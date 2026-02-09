@@ -1,8 +1,12 @@
 import express from "express";
 
+// types
+import type { Database } from "better-sqlite3";
+
 // routes
 import quotationRoutes from "./Routes/quotation.routes";
-import type { Database } from "better-sqlite3";
+import clientRoutes from "./Routes/client.routes";
+
 
 export const createApp = (db: Database) => {
     const app = express();
@@ -12,6 +16,7 @@ export const createApp = (db: Database) => {
 
     // using routes
     app.use("/quotations", quotationRoutes(db));
+    app.use("/clients", clientRoutes(db));
 
     return app;
 }

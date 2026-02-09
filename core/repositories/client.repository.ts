@@ -2,29 +2,35 @@
 import type { Database } from "better-sqlite3";
 import type { ClientType } from "../db/schema";
 
+// utils
+import { onlyNumbers,onlyName } from "../utils/clean";
+
 export type ClientQuery = Omit<
     ClientType,
     "id" | "created_at" | "updated_at"
 >;
 
 export const createClientRepository = (db: Database) => ({ ...data }: ClientQuery) => {
+    const document = onlyNumbers(data.document!)
+    const name = onlyName(data.name!)
+
     // check or insert client
     const clientId = db.prepare(`
         INSERT INTO clients (name, document, type_client, notes)
         VALUES (?, ?, ?, ?) 
-    `).run(data.name, data.document, data.type_client, data.notes);
+    `).run(name, document, data.type_client, data.notes);
 
     return clientId.lastInsertRowid;
 }
 
-export const getClientByNameAndDocumentRepository = (db: Database) => (name: string | undefined, document: string | undefined) => {
-    // get client by name and document
+export const getClientByDocumentRepository = (db: Database) => (document: string | undefined) => {
+    // get client document
     const client = db.prepare(`
         SELECT *
         FROM clients
-        WHERE name = ? AND document = ?
+        WHERE document = ?
         LIMIT 1
-    `).get(name, document) as ClientType | undefined;
+    `).get(document) as ClientType | undefined;
 
     return client;
 }
@@ -39,4 +45,30 @@ export const getClientByIdRepository = (db: Database) => (id?: number) => {
     `).get(id) as ClientType | undefined;
 
     return client;
+}
+
+export const searchClientsByDocumentRepository = (db: Database) => (document: string | undefined) => {
+    // get all clients by document
+    const clients = db.prepare(`
+        SELECT *
+        FROM clients
+        WHERE document LIKE ? || '%'
+        ORDER by name
+        LIMIT 10
+    `).all(document) as ClientType[];
+
+    return clients;
+}
+
+export const searchClientsByNameRepository = (db: Database) => (name: string | undefined) => {
+    // get all clients by name
+    const clients = db.prepare(`
+        SELECT *
+        FROM clients
+        WHERE name LIKE ? || '%'
+        ORDER by name
+        LIMIT 10
+    `).all(name) as ClientType[];
+
+    return clients;
 }

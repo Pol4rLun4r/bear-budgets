@@ -9,8 +9,8 @@ export type ClientType = {
     document?: string;
     type_client?: ClientCategory;
     notes?: string | null;
-    created_at: string;
-    updated_at: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export type QuotationType = {
@@ -28,15 +28,18 @@ export const ApplySchema = (db: DatabaseType) => {
             name TEXT NOT NULL,
             document TEXT NOT NULL,
             notes TEXT,
-            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-            updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
-
             type_client TEXT NOT NULL
-            CHECK (type_client IN ('Nacional', 'Internacional'))
-            DEFAULT 'Nacional',
-
-            UNIQUE (name, document)
+                DEFAULT 'Nacional'
+                CHECK (type_client IN ('Nacional', 'Internacional')),
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP
         );
+    `).run();
+
+
+    db.prepare(`
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_clients_document
+        ON clients(document);
     `).run();
 
     db.prepare(`

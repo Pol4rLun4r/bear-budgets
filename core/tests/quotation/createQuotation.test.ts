@@ -1,4 +1,5 @@
-// types
+/// <reference types="jest" />
+
 import type { createQuotationType } from "../../domain/createQuotation.rules";
 
 // jest

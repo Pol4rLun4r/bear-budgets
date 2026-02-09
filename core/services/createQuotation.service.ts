@@ -5,7 +5,9 @@ import type { createQuotationType } from "../domain/createQuotation.rules"
 // rules
 import createQuotationRules from "../domain/createQuotation.rules";
 import { success } from "../utils/handleSuccess";
-import { createRepositories } from "./index";
+
+// repositories
+import { createRepositories } from "../repositories/index";
 
 const createQuotationService = (db: Database) => {
     const repo = createRepositories(db);
@@ -13,7 +15,7 @@ const createQuotationService = (db: Database) => {
     return db.transaction((data: createQuotationType) => {
         // Check if client exists
         const clientIdExists = repo.client.getById(data.client_id)?.id;
-        const clientExists = repo.client.getByNameAndDocument(data.name, data.document)?.id;
+        const clientExists = repo.client.getByDocument(data.document)?.id;
 
         // Apply rules
         const rulesResult = createQuotationRules({ ...data, clientIdExists, clientExists });
