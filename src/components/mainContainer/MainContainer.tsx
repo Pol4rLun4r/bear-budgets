@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../redux/store';
 
 // tabs
-import CreateBudget from '../createQuote/CreateBudget';
+import CreateBudget from '../createBudget/CreateBudget';
 
 // styles
 import classes from './MainContainer.module.css';
