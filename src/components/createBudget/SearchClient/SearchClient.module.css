@@ -7,20 +7,22 @@
 }
 
 .box {
-    margin-top: var(--mantine-spacing-md);
-
-    width: 600px;
-    min-height: 200px;
-
-    @media (max-width: 900px) {
-        width: 90%;
-    }
-
     background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-8));
 
     border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
     border-radius: var(--mantine-radius-lg);
     padding: var(--mantine-spacing-md);
+
+    margin-top: var(--mantine-spacing-md);
+
+    width: 600px;
+    min-height: 350px;
+
+    @media (max-width: 900px) {
+        width: 90%;
+    }
+
+    transition: width 200ms ease;
 }
 
 .nothing {

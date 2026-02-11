@@ -1,33 +1,19 @@
 // react
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // mantine
-import { Box, SegmentedControl, Title, Text, Stack, Button } from "@mantine/core";
+import { Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
+// lodash
+import isEqual from "lodash/isEqual";
+
 // components
-import SearchInput from "./SearchInput";
-
-// styles
-import classes from "./SearchClient.module.css"
-
-// icon
-import { IconSearch } from "@tabler/icons-react";
+import Content from "./Content";
+import Form from "./Form";
 
 // axios
 import clientService from '../../../services/client-api';
-
-const NoSearch = () => {
-    return (
-        <>
-            <Text style={{ alignItems: 'center', justifyContent: 'center', display: 'flex', gap: 5 }}>
-                Sem um cliente no momento, faça uma busca <IconSearch size={18} />
-            </Text>
-            <Text>OU</Text>
-            <Button variant="gradient" radius='lg'>Criar novo cliente</Button>
-        </>
-    )
-}
 
 export type ClientCategory = "Nacional" | "Internacional";
 
@@ -50,50 +36,58 @@ const SearchClient = () => {
         }
     })
 
-    const [clients, setClients] = useState()
+    const [clients, setClients] = useState<ClientType[]>([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
-    const handleQuery = () => {
-        const data = { value: form.values.query, type: form.values.typeQuery };
-        
-        // if (data.value.length <= 0){
-        //     return;
-        // }
+    // Fetch com debounce
+    useEffect(() => {
+        const query = form.values.query.trim()
 
-        // const response = await clientService.search(data);
+        // Se não houver query, limpar resultados
+        if (query.length === 0) {
+            setClients([])
+            setError(null)
+            return
+        }
 
-        // setClients(response);
+        setTimeout(async () => {
+            try {
+                setLoading(true)
+                setError(null)
 
-        // console.log(clients);
+                const data = {
+                    value: query,
+                    type: form.values.typeQuery
+                }
 
-        console.log(data);
-    }
+                const response: { success: boolean, data: any[] } = await clientService.search(data)
+
+                // Se a resposta não for um array, converter para array vazio
+                const newData = Array.isArray(response.data) ? response.data : [];
+
+                if (!isEqual(clients, newData)) {
+                    setClients(newData);
+                }
+
+            } catch (err: any) {
+                const errorData = err.response?.data?.data;
+
+                console.log(errorData);
+                setError(errorData);
+                setClients([])
+            } finally {
+                setLoading(false)
+            }
+        }, 0)
+
+    }, [form.values.query, form.values.typeQuery])
 
     return (
         <>
             <Title>Buscar Cliente</Title>
-            <form className={classes.containerForm} onChange={handleQuery}>
-                <SearchInput mt={10}
-                    {...form.getInputProps('query')}
-                />
-                <Text mt='md' size="sm" c='dimmed'>Tipo de busca</Text>
-                <SegmentedControl
-                    fullWidth
-                    radius='lg'
-                    size="md"
-                    {...form.getInputProps('typeQuery')}
-                    data={[
-                        { label: 'Documento', value: 'document' },
-                        { label: 'Nome', value: 'name' }
-                    ]}
-                    defaultValue={form.values.typeQuery}
-                />
-            </form>
-            <Box className={classes.box}>
-                <Stack className={classes.nothing}>
-                    {/* {!clients && <NoSearch />} */}
-                    {/* {clients && <ClientsJsx data={clients}/>} */}
-                </Stack>
-            </Box>
+            <Form form={form} />
+            <Content form={form} loading={loading} clients={clients} error={error} />
         </>
     )
 }
