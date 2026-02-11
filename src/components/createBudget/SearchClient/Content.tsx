@@ -10,13 +10,16 @@ import type { ClientType } from './SearchClient';
 // icons
 import { IconSearch } from '@tabler/icons-react';
 import { UseFormReturnType } from '@mantine/form';
+
+// components
+import Loading from './Loading';
 import Rows from './Rows';
 
 const NoSearch = () => {
     return (
         <>
             <Text style={{ alignItems: 'center', justifyContent: 'center', display: 'flex', gap: 5 }}>
-                Sem um cliente no momento, faça uma busca <IconSearch size={18} />
+                Faça uma busca <IconSearch size={18} />
             </Text>
             <Text>OU</Text>
             <Button variant="gradient" radius='lg'>Criar novo cliente</Button>
@@ -43,34 +46,38 @@ interface ContenteType {
 const Content = ({ clients, error, form }: ContenteType) => {
     return (
         <Box className={classes.box}>
-            <Stack className={classes.nothing}>
+            <div className={classes.containerLoading}>
+                {/* <Loading /> */}
+                {/* Sem resultados */}
+                {clients.length === 0 && form.values.query.trim().length > 0 && !error && (
+                    <Stack className={classes.messages}>
+                        <Alert title="Sem resultados" mt="md" variant='transparent'>
+                            Nenhum cliente encontrado
+                        </Alert>
+                    </Stack>
+                )}
+
                 {/* Estado de erro */}
                 {error && (
-                    <Alert title="Erro" color="red" mt="md" variant="transparent">
-                        {error}
-                    </Alert>
+                    <Stack className={classes.messages}>
+                        <Alert title="Erro" color="red" mt="md" variant="transparent">
+                            {error}
+                        </Alert>
+                    </Stack>
                 )}
 
                 {/* Sem busca ainda */}
                 {clients.length === 0 && form.values.query.trim().length === 0 && (
-                    <NoSearch />
+                    <Stack className={classes.messages}>
+                        <NoSearch />
+                    </Stack>
                 )}
-
-                {/* Sem resultados */}
-                {clients.length === 0 && form.values.query.trim().length > 0 && !error && (
-                    <div>
-                        <Alert title="Sem resultados" mt="md" variant='transparent'>
-                            Nenhum cliente encontrado
-                        </Alert>
-                    </div>
-                )}
-
-                {/* Com resultados */}
-                {clients.length > 0 && (
-                    <Rows clients={clients} />
-                )}
-            </Stack>
-        </Box>
+            </div>
+            {/* Com resultados */}
+            {clients.length > 0 && (
+                <Rows clients={clients} />
+            )}
+        </Box >
     )
 }
 
