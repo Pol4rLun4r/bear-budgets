@@ -8,15 +8,7 @@ import type { Database } from "better-sqlite3";
 import quotationRoutes from "./Routes/quotation.routes";
 import clientRoutes from "./Routes/client.routes";
 
-// teste ruim
-import { fakeClients } from './tests/client/fakeClients';
-import { createRepositories } from "./repositories";
-
 export const createApp = (db: Database) => {
-    // test ruim
-    fakeClients.map(client => {
-        createRepositories(db).client.create(client);
-    })
 
     const app = express();
     

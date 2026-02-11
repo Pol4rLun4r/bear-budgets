@@ -1,45 +1,37 @@
 // types
 import type { Database } from "better-sqlite3";
+import type { SearchClientDataType } from "../domain/searchClients.rules";
 
 // repositories
 import { createRepositories } from "../repositories";
 
 // utils
-import { onlyNumbers, onlyName } from '../utils/clean';
 import { success } from "../utils/handleSuccess";
 
 // rules
 import searchClientsRules from "../domain/searchClients.rules";
 
-export type SearchClientDataType = {
-    value: string;
-    type: 'document' | 'name'
-}
-
 const searchClientsService = (db: Database) => {
     const repo = createRepositories(db);
 
-    return db.transaction(({ type, value }: SearchClientDataType) => {
-        // check what type of search you should do
-        const query = () => {
-            if (type === 'document') {
-                return repo.client.searchByDocument(onlyNumbers(value));
-            }
+    return db.transaction((data: SearchClientDataType) => {
+        const result = searchClientsRules(data);
 
-            return repo.client.searchByName(onlyName(value));
+        // any errors
+        if (!result.success) {
+            return result;
         }
 
-        const queryClients = query();
-
-        const clients = (searchClientsRules(queryClients));
-
-        if (!clients.success) {
-            return clients;
+        // if 'type' is 'document'
+        if (result.code === 'DOCUMENT') {
+            const value = result.data;
+            return success(repo.client.searchByDocument(value))
         }
-        
-        return success(clients.data);
+
+        // if 'type' is 'name'
+        const value = result.data;
+        return success(repo.client.searchByName(value));
     })
-
-}
+};
 
 export default searchClientsService;

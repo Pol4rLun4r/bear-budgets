@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "build-core": "tsc core/cli.ts core/commands/*.ts --outDir dist-core --module commonjs",
-    "dev-server": "cross-env NODE_ENV=test tsx watch core/server.ts"
+    "dev-server": "cross-env NODE_ENV=test tsx watch core/utils/serverTest.ts"
   },
   "dependencies": {
     "@mantine/core": "^8.3.14",
@@ -26,6 +26,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "lodash": "^4.17.23",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0"
@@ -36,6 +37,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
+    "@types/lodash": "^4.17.23",
     "@types/mocha": "^10.0.10",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
