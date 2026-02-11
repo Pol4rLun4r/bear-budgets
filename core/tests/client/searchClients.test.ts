@@ -186,4 +186,42 @@ describe("POST/ Search Clients", () => {
         // 3. verifica se houve o retorno correto (falha)
         expect(clients.body.data).toBe("Por favor, especifique o tipo da busca");
     });
+
+    // Teste para consultar documentos que tenham pontuações ou espaços, retorna vazio neste caso
+    it('should be successful when searching for clients using documents that contain special characters, return void', async () => {
+                // 1. Prepara os dados
+        const searchData: SearchClientDataType = {
+            type: 'document',
+            value: '12-31 23.32/312 1'
+        }
+
+        // 2. Chama o serviço para buscar o cliente
+        const clients = await request(app)
+            .post("/clients/search")
+            .send(searchData)
+            .expect(200)
+            .expect("Content-Type", /application\/json/);
+
+        // 3. verifica se houve o retorno correto (array vazio)
+        expect(JSON.stringify(clients.body.data)).toBe('[]');
+    })
+
+    // Teste para consultar documentos que tenham pontuações ou espaços, retorna um cliente
+    it('should be successful when searching for clients using documents that contain special characters, return client', async () => {
+                // 1. Prepara os dados
+        const searchData: SearchClientDataType = {
+            type: 'document',
+            value: '1234 5.67 /89 /01'
+        }
+
+        // 2. Chama o serviço para buscar o cliente
+        const clients = await request(app)
+            .post("/clients/search")
+            .send(searchData)
+            .expect(200)
+            .expect("Content-Type", /application\/json/);
+
+        // 3. verifica se houve o retorno correto (retorna o documento de um cliente especifico)
+        expect(clients.body.data[0].document).toBe('12345678901');
+    })
 });

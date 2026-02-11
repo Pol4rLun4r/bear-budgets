@@ -8,20 +8,18 @@ export type SearchClientDataType = {
 }
 
 function identifyType(value: string): "number" | "letters" | "Invalid" {
-    // Check if it contains only numbers.
-    if (/^\d+$/.test(value)) {
-        return "number";
+    const cleanedNum = onlyNumbers(value);
+    const cleanedText = onlyName(value);
+
+    if (cleanedNum.length > 0 && !/[a-zà-ÿ]/i.test(value)) {
+        return 'number'; 
     }
 
-    // Check if it contains only letters (considering accents and uppercase/lowercase letters).
-    if (/^[a-zA-ZÀ-ÿ\s]+$/.test(value)) {
-        // Se após remover os espaços sobrar algo e for só letra
-        if (value.trim().length === 0) return "Invalid";
+    if (cleanedText.length > 0 && !/\d/.test(value)) {
         return "letters";
     }
 
-    // Returns invalid if it contains letters and numbers together.
-    return "Invalid"
+    return "Invalid";
 }
 
 const searchClientsRules = ({ type, value }: SearchClientDataType) => {
