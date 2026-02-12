@@ -9,7 +9,7 @@ import { useForm } from "@mantine/form";
 import isEqual from "lodash/isEqual";
 
 // components
-import Content from "./Content";
+import Content from "./Content/Content";
 import Form from "./Form";
 
 // axios
@@ -37,7 +37,6 @@ const SearchClient = () => {
     })
 
     const [clients, setClients] = useState<ClientType[]>([])
-    const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
     // Fetch com debounce
@@ -51,11 +50,8 @@ const SearchClient = () => {
             return
         }
 
-        setTimeout(async () => {
+        const fetchData = async () => {
             try {
-                setLoading(true)
-                setError(null)
-
                 const data = {
                     value: query,
                     type: form.values.typeQuery
@@ -70,16 +66,21 @@ const SearchClient = () => {
                     setClients(newData);
                 }
 
+                console.log(newData);
+
+                setError(null);
             } catch (err: any) {
                 const errorData = err.response?.data?.data;
 
-                console.log(errorData);
-                setError(errorData);
-                setClients([])
+                if(!(error === errorData)){
+                    setError(errorData);
+                    setClients([])
+                }
             } finally {
-                setLoading(false)
             }
-        }, 0)
+        }
+
+        fetchData();
 
     }, [form.values.query, form.values.typeQuery])
 
@@ -87,7 +88,7 @@ const SearchClient = () => {
         <>
             <Title>Buscar Cliente</Title>
             <Form form={form} />
-            <Content form={form} loading={loading} clients={clients} error={error} />
+            <Content form={form} clients={clients} error={error} />
         </>
     )
 }

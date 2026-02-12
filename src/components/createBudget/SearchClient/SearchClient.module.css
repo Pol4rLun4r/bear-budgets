@@ -25,19 +25,6 @@
     transition: width 200ms ease;
 }
 
-.messages {
-    position: absolute;
-    z-index: 1;
-
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-}
-
 .containerLoading{
     position: relative;
 
@@ -45,6 +32,48 @@
     height: 100%;
 }
 
+.messages {
+    position: absolute;
+    z-index: 1;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    border-radius: var(--mantine-radius-md);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: light-dark(#f1f3f5c7, #1f1f1fc7);
+
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .loading {
     z-index: 0;
+}
+
+.startButton {
+    opacity: 0.2;
+
+    transition: opacity 200ms ease;
+}
+
+.table:hover {
+
+    .startButton{
+        opacity: 1;
+    }
 }
