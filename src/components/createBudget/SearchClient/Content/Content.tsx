@@ -36,10 +36,10 @@ export interface ContenteType {
     }>
 }
 
-const Container = ({ children }: { children: ReactNode }) => {
+const ContainerMessage = ({ children }: { children: ReactNode }) => {
     return (
         <motion.div
-            className={classes.containerLoading}
+            className={classes.containerMessage}
             key="loading-state"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -56,12 +56,10 @@ const Content = ({ clients, error, form }: ContenteType) => {
 
     return (
         <Box className={classes.box}>
+            <Rows clients={clients} />
             <AnimatePresence mode='wait'>
                 {clients.length === 0 && (
-                    <Container>
-                        {/* Loader de fundo */}
-                        < Loading />
-
+                    <ContainerMessage>
                         {/* Sem resultados */}
                         < NoResults hasQuery={hasQuery} error={error} />
 
@@ -70,12 +68,7 @@ const Content = ({ clients, error, form }: ContenteType) => {
 
                         {/* Sem buscas */}
                         <NoSearch hasQuery={hasQuery} />
-                    </Container>
-                )}
-
-                {/* Com resultados */}
-                {clients.length > 0 && (
-                    <Rows clients={clients} />
+                    </ContainerMessage>
                 )}
             </AnimatePresence>
         </Box >

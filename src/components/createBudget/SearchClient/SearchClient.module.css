@@ -7,6 +7,8 @@
 }
 
 .box {
+    position: relative;
+
     background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-8));
 
     border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
@@ -25,20 +27,22 @@
     transition: width 200ms ease;
 }
 
-.containerLoading{
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-}
-
-.messages {
+.containerMessage{
     position: absolute;
     z-index: 1;
 
     top: 0;
     left: 0;
 
+    width: 100%;
+    height: 100%;
+    
+    border-radius: var(--mantine-radius-xl);
+
+    padding: 1rem;
+}
+
+.messages {
     width: 100%;
     height: 100%;
     border-radius: var(--mantine-radius-md);
