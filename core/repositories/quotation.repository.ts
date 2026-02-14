@@ -1,21 +1,66 @@
 // types
 import type { Database } from "better-sqlite3";
-import type { QuotationType } from "../db/schema";
+import type { QuotationStatus, QuotationType } from "../db/schema";
+
+export type QuotationVersionSummary = {
+    version_id: number;
+    client_name: string;
+    client_document: string;
+    status: QuotationStatus;
+    notes: string | null;
+};
 
 export type QuotationQuery = Omit<
     QuotationType,
-    "id" | "created_at" | "updated_at"
->;
-
-export const createQuotationRepository = (db: Database) => ({ ...data }: QuotationQuery) => {
-    // get quotation id
-    const quotation = db.prepare(`
-        INSERT INTO quotations (client_id, status)
-        VALUES (?, ?)
-    `).run(data.client_id, data.status);
-
-    return quotation.lastInsertRowid as number;
+    "id" | "created_at"
+> & {
+    notes?: string | null;
+    status?: QuotationStatus;
 };
+
+export const createQuotationRepository = (db: Database) => ({ client_id, notes, status }: QuotationQuery) => {
+    const quotationId = db.transaction(() => {
+
+        // cria a cotação
+        const quotation = db.prepare(`
+            INSERT INTO quotations (client_id)
+            VALUES (?)
+        `).run(client_id);
+
+        const quotationId = quotation.lastInsertRowid as number;
+
+        // cria a primeira versão da cotação
+        const quotationVersion = db.prepare(`
+            INSERT INTO quotation_versions (quotation_id, version, status, notes)
+            VALUES (?, 1, ?, ?)
+        `).run(quotationId, status, notes);
+
+        const quotationVersionId = quotationVersion.lastInsertRowid as number;
+
+        return quotationVersionId
+    })
+
+    return quotationId();
+};
+
+export const getQuotationVersionByIdRepository = (db: Database) =>
+    (id: number): QuotationVersionSummary | undefined => {
+        const row = db.prepare(`
+            SELECT 
+                quotation_versions.id as version_id,
+                clients.name as client_name,
+                clients.document as client_document,
+                quotation_versions.status,
+                quotation_versions.notes
+            FROM quotation_versions
+            JOIN quotations ON quotation_versions.quotation_id = quotations.id
+            JOIN clients ON quotations.client_id = clients.id
+            WHERE quotation_versions.id = ?
+            LIMIT 1
+        `).get(id) as QuotationVersionSummary | undefined;
+
+        return row;
+    };
 
 export const getQuotationByIdRepository = (db: Database) => (id: number) => {
     // get quotation by id

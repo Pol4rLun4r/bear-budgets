@@ -3,7 +3,7 @@ import type { Database } from "better-sqlite3";
 import type { ClientType } from "../db/schema";
 
 // utils
-import { onlyNumbers,onlyName } from "../utils/clean";
+import { onlyNumbers, onlyName } from "../utils/clean";
 
 export type ClientQuery = Omit<
     ClientType,
@@ -14,13 +14,28 @@ export const createClientRepository = (db: Database) => ({ ...data }: ClientQuer
     const document = onlyNumbers(data.document!)
     const name = onlyName(data.name!)
 
-    // check or insert client
-    const clientId = db.prepare(`
-        INSERT INTO clients (name, document, type_client, notes)
-        VALUES (?, ?, ?, ?) 
-    `).run(name, document, data.type_client, data.notes);
+    const client = db.transaction(() => {
 
-    return clientId.lastInsertRowid;
+        // check or insert client
+        const clientQuery = db.prepare(`
+            INSERT INTO clients (name, document, type_client, notes)
+            VALUES (?, ?, ?, ?) 
+            `).run(name, document, data.type_client, data.notes);
+
+        const clientId = clientQuery.lastInsertRowid;
+
+        // get client by id
+        const client = db.prepare(`
+            SELECT *
+            FROM clients
+            WHERE id = ?
+            LIMIT 1
+        `).get(clientId) as ClientType | undefined;
+
+        return client;
+    });
+
+    return client();
 }
 
 export const getClientByDocumentRepository = (db: Database) => (document: string | undefined) => {

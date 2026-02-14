@@ -5,10 +5,15 @@ import {
     getClientByIdRepository,
     getClientByDocumentRepository,
     searchClientsByDocumentRepository,
-    searchClientsByNameRepository
+    searchClientsByNameRepository,
 } from "./client.repository";
 
-import { createQuotationRepository, getAllQuotationsRepository, getQuotationByIdRepository } from "./quotation.repository";
+import {
+    createQuotationRepository,
+    getAllQuotationsRepository,
+    getQuotationByIdRepository,
+    getQuotationVersionByIdRepository
+} from "./quotation.repository";
 
 export const createRepositories = (db: Database) => ({
     client: {
@@ -22,6 +27,7 @@ export const createRepositories = (db: Database) => ({
         create: createQuotationRepository(db),
         getAll: getAllQuotationsRepository(db),
         getById: getQuotationByIdRepository(db),
+        getByVersion: getQuotationVersionByIdRepository(db),
     }
 });
 

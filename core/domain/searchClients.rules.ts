@@ -2,7 +2,7 @@
 import { success, failure } from "../utils/handleSuccess";
 import { onlyName, onlyNumbers } from "../utils/clean";
 
-export type SearchClientDataType = {
+export interface SearchClientDataType {
     value: string;
     type: 'document' | 'name'
 }
@@ -20,7 +20,7 @@ function identifyType(value: string): "number" | "letters" | "Invalid" {
     }
 
     return "Invalid";
-}
+};
 
 const searchClientsRules = ({ type, value }: SearchClientDataType) => {
     // check if is empty
@@ -61,6 +61,6 @@ const searchClientsRules = ({ type, value }: SearchClientDataType) => {
     }
 
     return failure("Não encontrado");
-}
+};
 
 export default searchClientsRules;
