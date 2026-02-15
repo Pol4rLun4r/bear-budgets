@@ -6,19 +6,36 @@ import { useForm } from "@mantine/form";
 import classes from "../CreateBudget.module.css"
 
 // react
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// redux
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { setNewClient } from "../../../redux/newClientSlice";
+
 
 const CreateClient = () => {
+  const dispatch = useDispatch();
+  const initialState = useSelector((state: RootState) => state.newClient);
+
+  // Valores iniciais do Redux só no mount; depois o formulário sincroniza com o store
+  const [initialValues] = useState(() => ({ ...initialState }));
+
   const form = useForm({
     mode: 'controlled',
-    initialValues: { name: '', document: '', notes: '', typeClient: 'Nacional' },
+    initialValues,
   });
+
+  // Mantém o Redux em sync com o formulário
+  useEffect(() => {
+    dispatch(setNewClient(form.values));
+  }, [form.values, dispatch]);
 
   const [submittedValues, setSubmittedValues] = useState<typeof form.values | null>(null)
 
   return (
     <>
-      <form onSubmit={form.onSubmit(setSubmittedValues)} style={{width: '100%'}}>
+      <form onSubmit={form.onSubmit(setSubmittedValues)} style={{ width: '100%' }}>
         <TextInput
           {...form.getInputProps('document')}
           radius='lg'
@@ -41,11 +58,14 @@ const CreateClient = () => {
         />
         <Text mt='md' c='dimmed' size="sm">Por padrão o cliente é nacional</Text>
         <SegmentedControl
-          {...form.getInputProps('typeClient')}
+          {...form.getInputProps('type_client')}
           fullWidth
           radius='lg'
           size="md"
-          data={['Nacional', 'Internacional']}
+          data={[
+            { label: 'Nacional', value: 'nacional' },
+            { label: 'Internacional', value: 'internacional' }
+          ]}
         />
         <Textarea
           {...form.getInputProps('notes')}

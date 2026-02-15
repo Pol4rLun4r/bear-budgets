@@ -15,6 +15,9 @@ import Form from "./Form";
 // axios
 import clientService from '../../../services/client-api';
 
+// types
+import type { NewClientParcialDataType } from "../CreateBudget";
+
 export type ClientCategory = "Nacional" | "Internacional";
 
 export type ClientType = {
@@ -28,7 +31,7 @@ export type ClientType = {
 }
 
 interface SearchClientProps {
-    onCreateNewClient?: () => void;
+    onCreateNewClient?: (data: NewClientParcialDataType) => void;
 }
 
 const SearchClient = ({ onCreateNewClient }: SearchClientProps) => {
@@ -70,8 +73,6 @@ const SearchClient = ({ onCreateNewClient }: SearchClientProps) => {
                     setClients(newData);
                 }
 
-                console.log(newData);
-
                 setError(null);
             } catch (err: any) {
                 const errorData = err.response?.data?.data;
@@ -92,7 +93,7 @@ const SearchClient = ({ onCreateNewClient }: SearchClientProps) => {
         <>
             <Title>Buscar Cliente</Title>
             <Form form={form} />
-            <Content form={form} clients={clients} error={error} onClientNewClient={onCreateNewClient}/>
+            <Content form={form} clients={clients} error={error} onClientNewClient={onCreateNewClient} />
         </>
     )
 }

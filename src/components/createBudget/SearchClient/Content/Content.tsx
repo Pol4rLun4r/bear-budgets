@@ -13,6 +13,7 @@ import { UseFormReturnType } from '@mantine/form';
 
 // types
 import type { ClientType } from '../SearchClient';
+import type { NewClientParcialDataType } from '../../CreateBudget';
 
 // components
 import Rows from './Rows';
@@ -33,7 +34,7 @@ export interface ContenteType {
         query: string;
         typeQuery: string;
     }>;
-    onClientNewClient?: () => void;
+    onClientNewClient?: (data: NewClientParcialDataType) => void;
 }
 
 const ContainerMessage = ({ children }: { children: ReactNode }) => {
@@ -61,7 +62,7 @@ const Content = ({ clients, error, form, onClientNewClient }: ContenteType) => {
                 {clients.length === 0 && (
                     <ContainerMessage>
                         {/* Sem resultados */}
-                        < NoResults hasQuery={hasQuery} error={error} onCreateNewClient={onClientNewClient}/>
+                        < NoResults hasQuery={hasQuery} error={error} onCreateNewClient={onClientNewClient} query={form.values.query} typeQuery={form.values.typeQuery as 'document' | 'name'}/>
 
                         {/* Estado de erro */}
                         <Error error={error} />

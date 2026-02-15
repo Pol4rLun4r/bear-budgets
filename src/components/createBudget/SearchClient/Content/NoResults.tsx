@@ -7,13 +7,17 @@ import { Button, Stack } from "@mantine/core"
 // styles
 import classes from '../SearchClient.module.css'
 
+import type { NewClientParcialDataType } from "../../CreateBudget"
+
 interface NoResultProps {
     hasQuery: number;
     error: string | null;
-    onCreateNewClient?: () => void;
+    query: string;
+    typeQuery: 'document' | 'name';
+    onCreateNewClient?: (data: NewClientParcialDataType) => void;
 }
 
-const NoResults = ({ hasQuery, error, onCreateNewClient }: NoResultProps) => {
+const NoResults = ({ hasQuery, error, query, typeQuery, onCreateNewClient }: NoResultProps) => {
     return (
         <>
             {hasQuery > 0 && !error && (
@@ -24,7 +28,7 @@ const NoResults = ({ hasQuery, error, onCreateNewClient }: NoResultProps) => {
                 >
                         <Stack >
                             Nenhum cliente encontrado
-                            <Button variant="gradient" radius='lg' onClick={onCreateNewClient}>Criar novo cliente</Button>
+                            <Button variant="gradient" radius='lg' onClick={() => onCreateNewClient?.({ type: typeQuery, value: query })}>Criar novo cliente</Button>
                         </Stack>
                 </motion.div>
             )}

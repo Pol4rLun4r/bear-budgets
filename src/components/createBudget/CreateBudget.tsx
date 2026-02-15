@@ -1,3 +1,4 @@
+// react
 import { useState } from 'react';
 
 // styles
@@ -11,11 +12,39 @@ import Steps from './Steps/Steps';
 import SearchClient from './SearchClient/SearchClient'
 import { ActionIcon, Tooltip } from '@mantine/core';
 
+// redux
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from '../../redux/store';
+import { resetNewClient, setDocument, setName } from '../../redux/newClientSlice';
+
 // icons
-import { IconArrowLeft} from '@tabler/icons-react';
+import { IconArrowLeft } from '@tabler/icons-react';
+
+export type NewClientParcialDataType = {
+    value: string;
+    type: 'document' | 'name'
+}
 
 const CreateBudget = () => {
+    const dispatch = useDispatch<AppDispatch>();
+
     const [showSteps, setShowSteps] = useState(false);
+
+    // define pré dados como nome ou documento ao formulário de novo cliente
+    const handleNewClientParcial = ({ type, value }: NewClientParcialDataType) => {
+        setShowSteps(true);
+
+        if(type === 'name') {
+            dispatch(setName(value));
+        } else {
+            dispatch(setDocument(value))
+        }
+    }
+
+    const handleReset = () => {
+        setShowSteps(false);
+        dispatch(resetNewClient());
+    }
 
     return (
         <div className={classes.container}>
@@ -34,7 +63,7 @@ const CreateBudget = () => {
                                 transition: { duration: 0.3, ease: [1, 0, 0, 1] }
                             }}
                         >
-                            <SearchClient onCreateNewClient={() => setShowSteps(true)} />
+                            <SearchClient onCreateNewClient={handleNewClientParcial} />
                         </motion.div>
                     ) : (
                         <motion.div
@@ -60,12 +89,12 @@ const CreateBudget = () => {
                     <ActionIcon
                         className={classes.backButton}
                         size='lg'
-                        onClick={() => setShowSteps(false)}
+                        onClick={() => handleReset()}
                         radius='lg'
                         variant='default'
                         disabled={showSteps ? false : true}
                     >
-                        <IconArrowLeft/>
+                        <IconArrowLeft />
                     </ActionIcon>
                 </Tooltip>
             </div>

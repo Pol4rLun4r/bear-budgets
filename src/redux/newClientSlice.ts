@@ -27,10 +27,10 @@ const newClientSlice = createSlice({
             state.notes = action.payload.notes;
             state.type_client = action.payload.type_client;
         },
-        setResetNewClient: () => initialState,
+        resetNewClient: () => initialState,
     }
 })
 
-export const { setDocument, setName, setNewClient, setResetNewClient } = newClientSlice.actions;
+export const { setDocument, setName, setNewClient, resetNewClient } = newClientSlice.actions;
 
 export default newClientSlice.reducer;
