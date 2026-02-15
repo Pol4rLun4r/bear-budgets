@@ -1,6 +1,6 @@
 // types
 import type { QuotationQuery } from "../repositories/quotation.repository";
-import type { ClientType } from "../db/schema";
+import type { ClientType } from "../../types/client";
 
 // utils
 import { success, failure } from "../utils/handleSuccess";

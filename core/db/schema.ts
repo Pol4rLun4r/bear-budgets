@@ -1,15 +1,4 @@
 // Tipos do domínio / banco (schema aplicado via migrations em ./migrate.ts)
-export type ClientCategory = "nacional" | "internacional";
-
-export type ClientType = {
-    id: number;
-    name?: string;
-    document?: string;
-    type_client?: ClientCategory;
-    notes?: string | null;
-    created_at?: string;
-    updated_at?: string;
-}
 
 // Cotação "container" – agrupa todas as versões. Imutável (não se edita, só se adicionam versões).
 export type QuotationType = {

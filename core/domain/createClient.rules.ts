@@ -4,8 +4,8 @@ import { onlyNumbers, onlyName } from "../utils/clean";
 import { validateDocument } from "../utils/documentValidator";
 
 // types
-import type { ClientQuery } from "../repositories/client.repository";
-import type { ClientCategory, ClientType } from "../db/schema";
+import type { ClientQuery } from "../../types/client";
+import type { TypeClientCategory, ClientType } from "../../types/client";
 
 interface CreateClientDataType extends ClientQuery {
     clientExists: ClientType | undefined
@@ -44,7 +44,7 @@ const createClientRules = ({ clientExists, document, name, notes, type_client }:
     const data: ClientQuery = {
         name: cleanedName,
         document: cleanedDocument,
-        type_client: cleanedTypeClient as ClientCategory,
+        type_client: cleanedTypeClient as TypeClientCategory,
         notes: notes?.length !== 0 ? notes : null,
     }
 

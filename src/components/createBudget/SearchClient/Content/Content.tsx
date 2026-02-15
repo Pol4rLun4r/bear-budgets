@@ -61,13 +61,13 @@ const Content = ({ clients, error, form, onClientNewClient }: ContenteType) => {
                 {clients.length === 0 && (
                     <ContainerMessage>
                         {/* Sem resultados */}
-                        < NoResults hasQuery={hasQuery} error={error} />
+                        < NoResults hasQuery={hasQuery} error={error} onCreateNewClient={onClientNewClient}/>
 
                         {/* Estado de erro */}
                         <Error error={error} />
 
                         {/* Sem buscas */}
-                        <NoSearch hasQuery={hasQuery} onCreateNewClient={onClientNewClient}/>
+                        <NoSearch hasQuery={hasQuery}/>
                     </ContainerMessage>
                 )}
             </AnimatePresence>

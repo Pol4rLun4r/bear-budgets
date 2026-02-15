@@ -1,14 +1,10 @@
 // types
 import type { Database } from "better-sqlite3";
-import type { ClientType } from "../db/schema";
+import type { ClientType } from "../../types/client";
+import type { ClientQuery } from "../../types/client";
 
 // utils
 import { onlyNumbers, onlyName } from "../utils/clean";
-
-export type ClientQuery = Omit<
-    ClientType,
-    "id" | "created_at" | "updated_at"
->;
 
 export const createClientRepository = (db: Database) => ({ ...data }: ClientQuery) => {
     const document = onlyNumbers(data.document!)

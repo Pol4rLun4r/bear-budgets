@@ -2,12 +2,18 @@
 import { motion } from "framer-motion"
 
 // mantine
-import { Alert } from "@mantine/core"
+import { Button, Stack } from "@mantine/core"
 
 // styles
 import classes from '../SearchClient.module.css'
 
-const NoResults = ({ hasQuery, error }: { error: string | null, hasQuery: number }) => {
+interface NoResultProps {
+    hasQuery: number;
+    error: string | null;
+    onCreateNewClient?: () => void;
+}
+
+const NoResults = ({ hasQuery, error, onCreateNewClient }: NoResultProps) => {
     return (
         <>
             {hasQuery > 0 && !error && (
@@ -16,9 +22,10 @@ const NoResults = ({ hasQuery, error }: { error: string | null, hasQuery: number
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.6, duration: 0.4 }}
                 >
-                    <Alert title="Sem resultados" mt="md" variant='transparent'>
-                        Nenhum cliente encontrado
-                    </Alert>
+                        <Stack >
+                            Nenhum cliente encontrado
+                            <Button variant="gradient" radius='lg' onClick={onCreateNewClient}>Criar novo cliente</Button>
+                        </Stack>
                 </motion.div>
             )}
         </>
