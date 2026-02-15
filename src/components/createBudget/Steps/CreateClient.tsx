@@ -2,16 +2,13 @@
 import { SegmentedControl, Textarea, TextInput, Text, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
-// styles
-import classes from "../CreateBudget.module.css"
-
 // react
 import { useState, useEffect } from "react";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { setNewClient } from "../../../redux/newClientSlice";
+import { setNewClient } from "../../../redux/createBudget/newClientSlice";
 
 
 const CreateClient = () => {

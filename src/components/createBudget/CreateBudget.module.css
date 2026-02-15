@@ -26,20 +26,3 @@
     position: relative;
     overflow: hidden;
 }
-
-.slideContent {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-}
-
-.backButton{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}

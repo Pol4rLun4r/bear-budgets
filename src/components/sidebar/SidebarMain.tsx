@@ -9,7 +9,7 @@ import classes from './Sidebar.module.css';
 
 // redux
 import { useDispatch } from 'react-redux';
-import { setActiveTab } from '../../redux/tabSlice';
+import { setActiveTab } from '../../redux/sideBar/tabSlice';
 import type { AppDispatch } from '../../redux/store';
 
 // components

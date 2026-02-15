@@ -13,13 +13,12 @@ import { UseFormReturnType } from '@mantine/form';
 
 // types
 import type { ClientType } from '../SearchClient';
-import type { NewClientParcialDataType } from '../../CreateBudget';
 
 // components
 import Rows from './Rows';
 import NoSearch from './NoSearch';
 import Error from './Error';
-import NoResults from './NoResults';
+import NoResults from './noResults/NoResults';
 
 export interface ContenteType {
     clients: ClientType[];
@@ -34,7 +33,6 @@ export interface ContenteType {
         query: string;
         typeQuery: string;
     }>;
-    onClientNewClient?: (data: NewClientParcialDataType) => void;
 }
 
 const ContainerMessage = ({ children }: { children: ReactNode }) => {
@@ -52,7 +50,7 @@ const ContainerMessage = ({ children }: { children: ReactNode }) => {
     )
 }
 
-const Content = ({ clients, error, form, onClientNewClient }: ContenteType) => {
+const Content = ({ clients, error, form }: ContenteType) => {
     const hasQuery = form.values.query.trim().length;
 
     return (
@@ -62,7 +60,7 @@ const Content = ({ clients, error, form, onClientNewClient }: ContenteType) => {
                 {clients.length === 0 && (
                     <ContainerMessage>
                         {/* Sem resultados */}
-                        < NoResults hasQuery={hasQuery} error={error} onCreateNewClient={onClientNewClient} query={form.values.query} typeQuery={form.values.typeQuery as 'document' | 'name'}/>
+                        < NoResults hasQuery={hasQuery} error={error}/>
 
                         {/* Estado de erro */}
                         <Error error={error} />

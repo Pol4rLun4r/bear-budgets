@@ -12,29 +12,20 @@ import isEqual from "lodash/isEqual";
 import Content from "./Content/Content";
 import Form from "./Form";
 
+// type
+import { ClientType } from "../../../../types/client";
+
 // axios
 import clientService from '../../../services/client-api';
 
-// types
-import type { NewClientParcialDataType } from "../CreateBudget";
+// redux
+import type { AppDispatch } from "../../../redux/store";
+import { useDispatch } from "react-redux";
+import { setSearchClient } from "../../../redux/createBudget/searchClient/searchClientSlice";
 
-export type ClientCategory = "Nacional" | "Internacional";
+const SearchClient = () => {
+    const dispatch = useDispatch<AppDispatch>();
 
-export type ClientType = {
-    id: number;
-    name?: string;
-    document?: string;
-    type_client?: ClientCategory;
-    notes?: string | null;
-    created_at?: string;
-    updated_at?: string;
-}
-
-interface SearchClientProps {
-    onCreateNewClient?: (data: NewClientParcialDataType) => void;
-}
-
-const SearchClient = ({ onCreateNewClient }: SearchClientProps) => {
     const form = useForm({
         mode: 'controlled',
         initialValues: {
@@ -61,8 +52,10 @@ const SearchClient = ({ onCreateNewClient }: SearchClientProps) => {
             try {
                 const data = {
                     value: query,
-                    type: form.values.typeQuery
+                    type: form.values.typeQuery as 'document' | 'name'
                 }
+
+                dispatch(setSearchClient(data));
 
                 const response: { success: boolean, data: any[] } = await clientService.search(data)
 
@@ -81,9 +74,8 @@ const SearchClient = ({ onCreateNewClient }: SearchClientProps) => {
                     setError(errorData);
                     setClients([])
                 }
-            } finally {
-            }
-        }
+            };
+        };
 
         fetchData();
 
@@ -93,9 +85,9 @@ const SearchClient = ({ onCreateNewClient }: SearchClientProps) => {
         <>
             <Title>Buscar Cliente</Title>
             <Form form={form} />
-            <Content form={form} clients={clients} error={error} onClientNewClient={onCreateNewClient} />
+            <Content form={form} clients={clients} error={error} />
         </>
     )
-}
+};
 
-export default SearchClient
+export default SearchClient;

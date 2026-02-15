@@ -7,7 +7,7 @@ import { UnstyledButton } from '@mantine/core';
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleCollapsed } from '../../redux/collapsedSlice';
+import { toggleCollapsed } from '../../redux/sideBar/collapsedSlice';
 import type { AppDispatch, RootState } from '../../redux/store';
 
 // styles

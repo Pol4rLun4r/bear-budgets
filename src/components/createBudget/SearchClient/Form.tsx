@@ -19,7 +19,7 @@ interface FormType {
         query: string;
         typeQuery: string;
     }>
-}
+};
 
 const Form = ({ form}: FormType) => {
     return (
@@ -42,6 +42,6 @@ const Form = ({ form}: FormType) => {
             />
         </form>
     )
-}
+};
 
-export default Form
+export default Form;
