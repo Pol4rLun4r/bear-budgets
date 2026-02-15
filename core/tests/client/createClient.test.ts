@@ -1,9 +1,9 @@
-/// <reference types="jest" />
+/// <reference types="vitest/globals" />
 
 // types
 import type { ClientQuery } from "../../repositories/client.repository";
 
-// jest
+// api
 import request from "supertest";
 
 // api

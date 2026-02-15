@@ -1,12 +1,12 @@
 import * as Database from "better-sqlite3";
 import { createApp } from "../app";
-import { ApplySchema } from "../db/schema";
+import { runMigrations } from "../db/migrate";
 
 export const createTestApp = () => {
     const db = new Database.default(":memory:");
 
     db.pragma("foreign_keys = ON");
-    ApplySchema(db);
+    runMigrations(db);
 
     const app = createApp(db);
     return { app, db };

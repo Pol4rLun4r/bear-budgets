@@ -1,9 +1,9 @@
-/// <reference types="jest" />
+/// <reference types="vitest/globals" />
 
 // type
 import { QuotationQuery } from "../../repositories/quotation.repository";
 
-// jest
+// api
 import request from "supertest";
 
 // api

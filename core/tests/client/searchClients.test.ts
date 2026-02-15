@@ -1,4 +1,4 @@
-/// <reference types="jest" />
+/// <reference types="vitest/globals" />
 
 // types
 import { SearchClientDataType } from "../../domain/searchClients.rules";
