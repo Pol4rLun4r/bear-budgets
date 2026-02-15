@@ -3,7 +3,7 @@ import { SegmentedControl, Textarea, TextInput, Text, Title } from "@mantine/cor
 import { useForm } from "@mantine/form";
 
 // styles
-import classes from "./CreateBudget.module.css"
+import classes from "../CreateBudget.module.css"
 
 // react
 import { useState } from "react";
@@ -18,8 +18,7 @@ const CreateClient = () => {
 
   return (
     <>
-      <Title>Criar Orçamento</Title>
-      <form className={classes.containerForm} onSubmit={form.onSubmit(setSubmittedValues)}>
+      <form onSubmit={form.onSubmit(setSubmittedValues)} style={{width: '100%'}}>
         <TextInput
           {...form.getInputProps('document')}
           radius='lg'

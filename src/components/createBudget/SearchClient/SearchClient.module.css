@@ -40,6 +40,10 @@
     border-radius: var(--mantine-radius-xl);
 
     padding: 1rem;
+
+    background-color: light-dark(#f1f3f5c7, #1f1f1fd8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .messages {
@@ -50,8 +54,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background-color: light-dark(#f1f3f5c7, #1f1f1fc7);
 
     animation: fadeIn 0.5s ease-out forwards;
 }
@@ -75,9 +77,26 @@
     transition: opacity 200ms ease;
 }
 
-.table:hover {
+
+.tableTr:hover {
 
     .startButton{
         opacity: 1;
     }
+}
+
+table, thead, tr {
+    width: 100%;
+}
+
+.tableHeaderName {
+    width: 45%;
+}
+
+.tableHeaderDocument {
+    width: 45;
+}
+
+.tableHeaderAction {
+    width: 10%;
 }

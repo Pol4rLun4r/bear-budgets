@@ -15,7 +15,6 @@ import { UseFormReturnType } from '@mantine/form';
 import type { ClientType } from '../SearchClient';
 
 // components
-import Loading from './Loading';
 import Rows from './Rows';
 import NoSearch from './NoSearch';
 import Error from './Error';
@@ -33,7 +32,8 @@ export interface ContenteType {
     }) => {
         query: string;
         typeQuery: string;
-    }>
+    }>;
+    onClientNewClient?: () => void;
 }
 
 const ContainerMessage = ({ children }: { children: ReactNode }) => {
@@ -51,7 +51,7 @@ const ContainerMessage = ({ children }: { children: ReactNode }) => {
     )
 }
 
-const Content = ({ clients, error, form }: ContenteType) => {
+const Content = ({ clients, error, form, onClientNewClient }: ContenteType) => {
     const hasQuery = form.values.query.trim().length;
 
     return (
@@ -67,7 +67,7 @@ const Content = ({ clients, error, form }: ContenteType) => {
                         <Error error={error} />
 
                         {/* Sem buscas */}
-                        <NoSearch hasQuery={hasQuery} />
+                        <NoSearch hasQuery={hasQuery} onCreateNewClient={onClientNewClient}/>
                     </ContainerMessage>
                 )}
             </AnimatePresence>

@@ -7,7 +7,12 @@ import { IconSearch } from "@tabler/icons-react"
 // style
 import classes from '../SearchClient.module.css'
 
-const NoSearch = ({ hasQuery }: { hasQuery: number }) => {
+interface NoSearchProps {
+    hasQuery: number;
+    onCreateNewClient?: () => void; 
+}
+
+const NoSearch = ({ hasQuery, onCreateNewClient }: NoSearchProps) => {
     return (
         <>
             {hasQuery === 0 &&
@@ -16,7 +21,7 @@ const NoSearch = ({ hasQuery }: { hasQuery: number }) => {
                         Faça uma busca <IconSearch size={18} />
                     </Text>
                     <Text>OU</Text>
-                    <Button variant="gradient" radius='lg'>Criar novo cliente</Button>
+                    <Button variant="gradient" radius='lg' onClick={onCreateNewClient}>Criar novo cliente</Button>
                 </Stack>
             }
         </>

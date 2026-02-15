@@ -27,7 +27,11 @@ export type ClientType = {
     updated_at?: string;
 }
 
-const SearchClient = () => {
+interface SearchClientProps {
+    onCreateNewClient?: () => void;
+}
+
+const SearchClient = ({ onCreateNewClient }: SearchClientProps) => {
     const form = useForm({
         mode: 'controlled',
         initialValues: {
@@ -72,7 +76,7 @@ const SearchClient = () => {
             } catch (err: any) {
                 const errorData = err.response?.data?.data;
 
-                if(!(error === errorData)){
+                if (!(error === errorData)) {
                     setError(errorData);
                     setClients([])
                 }
@@ -88,7 +92,7 @@ const SearchClient = () => {
         <>
             <Title>Buscar Cliente</Title>
             <Form form={form} />
-            <Content form={form} clients={clients} error={error} />
+            <Content form={form} clients={clients} error={error} onClientNewClient={onCreateNewClient}/>
         </>
     )
 }
