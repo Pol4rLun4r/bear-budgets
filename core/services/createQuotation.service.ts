@@ -1,6 +1,6 @@
 // types
 import type { Database } from "better-sqlite3";
-import type { createQuotationType } from "../domain/createQuotation.rules"
+import type { QuotationQuery } from "../repositories/quotation.repository";
 
 // rules
 import createQuotationRules from "../domain/createQuotation.rules";
@@ -12,8 +12,22 @@ import { createRepositories } from "../repositories/index";
 const createQuotationService = (db: Database) => {
     const repo = createRepositories(db);
 
-    return db.transaction((data: createQuotationType) => {
-        
+    return db.transaction((data: QuotationQuery) => {
+        const clientExists = repo.client.getById(data?.client_id);
+
+        const result = createQuotationRules({clientExists, ...data});
+
+        // any errors
+        if(!result.success) {
+            return result;
+        }
+
+        const createQuotation = repo.quotation.create(result.data);
+
+        const quotation = repo.quotation.getByVersion(createQuotation);
+
+        return success(quotation);
     });
 };
+
 export default createQuotationService;

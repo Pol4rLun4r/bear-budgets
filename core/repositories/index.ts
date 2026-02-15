@@ -12,7 +12,8 @@ import {
     createQuotationRepository,
     getAllQuotationsRepository,
     getQuotationByIdRepository,
-    getQuotationVersionByIdRepository
+    getQuotationVersionByIdRepository,
+    getAllQuotationsVersionsRepository
 } from "./quotation.repository";
 
 export const createRepositories = (db: Database) => ({
@@ -28,6 +29,7 @@ export const createRepositories = (db: Database) => ({
         getAll: getAllQuotationsRepository(db),
         getById: getQuotationByIdRepository(db),
         getByVersion: getQuotationVersionByIdRepository(db),
+        getAllVersions: getAllQuotationsVersionsRepository(db),
     }
 });
 

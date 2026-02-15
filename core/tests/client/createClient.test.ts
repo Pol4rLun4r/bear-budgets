@@ -10,7 +10,6 @@ import request from "supertest";
 import { createTestApp } from "../../utils/createTestApp";
 
 // utils
-import { onlyNumbers } from "../../utils/clean";
 import { fakeClients } from "./fakeClients";
 
 // repositories

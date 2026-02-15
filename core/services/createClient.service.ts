@@ -15,7 +15,6 @@ const createClientService = (db: Database) => {
     const repo = createRepositories(db);
 
     return db.transaction((data: ClientQuery) => {
-
         const clientExists = repo.client.getByDocument(cleanDocument(data?.document!))
 
         const result = createClientRules({clientExists, ...data});

@@ -9,7 +9,7 @@ import type { ClientCategory, ClientType } from "../db/schema";
 
 interface CreateClientDataType extends ClientQuery {
     clientExists: ClientType | undefined
-}
+};
 
 const createClientRules = ({ clientExists, document, name, notes, type_client }: CreateClientDataType) => {
     const cleanedName = onlyName(name!)
