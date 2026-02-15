@@ -9,7 +9,7 @@ import { useForm } from "@mantine/form";
 import isEqual from "lodash/isEqual";
 
 // components
-import Content from "./Content/Content";
+import Content from "./content/Content";
 import Form from "./Form";
 
 // type

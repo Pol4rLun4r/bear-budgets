@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion';
 
 // components
 import Steps from './Steps/Steps';
-import SearchClient from './SearchClient/SearchClient';
+import SearchClient from './searchClient/SearchClient';
 import SlideContent from './slideContent/SlideContent';
 import BackBeginningButton from './backBeginningButton/BackBeginningButton';
 
