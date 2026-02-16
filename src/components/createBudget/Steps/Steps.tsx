@@ -1,11 +1,12 @@
 // components
 import CreateClient from "./createClient/CreateClient";
+import StepsButtons from "./stepsButtons/StepsButtons";
 
 // styles
 import classes from '../CreateBudget.module.css'
 
 // mantine
-import { Button, Stepper, Title, Text } from "@mantine/core"
+import { Stepper, Title, Text } from "@mantine/core"
 
 // redux
 import { useSelector } from "react-redux";
@@ -31,19 +32,7 @@ const Steps = () => {
                     <Text>Finalizar</Text>
                 </Stepper.Step>
             </Stepper>
-            <Button
-                mt={20}
-                variant="gradient"
-                radius='lg'
-                type="submit"
-                form={
-                    stepState === 0 ?
-                        'create-client-form' :
-                        'other'
-                }
-            >
-                Próximo
-            </Button>
+            <StepsButtons/>
         </div>
     )
 }
