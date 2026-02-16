@@ -7,19 +7,6 @@
     flex-direction: column;
 }
 
-.stepsWrapper {
-    width: 600px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    @media (max-width: 900px) {
-        width: 90%;
-    }
-}
-
 .slideWrapper {
     width: 100%;
     height: 100%;

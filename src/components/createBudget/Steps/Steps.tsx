@@ -1,9 +1,10 @@
 // components
 import CreateClient from "./createClient/CreateClient";
 import StepsButtons from "./stepsButtons/StepsButtons";
+import StartBudget from "./startBudget/StartBudget";
 
 // styles
-import classes from '../CreateBudget.module.css';
+import classes from './Steps.module.css';
 
 // mantine
 import { Stepper, Title, Text } from "@mantine/core";
@@ -18,21 +19,27 @@ const Steps = () => {
     return (
         <div className={classes.stepsWrapper}>
             <Title>Criar Orçamento</Title>
-            <Stepper active={stepState} style={{ width: '100%' }} mt={50}>
-                <Stepper.Step label="Criar cliente">
+            <Stepper
+                active={stepState}
+                mt={50}
+                classNames={{
+                    root: classes.root,
+                }}
+            >
+                <Stepper.Step label="Passo: 1" description="Criar cliente">
                     <CreateClient />
                 </Stepper.Step>
-                {/* <Stepper.Step label="Definir cotação">
-                    <Text>definir</Text>
-                </Stepper.Step> */}
-                <Stepper.Step label="Adicionar itens">
+                <Stepper.Step label="Passo: 2" description="Iniciar orçamento">
+                    <StartBudget/>
+                </Stepper.Step>
+                <Stepper.Step label="Passo: 3" description="Definir itens">
                     <Text>adicionar</Text>
                 </Stepper.Step>
-                <Stepper.Step label="Finalizar">
-                    <Text>Finalizar</Text>
-                </Stepper.Step>
+                <Stepper.Completed>
+                    <Text>Ajustes finais</Text>
+                </Stepper.Completed>
             </Stepper>
-            <StepsButtons/>
+            <StepsButtons />
         </div>
     )
 }

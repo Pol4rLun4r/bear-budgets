@@ -22,8 +22,12 @@ interface FormType {
 };
 
 const Form = ({ form}: FormType) => {
+    const handleEnter = () => {
+        
+    }
+
     return (
-        <form className={classes.containerForm}>
+        <form className={classes.containerForm} onChange={() => handleEnter()}>
             <SearchInput mt={10}
                 {...form.getInputProps('query')}
                 placeholder="Digite o documento ou nome..."

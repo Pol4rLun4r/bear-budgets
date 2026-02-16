@@ -15,7 +15,8 @@ const App = () => {
   return (
     <MantineProvider
       defaultColorScheme='dark'
-      theme={{ fontFamily: 'Google Sans' }}
+      theme={{ fontFamily: 'Google Sans', primaryColor: 'violet' }}
+
     >
       <Notifications/>
       <div style={{ display: 'flex' }}>

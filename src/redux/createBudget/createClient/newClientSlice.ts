@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // types
 import type { ClientQuery } from '../../../../types/client'
 
-interface newClientClientDataType extends ClientQuery {
+export interface newClientClientDataType extends ClientQuery {
     id?: number;
     created_at?: string;
     updated_at?: string;

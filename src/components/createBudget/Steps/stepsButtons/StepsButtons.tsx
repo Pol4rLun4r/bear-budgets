@@ -12,15 +12,16 @@ const StepsButtons = () => {
 
     const handleDecrement = () => {
         if (stepState === 0) {
-            return ;
+            return;
         }
 
         dispatch(decrementStep());
     }
 
     return (
-        <Group justify="space-around" style={{ width: '100%' }} mt={20}>
+        <Group justify="space-between" style={{ width: '100%' }} mt={20}>
             <Button
+                style={{ width: '45%' }}
                 variant="default"
                 radius='lg'
                 size="lg"
@@ -30,14 +31,15 @@ const StepsButtons = () => {
                 Voltar
             </Button>
             <Button
-                variant="gradient"
+                style={{ width: '45%' }}
+                variant="light"
                 radius='lg'
                 size="lg"
                 type="submit"
                 form={
                     stepState === 0 ?
-                        'create-client-form' :
-                        'other'
+                        'create-client-form' : stepState === 1 ?
+                            'start-budget-form' : 'other' 
                 }
             >
                 Próximo
