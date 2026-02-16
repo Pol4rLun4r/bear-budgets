@@ -1,6 +1,6 @@
 // types
 import type { Database } from "better-sqlite3";
-import type { ClientQuery } from "../repositories/client.repository";
+import type { ClientQuery } from "../../types/client";
 
 // repositories
 import { createRepositories } from "../repositories";

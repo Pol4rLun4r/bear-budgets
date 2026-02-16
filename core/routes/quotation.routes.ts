@@ -5,7 +5,7 @@ import { Router } from "express";
 import type { Database } from "better-sqlite3";
 
 // controllers
-import create from "../controller/createQuotation.controller";
+import create from "../controller/quotation/createQuotation.controller";
 
 const quotationRoutes = (db: Database) => {
     const router = Router();

@@ -5,8 +5,8 @@ import cors from "cors";
 import type { Database } from "better-sqlite3";
 
 // routes
-import quotationRoutes from "./Routes/quotation.routes";
-import clientRoutes from "./Routes/client.routes";
+import quotationRoutes from "./routes/quotation.routes";
+import clientRoutes from "./routes/client.routes";
 
 export const createApp = (db: Database) => {
 

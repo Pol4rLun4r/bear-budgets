@@ -1,6 +1,3 @@
-// mantine
-import { Button } from "@mantine/core"
-
 // redux
 import type { RootState, AppDispatch } from "../../../../redux/store"
 import { useSelector, useDispatch } from "react-redux"
