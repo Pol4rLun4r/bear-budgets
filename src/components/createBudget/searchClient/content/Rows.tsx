@@ -26,7 +26,7 @@ const rowSkeleton = dataSkeleton.map((row, index) => (
         <Table.Td><Skeleton {...loadingProps} width={row.descriptionWidth} /></Table.Td>
         <Table.Td><Button variant="light" size="compact-xs" opacity={0.1}>Inciar cotação</Button></Table.Td>
     </Table.Tr>
-))
+));
 
 const Rows = ({ clients }: { clients: ClientType[] }) => {
     return (

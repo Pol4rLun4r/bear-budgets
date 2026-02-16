@@ -3,10 +3,10 @@ import CreateClient from "./createClient/CreateClient";
 import StepsButtons from "./stepsButtons/StepsButtons";
 
 // styles
-import classes from '../CreateBudget.module.css'
+import classes from '../CreateBudget.module.css';
 
 // mantine
-import { Stepper, Title, Text } from "@mantine/core"
+import { Stepper, Title, Text } from "@mantine/core";
 
 // redux
 import { useSelector } from "react-redux";
@@ -37,4 +37,4 @@ const Steps = () => {
     )
 }
 
-export default Steps
+export default Steps;

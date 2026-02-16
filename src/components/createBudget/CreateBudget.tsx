@@ -22,11 +22,11 @@ const CreateBudget = () => {
             <div className={classes.slideWrapper}>
                 <AnimatePresence mode='wait'>
                     {!showSteps ? (
-                        <SlideContent key='search-client'>
+                        <SlideContent framerMotionKey='search-client'>
                             <SearchClient />
                         </SlideContent>
                     ) : (
-                        <SlideContent key='steps'>
+                        <SlideContent framerMotionKey='steps'>
                             <Steps />
                         </SlideContent>
                     )}

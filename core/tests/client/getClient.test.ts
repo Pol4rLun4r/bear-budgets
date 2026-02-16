@@ -24,7 +24,7 @@ describe("GET/ Get client", () => {
 
         const response = await request(app)
             .get("/clients/get")
-            .send({ client_id: clientId })
+            .query({ client_id: clientId })
             .expect(200)
             .expect("Content-Type", /application\/json/);
 
@@ -41,7 +41,7 @@ describe("GET/ Get client", () => {
 
         const response = await request(app)
             .get("/clients/get")
-            .send({ client_id: clientId })
+            .query({ client_id: clientId })
             .expect(200)
             .expect("Content-Type", /application\/json/);
 
@@ -53,7 +53,7 @@ describe("GET/ Get client", () => {
     it("should fail when client_id is not provided", async () => {
         const response = await request(app)
             .get("/clients/get")
-            .send({})
+            .query({})
             .expect(400)
             .expect("Content-Type", /application\/json/);
 
@@ -65,7 +65,6 @@ describe("GET/ Get client", () => {
     it("should fail when client_id is undefined", async () => {
         const response = await request(app)
             .get("/clients/get")
-            .send()
             .expect(400)
             .expect("Content-Type", /application\/json/);
 
@@ -79,7 +78,7 @@ describe("GET/ Get client", () => {
 
         const response = await request(app)
             .get("/clients/get")
-            .send({ client_id: nonExistentId })
+            .query({ client_id: nonExistentId })
             .expect(400)
             .expect("Content-Type", /application\/json/);
 
@@ -91,7 +90,7 @@ describe("GET/ Get client", () => {
     it("should fail when client_id is zero", async () => {
         const response = await request(app)
             .get("/clients/get")
-            .send({ client_id: 0 })
+            .query({ client_id: 0 })
             .expect(400)
             .expect("Content-Type", /application\/json/);
 

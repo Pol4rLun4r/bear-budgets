@@ -1,5 +1,6 @@
 // mantine
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { MantineProvider } from "@mantine/core"
 
 // components
@@ -8,6 +9,7 @@ import MainContainer from './components/mainContainer/MainContainer';
 
 // styles
 import './style/Global.css'
+import { Notifications } from '@mantine/notifications';
 
 const App = () => {
   return (
@@ -15,6 +17,7 @@ const App = () => {
       defaultColorScheme='dark'
       theme={{ fontFamily: 'Google Sans' }}
     >
+      <Notifications/>
       <div style={{ display: 'flex' }}>
         <Sidebar />
         <MainContainer />

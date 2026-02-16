@@ -7,7 +7,7 @@ import getClientService from "../../domain/getClient.rules";
 
 const getClient = (db: Database) => (req: Request, res: Response) => {
     const service = getClientService(db);
-    const client_id = req.body?.client_id;
+    const client_id = Number(req.query?.client_id);
     const result = service(client_id);
 
     if (!result.success) {

@@ -4,11 +4,20 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // types
 import type { ClientQuery } from '../../../../types/client'
 
-const initialState: ClientQuery = {
+interface newClientClientDataType extends ClientQuery {
+    id?: number;
+    created_at?: string;
+    updated_at?: string;
+}
+
+const initialState: newClientClientDataType = {
+    id: undefined,
     name: '',
     document: '',
     notes: '',
-    type_client: "nacional"
+    type_client: "nacional",
+    created_at: '',
+    updated_at: '',
 }
 
 const newClientSlice = createSlice({
@@ -21,11 +30,14 @@ const newClientSlice = createSlice({
         setDocument: (state, action: PayloadAction<string>) => {
             state.document = action.payload;
         },
-        setNewClient: (state, action: PayloadAction<ClientQuery>) => {
+        setNewClient: (state, action: PayloadAction<newClientClientDataType>) => {
+            state.id = action.payload.id;
             state.name = action.payload.name;
             state.document = action.payload.document;
             state.notes = action.payload.notes;
             state.type_client = action.payload.type_client;
+            state.created_at = action.payload.created_at;
+            state.updated_at = action.payload.updated_at;
         },
         resetNewClient: () => initialState,
     }
