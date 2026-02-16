@@ -1,11 +1,11 @@
 // utils
-import { success, failure } from "../utils/handleSuccess";
-import { onlyNumbers, onlyName } from "../utils/clean";
-import { validateDocument } from "../../utils/documentValidator";
+import { success, failure } from "../../utils/handleSuccess";
+import { onlyNumbers, onlyName } from "../../utils/clean";
+import { validateDocument } from "../../../utils/documentValidator";
 
 // types
-import type { ClientQuery } from "../../types/client";
-import type { TypeClientCategory, ClientType } from "../../types/client";
+import type { ClientQuery } from "../../../types/client";
+import type { TypeClientCategory, ClientType } from "../../../types/client";
 
 interface CreateClientDataType extends ClientQuery {
     clientExists: ClientType | undefined

@@ -1,14 +1,6 @@
 // Tipos do domínio / banco (schema aplicado via migrations em ./migrate.ts)
 
-// Cotação "container" – agrupa todas as versões. Imutável (não se edita, só se adicionam versões).
-export type QuotationType = {
-    id: number;
-    client_id: number;
-    created_at: string;
-};
-
-// Status por versão: 0 = rascunho, 1 = aprovado, 2 = outro (ex.: omie) 
-export type QuotationStatus = 0 | 1 | 2;
+import { QuotationStatus } from "../../types/quotation";
 
 // Uma versão imutável de uma cotação. "Editar" = criar nova versão. 
 export type QuotationVersionType = {

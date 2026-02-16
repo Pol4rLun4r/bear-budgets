@@ -1,6 +1,6 @@
 // types
 import type { Database } from "better-sqlite3";
-import type { QuotationStatus, QuotationType } from "../db/schema";
+import type { QuotationStatus, QuotationType, QuotationQuery } from "../../types/quotation"; 
 
 export type QuotationVersionSummary = {
     quotation_id: number;
@@ -12,13 +12,7 @@ export type QuotationVersionSummary = {
     notes: string | null;
 };
 
-export type QuotationQuery = Omit<
-    QuotationType,
-    "id" | "created_at"
-> & {
-    notes?: string | null;
-    status?: QuotationStatus;
-};
+
 
 export const createQuotationRepository = (db: Database) => ({ client_id, notes, status }: QuotationQuery) => {
     const quotation = db.transaction(() => {

@@ -1,9 +1,9 @@
 // types
-import type { QuotationQuery } from "../repositories/quotation.repository";
-import type { ClientType } from "../../types/client";
+import type { QuotationQuery } from "../../../types/quotation";
+import type { ClientType } from "../../../types/client";
 
 // utils
-import { success, failure } from "../utils/handleSuccess";
+import { success, failure } from "../../utils/handleSuccess";
 
 export interface createQuotationDataType extends QuotationQuery {
     clientExists: ClientType | undefined

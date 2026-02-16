@@ -1,6 +1,6 @@
 // utils
-import { success, failure } from "../utils/handleSuccess";
-import { onlyName, onlyNumbers } from "../utils/clean";
+import { success, failure } from "../../utils/handleSuccess";
+import { onlyName, onlyNumbers } from "../../utils/clean";
 
 export interface SearchClientDataType {
     value: string;

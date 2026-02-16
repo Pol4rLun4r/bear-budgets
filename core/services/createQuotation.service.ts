@@ -3,7 +3,7 @@ import type { Database } from "better-sqlite3";
 import type { QuotationQuery } from "../repositories/quotation.repository";
 
 // rules
-import createQuotationRules from "../domain/createQuotation.rules";
+import createQuotationRules from "../domain/quotation/createQuotation.rules";
 import { success } from "../utils/handleSuccess";
 
 // repositories

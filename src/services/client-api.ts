@@ -1,11 +1,9 @@
 // api
 import axios from "axios";
+import { baseUrl } from "./url";
 
 // types
 import { ClientQuery } from "../../types/client";
-
-// alterar depois
-export const baseUrl = 'http://localhost:4000';
 
 // types
 export type SearchClientDataType = {

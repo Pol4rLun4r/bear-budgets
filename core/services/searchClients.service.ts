@@ -1,6 +1,6 @@
 // types
 import type { Database } from "better-sqlite3";
-import type { SearchClientDataType } from "../domain/searchClients.rules";
+import type { SearchClientDataType } from "../domain/client/searchClients.rules";
 
 // repositories
 import { createRepositories } from "../repositories";
@@ -9,7 +9,7 @@ import { createRepositories } from "../repositories";
 import { success } from "../utils/handleSuccess";
 
 // rules
-import searchClientsRules from "../domain/searchClients.rules";
+import searchClientsRules from "../domain/client/searchClients.rules";
 
 const searchClientsService = (db: Database) => {
     const repo = createRepositories(db);

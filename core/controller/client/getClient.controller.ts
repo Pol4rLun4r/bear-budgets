@@ -3,7 +3,7 @@ import type { Request, Response } from "express";
 import type { Database } from "better-sqlite3";
 
 // services
-import getClientService from "../../domain/getClient.rules";
+import getClientService from '../../services/getClient.service';
 
 const getClient = (db: Database) => (req: Request, res: Response) => {
     const service = getClientService(db);

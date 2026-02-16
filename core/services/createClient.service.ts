@@ -6,7 +6,7 @@ import type { ClientQuery } from "../../types/client";
 import { createRepositories } from "../repositories";
 
 // rules
-import createClientRules, { cleanDocument } from "../domain/createClient.rules";
+import createClientRules, { cleanDocument } from "../domain/client/createClient.rules";
 
 // utils
 import { success } from "../utils/handleSuccess";

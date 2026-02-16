@@ -1,26 +1,30 @@
 // types
-import type { ClientType } from "../../types/client";
+import type { Database } from "better-sqlite3";
+
+// repositores
+import { createRepositories } from "../repositories";
+
+// rules
+import getClientRules from "../domain/client/getClient.rules";
 
 // utils
-import { failure, success } from "../utils/handleSuccess";
+import { success } from "../utils/handleSuccess";
 
-interface GetClientDataType {
-    client_id: number;
-    clientExists: ClientType | undefined;
+const getClientService = (db: Database) => {
+    const repo = createRepositories(db);
+
+    return db.transaction((client_id: number) => {
+        const clientExists = repo.client.getById((client_id));
+
+        const result = getClientRules({ clientExists, client_id });
+
+        // any errors
+        if(!result.success) {
+            return result;
+        }
+
+        return success(clientExists);
+    });
 }
 
-const getClientRules = ({ clientExists, client_id }: GetClientDataType) => {
-    // check if client_id is empty
-    if (!client_id) {
-        return failure('Cliente ID não informado');
-    }
-
-    // check if client exists
-    if (!clientExists) {
-        return failure('Cliente não existe');
-    }
-
-    return success(client_id);
-}
-
-export default getClientRules;
+export default getClientService;
