@@ -8,7 +8,7 @@ import StartBudgetButton from './StartBudgetButton';
 import classes from '../SearchClient.module.css';
 
 // types
-import type { ClientType } from '../SearchClient';
+import type { ClientType } from '../../../../../types/client';
 
 const dataSkeleton = [
     { nameWidth: '50%', descriptionWidth: '50%' },

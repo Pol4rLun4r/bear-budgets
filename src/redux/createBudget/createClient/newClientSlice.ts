@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // types
-import type { ClientQuery } from '../../../types/client'
+import type { ClientQuery } from '../../../../types/client'
 
 const initialState: ClientQuery = {
     name: '',

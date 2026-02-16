@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 
 const Sidebar = () => {
-    const collapsed = useSelector((state: RootState) => state.collapsed.collapsed);
+    const collapsed = useSelector((state: RootState) => state.sidebar.collapsed.collapsed);
 
     return (
         <nav className={classes.sidebar} data-collapsed={collapsed}>

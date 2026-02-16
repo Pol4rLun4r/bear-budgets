@@ -12,7 +12,7 @@ import classes from './MainContainer.module.css';
 import { Text, Title } from '@mantine/core';
 
 const MainContainer = () => {
-    const tabState = useSelector((state: RootState) => state.tab.activeTab);
+    const tabState = useSelector((state: RootState) => state.sidebar.tab.activeTab);
 
     return (
         <main className={classes.main}>

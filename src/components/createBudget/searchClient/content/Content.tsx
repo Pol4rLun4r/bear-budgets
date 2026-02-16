@@ -12,7 +12,7 @@ import { Box } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 
 // types
-import type { ClientType } from '../SearchClient';
+import type { ClientType } from '../../../../../types/client';
 
 // components
 import Rows from './Rows';

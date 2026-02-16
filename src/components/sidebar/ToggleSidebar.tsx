@@ -15,7 +15,7 @@ import classes from './ToggleSidebar.module.css';
 
 const ToggleSidebar = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const collapsed = useSelector((state: RootState) => state.collapsed.collapsed)
+    const collapsed = useSelector((state: RootState) => state.sidebar.collapsed.collapsed)
 
     const handleCollapse = () => {
         dispatch(toggleCollapsed())

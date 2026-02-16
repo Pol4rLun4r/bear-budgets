@@ -14,7 +14,7 @@ import classes from './BackBeginningButton.module.css';
 
 const BackBeginningButton = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const showSteps = useSelector((state: RootState) => state.steps.showSteps);
+    const showSteps = useSelector((state: RootState) => state.createBudget.showSteps.showSteps);
 
     const handleReset = () => dispatch(resetCreateBudget());
 

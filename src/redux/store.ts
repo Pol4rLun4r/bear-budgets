@@ -1,20 +1,16 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-// slices
-import tabSlice from "./sideBar/tabSlice";
-import collapsedSlice from "./sideBar/collapsedSlice";
-import newClientSlice from "./createBudget/newClientSlice";
-import stepsSlice from "./createBudget/stepsSlice";
-import searchClientSlice from './createBudget/searchClient/searchClientSlice';
+// domain reducers
+import sidebarReducer from "./sideBar/rootReducer";
+import createBudgetReducer from "./createBudget/rootReducer";
+
+const rootReducer = combineReducers({
+    sidebar: sidebarReducer,
+    createBudget: createBudgetReducer,
+});
 
 const store = configureStore({
-    reducer: {
-        tab: tabSlice,
-        collapsed: collapsedSlice,
-        newClient: newClientSlice,
-        steps: stepsSlice,
-        searchClient: searchClientSlice,
-    },
+    reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,7 +1,7 @@
 // utils
 import { success, failure } from "../utils/handleSuccess";
 import { onlyNumbers, onlyName } from "../utils/clean";
-import { validateDocument } from "../utils/documentValidator";
+import { validateDocument } from "../../utils/documentValidator";
 
 // types
 import type { ClientQuery } from "../../types/client";

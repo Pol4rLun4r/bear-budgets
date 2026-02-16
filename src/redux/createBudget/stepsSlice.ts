@@ -2,23 +2,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    showSteps: false,
+    step: 0,
 }
 
 const stepsSlice = createSlice({
-    name: "steps",
+    name: 'steps',
     initialState,
     reducers: {
-        openSteps: (state) => {
-            state.showSteps = true;
+        incrementStep: (state) => {
+            state.step = state.step + 1
         },
-        closeSteps: (state) => {
-            state.showSteps = false;
+        decrementStep: (state) => {
+            state.step = state.step - 1;
         },
+        resetStep: () => initialState,
     }
 });
 
-export const { openSteps, closeSteps } = stepsSlice.actions;
+export const { decrementStep, incrementStep, resetStep } = stepsSlice.actions;
 
 export default stepsSlice.reducer;
-

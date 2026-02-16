@@ -25,7 +25,7 @@ interface TabsProps {
 }
 
 export const SidebarTab = ({ icon: Icon, label, active, onClick, ref }: TabsProps) => {
-    const collapsed = useSelector((state: RootState) => state.collapsed.collapsed);
+    const collapsed = useSelector((state: RootState) => state.sidebar.collapsed.collapsed);
 
     return (
         <div ref={ref}>

@@ -18,8 +18,9 @@ const NoSearch = ({ hasQuery }: NoSearchProps) => {
                 <Stack className={classes.messages}>
                     <Stack justify="center" align="center">
                         <Text
-                            style={{display: 'flex', alignItems: 'center', gap: 5}}
-                        >Faça uma busca para encontrar um cliente <IconSearch size={18} /></Text>
+                            style={{ display: 'flex', alignItems: 'center', gap: 5 }}
+                        >
+                            Faça uma busca para encontrar um cliente <IconSearch size={18} /></Text>
                         <Text>OU</Text>
                         <Text>Adicionar um novo caso não encontre!</Text>
                     </Stack>

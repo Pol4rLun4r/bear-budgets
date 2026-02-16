@@ -15,7 +15,7 @@ import type { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 
 const CreateBudget = () => {
-    const showSteps = useSelector((state: RootState) => state.steps.showSteps);
+    const showSteps = useSelector((state: RootState) => state.createBudget.showSteps.showSteps);
 
     return (
         <div className={classes.container}>

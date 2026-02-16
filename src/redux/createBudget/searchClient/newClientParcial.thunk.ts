@@ -2,15 +2,15 @@
 import type { AppDispatch, RootState } from "../../store"
 
 // redux
-import { openSteps } from "../stepsSlice"
-import { setName, setDocument } from "../newClientSlice"
+import { openSteps } from "../showStepsSlice"
+import { setName, setDocument } from "../createClient/newClientSlice"
 
 // define pré dados como nome ou documento ao formulário de novo cliente
 const newClientPartial = () =>
     (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(openSteps());
 
-        const { type, value } = getState().searchClient;
+        const { type, value } = getState().createBudget.searchClient;
 
         if (type === 'name') {
             dispatch(setName(value));
