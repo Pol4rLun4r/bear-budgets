@@ -33,7 +33,7 @@ const addItemsToQuotationService = (db: Database) => (payload: AddItemsToQuotati
         return result;
     }
 
-    const added = repo.item.addItemsToQuotationVersion(
+    const added = repo.item.addToQuotation(
         result.data.quotation_version_id,
         result.data.items
     );

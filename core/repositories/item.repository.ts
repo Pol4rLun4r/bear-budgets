@@ -1,6 +1,8 @@
 import type { Database } from "better-sqlite3";
 import type {
     ItemReferenceType,
+    ItemReferenceWithNotesType,
+    ItemReferenceNoteType,
     ItemVersionType,
     AddItemToQuotationInput,
     AddedItemResult,
@@ -9,7 +11,7 @@ import type {
 
 
 // cria a referência do item (dados mestre).
- 
+
 export const createItemReferenceRepository = (db: Database) =>
     (data: Pick<AddItemToQuotationInput, "description" | "internal_code" | "manufacturer_code" | "ncm">): number => {
         const row = db.prepare(`
@@ -121,12 +123,55 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
         return run();
     };
 
-/**
- * Busca referência por id (útil para validações).
- */
+// busca referência por id com notas da referência
 export const getItemReferenceByIdRepository = (db: Database) =>
-    (id: number): ItemReferenceType | undefined => {
-        return db.prepare(`
+    (id: number): ItemReferenceWithNotesType | undefined => {
+        const ref = db.prepare(`
             SELECT * FROM item_references WHERE id = ? LIMIT 1
         `).get(id) as ItemReferenceType | undefined;
+
+        if (!ref) return undefined;
+
+        const notes = db.prepare(`
+            SELECT id, item_reference_id, type, content, created_at, updated_at
+            FROM item_reference_notes
+            WHERE item_reference_id = ?
+            ORDER BY id ASC
+        `).all(id) as ItemReferenceNoteType[];
+
+        return { ...ref, notes };
+    };
+
+// pesquisa referências por descrição
+export const searchItemReferencesByDescriptionRepository = (db: Database) =>
+    (rawQuery: string): ItemReferenceType[] => {
+
+        // divide a query em palavras separadas por espaços e filtra as palavras vazias
+        const words = rawQuery
+            .toLowerCase() // converte para minúsculas para facilitar a pesquisa
+            .trim() // remove espaços em branco no início e no fim
+            .split(/\s+/) // divide em palavras separadas por espaços
+            .filter(Boolean); // filtra as palavras vazias
+
+        // se não houver palavras, retorna um array vazio
+        if (!words.length) {
+            return [];
+        }
+
+        // constrói as cláusulas WHERE para cada palavra
+        const whereClauses = words.map((word) => "LOWER(description) LIKE '%' || ? || '%'");
+
+        // constrói a query de pesquisa
+        const sql = `
+            SELECT *
+            FROM item_references
+            WHERE ${whereClauses.join(" AND ")}
+            ORDER BY description
+        `;
+
+        // constrói os parâmetros para a query
+        const params = words.map(w => w.toLowerCase());
+
+        // executa a query e retorna os resultados
+        return db.prepare(sql).all(...params) as ItemReferenceType[];
     };

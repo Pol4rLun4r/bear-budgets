@@ -15,6 +15,21 @@ export type ItemReferenceNoteInput = {
     content: string;
 };
 
+// nota da referência como retornada do banco
+export type ItemReferenceNoteType = {
+    id: number;
+    item_reference_id: number;
+    type: "text" | "link";
+    content: string;
+    created_at: string;
+    updated_at: string;
+};
+
+// referência do item com suas notas (retorno do get por id)
+export type ItemReferenceWithNotesType = ItemReferenceType & {
+    notes: ItemReferenceNoteType[];
+};
+
 // uma versão imutável do item (ex.: versão 1 ao criar; novas versões ao editar)
 export type ItemVersionType = {
     id: number;

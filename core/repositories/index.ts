@@ -19,6 +19,7 @@ import {
 import {
     addItemsToQuotationVersionRepository,
     getItemReferenceByIdRepository,
+    searchItemReferencesByDescriptionRepository,
 } from "./item.repository";
 
 export const createRepositories = (db: Database) => ({
@@ -37,8 +38,9 @@ export const createRepositories = (db: Database) => ({
         getAllVersions: getAllQuotationsVersionsRepository(db),
     },
     item: {
-        addItemsToQuotationVersion: addItemsToQuotationVersionRepository(db),
+        addToQuotation: addItemsToQuotationVersionRepository(db),
         getReferenceById: getItemReferenceByIdRepository(db),
+        searchByDescription: searchItemReferencesByDescriptionRepository(db),
     },
 });
 
