@@ -1,7 +1,7 @@
 /// <reference types="vitest/globals" />
 
 // types
-import { SearchClientDataType } from "../../domain/searchClients.rules";
+import { SearchClientDataType } from "../../domain/client/searchClients.rules";
 
 // jest
 import request from "supertest"
@@ -211,7 +211,7 @@ describe("POST/ Search Clients", () => {
                 // 1. Prepara os dados
         const searchData: SearchClientDataType = {
             type: 'document',
-            value: '1234 5.67 /89 /01'
+            value: '52 9/ 9 -82 .24 725'
         }
 
         // 2. Chama o serviço para buscar o cliente
@@ -222,6 +222,6 @@ describe("POST/ Search Clients", () => {
             .expect("Content-Type", /application\/json/);
 
         // 3. verifica se houve o retorno correto (retorna o documento de um cliente especifico)
-        expect(clients.body.data[0].document).toBe('12345678901');
+        expect(clients?.body?.data[0]?.document!).toBe('52998224725');
     })
 });

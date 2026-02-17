@@ -1,7 +1,7 @@
 /// <reference types="vitest/globals" />
 
 // types
-import type { ClientQuery } from "../../repositories/client.repository";
+import type { ClientQuery } from "../../../types/client";
 
 // api
 import request from "supertest";
@@ -57,7 +57,7 @@ describe('POST/ Create client', () => {
         // 1. Prepara os dados
         const searchData: ClientQuery = {
             name: 'Pedro',
-            document: '45.678.912/0001-09',
+            document: '11144477735',
             type_client: 'nacional',
             notes: 'Cliente brabo'
         };
