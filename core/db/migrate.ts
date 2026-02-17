@@ -14,6 +14,7 @@ const INITIAL_UP = `
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
     CREATE UNIQUE INDEX IF NOT EXISTS idx_clients_document ON clients(document);
+
     CREATE TABLE IF NOT EXISTS quotations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         client_id INTEGER NOT NULL,
@@ -32,9 +33,67 @@ const INITIAL_UP = `
         UNIQUE(quotation_id, version)
     );
     CREATE INDEX IF NOT EXISTS idx_quotation_versions_quotation_id ON quotation_versions(quotation_id);
+
+    CREATE TABLE IF NOT EXISTS item_references (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        description TEXT NOT NULL,
+        internal_code TEXT,
+        manufacturer_code TEXT,
+        ncm TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE INDEX IF NOT EXISTS idx_item_references_description ON item_references(description);
+
+    CREATE TABLE IF NOT EXISTS item_reference_notes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_reference_id INTEGER NOT NULL,
+        type TEXT NOT NULL CHECK (type IN ('text', 'link')),
+        content TEXT NOT NULL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (item_reference_id)
+            REFERENCES item_references(id)
+            ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS item_versions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_reference_id INTEGER NOT NULL,
+        version INTEGER NOT NULL,
+        quantity REAL NOT NULL DEFAULT 1,
+        unit_price REAL,
+        markup REAL,
+        purchase_freight REAL,
+        ipi REAL,
+        st REAL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (item_reference_id) REFERENCES item_references(id) ON DELETE CASCADE,
+        UNIQUE(item_reference_id, version)
+    );
+    CREATE INDEX IF NOT EXISTS idx_item_versions_item_reference_id ON item_versions(item_reference_id);
+
+    CREATE TABLE IF NOT EXISTS quotation_version_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        quotation_version_id INTEGER NOT NULL,
+        item_version_id INTEGER NOT NULL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (quotation_version_id) REFERENCES quotation_versions(id) ON DELETE CASCADE,
+        FOREIGN KEY (item_version_id) REFERENCES item_versions(id) ON DELETE CASCADE,
+        UNIQUE(quotation_version_id, item_version_id)
+    );
+    CREATE INDEX IF NOT EXISTS idx_quotation_version_items_quotation_version_id ON quotation_version_items(quotation_version_id);
 `;
 
 const INITIAL_DOWN = `
+    DROP INDEX IF EXISTS idx_quotation_version_items_quotation_version_id;
+    DROP TABLE IF EXISTS quotation_version_items;
+    DROP INDEX IF EXISTS idx_item_versions_item_reference_id;
+    DROP TABLE IF EXISTS item_versions;
+    DROP TABLE IF EXISTS item_reference_notes;
+    DROP INDEX IF EXISTS idx_item_references_description;
+    DROP TABLE IF EXISTS item_references;
     DROP INDEX IF EXISTS idx_quotation_versions_quotation_id;
     DROP TABLE IF EXISTS quotation_versions;
     DROP TABLE IF EXISTS quotations;

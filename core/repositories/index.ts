@@ -16,6 +16,11 @@ import {
     getAllQuotationsVersionsRepository
 } from "./quotation.repository";
 
+import {
+    addItemsToQuotationVersionRepository,
+    getItemReferenceByIdRepository,
+} from "./item.repository";
+
 export const createRepositories = (db: Database) => ({
     client: {
         create: createClientRepository(db),
@@ -30,7 +35,11 @@ export const createRepositories = (db: Database) => ({
         getById: getQuotationByIdRepository(db),
         getByVersion: getQuotationVersionByIdRepository(db),
         getAllVersions: getAllQuotationsVersionsRepository(db),
-    }
+    },
+    item: {
+        addItemsToQuotationVersion: addItemsToQuotationVersionRepository(db),
+        getReferenceById: getItemReferenceByIdRepository(db),
+    },
 });
 
 export type Repositories = ReturnType<typeof createRepositories>;

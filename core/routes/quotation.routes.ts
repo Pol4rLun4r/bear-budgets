@@ -6,11 +6,13 @@ import type { Database } from "better-sqlite3";
 
 // controllers
 import create from "../controller/quotation/createQuotation.controller";
+import addItems from "../controller/quotation/addItemsToQuotation.controller";
 
 const quotationRoutes = (db: Database) => {
     const router = Router();
 
     router.post("/", create(db));
+    router.post("/items", addItems(db));
 
     return router;
 }

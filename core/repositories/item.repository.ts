@@ -1,0 +1,132 @@
+import type { Database } from "better-sqlite3";
+import type {
+    ItemReferenceType,
+    ItemVersionType,
+    AddItemToQuotationInput,
+    AddedItemResult,
+    ItemReferenceNoteInput,
+} from "../../types/item";
+
+
+// cria a referência do item (dados mestre).
+ 
+export const createItemReferenceRepository = (db: Database) =>
+    (data: Pick<AddItemToQuotationInput, "description" | "internal_code" | "manufacturer_code" | "ncm">): number => {
+        const row = db.prepare(`
+            INSERT INTO item_references (description, internal_code, manufacturer_code, ncm)
+            VALUES (?, ?, ?, ?)
+        `).run(
+            data.description,
+            data.internal_code ?? null,
+            data.manufacturer_code ?? null,
+            data.ncm ?? null
+        );
+        return row.lastInsertRowid as number;
+    };
+
+// cria a primeira (ou próxima) versão do item.
+
+export const createItemVersionRepository = (db: Database) =>
+    (
+        itemReferenceId: number,
+        version: number,
+        quantity: number,
+        unitPrice: number | null,
+        markup: number | null,
+        purchaseFreight: number | null,
+        ipi: number | null,
+        st: number | null
+    ): number => {
+        const row = db.prepare(`
+            INSERT INTO item_versions (item_reference_id, version, quantity, unit_price, markup, purchase_freight, ipi, st)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(itemReferenceId, version, quantity, unitPrice, markup, purchaseFreight, ipi, st);
+        return row.lastInsertRowid as number;
+    };
+
+// vincula uma versão do item a uma versão da cotação.
+// usado para buscar ou edições futuras do item.
+export const linkItemVersionToQuotationVersionRepository = (db: Database) =>
+    (quotationVersionId: number, itemVersionId: number): number => {
+        const row = db.prepare(`
+            INSERT INTO quotation_version_items (quotation_version_id, item_version_id)
+            VALUES (?, ?)
+        `).run(quotationVersionId, itemVersionId);
+        return row.lastInsertRowid as number;
+    };
+
+// adiciona um ou mais itens à versão da cotação em uma única transação:
+// para cada item: cria referência → cria versão 1 → vincula à quotation_version.
+export const addItemsToQuotationVersionRepository = (db: Database) =>
+    (quotationVersionId: number, items: AddItemToQuotationInput[]): AddedItemResult[] => {
+        const createRef = db.prepare(`
+            INSERT INTO item_references (description, internal_code, manufacturer_code, ncm)
+            VALUES (?, ?, ?, ?)
+        `);
+        const createVersion = db.prepare(`
+            INSERT INTO item_versions (item_reference_id, version, quantity, unit_price, markup, purchase_freight, ipi, st)
+            VALUES (?, 1, ?, ?, ?, ?, ?, ?)
+        `);
+        const createNote = db.prepare(`
+            INSERT INTO item_reference_notes (item_reference_id, type, content)
+            VALUES (?, ?, ?)
+        `);
+        const link = db.prepare(`
+            INSERT INTO quotation_version_items (quotation_version_id, item_version_id)
+            VALUES (?, ?)
+        `);
+
+        const run = db.transaction(() => {
+            const results: AddedItemResult[] = [];
+            for (const item of items) {
+
+                const quantity = item.quantity ?? 1;
+                const unitPrice = item.unit_price ?? null;
+                const markup = item.markup ?? null;
+                const purchaseFreight = item.purchase_freight ?? null;
+                const ipi = item.ipi ?? null;
+                const st = item.st ?? null;
+
+                const refRow = createRef.run(
+                    item.description,
+                    item.internal_code ?? null,
+                    item.manufacturer_code ?? null,
+                    item.ncm ?? null
+                );
+
+                const itemReferenceId = refRow.lastInsertRowid as number;
+
+                // Cria notas de referência (se existirem)
+                if (item.notes?.length) {
+                    for (const note of item.notes) {
+                        createNote.run(
+                            itemReferenceId,
+                            note.type,
+                            note.content
+                        );
+                    }
+                }
+
+                const versionRow = createVersion.run(itemReferenceId, quantity, unitPrice, markup, purchaseFreight, ipi, st);
+                const itemVersionId = versionRow.lastInsertRowid as number;
+
+                const linkRow = link.run(quotationVersionId, itemVersionId);
+                const quotationVersionItemId = linkRow.lastInsertRowid as number;
+
+                results.push({ item_reference_id: itemReferenceId, item_version_id: itemVersionId, quotation_version_item_id: quotationVersionItemId });
+            }
+            return results;
+        });
+
+        return run();
+    };
+
+/**
+ * Busca referência por id (útil para validações).
+ */
+export const getItemReferenceByIdRepository = (db: Database) =>
+    (id: number): ItemReferenceType | undefined => {
+        return db.prepare(`
+            SELECT * FROM item_references WHERE id = ? LIMIT 1
+        `).get(id) as ItemReferenceType | undefined;
+    };
