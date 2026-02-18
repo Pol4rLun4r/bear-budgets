@@ -2,6 +2,7 @@
 import CreateClient from "./createClient/CreateClient";
 import StepsButtons from "./stepsButtons/StepsButtons";
 import StartBudget from "./startBudget/StartBudget";
+import AddItems from "./addItems/AddItems";
 
 // styles
 import classes from './Steps.module.css';
@@ -32,8 +33,8 @@ const Steps = () => {
                 <Stepper.Step label="Passo: 2" description="Iniciar orçamento">
                     <StartBudget/>
                 </Stepper.Step>
-                <Stepper.Step label="Passo: 3" description="Definir itens">
-                    <Text>adicionar</Text>
+                <Stepper.Step label="Passo: 3" description="Adicionar Itens">
+                    <AddItems/>
                 </Stepper.Step>
                 <Stepper.Completed>
                     <Text>Ajustes finais</Text>

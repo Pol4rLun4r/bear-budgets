@@ -2,6 +2,7 @@
 import { RootState, type AppDispatch } from '../../../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementStep } from '../../../../redux/createBudget/stepsSlice';
+import { setBasicData } from '../../../../redux/createBudget/drafts/quotationBasicDataSlice';
 
 // components
 import ClientInfo from "./ClientInfo";
@@ -29,8 +30,7 @@ const StartBudget = () => {
     try {
       const response = await clientService.create(cleanedData);
 
-      console.log(response);
-
+      dispatch(setBasicData(response.data));
       dispatch(incrementStep());
     } catch (error) {
       console.log(error);

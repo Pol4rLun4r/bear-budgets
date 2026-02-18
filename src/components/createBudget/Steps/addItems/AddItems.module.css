@@ -1,0 +1,22 @@
+.data {
+    margin-top: var(--mantine-spacing-xl);
+    position: relative;
+    padding: var(--mantine-spacing-md);
+    padding-top: calc(var(--mantine-spacing-md) + 30px);
+}
+
+.dataIcon {
+    position: absolute;
+    top: -20px;
+    left: calc(50% - 25px);
+}
+
+.form {
+    margin-top: var(--mantine-spacing-md);
+    padding: var(--mantine-spacing-md);
+}
+
+.notes {
+    padding: var(--mantine-spacing-md);
+    background-color: var(--input-bg);
+}
