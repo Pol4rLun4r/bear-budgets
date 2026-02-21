@@ -1,6 +1,6 @@
 // types
 import type { Database } from "better-sqlite3";
-import type { QuotationQuery } from "../repositories/quotation.repository";
+import type { QuotationQuery } from "../../types/quotation";
 
 // rules
 import createQuotationRules from "../domain/quotation/createQuotation.rules";

@@ -6,6 +6,9 @@ import type { RootState, AppDispatch } from "../../../../redux/store"
 // mantine
 import { Group, Button } from "@mantine/core"
 
+// style
+import classes from '../Steps.module.css';
+
 const StepsButtons = () => {
     const dispatch = useDispatch<AppDispatch>();
     const stepState = useSelector<RootState>((state) => state.createBudget.steps.step) as number;
@@ -19,7 +22,7 @@ const StepsButtons = () => {
     }
 
     return (
-        <Group justify="space-between" style={{ width: '100%' }} mt={20}>
+        <Group className={classes.stepsButtons}>
             <Button
                 style={{ width: '45%' }}
                 variant="default"

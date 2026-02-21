@@ -9,7 +9,6 @@ const DocumentInput = ({ form }: FormDataType) => {
         <TextInput
             {...form.getInputProps('document')}
             radius='lg'
-            mt='xl'
             size="md"
             label="CNPJ ou CPF"
             description="Informe o documento com ou sem pontuação"

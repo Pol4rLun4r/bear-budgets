@@ -24,7 +24,7 @@ const StartBudget = () => {
     const cleanedData: QuotationQuery = {
       client_id: client_id as number,
       notes: data.notes,
-      status: data.status
+      status: Number(data.status) as any
     }
 
     try {

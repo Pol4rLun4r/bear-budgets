@@ -1,5 +1,5 @@
 // mantine
-import { Center, Divider, Group, Paper, ThemeIcon, Title, Text, CopyButton, Tooltip, ActionIcon, MantineStyleProp } from '@mantine/core';
+import { Center, Divider, Group, Paper, ThemeIcon, Title, Text, CopyButton, Tooltip, ActionIcon, MantineStyleProp, HoverCard } from '@mantine/core';
 
 // style
 import classes from './StartBudget.module.css';
@@ -38,31 +38,35 @@ const ClientInfo = () => {
     const document = formatDocument(clientData.document!);
 
     const style: MantineStyleProp = {
-        display: "flex", gap: 5, justifyContent: 'center', alignItems: 'center', 
+        display: "flex", gap: 5, justifyContent: 'center', alignItems: 'center',
     }
 
     return (
-        <Paper withBorder radius='md' className={classes.client}>
-            <ThemeIcon size={50} radius={50} className={classes.clientIcon}>
-                <IconUser size={32} stroke={1.5} />
-            </ThemeIcon>
-            <Center>
-                <Title order={4}>Informações do cliente</Title>
-            </Center>
-            <Divider mt={20} />
-            <Group justify="space-around" mt={20}>
+        <HoverCard shadow='md' radius={'md'}>
+            <HoverCard.Target>
+                <Paper withBorder radius='md' className={classes.client}>
+                    <Center style={{ flexDirection: 'row', gap: 10 }} >
+                        <ThemeIcon size={30} radius={50} className={classes.clientIcon}>
+                            <IconUser size={20} stroke={1.5} />
+                        </ThemeIcon>
+                        <Title order={4}>Informações do cliente</Title>
+                    </Center>
+                </Paper>
+            </HoverCard.Target>
+            <HoverCard.Dropdown>
+                <Group justify="space-around">
+                    <div style={{ ...style }} >
+                        Nome: <Text c="dimmed" tt='capitalize'>{name}</Text>
+                        <CopyButtonFactory value={name} />
+                    </div>
 
-                <div style={{...style}} >
-                    Nome: <Text c="dimmed" tt='capitalize'>{name}</Text>
-                    <CopyButtonFactory value={name}/>
-                </div>
-
-                <div style={{...style}} >
-                    Documento: <Text c="dimmed">{document}</Text>
-                    <CopyButtonFactory value={document}/>
-                </div>
-            </Group>
-        </Paper>
+                    <div style={{ ...style }} >
+                        Documento: <Text c="dimmed">{document}</Text>
+                        <CopyButtonFactory value={document} />
+                    </div>
+                </Group>
+            </HoverCard.Dropdown>
+        </HoverCard>
     )
 }
 

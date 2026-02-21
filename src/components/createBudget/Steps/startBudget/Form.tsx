@@ -18,7 +18,7 @@ const Form = ({ handleSubmit }: FormDataType) => {
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
-            status: 0,
+            status: '0',
             notes: ''
         }
     })

@@ -18,11 +18,11 @@ const App = () => {
       theme={{ fontFamily: 'Google Sans', primaryColor: 'violet' }}
 
     >
-      <Notifications/>
-      <div style={{ display: 'flex' }}>
+      <Notifications />
+      <>
         <Sidebar />
         <MainContainer />
-      </div>
+      </>
     </MantineProvider>
   )
 }

@@ -14,7 +14,7 @@ const CreateNewClientButton = () => {
   return (
     <Stack >
       Nenhum cliente encontrado
-      <Button variant="gradient" radius='lg' onClick={() => handleNewClientPartial()}>Criar novo cliente</Button>
+      <Button variant="light" radius='lg' onClick={() => handleNewClientPartial()}>Criar novo cliente</Button>
     </Stack>
   )
 };

@@ -9,7 +9,7 @@ const StatusInput = ({form}: FormDataType) => {
         <>
             <Text c='dimmed' size="sm">Por padrão o orçamento é um Rascunho</Text>
             <SegmentedControl
-                {...form.getInputProps('type_client')}
+                {...form.getInputProps('status')}
                 fullWidth
                 radius='lg'
                 size="md"

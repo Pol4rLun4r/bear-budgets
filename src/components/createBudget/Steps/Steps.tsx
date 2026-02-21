@@ -18,13 +18,14 @@ const Steps = () => {
     const stepState = useSelector<RootState>((state) => state.createBudget.steps.step) as number;
 
     return (
-        <div className={classes.stepsWrapper}>
-            <Title>Criar Orçamento</Title>
+        <div className={classes.container}>
+            <Title className={classes.title}>Criar Orçamento</Title>
             <Stepper
                 active={stepState}
-                mt={50}
                 classNames={{
                     root: classes.root,
+                    content: classes.content,
+                    steps: classes.steps
                 }}
             >
                 <Stepper.Step label="Passo: 1" description="Criar cliente">

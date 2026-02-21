@@ -2,13 +2,13 @@ import type { UseFormReturnType } from "@mantine/form";
 
 export interface FormDataType {
     form: UseFormReturnType<{
-        status: number;
+        status: string;
         notes: string;
     }, (values: {
-        status: number;
+        status: string;
         notes: string;
     }) => {
-        status: number;
+        status: string;
         notes: string;
     }>
 };

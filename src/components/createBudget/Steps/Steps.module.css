@@ -1,17 +1,88 @@
-.stepsWrapper {
+.container {
     width: 600px;
+
+    height: 100%;
+    min-height: 0; /* permite o flex shrink em telas pequenas */
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
+    position: relative;
+    z-index: 0;
+
     @media (max-width: 900px) {
         width: 90%;
     }
 }
 
+.title {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.stepsButtons {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+
+    justify-content: space-between;
+    width: 100%;
+}
+
 .root {
     width: 100%;
-    overflow: scroll;
+    /* flex: 1; */
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.steps {
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--mantine-spacing-xl) * 2.5);
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 100%;
+}
+
+.content {
+    padding: 0;
+    /* background-color: rgba(128, 128, 128, 0.52); */
+
+    margin-top: calc(var(--mantine-spacing-xl) * 4);
+    margin-bottom: calc(var(--mantine-spacing-xl) * 2);
+
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+
+    /* scrollbar: só a barra, sem fundo */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(80, 80, 80, 0.35) transparent;
+}
+
+.content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 4px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
 }

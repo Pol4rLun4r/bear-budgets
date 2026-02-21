@@ -1,5 +1,5 @@
 .backButton{
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    position: fixed;
+    bottom: var(--mantine-spacing-md);
+    right: var(--mantine-spacing-md);
 }

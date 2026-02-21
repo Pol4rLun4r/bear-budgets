@@ -1,5 +1,5 @@
 // mantine
-import { Center, Divider, Group, Paper, ThemeIcon, Title, Text, CopyButton, Tooltip, ActionIcon, MantineStyleProp, Badge, Stack } from '@mantine/core';
+import { Center, Group, Paper, ThemeIcon, Title, Text, CopyButton, Tooltip, ActionIcon, MantineStyleProp, Badge, Stack, HoverCard } from '@mantine/core';
 
 // style
 import classes from './AddItems.module.css';
@@ -44,35 +44,40 @@ const DataInfo = () => {
     }
 
     return (
-        <Paper withBorder radius='md' className={classes.data}>
-            <ThemeIcon size={50} radius={50} className={classes.dataIcon}>
-                <IconNotes size={32} stroke={1.5} />
-            </ThemeIcon>
-            <Center>
-                <Title order={4}>Informações atuais da cotação</Title>
-            </Center>
-            <Divider mt={20} />
-            <Group justify="space-between" mt={20}>
-                <div style={{ ...style }} >
-                    Nome: <Text c="dimmed" tt='capitalize'>{name}</Text>
-                    <CopyButtonFactory value={name} />
-                </div>
-
-                <div style={{ ...style }} >
-                    Documento: <Text c="dimmed">{document}</Text>
-                    <CopyButtonFactory value={document} />
-                </div>
-                <Badge color={colorStatus} >{status}</Badge>
-            </Group>
-            <Stack mt={20}>
-                <Paper withBorder className={classes.notes} radius='lg'>
-                    <Text>Notas sobre a cotação:</Text>
-                    <Text c='dimmed'>
-                        {basicData.notes ? basicData.notes : 'Sem notas'}
-                    </Text>
+        <HoverCard shadow='md' radius={'md'}>
+            <HoverCard.Target>
+                <Paper withBorder radius='md' className={classes.data}>
+                    <Center style={{ flexDirection: 'row', gap: 10 }} >
+                        <ThemeIcon size={30} radius={50} className={classes.dataIcon}>
+                            <IconNotes size={20} stroke={1.5} />
+                        </ThemeIcon>
+                        <Title order={4}>Informações atuais da cotação</Title>
+                        <Badge color={colorStatus} >{status}</Badge>
+                    </Center>
                 </Paper>
-            </Stack>
-        </Paper>
+            </HoverCard.Target>
+            <HoverCard.Dropdown>
+                <Group justify="space-between">
+                    <div style={{ ...style }} >
+                        Nome: <Text c="dimmed" tt='capitalize'>{name}</Text>
+                        <CopyButtonFactory value={name} />
+                    </div>
+
+                    <div style={{ ...style }} >
+                        Documento: <Text c="dimmed">{document}</Text>
+                        <CopyButtonFactory value={document} />
+                    </div>
+                </Group>
+                <Stack mt={20}>
+                    <Text>Notas sobre a cotação:</Text>
+                    <Paper withBorder className={classes.notes} radius='md'>
+                        <Text c='dimmed'>
+                            {basicData.notes ? basicData.notes : 'Sem notas'}
+                        </Text>
+                    </Paper>
+                </Stack>
+            </HoverCard.Dropdown>
+        </HoverCard>
     )
 }
 
