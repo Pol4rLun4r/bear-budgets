@@ -11,7 +11,6 @@ import type {
 
 
 // cria a referência do item (dados mestre).
-
 export const createItemReferenceRepository = (db: Database) =>
     (data: Pick<AddItemToQuotationInput, "description" | "internal_code" | "manufacturer_code" | "ncm">): number => {
         const row = db.prepare(`
@@ -27,7 +26,6 @@ export const createItemReferenceRepository = (db: Database) =>
     };
 
 // cria a primeira (ou próxima) versão do item.
-
 export const createItemVersionRepository = (db: Database) =>
     (
         itemReferenceId: number,

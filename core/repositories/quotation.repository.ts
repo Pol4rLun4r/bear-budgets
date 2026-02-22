@@ -5,14 +5,13 @@ import type { QuotationStatus, QuotationType, QuotationQuery } from "../../types
 export type QuotationVersionSummary = {
     quotation_id: number;
     quotation_version_id: number;
+    client_id: number;   
     client_name: string;
     client_document: string;
     version: number;
     status: QuotationStatus;
     notes: string | null;
 };
-
-
 
 export const createQuotationRepository = (db: Database) => ({ client_id, notes, status }: QuotationQuery) => {
     const quotation = db.transaction(() => {
@@ -45,6 +44,7 @@ export const getQuotationVersionByIdRepository = (db: Database) =>
             SELECT
                 quotations.id as quotation_id,
                 quotation_versions.id as quotation_version_id,
+                quotations.client_id as client_id,
                 clients.name as client_name,
                 clients.document as client_document,
                 quotation_versions.version,
