@@ -10,6 +10,9 @@ import classes from '../SearchClient.module.css';
 // types
 import type { ClientType } from '../../../../../types/client';
 
+// utils
+import { formatDocument } from '../../../../utils/formatDocument';
+
 const dataSkeleton = [
     { nameWidth: '50%', descriptionWidth: '50%' },
     { nameWidth: '50%', descriptionWidth: '55%' },
@@ -43,7 +46,7 @@ const Rows = ({ clients }: { clients: ClientType[] }) => {
                     ? clients.map((client) => (
                         <Table.Tr key={client.id} className={classes.tableTr}>
                             <Table.Td>{client.name}</Table.Td>
-                            <Table.Td>{client.document}</Table.Td>
+                            <Table.Td>{formatDocument(client.document!)}</Table.Td>
                             <Table.Td><StartBudgetButton clientId={client.id}/></Table.Td>
                         </Table.Tr>
                     ))

@@ -1,5 +1,5 @@
 // mantine
-import { Center, Divider, Group, Paper, ThemeIcon, Title, Text, CopyButton, Tooltip, ActionIcon, MantineStyleProp, HoverCard } from '@mantine/core';
+import { Center, Group, Paper, ThemeIcon, Title, Text, CopyButton, Tooltip, ActionIcon, MantineStyleProp, HoverCard } from '@mantine/core';
 
 // style
 import classes from './StartBudget.module.css';

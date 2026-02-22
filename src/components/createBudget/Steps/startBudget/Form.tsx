@@ -9,17 +9,27 @@ import classes from './StartBudget.module.css'
 import StatusInput from "./inputs/StatusInput";
 import NotesInput from "./inputs/NotesInput";
 
+// redux
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+
+// react
+import { useState } from "react";
+
 interface FormDataType {
     handleSubmit: any
 }
 
 const Form = ({ handleSubmit }: FormDataType) => {
+    const formState = useSelector((state: RootState) => state.createBudget.quotationBasicData);
+
+    const [initialValues] = useState(() => ({ ...formState }))
 
     const form = useForm({
-        mode: 'uncontrolled',
+        mode: 'controlled',
         initialValues: {
-            status: '0',
-            notes: ''
+            status: String(initialValues.status) as string | null | undefined,
+            notes: initialValues.notes
         }
     })
 
