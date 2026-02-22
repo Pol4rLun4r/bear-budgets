@@ -165,6 +165,7 @@ export const searchItemReferencesByDescriptionRepository = (db: Database) =>
             FROM item_references
             WHERE ${whereClauses.join(" AND ")}
             ORDER BY description
+            LIMIT 8
         `;
 
         // constrói os parâmetros para a query

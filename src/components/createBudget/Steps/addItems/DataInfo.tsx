@@ -36,8 +36,8 @@ const DataInfo = () => {
 
     const name = basicData.client_name!;
     const document = formatDocument(basicData.client_document!);
-    const status = basicData.status === 0 ? 'rascunho' : 'aprovado';
-    const colorStatus = basicData.status === 0 ? 'gray' : 'green';
+    const status = basicData.status === 0 as unknown as string ? 'rascunho' : 'aprovado';
+    const colorStatus = basicData.status === 0 as unknown as string ? 'gray' : 'green';
 
     const style: MantineStyleProp = {
         display: "flex", gap: 5, justifyContent: 'center', alignItems: 'center',
@@ -45,17 +45,19 @@ const DataInfo = () => {
 
     return (
         <HoverCard shadow='md' radius={'md'}>
-            <HoverCard.Target>
-                <Paper withBorder radius='md' className={classes.data}>
-                    <Center style={{ flexDirection: 'row', gap: 10 }} >
-                        <ThemeIcon size={30} radius={50} className={classes.dataIcon}>
-                            <IconNotes size={20} stroke={1.5} />
-                        </ThemeIcon>
-                        <Title order={4}>Informações atuais da cotação</Title>
-                        <Badge color={colorStatus} >{status}</Badge>
-                    </Center>
-                </Paper>
-            </HoverCard.Target>
+            <Paper withBorder radius='md' className={classes.data}>
+                <Center>
+                    <HoverCard.Target>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+                            <ThemeIcon size={30} radius={50} className={classes.dataIcon}>
+                                <IconNotes size={20} stroke={1.5} />
+                            </ThemeIcon>
+                            <Title order={4}>Informações atuais da cotação</Title>
+                            <Badge color={colorStatus} >{status}</Badge>
+                        </div>
+                    </HoverCard.Target>
+                </Center>
+            </Paper>
             <HoverCard.Dropdown>
                 <Group justify="space-between">
                     <div style={{ ...style }} >

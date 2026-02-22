@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri",
+    "tauri": "tauri dev",
     "build-core": "tsc core/cli.ts core/commands/*.ts --outDir dist-core --module commonjs",
     "dev-server": "cross-env NODE_ENV=test tsx watch core/utils/serverTest.ts"
   },
