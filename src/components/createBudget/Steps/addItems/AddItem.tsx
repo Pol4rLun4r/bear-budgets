@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // components
-import ItemBasicData from "./inputs/ItemBasicData/ItemBasicData";
+import FormItemBasicData from "./inputs/ItemBasicData/FormItemBasicData";
 import Values from "./inputs/Values/Values";
 
 // mantine
@@ -15,7 +15,7 @@ const AddItem = () => {
         <Stack gap="xl">
             <Stepper active={active} size="sm" radius="xl">
                 <Stepper.Step label="Dados básicos" description="Informações iniciais do item" >
-                    <ItemBasicData />
+                    <FormItemBasicData />
                 </Stepper.Step>
                 <Stepper.Step label="Valores" description="Defina os valores do item">
                     <Values />

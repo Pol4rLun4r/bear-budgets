@@ -17,8 +17,24 @@ fakeClients.map(client => {
     repo.client.create(client);
 })
 
-fakeItens.map(item => {
-    repo.item.createReference(item);
+// Notas de referência fake (ao menos 2 por item)
+const fakeNotePairs: Array<{ type: "text" | "link"; content: string }[]> = [
+    [
+        { type: "text", content: "Especificação técnica conforme norma NBR 7286." },
+        { type: "link", content: "https://exemplo.com/ficha-cabo-2-5mm" },
+    ],
+    [
+        { type: "text", content: "Verificar estoque mínimo antes do pedido." },
+        { type: "link", content: "https://exemplo.com/catalogo-cabos" },
+    ],
+];
+
+fakeItens.map((item, index) => {
+    const itemReferenceId = repo.item.createReference(item);
+    const notes = fakeNotePairs[index % fakeNotePairs.length];
+    notes.forEach((note) => {
+        repo.item.createNoteReference(itemReferenceId, note);
+    });
 });
 
 app.listen(PORT, () => {

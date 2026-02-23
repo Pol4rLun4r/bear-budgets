@@ -44,6 +44,28 @@ export const createItemVersionRepository = (db: Database) =>
         return row.lastInsertRowid as number;
     };
 
+// cria uma nota de referência do item (texto ou link).
+export const createItemReferenceNoteRepository = (db: Database) =>
+    (itemReferenceId: number, data: ItemReferenceNoteInput): ItemReferenceNoteType => {
+        const row = db.prepare(`
+            INSERT INTO item_reference_notes (item_reference_id, type, content)
+            VALUES (?, ?, ?)
+            RETURNING id, item_reference_id, type, content, created_at, updated_at
+        `).get(itemReferenceId, data.type, data.content) as ItemReferenceNoteType;
+        return row;
+    };
+
+// busca as notas de referência de um item_reference pelo id da referência.
+export const getItemReferenceNotesByReferenceIdRepository = (db: Database) =>
+    (itemReferenceId: number): ItemReferenceNoteType[] => {
+        return db.prepare(`
+            SELECT id, item_reference_id, type, content, created_at, updated_at
+            FROM item_reference_notes
+            WHERE item_reference_id = ?
+            ORDER BY id ASC
+        `).all(itemReferenceId) as ItemReferenceNoteType[];
+    };
+
 // vincula uma versão do item a uma versão da cotação.
 // usado para buscar ou edições futuras do item.
 export const linkItemVersionToQuotationVersionRepository = (db: Database) =>
