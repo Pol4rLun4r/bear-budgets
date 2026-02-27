@@ -11,3 +11,11 @@
     padding: var(--mantine-spacing-sm);
     background-color: var(--input-bg);
 }
+
+.input {
+
+    input[disabled] {
+        color: var(--input-color);
+    }
+
+}

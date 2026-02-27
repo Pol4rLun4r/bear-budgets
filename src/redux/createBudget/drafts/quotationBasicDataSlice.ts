@@ -13,7 +13,7 @@ export interface quotationBasicDataSliceDataType {
 const initialState: quotationBasicDataSliceDataType = {
     quotation_version_id: null,
     client_id: null,
-    notes: null,
+    notes: '',
     status: '0',
     client_name: '',
     client_document: '',

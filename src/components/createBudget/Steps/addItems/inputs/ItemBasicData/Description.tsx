@@ -2,7 +2,11 @@
 import { useState, useRef, useEffect } from "react";
 
 // mantine
-import { TextInput, Combobox, useCombobox } from "@mantine/core"
+import { TextInput, Combobox, useCombobox, Text, UnstyledButton } from "@mantine/core"
+import { Loader } from "@mantine/core";
+
+// style 
+import classes from '../../AddItems.module.css'
 
 // types
 import { ItemReferenceType } from "../../../../../../../types/item";
@@ -11,20 +15,24 @@ import { FormType } from "./type";
 // redux
 import { AppDispatch, RootState } from "../../../../../../redux/store";
 import { useDispatch } from "react-redux";
+import { useSelector } from 'react-redux';
 import { setDescription } from "../../../../../../redux/createBudget/items/addItemSlice";
-import { setItemBasicData, resetAddItemData, resetItemDataButNotDescription, setNotes } from "../../../../../../redux/createBudget/items/addItemSlice";
+import { setItemBasicData, resetAddItemData, setNotes } from "../../../../../../redux/createBudget/items/addItemSlice";
 
 // api
 import itemService from "../../../../../../services/item-api";
-import { useSelector } from 'react-redux';
 
 const Description = ({ form }: FormType) => {
+    const [isLoader, setIsLoader] = useState(false);
+
     const dispatch = useDispatch<AppDispatch>();
     const description = useSelector((state: RootState) => state.createBudget.addItem.itemBasicData.description);
+    const isHasId = useSelector((state: RootState) => state.createBudget.addItem.itemBasicData.id);
 
     const [suggestions, setSuggestions] = useState<ItemReferenceType[]>([]);
+
     const fetchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const DEBOUNCE_MS = 300;
+    const DEBOUNCE_MS = 500;
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
@@ -49,39 +57,52 @@ const Description = ({ form }: FormType) => {
 
     useEffect(() => {
         return () => {
+            setIsLoader(false);
             if (fetchDebounceRef.current) clearTimeout(fetchDebounceRef.current);
         };
     }, []);
 
+    const handleClearData = () => {
+        dispatch(resetAddItemData());
+        setSuggestions([]);
+        setIsLoader(false);
+    }
+
     // lida com a mudança no input de pesquisa
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        
-        const value = event.currentTarget.value;
+        event.preventDefault(); // previne o comportamento padrão do input
 
+        const value = event.currentTarget.value; // valor digitado no input
+
+        // se o valor estiver vazio, limpa as sugestões e reseta os dados do item
         if (!value.trim()) {
             if (fetchDebounceRef.current) {
                 clearTimeout(fetchDebounceRef.current);
                 fetchDebounceRef.current = null;
             }
+
+            setIsLoader(false);
             setSuggestions([]);
-            dispatch(resetAddItemData());
             return;
         }
 
+        // debounce para evitar muitas requisições enquanto o usuário digita
         if (fetchDebounceRef.current) {
+            setIsLoader(true);
             clearTimeout(fetchDebounceRef.current);
         }
+
+        // agenda a busca após o tempo de debounce
         fetchDebounceRef.current = setTimeout(() => {
+            setIsLoader(false);
             fetchDebounceRef.current = null;
             fetchSuggestions(value);
         }, DEBOUNCE_MS);
 
         combobox.updateSelectedOptionIndex(); // atualiza a lista de opções do input
         combobox.openDropdown(); // abre o dropdown ao digitar e atualiza as opções
-        
+
         dispatch(setDescription(value));
-        dispatch(resetItemDataButNotDescription()); // limpa os dados do item, mas mantém a descrição para não perder o que o usuário digitou
     }
 
     // lida com o item selecionado (clicado ou pressionado Enter)
@@ -112,29 +133,37 @@ const Description = ({ form }: FormType) => {
         >
             {/* target do input de pesquisa */}
             <Combobox.Target>
-                <TextInput
-                    {...form.getInputProps('description')}
-                    radius="lg"
-                    label="Descrição do item"
-                    description="Busque por itens já cadastrados ou adicione um novo"
-                    placeholder="Digite a descrição do item"
-                    withAsterisk
-                    value={description}
-                    onChange={handleChange}
-                    onFocus={() => combobox.openDropdown()}
-                    onBlur={() => combobox.closeDropdown()}
-                    onClick={() => combobox.openDropdown()}
-                />
+                <div style={{ position: 'relative' }}>
+                    <UnstyledButton style={{ position: 'absolute', right: 0, bottom: 40 }} onClick={() => handleClearData()} >
+                        <Text c={'violet'}>Limpar dados</Text>
+                    </UnstyledButton>
+                    <TextInput
+                        {...form.getInputProps('description')}
+                        radius="lg"
+                        label="Descrição do item"
+                        description="Busque por itens já cadastrados ou adicione um novo"
+                        placeholder="Digite a descrição do item"
+                        rightSection={isLoader ? <Loader size="xs" /> : null}
+                        withAsterisk
+                        value={description}
+                        onChange={handleChange}
+                        disabled={isHasId ? true : false} // desabilita o input se um item já foi selecionado
+                        onFocus={() => combobox.openDropdown()}
+                        onBlur={() => combobox.closeDropdown()}
+                        onClick={() => combobox.openDropdown()}
+                        className={classes.input}
+                    />
+                </div>
             </Combobox.Target>
 
             {/* menu de opções */}
             <Combobox.Dropdown>
                 <Combobox.Options>
-                    {options.length === 0 ? (
+                    {options.length === 0 && !isLoader ? (
                         <Combobox.Empty>Nenhum resultado</Combobox.Empty>
-                    ) : (
-                        options
-                    )}
+                    ) : isLoader ? (
+                        <Combobox.Empty>Carregando...</Combobox.Empty>
+                    ) : options}
                 </Combobox.Options>
             </Combobox.Dropdown>
         </Combobox>

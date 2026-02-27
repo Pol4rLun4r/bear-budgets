@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // components
-import FormItemBasicData from "./inputs/ItemBasicData/FormItemBasicData";
+import FormItemBasicData from "./inputs/FormItemBasicData";
 import Values from "./inputs/Values/Values";
 
 // mantine

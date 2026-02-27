@@ -7,9 +7,6 @@ import { ItemReferenceNoteType } from "../../../../../../redux/createBudget/item
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../../redux/store";
 
-// react
-import { useState } from "react"
-
 const References = () => {
     const notes = useSelector((state: RootState) => state.createBudget.addItem.notes);
 

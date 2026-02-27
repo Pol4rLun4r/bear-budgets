@@ -1,5 +1,6 @@
 // redux
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { set } from "lodash";
 
 // types
 export type ItemReferenceType = {
@@ -58,6 +59,15 @@ const addItemSlice = createSlice({
         setDescription: (state, action: PayloadAction<string>) => {
             state.itemBasicData.description = action.payload;
         },
+        setInternalCode: (state, action: PayloadAction<string>) => {
+            state.itemBasicData.internal_code = action.payload;
+        },
+        setManufacturerCode: (state, action: PayloadAction<string>) => {
+            state.itemBasicData.manufacturer_code = action.payload;
+        },
+        setNcm: (state, action: PayloadAction<string>) => {
+            state.itemBasicData.ncm = action.payload;
+        },
         setItemBasicData: (state, action: PayloadAction<ItemReferenceType>) => {
             state.itemBasicData = action.payload;
         },
@@ -85,7 +95,10 @@ export const {
     setValues,
     resetAddItemData,
     setDescription,
-    resetItemDataButNotDescription
+    resetItemDataButNotDescription,
+    setInternalCode,
+    setManufacturerCode,
+    setNcm
 } = addItemSlice.actions;
 
 export default addItemSlice.reducer;
