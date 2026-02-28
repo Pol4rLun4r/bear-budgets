@@ -9,6 +9,9 @@ import { AppDispatch, RootState } from "../../../../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setNcm } from "../../../../../../redux/createBudget/items/addItemSlice";
 
+// style 
+import classes from './Item.module.css'
+
 // type
 import type { FormType } from "./type";
 
@@ -23,6 +26,7 @@ const NCM = ({ form }: FormType) => {
     return (
         <TextInput
             {...form.getInputProps('ncm')}
+            className={classes.input}
             label="NCM"
             placeholder="(opcional)"
             radius='lg'

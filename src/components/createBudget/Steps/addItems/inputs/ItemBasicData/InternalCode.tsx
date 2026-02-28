@@ -9,6 +9,9 @@ import { AppDispatch, RootState } from "../../../../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setInternalCode } from "../../../../../../redux/createBudget/items/addItemSlice";
 
+// style 
+import classes from './Item.module.css'
+
 // type
 import type { FormType } from "./type";
 
@@ -23,6 +26,7 @@ const InternalCode = ({ form }: FormType) => {
     return (
         <TextInput
             {...form.getInputProps('internal_code')}
+            className={classes.input}
             label="Código interno"
             placeholder="(opcional)"
             radius='lg'

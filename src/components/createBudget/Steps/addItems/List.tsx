@@ -6,7 +6,7 @@ import { useDisclosure } from "@mantine/hooks"
 import classes from './AddItems.module.css'
 
 // components
-import AddItem from "./AddItem"
+import NewItem from "./NewItem"
 
 // icons
 import { IconCirclePlus } from "@tabler/icons-react"
@@ -44,7 +44,7 @@ const List = () => {
                     blur: 3,
                 }}
             >
-                <AddItem />
+                <NewItem />
             </Modal>
         </>
     )

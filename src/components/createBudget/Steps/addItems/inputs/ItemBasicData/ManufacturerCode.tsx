@@ -9,6 +9,8 @@ import { AppDispatch, RootState } from "../../../../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setManufacturerCode } from "../../../../../../redux/createBudget/items/addItemSlice";
 
+import classes from './Item.module.css';
+
 // type
 import type { FormType } from "./type";
 
@@ -23,6 +25,7 @@ const ManufacturerCode = ({ form }: FormType) => {
     return (
         <TextInput
             {...form.getInputProps('manufacturer_code')}
+            className={classes.input}
             label="Código do fabricante"
             placeholder="(opcional)"
             radius='lg'

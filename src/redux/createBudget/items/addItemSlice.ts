@@ -1,6 +1,5 @@
 // redux
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { set } from "lodash";
 
 // types
 export type ItemReferenceType = {

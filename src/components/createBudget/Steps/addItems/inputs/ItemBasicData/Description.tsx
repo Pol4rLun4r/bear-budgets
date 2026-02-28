@@ -6,7 +6,7 @@ import { TextInput, Combobox, useCombobox, Text, UnstyledButton } from "@mantine
 import { Loader } from "@mantine/core";
 
 // style 
-import classes from '../../AddItems.module.css'
+import classes from './Item.module.css'
 
 // types
 import { ItemReferenceType } from "../../../../../../../types/item";
