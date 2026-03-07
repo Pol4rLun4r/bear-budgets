@@ -1,28 +1,43 @@
 // mantine
-import { ScrollArea, Table, Anchor } from "@mantine/core";
+import { ScrollArea, Table, Anchor, UnstyledButton, Tooltip } from "@mantine/core";
 
 // type
 import { ItemReferenceNoteType } from "../../../../../../../redux/createBudget/items/addItemSlice";
 
-// react
-import { useState } from "react";
+// icon
+import { IconTrash } from "@tabler/icons-react";
+
+// redux
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../../../../redux/store";
+import { removeNote } from "../../../../../../../redux/createBudget/items/addItemSlice";
 
 const List = ({ notes }: { notes: ItemReferenceNoteType[] }) => {
-    const [scrolled, setScrolled] = useState(false);
+    const dispatch = useDispatch<AppDispatch>()
 
-    const rows = notes.map((note: ItemReferenceNoteType) => (
-        <Table.Tr key={note.id}>
-            <Table.Td>
+    const handleRemove = (index: number) => {
+        dispatch(removeNote(index));
+    }
+
+    const rows = notes.map((note: ItemReferenceNoteType, index) => (
+        <Table.Tr key={note.id ? note.id : index}>
+            <Table.Td width={'95%'}>
                 {note.type === 'link' ?
                     (<Anchor target="_blank" href={note.content} size="sm">{note.content}</Anchor>) :
-                    note.content 
+                    note.content
                 }
+            </Table.Td>
+            <Table.Td>
+                <Tooltip label='Deletar nota' position="right">
+                    <UnstyledButton onClick={() => handleRemove(index)}>
+                        <IconTrash size={15} color="var(--mantine-color-dimmed)" />
+                    </UnstyledButton>
+                </Tooltip>
             </Table.Td>
         </Table.Tr >
     ))
-
     return (
-        <ScrollArea mah={100} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+        <ScrollArea h={notes.length >= 3 ? 100 : undefined } type="auto" scrollbarSize={8} offsetScrollbars>
             <Table>
                 <Table.Tbody>{rows}</Table.Tbody>
             </Table>

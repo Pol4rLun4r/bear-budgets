@@ -22,7 +22,7 @@ const NoSearch = ({ hasQuery }: NoSearchProps) => {
                         >
                             Faça uma busca para encontrar um cliente <IconSearch size={18} /></Text>
                         <Text>OU</Text>
-                        <Text>Adicionar um novo caso não encontre!</Text>
+                        <Text>Adicionar um novo, caso não encontre!</Text>
                     </Stack>
                 </Stack>
             }

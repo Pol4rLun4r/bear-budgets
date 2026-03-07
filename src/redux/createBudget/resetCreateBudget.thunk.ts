@@ -5,6 +5,8 @@ import { closeSteps } from "./showStepsSlice";
 import { resetSearchClient } from "./searchClient/searchClientSlice";
 import { resetStep } from "./stepsSlice";
 import { resetBasicData } from "./drafts/quotationBasicDataSlice";
+import { resetAllAddItemData } from "./items/addItemSlice";
+import { resetNote } from "./drafts/newItemNoteSlice";
 
 // limpa os dados e retorna à etapa anterior
 const resetCreateBudget = () => (dispatch: AppDispatch) => {
@@ -13,6 +15,8 @@ const resetCreateBudget = () => (dispatch: AppDispatch) => {
     dispatch(resetNewClient());
     dispatch(resetStep());
     dispatch(resetBasicData());
+    dispatch(resetAllAddItemData());
+    dispatch(resetNote());
 };
 
 export default resetCreateBudget;

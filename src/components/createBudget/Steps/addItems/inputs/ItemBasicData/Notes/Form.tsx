@@ -4,7 +4,8 @@ import { Button, NativeSelect, Textarea } from "@mantine/core"
 // redux
 import { useSelector, useDispatch } from "react-redux"
 import { AppDispatch, RootState } from "../../../../../../../redux/store"
-import { setNoteType, setNoteContent } from "../../../../../../../redux/createBudget/drafts/newItemNoteSlice"
+import { setNoteType, setNoteContent, resetNote } from "../../../../../../../redux/createBudget/drafts/newItemNoteSlice"
+import { addNote, ItemReferenceNoteType } from "../../../../../../../redux/createBudget/items/addItemSlice"
 
 //react
 import { useState, useRef } from "react"
@@ -13,13 +14,19 @@ const Form = () => {
     const dispatch = useDispatch<AppDispatch>()
     const note = useSelector((state: RootState) => state.createBudget.newItemNote);
 
+
     const [isError, setIsError] = useState(false);
     const cleanTimeout = useRef<any>(null);
 
-    const handleAdd = () => {
+    const handleAddNote = () => {
+        const data: ItemReferenceNoteType = {
+            content: note.content,
+            type: note.type
+        };
+
         if (cleanTimeout.current) {
             clearTimeout(cleanTimeout.current);
-        }
+        };
 
         if (note.content.trim().length <= 0) {
             cleanTimeout.current = setTimeout(() => {
@@ -27,10 +34,12 @@ const Form = () => {
             }, 2000);
 
             return setIsError(true);
-        }
+        };
 
         setIsError(false);
-        console.log(note);
+
+        dispatch(addNote(data));
+        dispatch(resetNote())
     }
 
     return (
@@ -57,7 +66,7 @@ const Form = () => {
                 value={note.type}
                 onChange={(e) => dispatch(setNoteType({ type: e.currentTarget.value, content: note.content } as any))}
             />
-            <Button radius='lg' variant="outline" onClick={() => handleAdd()}>adicionar</Button>
+            <Button radius='lg' variant="outline" onClick={() => handleAddNote()}>adicionar</Button>
         </div>
     )
 }

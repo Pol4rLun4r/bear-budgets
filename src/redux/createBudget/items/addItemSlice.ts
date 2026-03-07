@@ -18,12 +18,12 @@ export type ItemReferenceNoteType = {
 };
 
 export type ItemValues = {
-    unit_price: number | null;
+    unit_price: number | undefined;
     quantity: number;
-    ipi: number | null;
-    st: number | null;
-    markup: number | null;
-    purchase_freight: number | null;
+    ipi: number | undefined;
+    st: number | undefined;
+    markup: number | undefined;
+    purchase_freight: number | undefined;
 };
 
 export interface AddItemsDataType {
@@ -42,12 +42,12 @@ const initialState: AddItemsDataType = {
     },
     notes: [],
     values: {
-        unit_price: null,
+        unit_price: undefined,
         quantity: 1,
-        ipi: null,
-        st: null,
-        markup: null,
-        purchase_freight: null,
+        ipi: undefined,
+        st: undefined,
+        markup: undefined,
+        purchase_freight: undefined,
     }
 }
 
@@ -76,7 +76,14 @@ const addItemSlice = createSlice({
         setValues: (state, action: PayloadAction<ItemValues>) => {
             state.values = action.payload;
         },
-        resetAddItemData: () => initialState,
+        resetAddItemData: (state) => {
+            state.itemBasicData = initialState.itemBasicData;
+        },
+        resetAllAddItemData: (state) => {
+            state.itemBasicData = initialState.itemBasicData;
+            state.notes = initialState.notes;
+            state.values = initialState.values;
+        },
         resetItemDataButNotDescription: (state) => {
             state.itemBasicData = {
                 ...initialState.itemBasicData,
@@ -84,7 +91,13 @@ const addItemSlice = createSlice({
             };
             state.notes = initialState.notes;
             state.values = initialState.values;
-        }
+        },
+        addNote: (state, action: PayloadAction<ItemReferenceNoteType>) => {
+            state.notes.push(action.payload);
+        },
+        removeNote: (state, action: PayloadAction<number>) => {
+            state.notes.splice(action.payload, 1);
+        },
     }
 });
 
@@ -97,7 +110,10 @@ export const {
     resetItemDataButNotDescription,
     setInternalCode,
     setManufacturerCode,
-    setNcm
+    setNcm,
+    addNote,
+    removeNote,
+    resetAllAddItemData
 } = addItemSlice.actions;
 
 export default addItemSlice.reducer;

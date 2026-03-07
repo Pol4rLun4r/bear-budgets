@@ -23,7 +23,7 @@ const List = () => {
             <form>
                 <Paper withBorder radius='md' className={classes.form}>
                     <Center>
-                        <Button size="md" leftSection={<IconCirclePlus />} radius={'md'} variant="light" onClick={open}>Adiciona item</Button>
+                        <Button size="md" leftSection={<IconCirclePlus />} radius={'md'} variant="light" onClick={open}>Adicionar item</Button>
                     </Center>
                     <Divider mt='md' mb='md' />
                     <Stack mih={200} align="center" justify="center">
