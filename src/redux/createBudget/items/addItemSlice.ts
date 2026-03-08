@@ -76,19 +76,15 @@ const addItemSlice = createSlice({
         setValues: (state, action: PayloadAction<ItemValues>) => {
             state.values = action.payload;
         },
-        resetAddItemData: (state) => {
+        resetItemDescription: (state) => {
+            state.itemBasicData.description = initialState.itemBasicData.description;
+        },
+        resetBasicItemData: (state) => {
             state.itemBasicData = initialState.itemBasicData;
+            state.notes = initialState.notes;
         },
         resetAllAddItemData: (state) => {
             state.itemBasicData = initialState.itemBasicData;
-            state.notes = initialState.notes;
-            state.values = initialState.values;
-        },
-        resetItemDataButNotDescription: (state) => {
-            state.itemBasicData = {
-                ...initialState.itemBasicData,
-                description: state.itemBasicData.description, // mantém a descrição
-            };
             state.notes = initialState.notes;
             state.values = initialState.values;
         },
@@ -105,15 +101,15 @@ export const {
     setItemBasicData,
     setNotes,
     setValues,
-    resetAddItemData,
+    resetBasicItemData,
+    resetAllAddItemData,
+    resetItemDescription,
     setDescription,
-    resetItemDataButNotDescription,
     setInternalCode,
     setManufacturerCode,
     setNcm,
     addNote,
     removeNote,
-    resetAllAddItemData
 } = addItemSlice.actions;
 
 export default addItemSlice.reducer;

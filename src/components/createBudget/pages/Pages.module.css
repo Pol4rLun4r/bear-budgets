@@ -1,0 +1,13 @@
+.root {
+    width: 100%;
+    height: 100%;
+}
+
+.panel {
+    width: 100%;
+    height: calc(100% - var(--mantine-spacing-lg) * 3);
+}
+
+.list {
+    gap: calc(2 * var(--mantine-spacing-xl))
+}
