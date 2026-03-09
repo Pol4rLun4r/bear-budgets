@@ -2,7 +2,7 @@
 import { Group, Paper } from "@mantine/core";
 
 // components
-import DocumentInput from "./DocumentInput";
+import DocumentInput from "./documentInput/@Document";
 import NameInput from "./NameInput";
 import CleanData from "./CleanData";
 import CreateBudgetButton from "../createBudgetButton/@CreateBudgetButton";

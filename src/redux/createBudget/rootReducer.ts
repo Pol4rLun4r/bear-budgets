@@ -1,14 +1,14 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import newClientSlice from "./createClient/newClientSlice";
 import showStepsSlice from "./showStepsSlice";
 import searchClientSlice from "./searchClient/searchClientSlice";
 import stepsSlice from "./stepsSlice";
 import quotationBasicDataSlice from './drafts/quotationBasicDataSlice';
 import addItemSlice from "./items/addItemSlice";
 import newItemNoteSlice from "./drafts/newItemNoteSlice";
+import clientSlice from './clientSlice';
 
 const createBudgetReducer = combineReducers({
-    newClient: newClientSlice,
+    client: clientSlice,
     showSteps: showStepsSlice,
     searchClient: searchClientSlice,
     steps: stepsSlice,

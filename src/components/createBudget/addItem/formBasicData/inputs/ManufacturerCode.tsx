@@ -5,14 +5,12 @@ import { TextInput } from "@mantine/core";
 import { useEffect } from "react";
 
 // redux
-import { AppDispatch, RootState } from "../../../../redux/store";
+import { AppDispatch, RootState } from "../../../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setManufacturerCode } from "../../../../redux/createBudget/items/addItemSlice";
-
-import classes from './Item.module.css';
+import { setManufacturerCode } from "../../../../../redux/createBudget/items/addItemSlice";
 
 // type
-import type { FormType } from "./type";
+import type { FormType } from "../type";
 
 const ManufacturerCode = ({ form }: FormType) => {
     const itemData = useSelector((state: RootState) => state.createBudget.addItem.itemBasicData);
@@ -25,7 +23,6 @@ const ManufacturerCode = ({ form }: FormType) => {
     return (
         <TextInput
             {...form.getInputProps('manufacturer_code')}
-            className={classes.input}
             label="Código do fabricante"
             placeholder="(opcional)"
             radius='lg'

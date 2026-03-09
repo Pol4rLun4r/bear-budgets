@@ -5,15 +5,12 @@ import { TextInput } from "@mantine/core";
 import { useEffect } from "react";
 
 // redux
-import { AppDispatch, RootState } from "../../../../redux/store";
+import { AppDispatch, RootState } from "../../../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setNcm } from "../../../../redux/createBudget/items/addItemSlice";
-
-// style 
-import classes from './Item.module.css'
+import { setNcm } from "../../../../../redux/createBudget/items/addItemSlice";
 
 // type
-import type { FormType } from "./type";
+import type { FormType } from "../type";
 
 const NCM = ({ form }: FormType) => {
     const itemData = useSelector((state: RootState) => state.createBudget.addItem.itemBasicData);
@@ -26,7 +23,6 @@ const NCM = ({ form }: FormType) => {
     return (
         <TextInput
             {...form.getInputProps('ncm')}
-            className={classes.input}
             label="NCM"
             placeholder="(opcional)"
             radius='lg'

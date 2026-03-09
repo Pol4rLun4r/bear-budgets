@@ -1,8 +1,8 @@
 // components
-import Description from "./Description";
-import InternalCode from "./InternalCode";
-import NCM from "./Ncm";
-import ManufacturerCode from "./ManufacturerCode";
+import Description from "./inputs/description/@Description";
+import InternalCode from "./inputs/InternalCode";
+import NCM from "./inputs/Ncm";
+import ManufacturerCode from "./inputs/ManufacturerCode";
 import Notes from "./notes/@Notes";
 
 // mantine

@@ -4,3 +4,5 @@ import { ItemReferenceType } from "../../../../redux/createBudget/items/addItemS
 export interface FormType {
     form: UseFormReturnType<ItemReferenceType, (values: ItemReferenceType) => ItemReferenceType>;
 }
+
+export type InputFormType = UseFormReturnType<ItemReferenceType, (values: ItemReferenceType) => ItemReferenceType>;
