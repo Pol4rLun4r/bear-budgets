@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // type
-import type { ItemReferenceNoteType } from "../items/addItemSlice";
+import type { ItemReferenceNoteType } from "./items/addItemSlice";
 
 const initialState: ItemReferenceNoteType = {
     content: '',

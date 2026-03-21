@@ -6,7 +6,7 @@ import { resetSearchClient } from "./searchClient/searchClientSlice";
 import { resetStep } from "./stepsSlice";
 import { resetBasicData } from "./drafts/quotationBasicDataSlice";
 import { resetAllAddItemData } from "./items/addItemSlice";
-import { resetNote } from "./drafts/newItemNoteSlice";
+import { resetNote } from "./newItemNoteSlice";
 
 // limpa os dados e retorna à etapa anterior
 const resetCreateBudget = () => (dispatch: AppDispatch) => {

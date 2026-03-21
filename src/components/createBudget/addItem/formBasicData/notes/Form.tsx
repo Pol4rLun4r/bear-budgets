@@ -4,7 +4,7 @@ import { Button, NativeSelect, Textarea } from "@mantine/core"
 // redux
 import { useSelector, useDispatch } from "react-redux"
 import { AppDispatch, RootState } from "../../../../../redux/store"
-import { setNoteType, setNoteContent, resetNote } from "../../../../../redux/createBudget/drafts/newItemNoteSlice"
+import { setNoteType, setNoteContent, resetNote } from "../../../../../redux/createBudget/newItemNoteSlice"
 import { addNote, ItemReferenceNoteType } from "../../../../../redux/createBudget/items/addItemSlice"
 
 //react

@@ -4,7 +4,7 @@ import searchClientSlice from "./searchClient/searchClientSlice";
 import stepsSlice from "./stepsSlice";
 import quotationBasicDataSlice from './drafts/quotationBasicDataSlice';
 import addItemSlice from "./items/addItemSlice";
-import newItemNoteSlice from "./drafts/newItemNoteSlice";
+import newItemNoteSlice from "./newItemNoteSlice";
 import clientSlice from './clientSlice';
 
 const createBudgetReducer = combineReducers({

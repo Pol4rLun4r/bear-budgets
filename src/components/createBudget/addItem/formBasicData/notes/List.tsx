@@ -8,12 +8,13 @@ import { ItemReferenceNoteType } from "../../../../../redux/createBudget/items/a
 import { IconTrash } from "@tabler/icons-react";
 
 // redux
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../../redux/store";
 import { removeNote } from "../../../../../redux/createBudget/items/addItemSlice";
 
 const List = ({ notes }: { notes: ItemReferenceNoteType[] }) => {
-    const dispatch = useDispatch<AppDispatch>()
+    const dispatch = useDispatch<AppDispatch>();
+    const hasId = useSelector((state: RootState) => state.createBudget.addItem.itemBasicData.id);
 
     const handleRemove = (index: number) => {
         dispatch(removeNote(index));
@@ -28,16 +29,20 @@ const List = ({ notes }: { notes: ItemReferenceNoteType[] }) => {
                 }
             </Table.Td>
             <Table.Td>
-                <Tooltip label='Deletar nota' position="right">
-                    <UnstyledButton onClick={() => handleRemove(index)}>
-                        <IconTrash size={15} color="var(--mantine-color-dimmed)" />
-                    </UnstyledButton>
-                </Tooltip>
+                {hasId === null ? (
+                    <Tooltip label='Deletar nota' position="right">
+                        <UnstyledButton onClick={() => handleRemove(index)}>
+                            <IconTrash size={15} color="var(--mantine-color-dimmed)" />
+                        </UnstyledButton>
+                    </Tooltip>
+                ) :
+                    null
+                }
             </Table.Td>
         </Table.Tr >
     ))
     return (
-        <ScrollArea h={notes.length >= 3 ? 100 : undefined } type="auto" scrollbarSize={8} offsetScrollbars>
+        <ScrollArea h={notes.length >= 3 ? 100 : undefined} type="auto" scrollbarSize={8} offsetScrollbars>
             <Table>
                 <Table.Tbody>{rows}</Table.Tbody>
             </Table>
