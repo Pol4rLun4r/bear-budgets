@@ -6,7 +6,6 @@ import { Combobox, useCombobox } from "@mantine/core"
 
 // types
 import { ItemReferenceType } from "../../../../../../../types/item";
-import { FormType } from "../../type";
 
 // redux
 import { AppDispatch } from "../../../../../../redux/store";
@@ -20,7 +19,7 @@ import itemService from "../../../../../../services/item-api";
 // components
 import Input from "./Input";
 
-const Description = ({ form }: FormType) => {
+const Description = () => {
     const [isLoader, setIsLoader] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
@@ -29,7 +28,7 @@ const Description = ({ form }: FormType) => {
 
     const fetchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const DEBOUNCE_MS = 500;
-
+    
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     });
@@ -132,7 +131,6 @@ const Description = ({ form }: FormType) => {
                 isLoader={isLoader}
                 options={options}
                 combobox={combobox}
-                form={form}
                 handleChange={handleChange}
                 handleClearData={handleClearData}
             />

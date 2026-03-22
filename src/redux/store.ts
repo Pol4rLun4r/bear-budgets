@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 // domain reducers
 import sidebarReducer from "./sideBar/rootReducer";
-import createBudgetReducer from "./createBudget/rootReducer";
+import createBudgetReducer from "./createBudget/@rootReducer";
 
 const rootReducer = combineReducers({
     sidebar: sidebarReducer,

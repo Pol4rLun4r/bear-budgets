@@ -1,40 +1,37 @@
-import { Group, NumberInput } from "@mantine/core";
+import { Group, NumberInput, NumberInputProps } from "@mantine/core";
 
 // icon
 import { IconCurrencyReal } from "@tabler/icons-react";
 
 const Values = () => {
+    const configInput: NumberInputProps = {
+        decimalSeparator: ",",
+        thousandSeparator: ".",
+        decimalScale: 2,
+        fixedDecimalScale: true,
+        min: 0.00,
+
+        placeholder: "00,00",
+        radius: 'lg',
+
+        readOnly: true,
+
+        variant:"unstyled"
+    }
+
     return (
         <Group>
             <NumberInput
-                variant="unstyled"
-                readOnly
                 label="Valor Total do orçamento"
-                placeholder="00"
-                radius='lg'
-
                 leftSection={<IconCurrencyReal size={18} />}
 
-                decimalSeparator=","
-                thousandSeparator="."
-                decimalScale={2}
-                fixedDecimalScale
-                min={0.00}
+                {...configInput}
             />
             <NumberInput
-                variant="unstyled"
-                readOnly
                 label="Valor total do Markup"
-                placeholder="00"
-                radius='lg'
-
                 leftSection={<IconCurrencyReal size={18} />}
 
-                decimalSeparator=","
-                thousandSeparator="."
-                decimalScale={2}
-                fixedDecimalScale
-                min={0.00}
+                {...configInput}
             />
         </Group>
     )

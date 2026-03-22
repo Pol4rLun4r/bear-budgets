@@ -8,22 +8,24 @@ import { Combobox, Tooltip, UnstyledButton, Text, TextInput, ComboboxStore } fro
 import ClearDescription from "../../ClearDescription";
 
 // redux
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../../../redux/store";
-import { InputFormType } from "../../type";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../../../redux/store";
+import { setDescription } from "../../../../../../redux/createBudget/items/addItemSlice";
 
 interface InputType {
     isLoader: boolean;
     options: JSX.Element[];
     combobox: ComboboxStore;
-    form: InputFormType
     handleClearData: () => void;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({ isLoader, options, combobox, handleChange, handleClearData, form }: InputType) => {
+const Input = ({ isLoader, options, combobox, handleChange, handleClearData }: InputType) => {
+    const dispatch = useDispatch<AppDispatch>();
     const description = useSelector((state: RootState) => state.createBudget.addItem.itemBasicData.description);
+
     const isHasId = useSelector((state: RootState) => state.createBudget.addItem.itemBasicData.id);
+
     return (
         <>
             <Combobox.Target>
@@ -39,16 +41,23 @@ const Input = ({ isLoader, options, combobox, handleChange, handleClearData, for
                         offset={{ mainAxis: 16, crossAxis: -75 }}
                     >
                         <TextInput
-                            {...form.getInputProps('description')}
                             radius="lg"
                             label="Descrição do item"
                             description="Busque por itens já cadastrados ou adicione um novo"
                             placeholder="Digite a descrição do item"
+
                             rightSection={description.length !== 0 ? <ClearDescription /> : undefined}
                             withAsterisk
+
                             value={description}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                dispatch(setDescription(e.currentTarget.value))
+                                handleChange(e)
+                            }}
+
                             readOnly={isHasId ? true : false} // desabilita o input se um item já foi selecionado
+
+                            // configurações do combobox
                             onFocus={() => combobox.openDropdown()}
                             onBlur={() => combobox.closeDropdown()}
                             onClick={() => combobox.openDropdown()}

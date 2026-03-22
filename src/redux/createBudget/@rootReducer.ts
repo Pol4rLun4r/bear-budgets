@@ -6,6 +6,7 @@ import quotationBasicDataSlice from './drafts/quotationBasicDataSlice';
 import addItemSlice from "./items/addItemSlice";
 import newItemNoteSlice from "./newItemNoteSlice";
 import clientSlice from './clientSlice';
+import addItemStepsSlice from './items/addItemStepsSlice';
 
 const createBudgetReducer = combineReducers({
     client: clientSlice,
@@ -14,7 +15,8 @@ const createBudgetReducer = combineReducers({
     steps: stepsSlice,
     quotationBasicData: quotationBasicDataSlice,
     addItem: addItemSlice,
-    newItemNote: newItemNoteSlice
+    newItemNote: newItemNoteSlice,
+    addItemSteps: addItemStepsSlice
 });
 
 export default createBudgetReducer;

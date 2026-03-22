@@ -18,18 +18,18 @@ export type ItemReferenceNoteType = {
 };
 
 export type ItemValues = {
-    unit_price: number | undefined;
-    quantity: number;
-    ipi: number | undefined;
-    st: number | undefined;
-    markup: number | undefined;
-    purchase_freight: number | undefined;
+    unit_price?: number | undefined;
+    quantity?: number | undefined;
+    ipi?: number | undefined;
+    st?: number | undefined;
+    markup?: number | undefined;
+    purchase_freight?: number | undefined;
 };
 
 export interface AddItemsDataType {
     itemBasicData: ItemReferenceType;
     notes: ItemReferenceNoteType[];
-    values: ItemValues
+    values: ItemValues;
 }
 
 const initialState: AddItemsDataType = {
@@ -52,7 +52,7 @@ const initialState: AddItemsDataType = {
 }
 
 const addItemSlice = createSlice({
-    name: "addItems",
+    name: "add-items",
     initialState,
     reducers: {
         setDescription: (state, action: PayloadAction<string>) => {

@@ -10,7 +10,7 @@ const initialState: ItemReferenceNoteType = {
 }
 
 const newItemNoteSlice = createSlice({
-    name: "newItemNote",
+    name: "new-item-note",
     initialState,
     reducers: {
         setNoteType: (state, action: PayloadAction<ItemReferenceNoteType>) => {

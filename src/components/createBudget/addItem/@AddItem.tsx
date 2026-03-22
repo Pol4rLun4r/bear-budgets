@@ -1,6 +1,3 @@
-// react
-import { useState } from "react";
-
 // components
 import FormBasicData from "./formBasicData/@FormBasicData";
 import FormItemValues from "./formItemValues/@FormItemValues";
@@ -8,12 +5,23 @@ import FormItemValues from "./formItemValues/@FormItemValues";
 // mantine
 import { Stack, Stepper, Button, Group } from "@mantine/core";
 
+// redux
+import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
+import { incrementStep, decrementStep } from "../../../redux/createBudget/items/addItemStepsSlice";
+
 const AddItem = () => {
-    const [active, setActive] = useState(0);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const step = useSelector((state: RootState) => state.createBudget.addItemSteps.step);
+    const itemData = useSelector((state: RootState) => state.createBudget.addItem.itemBasicData);
+
+    const hasDescription = itemData.description.trim().length > 0;
 
     return (
         <Stack gap="xl">
-            <Stepper active={active} size="sm" radius="xl">
+            <Stepper active={step} size="sm" radius="xl">
                 <Stepper.Step label="Dados básicos" description="Informações iniciais do item" >
                     <FormBasicData />
                 </Stepper.Step>
@@ -21,11 +29,12 @@ const AddItem = () => {
                     <FormItemValues />
                 </Stepper.Step>
             </Stepper>
-            {active === 0 ? (
+            {step === 0 ? (
                 <Button
                     radius='lg'
                     variant="light"
-                    onClick={() => setActive(1)}
+                    onClick={() => dispatch(incrementStep())}
+                    disabled={!hasDescription}
                 >
                     Definir valores do item
                 </Button>
@@ -35,7 +44,7 @@ const AddItem = () => {
                         radius='lg'
                         variant="default"
                         c='dimmed'
-                        onClick={() => setActive(0)}
+                        onClick={() => dispatch(decrementStep())}
                     >
                         Voltar
                     </Button>
