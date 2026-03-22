@@ -1,24 +1,29 @@
 // mantine
-import { NumberInput } from "@mantine/core";
+import { Select } from "@mantine/core";
 
 // icons
 import { IconPercentage } from "@tabler/icons-react";
+import { markupList } from "../../../../../utils/markupList";
 
 const Markup = () => {
     return (
-        <NumberInput
+        <Select
+            w={'45%'}
+
             label="Markup"
             radius='lg'
             placeholder="00"
             withAsterisk
-
             leftSection={<IconPercentage size={18} />}
 
-            decimalSeparator=","
-            min={0}
+            searchable
+            clearable
+            selectFirstOptionOnChange
 
-            stepHoldDelay={500}
-            stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+            data={[
+                { group: 'Padrão', items: markupList as any },
+                { group: 'Customizado', items: ['00'] },
+            ]}
         />
     )
 }

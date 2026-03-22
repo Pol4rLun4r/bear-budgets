@@ -13,7 +13,7 @@ import PurchaseShipping from "./inputs/PurchaseShipping";
 const FormItemValues = () => {
     return (
         <Stack gap="md">
-            <Group grow>
+            <Group gap={0} align="flex-start" justify="space-between">
                 <UnitValue/>
                 <Quantity/>
                 <Markup/>
