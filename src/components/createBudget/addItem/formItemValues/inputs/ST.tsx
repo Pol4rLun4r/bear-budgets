@@ -24,7 +24,6 @@ const ST = () => {
             decimalSeparator=","
             thousandSeparator="."
             decimalScale={2}
-            fixedDecimalScale
             min={0.00}
 
             stepHoldDelay={500}

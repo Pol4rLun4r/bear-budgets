@@ -22,7 +22,7 @@ export type ItemValues = {
     quantity?: number | undefined;
     ipi?: number | undefined;
     st?: number | undefined;
-    markup?: number | undefined;
+    markup?: string | undefined;
     purchase_freight?: number | undefined;
 };
 

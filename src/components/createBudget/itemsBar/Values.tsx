@@ -16,19 +16,21 @@ const Values = () => {
 
         readOnly: true,
 
-        variant:"unstyled"
+        variant: "filled",
+
+        maw: '35%'
     }
 
     return (
         <Group>
             <NumberInput
-                label="Valor Total do orçamento"
+                label="Total do orçamento"
                 leftSection={<IconCurrencyReal size={18} />}
 
                 {...configInput}
             />
             <NumberInput
-                label="Valor total do Markup"
+                label="Total do Markup"
                 leftSection={<IconCurrencyReal size={18} />}
 
                 {...configInput}

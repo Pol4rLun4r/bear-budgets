@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 
 // hooks
 import useCalcAddItem from "../../../../utils/calcAddItem";
+import { convertMarkupValue } from "../../../../utils/markupList";
 
 const configInput: NumberInputProps = {
     decimalSeparator: ",",
@@ -22,6 +23,7 @@ const configInput: NumberInputProps = {
     radius: 'lg',
 
     readOnly: true,
+    tabIndex: -1,
 
     variant: "unstyled",
 };
@@ -29,11 +31,13 @@ const configInput: NumberInputProps = {
 const Calc = () => {
     const itemData = useSelector((state: RootState) => state.createBudget.addItem.values);
 
-    const { totalWithoutTaxes, ipiValue, totalWithIPIandST } = useCalcAddItem({
+    const { totalWithoutTaxes, ipiValue, totalWithIPIandST, markupValue, totalWithAll, finalUnitValue } = useCalcAddItem({
         quantity: itemData.quantity,
         unitValue: itemData.unit_price,
         ipi: itemData.ipi,
-        st: itemData.st
+        st: itemData.st,
+        markup: convertMarkupValue(itemData.markup!),
+        purchaseShipping: itemData.purchase_freight
     })
 
     return (
@@ -49,8 +53,9 @@ const Calc = () => {
                 <NumberInput
                     label="Valor Markup"
                     leftSection={<IconCurrencyReal size={18} />}
-
                     {...configInput}
+
+                    value={markupValue}
                 />
                 <NumberInput
                     label="Valor IPI"
@@ -69,16 +74,18 @@ const Calc = () => {
                     value={totalWithIPIandST}
                 />
                 <NumberInput
-                    label="Total c/ Impostos + MKP"
+                    label="Total geral c/ Impostos"
                     leftSection={<IconCurrencyReal size={18} />}
-
                     {...configInput}
+                    
+                    value={totalWithAll}
                 />
                 <NumberInput
                     label="Valor Unit Final"
                     leftSection={<IconCurrencyReal size={18} />}
-
                     {...configInput}
+
+                    value={finalUnitValue}
                 />
             </Group>
         </>

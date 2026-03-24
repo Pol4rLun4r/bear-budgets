@@ -17,6 +17,11 @@ export const markupList: listStructure[] = [
     { label: '(35%) Telbra', value: '35.1' },
 ];
 
-export const convertMarkupList = (value: string) => {
-    
+export const convertMarkupValue = (value: string): number => {
+    if(value === undefined) return 0
+    if(value === null) return 0
+    if(Number(value) === 0) return 0
+    const parts = value.split('.');
+    const numStr = parts[0];
+    return parseInt(numStr, 10);
 }

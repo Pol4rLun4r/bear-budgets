@@ -12,8 +12,11 @@ const calcAddItem = ({ unitValue = 0, quantity = 0, markup = 0, ipi = 0, purchas
     const ipiValue = ipi !== 0 ? totalWithoutTaxes * (ipi / 100) : 0;
     const totalWithIPI = ipiValue + totalWithoutTaxes;
     const totalWithIPIandST = totalWithIPI + st
+    const markupValue = markup !== 0 ? totalWithIPIandST * (markup / 100) : 0;
+    const totalWithAll = markupValue + totalWithIPIandST + purchaseShipping;
+    const finalUnitValue = totalWithAll / quantity;
 
-    return { totalWithoutTaxes, ipiValue, totalWithIPIandST };
+    return { totalWithoutTaxes, ipiValue, totalWithIPIandST, markupValue, totalWithAll, finalUnitValue };
 };
 
 export default calcAddItem;
