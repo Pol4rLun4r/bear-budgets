@@ -17,12 +17,10 @@ const Values = () => {
         readOnly: true,
 
         variant: "filled",
-
-        maw: '35%'
     }
 
     return (
-        <Group>
+        <Group grow maw={'45%'} miw={350}>
             <NumberInput
                 label="Total do orçamento"
                 leftSection={<IconCurrencyReal size={18} />}

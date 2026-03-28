@@ -76,6 +76,13 @@ const addItemSlice = createSlice({
         setValues: (state, action: PayloadAction<ItemValues>) => {
             state.values = action.payload;
         },
+        resetItemValues: (state) => {
+            state.values.unit_price = initialState.values.unit_price;
+            state.values.quantity = 1;
+            state.values.ipi = initialState.values.ipi;
+            state.values.st = initialState.values.st;
+            state.values.purchase_freight = initialState.values.purchase_freight;
+        },
         resetItemDescription: (state) => {
             state.itemBasicData.description = initialState.itemBasicData.description;
         },
@@ -104,6 +111,7 @@ export const {
     resetBasicItemData,
     resetAllAddItemData,
     resetItemDescription,
+    resetItemValues,
     setDescription,
     setInternalCode,
     setManufacturerCode,

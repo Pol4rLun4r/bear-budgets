@@ -30,7 +30,7 @@ const PurchaseShipping = () => {
             stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
 
             // configurações do valor do input
-            value={itemData.purchase_freight}
+            value={itemData.purchase_freight || ''}
             onChange={(value) => dispatch(setValues({ ...itemData, purchase_freight: value as number }))}
         />
     )

@@ -16,8 +16,11 @@ const AddItem = () => {
 
     const step = useSelector((state: RootState) => state.createBudget.addItemSteps.step);
     const itemData = useSelector((state: RootState) => state.createBudget.addItem.itemBasicData);
+    const itemValues = useSelector((state: RootState) => state.createBudget.addItem.values);
 
     const hasDescription = itemData.description.trim().length > 0;
+
+    const hasValues = (itemValues.unit_price !== undefined || itemValues.unit_price! > 0  ) && (itemValues.quantity! > 0 || itemValues.quantity !== undefined) && (itemValues.markup !== undefined);
 
     return (
         <Stack gap="xl">
@@ -52,6 +55,7 @@ const AddItem = () => {
                         radius='lg'
                         variant="light"
                         onClick={() => alert('item criado: fake')}
+                        disabled={!hasValues}
                     >
                         Criar item
                     </Button>

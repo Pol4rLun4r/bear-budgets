@@ -28,7 +28,7 @@ const Quantity = () => {
             stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
 
             // configurações do valor do input
-            value={itemData.quantity}
+            value={itemData.quantity || ''}
             onChange={(value) => dispatch(setValues({ ...itemData, quantity: value as number }))}
         />
     )

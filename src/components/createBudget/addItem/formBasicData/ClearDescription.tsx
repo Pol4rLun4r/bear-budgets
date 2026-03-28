@@ -23,7 +23,7 @@ const ClearDescription = () => {
 
     return (
         <ActionIcon variant="transparent" onClick={() => handleClear()}>
-            <IconX />
+            <IconX size={15} />
         </ActionIcon>
     )
 }

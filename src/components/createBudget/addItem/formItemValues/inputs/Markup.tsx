@@ -29,6 +29,9 @@ const Markup = () => {
             searchable
             clearable
             selectFirstOptionOnChange
+            selectFirstOptionOnDropdownOpen
+
+            defaultValue={'40.3'}
 
             data={[
                 { group: 'Padrão', items: markupList as any },

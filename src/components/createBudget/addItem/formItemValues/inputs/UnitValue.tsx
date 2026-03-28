@@ -27,14 +27,13 @@ const UnitValue = () => {
             decimalSeparator=","
             thousandSeparator="."
             decimalScale={2}
-            fixedDecimalScale
             min={0.00}
 
             stepHoldDelay={500}
             stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
 
             // configurações do valor do input
-            value={itemData.unit_price}
+            value={itemData.unit_price || ''}
             onChange={(value) => dispatch(setValues({ ...itemData, unit_price: value as number }))}
         />
     )

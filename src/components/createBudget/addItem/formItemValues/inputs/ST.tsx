@@ -30,7 +30,7 @@ const ST = () => {
             stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
 
             // configurações do valor do input
-            value={itemData.st}
+            value={itemData.st || ''}
             onChange={(value) => dispatch(setValues({ ...itemData, st: value as number }))}
         />
     )

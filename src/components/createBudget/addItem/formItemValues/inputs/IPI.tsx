@@ -29,7 +29,7 @@ const IPI = () => {
             stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
 
             // configurações do valor do input
-            value={itemData.ipi}
+            value={itemData.ipi || ''}
             onChange={(value) => dispatch(setValues({ ...itemData, ipi: value as number }))}
         />
     )

@@ -9,19 +9,22 @@ import IPI from "./inputs/IPI";
 import ST from "./inputs/ST";
 import Markup from "./inputs/Markup";
 import PurchaseShipping from "./inputs/PurchaseShipping";
+import ClearValues from "./ClearValues";
+
 
 const FormItemValues = () => {
     return (
         <Stack gap="md">
-            <Group gap={0} align="flex-start" justify="space-between">
-                <UnitValue/>
-                <Quantity/>
-                <Markup/>
+            <Group gap={0} align="flex-start" justify="space-between" style={{ position: "relative" }}>
+                <ClearValues/>
+                <UnitValue />
+                <Quantity />
+                <Markup />
             </Group>
             <Group grow justify="center" align="flex-end">
-                <IPI/>
-                <ST/>
-                <PurchaseShipping/>
+                <IPI />
+                <ST />
+                <PurchaseShipping />
             </Group>
             <Divider />
             <Calc />
