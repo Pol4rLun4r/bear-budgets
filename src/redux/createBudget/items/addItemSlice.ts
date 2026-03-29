@@ -26,13 +26,13 @@ export type ItemValues = {
     purchase_freight?: number | undefined;
 };
 
-export interface AddItemsDataType {
+export interface itemDataType {
     itemBasicData: ItemReferenceType;
     notes: ItemReferenceNoteType[];
     values: ItemValues;
 }
 
-const initialState: AddItemsDataType = {
+const initialState: itemDataType = {
     itemBasicData: {
         id: null,
         description: '',
@@ -46,7 +46,7 @@ const initialState: AddItemsDataType = {
         quantity: 1,
         ipi: undefined,
         st: undefined,
-        markup: undefined,
+        markup: '40.3',
         purchase_freight: undefined,
     }
 }

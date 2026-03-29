@@ -1,27 +1,36 @@
 // mantine
-import { Paper, Stack, Text } from "@mantine/core"
+import { Paper, Stack } from "@mantine/core"
 
 // components
 import ItemsBar from '../itemsBar/@ItemsBar';
+import NoItems from "./NoItems";
 
 // style
 import classes from './Items.module.css';
 
-// icon
-import { IconInvoice } from "@tabler/icons-react";
+// redux
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const Items = () => {
+    const listItems = useSelector((state: RootState) => state.createBudget.listItems);
+
     return (
         <Stack mt="lg" className={classes.container}>
-            <ItemsBar/>
+            <ItemsBar />
             <Paper withBorder radius="lg" className={classes.items}>
-                <Stack align="center">
-                    <IconInvoice size={100} stroke={1} color="var(--mantine-color-dimmed)" />
-                    <Text size="lg" c="var(--mantine-color-dimmed)" >Nenhum item adicionado no momento.</Text>
+                {/* <NoItems /> */}
+                <Stack>
+                    {listItems.map((item, index) => (
+                        <div key={index}>
+                            <div>{item.itemBasicData.description}</div>
+                            <div>{item.values.unit_price}</div>
+                        </div>
+                    ))}
                 </Stack>
             </Paper>
         </Stack>
     )
 }
 
-export default Items
+export default Items;

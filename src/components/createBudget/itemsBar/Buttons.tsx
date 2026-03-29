@@ -46,7 +46,7 @@ const Buttons = () => {
                     blur: 3,
                 }}
             >
-                <AddItem />
+                <AddItem close={close} />
             </Modal>
         </>
     )

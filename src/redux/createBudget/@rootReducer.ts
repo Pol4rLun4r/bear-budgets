@@ -1,4 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
+
+// slicers
 import showStepsSlice from "./showStepsSlice";
 import searchClientSlice from "./searchClient/searchClientSlice";
 import stepsSlice from "./stepsSlice";
@@ -7,6 +9,7 @@ import addItemSlice from "./items/addItemSlice";
 import newItemNoteSlice from "./newItemNoteSlice";
 import clientSlice from './clientSlice';
 import addItemStepsSlice from './items/addItemStepsSlice';
+import listItemsSlice from "./items/listItemsSlice";
 
 const createBudgetReducer = combineReducers({
     client: clientSlice,
@@ -16,7 +19,8 @@ const createBudgetReducer = combineReducers({
     quotationBasicData: quotationBasicDataSlice,
     addItem: addItemSlice,
     newItemNote: newItemNoteSlice,
-    addItemSteps: addItemStepsSlice
+    addItemSteps: addItemStepsSlice,
+    listItems: listItemsSlice
 });
 
 export default createBudgetReducer;
