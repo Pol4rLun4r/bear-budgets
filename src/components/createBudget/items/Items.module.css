@@ -6,6 +6,11 @@
     height: 100%;
 }
 
+
+
 .items {
     background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
+
+    padding-top: var(--mantine-spacing-md);
+    align-items: flex-start;
 }

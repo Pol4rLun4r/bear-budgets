@@ -3,14 +3,13 @@ import { Paper, Stack } from "@mantine/core"
 
 // components
 import ItemsBar from '../itemsBar/@ItemsBar';
+import List from "./List/@List";
 import NoItems from "./NoItems";
 
 // style
 import classes from './Items.module.css';
-
-// redux
-import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
 
 const Items = () => {
     const listItems = useSelector((state: RootState) => state.createBudget.listItems);
@@ -19,18 +18,10 @@ const Items = () => {
         <Stack mt="lg" className={classes.container}>
             <ItemsBar />
             <Paper withBorder radius="lg" className={classes.items}>
-                {/* <NoItems /> */}
-                <Stack>
-                    {listItems.map((item, index) => (
-                        <div key={index}>
-                            <div>{item.itemBasicData.description}</div>
-                            <div>{item.values.unit_price}</div>
-                        </div>
-                    ))}
-                </Stack>
+                <List/>
             </Paper>
         </Stack>
     )
-}
+};
 
 export default Items;

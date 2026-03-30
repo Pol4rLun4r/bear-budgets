@@ -10,7 +10,13 @@ import { IconClipboardList, IconPencilMinus } from "@tabler/icons-react";
 // Pages
 import Items from "../items/@Items";
 
+// redux
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+
 const Pages = () => {
+  const listItems = useSelector((state: RootState) => state.createBudget.listItems);
+
   const iconSize = 25;
 
   const Amount = ({ amount }: { amount: number }) => {
@@ -37,7 +43,7 @@ const Pages = () => {
         }}
       >
         <Tabs.List justify="center">
-          <Tabs.Tab value="items" leftSection={<IconClipboardList size={iconSize} />} rightSection={<Amount amount={11} />} >
+          <Tabs.Tab value="items" leftSection={<IconClipboardList size={iconSize} />} rightSection={<Amount amount={listItems.length > 0 ? listItems.length : 0} />} >
             Items
           </Tabs.Tab>
           <Tabs.Tab value="notes" leftSection={<IconPencilMinus size={iconSize} />} rightSection={<Amount amount={2} />} >

@@ -5,6 +5,11 @@ import type { itemDataType } from "./addItemSlice";
 
 const initialState: itemDataType[] = [];
 
+ type calcItemType = {
+    finalUnitValue: number;
+    totalWithAll: number;
+}
+ 
 const listItemsSlice = createSlice({
     name: "list-items",
     initialState,
