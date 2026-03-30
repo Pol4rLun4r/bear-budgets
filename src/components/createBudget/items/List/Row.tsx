@@ -39,10 +39,10 @@ const Row = ({ item }: { item: itemDataType }) => {
     return (
         <Table.Tr>
             <Table.Td {...tableTdProps}><RowContent label={item.itemBasicData.description} /></Table.Td>
-            <Table.Td {...tableTdProps} ><RowContent label={item.itemBasicData.internal_code} /></Table.Td>
             <Table.Td {...tableTdProps} ><RowContent label={brl.format(unitValue)} /></Table.Td>
             <Table.Td {...tableTdProps} ><RowContent label={item.values.quantity} /></Table.Td>
             <Table.Td {...tableTdProps} ><RowContent label={brl.format(total)} /></Table.Td>
+            <Table.Td {...tableTdProps} ><RowContent label={item.itemBasicData.internal_code} /></Table.Td>
             <Table.Td {...tableTdProps} ><RowContent label={brl.format(calcItem.markupUnitValue)} /></Table.Td>
             <Table.Td {...tableTdProps} ><RowContent label={brl.format(calcItem.markupValue)} /></Table.Td>
         </Table.Tr>

@@ -4,11 +4,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { itemDataType } from "./addItemSlice";
 
 const initialState: itemDataType[] = [];
-
- type calcItemType = {
-    finalUnitValue: number;
-    totalWithAll: number;
-}
  
 const listItemsSlice = createSlice({
     name: "list-items",
@@ -16,10 +11,11 @@ const listItemsSlice = createSlice({
     reducers: {
         addItem: (state, action: PayloadAction<itemDataType>) => {
             state.push(action.payload);
-        }
+        },
+        resetList: () => initialState
     }
 });
 
-export const { addItem } = listItemsSlice.actions;
+export const { addItem, resetList } = listItemsSlice.actions;
 
 export default listItemsSlice.reducer;

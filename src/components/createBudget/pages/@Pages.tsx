@@ -32,7 +32,7 @@ const Pages = () => {
   };
 
   return (
-    <Paper withBorder p="lg" w={'100%'} h={'100%'} radius="lg" mt="lg">
+    <Paper withBorder p="lg" w={'100%'} h={'100%'} radius="lg" mt="lg" className={classes.paper}>
       <Tabs
         radius="md"
         defaultValue="items"
