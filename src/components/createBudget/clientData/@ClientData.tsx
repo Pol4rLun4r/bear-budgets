@@ -11,14 +11,12 @@ import CreateBudgetButton from "../createBudgetButton/@CreateBudgetButton";
 const ClientData = () => {
   const smallScreen = useMediaQuery('(min-width: 800px)');
 
-  const evenSmallerScreen = useMediaQuery('(min-width: 745px)');
-
   return (
     <Paper withBorder radius="lg" w={'100%'} p="lg">
       <Group justify="space-between" w={'100%'} align="flex-end">
         {!smallScreen ? (
           <>
-            <Group align="flex-end" grow={!evenSmallerScreen ? true : false} >
+            <Group align="flex-start">
               <DocumentInput />
               <NameInput />
             </Group>
@@ -29,7 +27,7 @@ const ClientData = () => {
           </>
         ) : (
           <>
-            <Group align="flex-end">
+            <Group align="flex-start">
               <DocumentInput />
               <NameInput />
               <CleanData />

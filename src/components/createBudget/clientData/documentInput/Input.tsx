@@ -14,6 +14,10 @@ import type { ClientType } from "../../../../types/client";
 
 // util
 import { formatDocument } from "../../../../utils/formatDocument";
+import { validateDocument } from './../../../../../utils/documentValidator';
+
+// react
+import { useState } from "react";
 
 interface InputType {
     isLoader: boolean;
@@ -25,6 +29,7 @@ interface InputType {
 const Input = ({ handleChange, combobox, isLoader, suggestions }: InputType) => {
     const document = useSelector((state: RootState) => state.createBudget.client.document);
     const dispatch = useDispatch<AppDispatch>();
+    const [error, setError] = useState<string | null>(null);
 
     const textSize = "sm"
 
@@ -55,14 +60,21 @@ const Input = ({ handleChange, combobox, isLoader, suggestions }: InputType) => 
                     // configurações do valor do input
                     value={document || ''}
                     onChange={(e) => {
-                        dispatch(setDocument(e.currentTarget.value))
-                        handleChange(e)
+                        const newValue = e.currentTarget.value;
+                        dispatch(setDocument(newValue));
+                        handleChange(e);
+                        if (!validateDocument(newValue)) {
+                            setError("Documento inválido");
+                        } else {
+                            setError(null);
+                        }
                     }}
 
                     // configurações do combobox
                     onFocus={() => combobox.openDropdown()}
                     onBlur={() => combobox.closeDropdown()}
                     onClick={() => combobox.openDropdown()}
+                    error={error}
                 />
             </Combobox.Target>
 

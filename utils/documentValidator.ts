@@ -2,6 +2,8 @@
 
 // Main function to validate CPF or CNPJ
 export const validateDocument = (document: string): boolean => {
+    if(document === null || document === undefined) return false;
+
     // Remove all non-digit characters
     const cleanDoc = document.replace(/\D/g, '');
 
