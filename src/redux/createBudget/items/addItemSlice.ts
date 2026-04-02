@@ -27,12 +27,16 @@ export type ItemValues = {
 };
 
 export interface itemDataType {
+    tempId: string;
+    position: number;
     itemBasicData: ItemReferenceType;
     notes: ItemReferenceNoteType[];
     values: ItemValues;
 }
 
 const initialState: itemDataType = {
+    tempId: "",
+    position: 0,
     itemBasicData: {
         id: null,
         description: '',
@@ -91,6 +95,8 @@ const addItemSlice = createSlice({
             state.notes = initialState.notes;
         },
         resetAllAddItemData: (state) => {
+            state.tempId = initialState.tempId;
+            state.position = initialState.position;
             state.itemBasicData = initialState.itemBasicData;
             state.notes = initialState.notes;
             state.values = initialState.values;

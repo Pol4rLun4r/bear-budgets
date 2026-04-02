@@ -5,8 +5,6 @@ import classes from './CreateBudget.module.css'
 import ClientData from '../../components/createBudget/clientData/@ClientData';
 import Pages from '../../components/createBudget/pages/@Pages';
 
-// redux
-
 const CreateBudget = () => {
     return (
         <div className={classes.container}>
