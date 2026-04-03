@@ -13,9 +13,7 @@ import { convertMarkupValue } from "../../../../utils/markupList";
 
 // components
 import RowContent from "./RowContent";
-
-// icons
-import { IconGripVertical } from "@tabler/icons-react";
+import MenuItem from "./MenuItem";
 
 // style
 import classes from './Row.module.css';
@@ -52,9 +50,11 @@ const SortableRow = ({ item, index }: SortableRowProps) => {
 
     return (
         <Table.Tr ref={ref}>
-            <Table.Td {...tableTdProps} align="center"><IconGripVertical /></Table.Td>
+            <Table.Td {...tableTdProps} align="center">
+                <MenuItem tempId={item.tempId}/>
+            </Table.Td>
             <Table.Td {...tableTdProps}>{item.position + 1}</Table.Td>
-            <Table.Td {...tableTdProps}><RowContent label={item.itemBasicData.description} /></Table.Td>
+            <Table.Td {...tableTdProps}><RowContent disableCopyButton label={item.itemBasicData.description} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={brl.format(unitValue)} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={item.values.quantity} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={brl.format(total)} /></Table.Td>

@@ -10,9 +10,10 @@ import classes from './Row.module.css';
 
 interface RowContentProps {
     label: any;
+    disableCopyButton?: boolean
 }
 
-const RowContent = ({ label }: RowContentProps) => {
+const RowContent = ({ label, disableCopyButton }: RowContentProps) => {
     const { hovered, ref } = useHover();
 
     const rowContentProps = {
@@ -24,7 +25,9 @@ const RowContent = ({ label }: RowContentProps) => {
     return (
         <Tooltip label={label} withArrow multiline maw={'40%'}>
             <span ref={ref} {...rowContentProps}>
-                {hovered ? (
+                {disableCopyButton ? (
+                    label
+                ) : hovered ? (
                     <CopyButton value={label}>
                         {({ copied, copy }) => (
                             <Button fullWidth size="compact-xs" color={copied ? 'teal' : 'var(--mantine-primary-color-filled)'} onClick={copy}>
@@ -32,7 +35,8 @@ const RowContent = ({ label }: RowContentProps) => {
                             </Button>
                         )}
                     </CopyButton>
-                ) : label}
+                ) : (label)
+                }
             </span>
         </Tooltip>
     )

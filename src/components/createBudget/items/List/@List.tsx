@@ -11,24 +11,23 @@ import SortableRow from "./SortableRow";
 
 // dnd-kit
 import { DragDropProvider } from "@dnd-kit/react";
-import { isSortableOperation } from "@dnd-kit/dom/sortable";
-
 
 const List = () => {
     const dispatch = useDispatch<AppDispatch>();
     const listItems = useSelector((state: RootState) => state.createBudget.listItems);
 
     const handleDragEnd: React.ComponentProps<typeof DragDropProvider>["onDragEnd"] = (event) => {
-        if (event.canceled) return; // cancela a operação se cancelado
-        if (!isSortableOperation(event.operation)) return; // cancela a operação se não for uma operação sortável
+        if (event.canceled) return console.log('canceled'); // cancela a operação se cancelado
 
         const { source } = event.operation;
 
-        if (!source) return; // cancela a operação se não houver source (item que está sendo arrastado)
-        
-        const oldIndex = source.initialIndex; // index do item que está sendo arrastado
+        if (!source) return console.log('no source'); // cancela a operação se não houver source (item que está sendo arrastado)
+
+        // ------------- corrigir erro de typagem --------------- //
+
+        const oldIndex = source.initialIndex; // index do item que está sendo arrastado 
         const newIndex = source.index; // index para onde o item está sendo arrastado
-        
+
         if (oldIndex === newIndex) return; // cancela a operação se o item está sendo arrastado para a mesma posição
 
         dispatch(reorderItems({ oldIndex, newIndex }));
@@ -40,7 +39,7 @@ const List = () => {
                 <Table layout="fixed" highlightOnHover stickyHeader>
                     <Table.Thead>
                         <Table.Tr>
-                            <Table.Th w={'5%'}><VisuallyHidden/></Table.Th>
+                            <Table.Th w={'5%'}><VisuallyHidden /></Table.Th>
                             <Table.Th w={'7%'}>Item</Table.Th>
                             <Table.Th w={'30%'}>Descrição</Table.Th>
                             <Table.Th w={'10%'}>Valor unitário</Table.Th>
@@ -53,7 +52,7 @@ const List = () => {
                     </Table.Thead>
                     <Table.Tbody>
                         {listItems.map((item, index) => (
-                            <SortableRow key={item.tempId} item={item} index={index}/>
+                            <SortableRow key={item.tempId} item={item} index={index} />
                         ))}
                     </Table.Tbody>
                 </Table>

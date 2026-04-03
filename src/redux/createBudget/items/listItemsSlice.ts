@@ -48,10 +48,23 @@ const listItemsSlice = createSlice({
                 item.position = index;
             });
         },
+        deleteItem: (state, action: PayloadAction<string>) => {
+            const tempId = action.payload;
+            const index = state.findIndex((item) => item.tempId === tempId); // encontra o índice do item a ser deletado
+
+            if (index !== -1) {
+                state.splice(index, 1); // remove o item do estado
+
+                // atualiza a posição de todos os itens
+                state.forEach((item, index) => {
+                    item.position = index;
+                });
+            }
+        },
         resetList: () => initialState,
     },
 });
 
-export const { addItem, reorderItems, resetList } = listItemsSlice.actions;
+export const { addItem, reorderItems, resetList, deleteItem } = listItemsSlice.actions;
 
 export default listItemsSlice.reducer;
