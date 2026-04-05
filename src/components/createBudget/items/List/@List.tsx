@@ -52,7 +52,7 @@ const List = () => {
                     </Table.Thead>
                     <Table.Tbody>
                         {listItems.map((item, index) => (
-                            <SortableRow key={item.tempId} item={item} index={index} />
+                            <SortableRow key={item.temp_id} item={item} index={index} />
                         ))}
                     </Table.Tbody>
                 </Table>

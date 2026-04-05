@@ -1,7 +1,7 @@
 // redux
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import type { itemDataType } from "./addItemSlice";
+import type { itemDataType } from "./itemFormSlice";
 
 const initialState: itemDataType[] = [];
 
@@ -19,7 +19,7 @@ const listItemsSlice = createSlice({
         addItem: (state, action: PayloadAction<itemDataType>) => {
             state.push({
                 ...action.payload,
-                tempId: newTemId(),
+                temp_id: newTemId(),
                 position: state.length,
             });
         },
@@ -50,7 +50,7 @@ const listItemsSlice = createSlice({
         },
         deleteItem: (state, action: PayloadAction<string>) => {
             const tempId = action.payload;
-            const index = state.findIndex((item) => item.tempId === tempId); // encontra o índice do item a ser deletado
+            const index = state.findIndex((item) => item.temp_id === tempId); // encontra o índice do item a ser deletado
 
             if (index !== -1) {
                 state.splice(index, 1); // remove o item do estado

@@ -8,7 +8,7 @@ import { AppDispatch } from "../../../redux/store";
 import { resetList } from "../../../redux/createBudget/items/listItemsSlice";
 
 // components
-import AddItem from "../addItem/@AddItem";
+import AddItem from "../itemForm/@itemForm";
 
 // icons
 import { IconPlus, IconTrash } from "@tabler/icons-react"
@@ -54,7 +54,7 @@ const Buttons = () => {
                     blur: 3,
                 }}
             >
-                <AddItem close={close} />
+                <AddItem scope="add" close={close} />
             </Modal>
         </>
     )

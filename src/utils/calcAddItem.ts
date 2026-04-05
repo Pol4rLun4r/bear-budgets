@@ -1,20 +1,19 @@
-type CalcType = {
-    unitValue?: number | undefined;
-    quantity?: number | undefined;
-    markup?: number | undefined;
-    ipi?: number | undefined;
-    st?: number | undefined;
-    purchaseShipping?: number | undefined;
-};
+// types
+import type { ItemValues } from "../redux/createBudget/items/itemFormSlice";
 
-const calcAddItem = ({ unitValue = 0, quantity = 0, markup = 0, ipi = 0, purchaseShipping = 0, st = 0 }: CalcType) => {
-    const totalWithoutTaxes = quantity * unitValue;
+// utils
+import { convertMarkupValue } from "./markupList";
+
+const calcAddItem = ({ ipi = 0, markup = "", purchase_shipping = 0, quantity = 0, st = 0, unit_price = 0 }: ItemValues) => {
+    const markupNum = convertMarkupValue(markup);
+
+    const totalWithoutTaxes = quantity * unit_price;
     const ipiValue = ipi !== 0 ? totalWithoutTaxes * (ipi / 100) : 0;
     const totalWithIPI = ipiValue + totalWithoutTaxes;
     const totalWithIPIandST = totalWithIPI + st;
-    const markupValue = markup !== 0 ? totalWithIPIandST * (markup / 100) : 0;
+    const markupValue = markupNum !== 0 ? totalWithIPIandST * (markupNum / 100) : 0;
     const markupUnitValue = markupValue / quantity;
-    const totalWithAll = markupValue + totalWithIPIandST + purchaseShipping;
+    const totalWithAll = markupValue + totalWithIPIandST + purchase_shipping;
     const finalUnitValue = totalWithAll / quantity;
 
     return { totalWithoutTaxes, ipiValue, totalWithIPIandST, markupValue, markupUnitValue, totalWithAll, finalUnitValue };

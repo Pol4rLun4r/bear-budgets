@@ -9,20 +9,14 @@ import { RootState } from "../../../redux/store";
 
 // utils
 import calcAddItem from "../../../utils/calcAddItem";
-import { convertMarkupValue } from "../../../utils/markupList";
 
 const Values = () => {
     const listItems = useSelector((state: RootState) => state.createBudget.listItems);
 
     const calcValues = listItems.map(item => {
-        const calcItem = calcAddItem({
-            unitValue: item.values.unit_price,
-            quantity: item.values.quantity,
-            markup: convertMarkupValue(item.values.markup!),
-            purchaseShipping: item.values.purchase_freight,
-            ipi: item.values.ipi,
-            st: item.values.st
-        })
+        const values = item.values;
+
+        const calcItem = calcAddItem(values)
         
         return calcItem;
     })
