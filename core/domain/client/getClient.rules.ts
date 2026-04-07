@@ -1,12 +1,12 @@
 // types
-import type { ClientType } from "../../../types/client";
+import type { Client } from "../../types/client";
 
 // utils
 import { failure, success } from "../../utils/handleSuccess";
 
 interface GetClientDataType {
     client_id: number;
-    clientExists: ClientType | undefined;
+    clientExists: Client | undefined;
 }
 
 const getClientRules = ({ clientExists, client_id }: GetClientDataType) => {

@@ -18,8 +18,7 @@ describe("GET/ Get client", () => {
         repo.client.create(client);
     });
 
-    // Teste para pegar um cliente pelo id
-    it("must be successful when getting a client by id", async () => {
+    it("ter sucesso pegar um cliente pelo id", async () => {
         const clientId = 1;
 
         const response = await request(app)
@@ -35,8 +34,7 @@ describe("GET/ Get client", () => {
         expect(response.body.data.id).toBe(clientId);
     });
 
-    // Teste para pegar um cliente por um id diferente
-    it("must be successful when getting a client by different id", async () => {
+    it("ter sucesso ao pegar um cliente por um id diferente", async () => {
         const clientId = 4;
 
         const response = await request(app)
@@ -49,8 +47,7 @@ describe("GET/ Get client", () => {
         expect(response.body.data.id).toBe(clientId);
     });
 
-    // Teste falha ao não informar nenhum id
-    it("should fail when client_id is not provided", async () => {
+    it("falhar quando o id de cliente não é informado", async () => {
         const response = await request(app)
             .get("/clients/get")
             .query({})
@@ -61,19 +58,7 @@ describe("GET/ Get client", () => {
         expect(response.body.data).toBe("Cliente ID não informado");
     });
 
-    // Teste falha ao não informar nenhum id
-    it("should fail when client_id is undefined", async () => {
-        const response = await request(app)
-            .get("/clients/get")
-            .expect(400)
-            .expect("Content-Type", /application\/json/);
-
-        expect(response.body.success).toBe(false);
-        expect(response.body.data).toBe("Cliente ID não informado");
-    });
-
-    // Teste falha ao buscar um cliente que não existe
-    it("should fail when client does not exist", async () => {
+    it("falhar ao tentar buscar/pegar dados de um id de client que não existe", async () => {
         const nonExistentId = 9999;
 
         const response = await request(app)
@@ -86,8 +71,7 @@ describe("GET/ Get client", () => {
         expect(response.body.data).toBe("Cliente não existe");
     });
 
-    // Teste falha ao informar um client id não existe, no caso '0'
-    it("should fail when client_id is zero", async () => {
+    it("falhar quando o cliente id é zero", async () => {
         const response = await request(app)
             .get("/clients/get")
             .query({ client_id: 0 })
