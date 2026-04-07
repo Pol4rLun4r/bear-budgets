@@ -3,7 +3,7 @@ import axios from "axios";
 import { baseUrl } from "./url";
 
 // types
-import { ClientQuery } from "../../types/client";
+import { ClientQuery } from "../../core/types/client";
 
 // types
 export type SearchClientDataType = {

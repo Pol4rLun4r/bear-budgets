@@ -1,31 +1,31 @@
-import type { ClientType } from '../../../types/client';
+import type { Client } from "../../types/client";
 
-export const fakeClients: ClientType[] = [
+export const fakeClients: Client[] = [
   {
     id: 1,
     name: "João Silva",
-    document: "52998224725", // CPF válido
+    document: "700.690.590-71", // CPF válido
     type_client: "nacional",
     notes: null,
   },
   {
     id: 2,
     name: "Maria Oliveira",
-    document: "168.995.350-09", // CPF válido
+    document: "20039966054", // CPF válido
     type_client: "nacional",
     notes: "Cliente recorrente",
   },
   {
     id: 3,
     name: "Carlos Pereira",
-    document: "04.252.011/0001-10", // CNPJ válido
+    document: "99.083.371/0001-41", // CNPJ válido
     type_client: "nacional",
     notes: null,
   },
   {
     id: 4,
     name: "Ana Souza",
-    document: "40.688.134/0001-61", // CNPJ válido
+    document: "19.836.129/0001-62", // CNPJ válido
     type_client: "nacional",
     notes: "Prefere contato por email",
   },
@@ -39,7 +39,7 @@ export const fakeClients: ClientType[] = [
   {
     id: 6,
     name: "Fernanda Rocha",
-    document: "71.506.168/0001-11", // CNPJ válido
+    document: "90.988.466/0001-30", // CNPJ válido
     type_client: "nacional",
     notes: "Contrato anual",
   },
@@ -53,7 +53,7 @@ export const fakeClients: ClientType[] = [
   {
     id: 8,
     name: "Empresa Alpha LTDA",
-    document: "33.000.167/0001-01", // CNPJ válido
+    document: "61.097.024/0001-03", // CNPJ válido
     type_client: "nacional",
     notes: "Pessoa jurídica",
   },
@@ -67,7 +67,7 @@ export const fakeClients: ClientType[] = [
   {
     id: 10,
     name: "Juliana Costa",
-    document: "45.723.174/0001-10", // CNPJ válido
+    document: "13.155.792/0001-15", // CNPJ válido
     type_client: "nacional",
     notes: "Primeira compra",
   },
@@ -81,7 +81,7 @@ export const fakeClients: ClientType[] = [
   {
     id: 12,
     name: "Empresa Beta SA",
-    document: "54.550.752/0001-55", // CNPJ válido
+    document: "15.039.919/0001-66", // CNPJ válido
     type_client: "nacional",
     notes: "Cliente corporativo",
   },
@@ -102,7 +102,7 @@ export const fakeClients: ClientType[] = [
   {
     id: 15,
     name: "Comercial Gamma ME",
-    document: "19.131.243/0001-97", // CNPJ válido
+    document: "11.724.224/0001-62", // CNPJ válido
     type_client: "nacional",
     notes: null,
   },

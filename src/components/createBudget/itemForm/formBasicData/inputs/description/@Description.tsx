@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { Combobox, useCombobox } from "@mantine/core"
 
 // types
-import { ItemReferenceType } from "../../../../../../../types/item";
+import { ItemReferenceType } from "../../../../../../../core/types/item";
 
 // redux
 import { AppDispatch } from "../../../../../../redux/store";

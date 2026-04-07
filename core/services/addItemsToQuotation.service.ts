@@ -1,5 +1,5 @@
 import type { Database } from "better-sqlite3";
-import type { AddItemToQuotationInput } from "../../types/item";
+import type { AddItemToQuotationInput } from "../types/item";
 
 // rules
 import addItemsToQuotationRules, {

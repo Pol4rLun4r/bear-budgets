@@ -1,17 +1,17 @@
-export type TypeClientCategory = "nacional" | "internacional";
+export type TypeClient = "nacional" | "internacional";
 
-export type ClientType = {
+export type Client = {
     id: number;
     name?: string;
     document?: string;
-    type_client?: TypeClientCategory;
+    type_client?: TypeClient;
     notes?: string | null;
     created_at?: string;
     updated_at?: string;
 }
 
 export type ClientQuery = Omit<
-    ClientType,
+    Client,
     "id" | "created_at" | "updated_at"
 > & {
     id?: number;

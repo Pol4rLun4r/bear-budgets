@@ -9,6 +9,16 @@ export type ItemReferenceType = {
     updated_at: string;
 };
 
+// valores do item – dados mutáveis (preço, quantidade, etc). Criada a cada edição.
+export type ItemValuesType = {
+    unit_price?: number | undefined;
+    quantity?: number | undefined;
+    ipi?: number | undefined;
+    st?: number | undefined;
+    markup?: string | undefined;
+    purchase_shipping?: number | undefined;
+};
+
 // nota ligada à referência do item (texto livre ou link)
 export type ItemReferenceNoteInput = {
     type: "text" | "link";
@@ -34,11 +44,12 @@ export type ItemReferenceWithNotesType = ItemReferenceType & {
 export type ItemVersionType = {
     id: number;
     item_reference_id: number;
+    position: number; // posição do item na cotação (ordem)
     version: number;
     quantity: number;
     unit_price: number | null;
     markup: number | null;
-    purchase_freight: number | null;
+    purchase_shipping: number | null;
     ipi: number | null;
     st: number | null;
     created_at: string;
@@ -56,18 +67,10 @@ export type QuotationVersionItemType = {
 
 // payload para adicionar um item à cotação (cria referência + versão 1 + link)
 export type AddItemToQuotationInput = {
-    description: string;
-    internal_code?: string | null;
-    manufacturer_code?: string | null;
-    ncm?: string | null;
-    quantity?: number;
-    unit_price?: number | null;
-    markup?: number | null;
-    purchase_freight?: number | null;
-    ipi?: number | null;
-    st?: number | null;
-    // Notas da referência já no momento da criação do item
-    notes?: ItemReferenceNoteInput[];
+    position: number;
+    item_basic_data: ItemReferenceType;
+    notes: ItemReferenceNoteInput[];
+    values: ItemValuesType;
 };
 
 // resultado de um item adicionado (referência, versão e link criados)

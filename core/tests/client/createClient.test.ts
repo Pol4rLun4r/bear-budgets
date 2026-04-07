@@ -1,7 +1,7 @@
 /// <reference types="vitest/globals" />
 
 // types
-import type { ClientQuery } from "../../../types/client";
+import type { ClientQuery } from "../../types/client";
 
 // api
 import request from "supertest";
@@ -11,9 +11,31 @@ import { createTestApp } from "../../utils/createTestApp";
 
 // utils
 import { fakeClients } from "./fakeClients";
+import { normalizeDocument } from "../../utils/clean";
 
 // repositories
 import { createRepositories } from "../../repositories";
+
+// função para verificar se os dados do cliente enviados são os mesmo vindo do banco de dados
+const expectClientMatchesRequest = (responseData: any, requestData: ClientQuery) => {
+    expect(responseData).toBeDefined(); // verifica se houve algum retorno
+
+    if (requestData.name?.length! > 0) {
+        expect(requestData.name?.toLocaleLowerCase()).toBe(responseData.name); // verifica se os nomes batem
+    }
+
+    if (requestData.document) {
+        expect(normalizeDocument(requestData.document)).toBe(normalizeDocument(responseData.document)); // verifica se os documentos batem
+    }
+
+    if (requestData.type_client) {
+        expect(requestData.type_client?.toLocaleLowerCase()).toBe(responseData.type_client); // verifica se o tipo de cliente bate
+    }
+
+    if (requestData.notes) {
+        expect(requestData.notes).toBe(responseData.notes); // verifica se as notas batem
+    }
+};
 
 describe('POST/ Create client', () => {
     // Criar banco de dados antes dos testes
@@ -27,10 +49,9 @@ describe('POST/ Create client', () => {
         repo.client.create(client);
     });
 
-    // Teste para criar um novo cliente
-    it('must be successful when creating a new customer', async () => {
+    it('ter sucesso ao criar um novo cliente', async () => {
         // 1. Prepara os dados
-        const searchData: ClientQuery = {
+        const data: ClientQuery = {
             name: 'Pedro',
             document: '926.102.250-24',
             type_client: 'nacional',
@@ -40,7 +61,7 @@ describe('POST/ Create client', () => {
         // 2. Chama o serviço para buscar o cliente
         const client = await request(app)
             .post("/clients/")
-            .send(searchData)
+            .send(data)
             .expect(200)
             .expect("Content-Type", /application\/json/);
 
@@ -49,15 +70,15 @@ describe('POST/ Create client', () => {
         const getClientIdInDatabase = repo.client.getById(clientId)?.id;
 
         // 3. verifica se houve o retorno correto
-        expect(clientId).toBe(getClientIdInDatabase);
+        expect(clientId).toBe(getClientIdInDatabase); // verificar se o id do cliente criado é o mesmo presente no banco de dados
+        expectClientMatchesRequest(client.body?.data, data);
     });
 
-    // Teste para criar um novo cliente, com ele existindo
-    it('must be successful in creating one, where the document is the same, thus returning the existing customer', async () => {
+    it('ter sucesso ao criar um novo cliente, onde o documento é o mesmo, retornando o cliente existente', async () => {
         // 1. Prepara os dados
-        const searchData: ClientQuery = {
+        const data: ClientQuery = {
             name: 'Pedro',
-            document: '11144477735',
+            document: '1114-4477735',
             type_client: 'nacional',
             notes: 'Cliente brabo'
         };
@@ -65,7 +86,7 @@ describe('POST/ Create client', () => {
         // 2. Chama o serviço para buscar o cliente
         const client = await request(app)
             .post("/clients/")
-            .send(searchData)
+            .send(data)
             .expect(200)
             .expect("Content-Type", /application\/json/);
 
@@ -74,11 +95,11 @@ describe('POST/ Create client', () => {
         const getClientIdInDatabase = repo.client.getById(clientId)?.id;
 
         // 3. verifica se houve o retorno correto
-        expect(clientId).toBe(getClientIdInDatabase);
+        expect(clientId).toBe(getClientIdInDatabase); // verificar se o id do cliente criado é o mesmo presente no banco de dados
+        expect(normalizeDocument(data.document)).toBe(client.body?.data.document) // verifica se o documento é o mesmo
     });
 
-    // Teste para falhar ao tentar criar um novo cliente sem um nome
-    it('should fail when creating a new client without a name', async () => {
+    it('falhar ao tentar criar um novo cliente sem um nome', async () => {
         // 1. Prepara os dados
         const searchData: ClientQuery = {
             name: '',
@@ -100,8 +121,7 @@ describe('POST/ Create client', () => {
         expect(clientData).toBe('Nome é obrigatório');
     });
 
-    // Teste para falhar ao tentar criar um novo cliente sem um documento
-    it('should fail when creating a new client without a document', async () => {
+    it('falhar ao tentar criar um novo cliente sem um documento', async () => {
         // 1. Prepara os dados
         const searchData: ClientQuery = {
             name: 'Jorge',
@@ -123,8 +143,7 @@ describe('POST/ Create client', () => {
         expect(clientData).toBe('Documento é obrigatório');
     });
 
-    // Teste para falhar ao tentar criar um novo cliente sem um documento válido
-    it('should fail when creating a new customer without a valid document', async () => {
+    it('falhar ao tentar criar um novo cliente sem um documento válido', async () => {
         // 1. Prepara os dados
         const searchData: ClientQuery = {
             name: 'Matheus',
@@ -146,8 +165,7 @@ describe('POST/ Create client', () => {
         expect(clientData).toBe('Informe um documento válido');
     });
 
-    // Teste para falhar ao tentar criar um novo cliente sem um documento válido
-    it('should fail when creating a new client without a valid type', async () => {
+    it('falhar ao tentar criar um novo cliente sem um tipo de cliente válido', async () => {
         // 1. Prepara os dados
         const searchData = {
             name: 'Matheus',

@@ -10,19 +10,19 @@ import { RootState, AppDispatch } from "../../../../redux/store";
 import { setDocument } from "../../../../redux/createBudget/clientSlice";
 
 // types
-import type { ClientType } from "../../../../types/client";
+import type { Client } from "../../../../types/client";
 
 // util
 import { formatDocument } from "../../../../utils/formatDocument";
 import { validateDocument } from './../../../../../utils/documentValidator';
 
 // react
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface InputType {
     isLoader: boolean;
     combobox: ComboboxStore;
-    suggestions: ClientType[]
+    suggestions: Client[]
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -30,6 +30,14 @@ const Input = ({ handleChange, combobox, isLoader, suggestions }: InputType) => 
     const document = useSelector((state: RootState) => state.createBudget.client.document);
     const dispatch = useDispatch<AppDispatch>();
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (document && validateDocument(document)) {
+            setError(null);
+        } else if (document) {
+            setError("Documento inválido");
+        }
+    }, [document]);
 
     const textSize = "sm"
 
@@ -62,12 +70,7 @@ const Input = ({ handleChange, combobox, isLoader, suggestions }: InputType) => 
                     onChange={(e) => {
                         const newValue = e.currentTarget.value;
                         dispatch(setDocument(newValue));
-                        handleChange(e);
-                        if (!validateDocument(newValue)) {
-                            setError("Documento inválido");
-                        } else {
-                            setError(null);
-                        }
+                        handleChange(e)
                     }}
 
                     // configurações do combobox

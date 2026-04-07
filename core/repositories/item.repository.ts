@@ -7,7 +7,7 @@ import type {
     AddItemToQuotationInput,
     AddedItemResult,
     ItemReferenceNoteInput,
-} from "../../types/item";
+} from "../types/item";
 
 
 // cria a referência do item (dados mestre).
@@ -81,18 +81,25 @@ export const linkItemVersionToQuotationVersionRepository = (db: Database) =>
 // para cada item: cria referência → cria versão 1 → vincula à quotation_version.
 export const addItemsToQuotationVersionRepository = (db: Database) =>
     (quotationVersionId: number, items: AddItemToQuotationInput[]): AddedItemResult[] => {
+        // item reference
         const createRef = db.prepare(`
             INSERT INTO item_references (description, internal_code, manufacturer_code, ncm)
             VALUES (?, ?, ?, ?)
         `);
+
+        // item version
         const createVersion = db.prepare(`
             INSERT INTO item_versions (item_reference_id, version, quantity, unit_price, markup, purchase_freight, ipi, st)
             VALUES (?, 1, ?, ?, ?, ?, ?, ?)
         `);
+
+        // notas do item
         const createNote = db.prepare(`
             INSERT INTO item_reference_notes (item_reference_id, type, content)
             VALUES (?, ?, ?)
         `);
+
+        // conexão entre a versão do item e a versão da cotação
         const link = db.prepare(`
             INSERT INTO quotation_version_items (quotation_version_id, item_version_id)
             VALUES (?, ?)
@@ -105,7 +112,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                 const quantity = item.quantity ?? 1;
                 const unitPrice = item.unit_price ?? null;
                 const markup = item.markup ?? null;
-                const purchaseFreight = item.purchase_freight ?? null;
+                const purchaseShipping = item.purchase_shipping ?? null;
                 const ipi = item.ipi ?? null;
                 const st = item.st ?? null;
 
@@ -129,7 +136,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                     }
                 }
 
-                const versionRow = createVersion.run(itemReferenceId, quantity, unitPrice, markup, purchaseFreight, ipi, st);
+                const versionRow = createVersion.run(itemReferenceId, quantity, unitPrice, markup, purchaseShipping, ipi, st);
                 const itemVersionId = versionRow.lastInsertRowid as number;
 
                 const linkRow = link.run(quotationVersionId, itemVersionId);

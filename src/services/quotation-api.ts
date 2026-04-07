@@ -1,5 +1,5 @@
 // type
-import type { QuotationQuery } from '../../types/quotation';
+import type { QuotationQuery } from '../../core/types/quotation';
 
 // api
 import axios from 'axios';

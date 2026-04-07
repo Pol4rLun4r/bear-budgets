@@ -14,7 +14,7 @@ import { setClient } from "../../../../redux/createBudget/clientSlice";
 import { resetClient } from "../../../../redux/createBudget/clientSlice";
 
 // type
-import { ClientType } from "../../../../types/client";
+import { Client } from "../../../../types/client";
 
 // api
 import clientService from "../../../../services/client-api";
@@ -27,7 +27,7 @@ const DocumentInput = () => {
   const trigger = useSelector((state: RootState) => state.createBudget.client.clearClientTrigger);
 
   const [isLoader, setIsLoader] = useState(false);
-  const [suggestions, setSuggestions] = useState<ClientType[]>([]);
+  const [suggestions, setSuggestions] = useState<Client[]>([]);
 
   const fetchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const DEBOUNCE_MS = 500;

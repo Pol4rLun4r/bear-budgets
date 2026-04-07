@@ -4,11 +4,11 @@ import { onlyNumbers, onlyName } from "../../utils/clean";
 import { validateDocument } from "../../../utils/documentValidator";
 
 // types
-import type { ClientQuery } from "../../../types/client";
-import type { TypeClientCategory, ClientType } from "../../../types/client";
+import type { ClientQuery } from "../../types/client";
+import type { ClientType, Client } from "../../types/client";
 
 interface CreateClientDataType extends ClientQuery {
-    clientExists: ClientType | undefined
+    clientExists: Client | undefined
 };
 
 const createClientRules = ({ clientExists, document, name, notes, type_client }: CreateClientDataType) => {
@@ -44,7 +44,7 @@ const createClientRules = ({ clientExists, document, name, notes, type_client }:
     const data: ClientQuery = {
         name: cleanedName,
         document: cleanedDocument,
-        type_client: cleanedTypeClient as TypeClientCategory,
+        type_client: cleanedTypeClient as ClientType,
         notes: notes?.length !== 0 ? notes : null,
     }
 

@@ -1,7 +1,7 @@
 // types
 import type { Database } from "better-sqlite3";
-import type { ClientType } from "../../types/client";
-import type { ClientQuery } from "../../types/client";
+import type { Client } from "../types/client";
+import type { ClientQuery } from "../types/client";
 
 // utils
 import { onlyNumbers, onlyName } from "../utils/clean";
@@ -26,7 +26,7 @@ export const createClientRepository = (db: Database) => ({ ...data }: ClientQuer
             FROM clients
             WHERE id = ?
             LIMIT 1
-        `).get(clientId) as ClientType | undefined;
+        `).get(clientId) as Client | undefined;
 
         return client;
     });
@@ -41,7 +41,7 @@ export const getClientByDocumentRepository = (db: Database) => (document: string
         FROM clients
         WHERE document = ?
         LIMIT 1
-    `).get(document) as ClientType | undefined;
+    `).get(document) as Client | undefined;
 
     return client;
 }
@@ -53,7 +53,7 @@ export const getClientByIdRepository = (db: Database) => (id?: number) => {
         FROM clients
         WHERE id = ?
         LIMIT 1
-    `).get(id) as ClientType | undefined;
+    `).get(id) as Client | undefined;
 
     return client;
 }
@@ -66,7 +66,7 @@ export const searchClientsByDocumentRepository = (db: Database) => (document: st
         WHERE document LIKE ? || '%'
         ORDER by name
         LIMIT 10
-    `).all(document) as ClientType[];
+    `).all(document) as Client[];
 
     return clients;
 }
@@ -79,7 +79,7 @@ export const searchClientsByNameRepository = (db: Database) => (name: string | u
         WHERE name LIKE ? || '%'
         ORDER by name
         LIMIT 10
-    `).all(name) as ClientType[];
+    `).all(name) as Client[];
 
     return clients;
 }
