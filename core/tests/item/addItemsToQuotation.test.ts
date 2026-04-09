@@ -11,7 +11,7 @@ import { fakeClients } from "../client/fakeClients";
 import { createRepositories } from "../../repositories";
 
 // types
-import type { AddItemToQuotationInput } from "../../../types/item";
+import type { addItemQuery } from "../../types/item";
 
 describe("POST /quotations/items - Add Items to Quotation", () => {
     const { app, db } = createTestApp();
@@ -53,7 +53,7 @@ describe("POST /quotations/items - Add Items to Quotation", () => {
                     description: "Parafuso sextavado M8",
                     quantity: 100,
                     unit_price: 0.45,
-                } as AddItemToQuotationInput,
+                } as addItemQuery,
             ],
         };
 
@@ -111,7 +111,7 @@ describe("POST /quotations/items - Add Items to Quotation", () => {
             items: [
                 { description: "Parafuso M8", quantity: 100, unit_price: 0.45 },
                 { description: "Porca M8", quantity: 100, unit_price: 0.2 },
-            ] as AddItemToQuotationInput[],
+            ] as addItemQuery[],
         };
 
         // 2. envia a requisição
@@ -158,7 +158,7 @@ describe("POST /quotations/items - Add Items to Quotation", () => {
                         { type: "text", content: "Observação importante sobre o item" },
                         { type: "link", content: "https://example.com/ficha-tecnica" },
                     ],
-                } as AddItemToQuotationInput,
+                } as addItemQuery,
             ],
         };
 

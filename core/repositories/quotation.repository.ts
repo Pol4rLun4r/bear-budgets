@@ -1,6 +1,6 @@
 // types
 import type { Database } from "better-sqlite3";
-import type { QuotationStatus, QuotationType, QuotationQuery } from "../../types/quotation"; 
+import type { QuotationStatus, Quotation, QuotationQuery } from "../types/quotation"; 
 
 export type QuotationVersionSummary = {
     quotation_id: number;
@@ -66,7 +66,7 @@ export const getQuotationByIdRepository = (db: Database) => (id: number) => {
         SELECT * FROM quotations WHERE id = ? LIMIT 1
     `).get(id);
 
-    return quotation as QuotationType | undefined;
+    return quotation as Quotation | undefined;
 };
 
 export const getAllQuotationsRepository = (db: Database) => () => {
@@ -75,7 +75,7 @@ export const getAllQuotationsRepository = (db: Database) => () => {
         SELECT * FROM quotations
     `).all();
 
-    return quotations as QuotationType[] | undefined;
+    return quotations as Quotation[] | undefined;
 };
 
 export const getAllQuotationsVersionsRepository = (db: Database) => () => {
@@ -84,5 +84,5 @@ export const getAllQuotationsVersionsRepository = (db: Database) => () => {
         SELECT * FROM quotation_versions
     `).all();
 
-    return quotations as QuotationType[] | undefined;
+    return quotations as Quotation[] | undefined;
 };

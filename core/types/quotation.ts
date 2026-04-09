@@ -1,12 +1,12 @@
 // Cotação "container" – agrupa todas as versões. Imutável (não se edita, só se adicionam versões).
-export type QuotationType = {
+export type Quotation = {
     id: number;
     client_id: number;
     created_at: string;
 };
 
 export type QuotationQuery = Omit<
-    QuotationType,
+    Quotation,
     "id" | "created_at"
 > & {
     notes?: string | null;

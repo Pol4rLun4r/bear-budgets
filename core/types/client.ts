@@ -13,4 +13,6 @@ export type Client = {
 export type ClientQuery = Omit<
     Client,
     "id" | "created_at" | "updated_at"
->;
+> & {
+    id?: number;
+};

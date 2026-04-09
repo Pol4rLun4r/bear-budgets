@@ -1,26 +1,27 @@
 import type { Database } from "better-sqlite3";
-import type {
-    ItemReferenceType,
-    ItemReferenceWithNotesType,
-    ItemReferenceNoteType,
-    ItemVersionType,
-    AddItemToQuotationInput,
+import type { 
+    ItemNote,
+    ItemNoteQuery,
+    ItemReference,
+    ItemVersion,
+    ItemValues,
+    ItemWithNotes,
+    addItemQuery,
     AddedItemResult,
-    ItemReferenceNoteInput,
+    QuotationVersionItem,
 } from "../types/item";
-
 
 // cria a referência do item (dados mestre).
 export const createItemReferenceRepository = (db: Database) =>
-    (data: Pick<AddItemToQuotationInput, "description" | "internal_code" | "manufacturer_code" | "ncm">): number => {
+    (data: addItemQuery): number => {
         const row = db.prepare(`
             INSERT INTO item_references (description, internal_code, manufacturer_code, ncm)
             VALUES (?, ?, ?, ?)
         `).run(
-            data.description,
-            data.internal_code ?? null,
-            data.manufacturer_code ?? null,
-            data.ncm ?? null
+            data.item_basic_data.description,
+            data.item_basic_data.internal_code ?? null,
+            data.item_basic_data.manufacturer_code ?? null,
+            data.item_basic_data.ncm ?? null
         );
         return row.lastInsertRowid as number;
     };
@@ -46,24 +47,24 @@ export const createItemVersionRepository = (db: Database) =>
 
 // cria uma nota de referência do item (texto ou link).
 export const createItemReferenceNoteRepository = (db: Database) =>
-    (itemReferenceId: number, data: ItemReferenceNoteInput): ItemReferenceNoteType => {
+    (itemReferenceId: number, data: ItemNoteQuery): ItemNote => {
         const row = db.prepare(`
             INSERT INTO item_reference_notes (item_reference_id, type, content)
             VALUES (?, ?, ?)
             RETURNING id, item_reference_id, type, content, created_at, updated_at
-        `).get(itemReferenceId, data.type, data.content) as ItemReferenceNoteType;
+        `).get(itemReferenceId, data.type, data.content) as ItemNote;
         return row;
     };
 
 // busca as notas de referência de um item_reference pelo id da referência.
 export const getItemReferenceNotesByReferenceIdRepository = (db: Database) =>
-    (itemReferenceId: number): ItemReferenceNoteType[] => {
+    (itemReferenceId: number): ItemNote[] => {
         return db.prepare(`
             SELECT id, item_reference_id, type, content, created_at, updated_at
             FROM item_reference_notes
             WHERE item_reference_id = ?
             ORDER BY id ASC
-        `).all(itemReferenceId) as ItemReferenceNoteType[];
+        `).all(itemReferenceId) as ItemNote[];
     };
 
 // vincula uma versão do item a uma versão da cotação.
@@ -80,7 +81,7 @@ export const linkItemVersionToQuotationVersionRepository = (db: Database) =>
 // adiciona um ou mais itens à versão da cotação em uma única transação:
 // para cada item: cria referência → cria versão 1 → vincula à quotation_version.
 export const addItemsToQuotationVersionRepository = (db: Database) =>
-    (quotationVersionId: number, items: AddItemToQuotationInput[]): AddedItemResult[] => {
+    (quotationVersionId: number, items: addItemQuery[]): AddedItemResult[] => {
         // item reference
         const createRef = db.prepare(`
             INSERT INTO item_references (description, internal_code, manufacturer_code, ncm)
@@ -109,18 +110,21 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
             const results: AddedItemResult[] = [];
             for (const item of items) {
 
-                const quantity = item.quantity ?? 1;
-                const unitPrice = item.unit_price ?? null;
-                const markup = item.markup ?? null;
-                const purchaseShipping = item.purchase_shipping ?? null;
-                const ipi = item.ipi ?? null;
-                const st = item.st ?? null;
+                const dataValues = item.values;
+                const dataItemBasic = item.item_basic_data;
+
+                const quantity = dataValues.quantity ?? 1;
+                const unitPrice = dataValues.unit_price ?? null;
+                const markup = dataValues.markup ?? null;
+                const purchaseShipping = dataValues.purchase_shipping ?? null;
+                const ipi = dataValues.ipi ?? null;
+                const st = dataValues.st ?? null;
 
                 const refRow = createRef.run(
-                    item.description,
-                    item.internal_code ?? null,
-                    item.manufacturer_code ?? null,
-                    item.ncm ?? null
+                    dataItemBasic.description,
+                    dataItemBasic.internal_code ?? null,
+                    dataItemBasic.manufacturer_code ?? null,
+                    dataItemBasic.ncm ?? null
                 );
 
                 const itemReferenceId = refRow.lastInsertRowid as number;
@@ -152,10 +156,10 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
 
 // busca referência por id com notas da referência
 export const getItemReferenceByIdRepository = (db: Database) =>
-    (id: number): ItemReferenceWithNotesType | undefined => {
+    (id: number): ItemWithNotes | undefined => {
         const ref = db.prepare(`
             SELECT * FROM item_references WHERE id = ? LIMIT 1
-        `).get(id) as ItemReferenceType | undefined;
+        `).get(id) as ItemReference | undefined;
 
         if (!ref) return undefined;
 
@@ -164,14 +168,14 @@ export const getItemReferenceByIdRepository = (db: Database) =>
             FROM item_reference_notes
             WHERE item_reference_id = ?
             ORDER BY id ASC
-        `).all(id) as ItemReferenceNoteType[];
+        `).all(id) as ItemNote[];
 
         return { ...ref, notes };
     };
 
 // pesquisa referências por descrição
 export const searchItemReferencesByDescriptionRepository = (db: Database) =>
-    (rawQuery: string): ItemReferenceType[] => {
+    (rawQuery: string): ItemReference[] => {
 
         // divide a query em palavras separadas por espaços e filtra as palavras vazias
         const words = rawQuery
@@ -201,5 +205,5 @@ export const searchItemReferencesByDescriptionRepository = (db: Database) =>
         const params = words.map(w => w.toLowerCase());
 
         // executa a query e retorna os resultados
-        return db.prepare(sql).all(...params) as ItemReferenceType[];
+        return db.prepare(sql).all(...params) as ItemReference[];
     };

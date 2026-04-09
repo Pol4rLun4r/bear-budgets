@@ -15,22 +15,22 @@ const createClientService = (db: Database) => {
     const repo = createRepositories(db);
 
     return db.transaction((data: ClientQuery) => {
-        const clientExists = repo.client.getByDocument(cleanDocument(data?.document!))
+        const clientExistsByDocument = repo.client.getByDocument(cleanDocument(data?.document!))
 
-        const result = createClientRules({clientExists, ...data});
+        const result = createClientRules({ clientExistsByDocument, ...data });
 
         // any errors
-        if(!result.success) {
+        if (!result.success) {
             return result;
         }
 
-        // if client exists
-        if(result.code === 'CLIENT_EXISTS') {
+        // se o cliente existir baseado no documento
+        if (result.code === 'CLIENT_EXISTS_BY_DOCUMENT') {
             return result;
         }
 
         const createdClient = repo.client.create(result.data);
-        
+
         return success(createdClient);
     });
 };

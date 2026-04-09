@@ -45,7 +45,7 @@ const INITIAL_UP = `
     );
     CREATE INDEX IF NOT EXISTS idx_item_references_description ON item_references(description);
 
-    CREATE TABLE IF NOT EXISTS item_reference_notes (
+    CREATE TABLE IF NOT EXISTS item_notes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         item_reference_id INTEGER NOT NULL,
         type TEXT NOT NULL CHECK (type IN ('text', 'link')),
@@ -60,6 +60,7 @@ const INITIAL_UP = `
     CREATE TABLE IF NOT EXISTS item_versions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         item_reference_id INTEGER NOT NULL,
+        position INTEGER NOT NULL,
         version INTEGER NOT NULL,
         quantity REAL NOT NULL DEFAULT 1,
         unit_price REAL,
@@ -91,7 +92,7 @@ const INITIAL_DOWN = `
     DROP TABLE IF EXISTS quotation_version_items;
     DROP INDEX IF EXISTS idx_item_versions_item_reference_id;
     DROP TABLE IF EXISTS item_versions;
-    DROP TABLE IF EXISTS item_reference_notes;
+    DROP TABLE IF EXISTS item_notes;
     DROP INDEX IF EXISTS idx_item_references_description;
     DROP TABLE IF EXISTS item_references;
     DROP INDEX IF EXISTS idx_quotation_versions_quotation_id;

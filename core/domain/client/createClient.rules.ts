@@ -7,36 +7,42 @@ import { validateDocument } from "../../../utils/documentValidator";
 import type { ClientQuery } from "../../types/client";
 import type { ClientType, Client } from "../../types/client";
 
-interface CreateClientDataType extends ClientQuery {
-    clientExists: Client | undefined
+interface CreateClient extends Omit<ClientQuery, "id"> {
+    clientExistsByDocument?: Client | undefined
+    clientExistsById?: Client | undefined
 };
 
-const createClientRules = ({ clientExists, document, name, notes, type_client }: CreateClientDataType) => {
+const createClientRules = ({ clientExistsById, clientExistsByDocument, document, name, notes, type_client }: CreateClient) => {
     const cleanedName = onlyName(name!)
     const cleanedDocument = onlyNumbers(document!);
     const cleanedTypeClient = onlyName(type_client as string);
 
-    // check if client exists
-    if (clientExists) {
-        return success(clientExists, 'CLIENT_EXISTS');
+    // verifica se cliente existe baseado no id
+    if (clientExistsById) {
+        return success(clientExistsById, 'CLIENT_EXISTS_BY_ID');
     }
 
-    // check if name exists
+    // verifica se cliente existe baseado no documento
+    if (clientExistsByDocument) {
+        return success(clientExistsByDocument, 'CLIENT_EXISTS_BY_DOCUMENT');
+    }
+
+    // checar se o nome existe
     if (cleanedName.length === 0) {
         return failure('Nome é obrigatório');
     }
 
-    // check if document exists
+    // checar se o documento existe
     if (cleanedDocument.length === 0) {
         return failure('Documento é obrigatório');
     }
 
-    // check if document is valid
-    if(!validateDocument(cleanedDocument)) {
+    // checar se o documento é válido
+    if (!validateDocument(cleanedDocument)) {
         return failure('Informe um documento válido');
     }
 
-    // check type
+    // checar o tipo do cliente
     if (type_client !== 'internacional' && type_client !== 'nacional') {
         return failure('Por favor, especifique o tipo do cliente. Internacional ou Nacional')
     }
