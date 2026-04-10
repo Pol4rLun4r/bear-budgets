@@ -25,6 +25,17 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
 
     // validar cada item
     for (const item of items) {
+
+        // validar ordem/posição e se os items tem a mesma posição
+        const position = item.position;
+
+        if (!position) {
+            return failure("Cada item deve ter uma posição/ordem");
+        } else {
+            const hasSamePosition = items.filter((item) => item.position === position).length;
+            if(hasSamePosition > 1) return failure(`${hasSamePosition} items tem o mesmo numero de posição: ${position}`);
+        }
+
         // validar descrição
         const description = (item.item_basic_data.description ?? "").trim();
 
@@ -35,11 +46,6 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
 
         // validar quantidade
         const quantity = item.values.quantity ?? 1;
-
-        // verifica se quantidade é maior que zero
-        if (quantity <= 0) {
-            return failure("Quantidade deve ser maior que zero");
-        }
 
         // validá as notas se existirem
         const notes: ItemNoteQuery[] | undefined = item.notes?.map((note: ItemNoteQuery) => ({

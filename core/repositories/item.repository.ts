@@ -1,5 +1,5 @@
 import type { Database } from "better-sqlite3";
-import type { 
+import type {
     ItemNote,
     ItemNoteQuery,
     ItemReference,
@@ -82,6 +82,7 @@ export const linkItemVersionToQuotationVersionRepository = (db: Database) =>
 // para cada item: cria referência → cria versão 1 → vincula à quotation_version.
 export const addItemsToQuotationVersionRepository = (db: Database) =>
     (quotationVersionId: number, items: addItemQuery[]): AddedItemResult[] => {
+
         // item reference
         const createRef = db.prepare(`
             INSERT INTO item_references (description, internal_code, manufacturer_code, ncm)
@@ -90,13 +91,13 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
 
         // item version
         const createVersion = db.prepare(`
-            INSERT INTO item_versions (item_reference_id, version, quantity, unit_price, markup, purchase_freight, ipi, st)
-            VALUES (?, 1, ?, ?, ?, ?, ?, ?)
+            INSERT INTO item_versions (item_reference_id, position, version, quantity, unit_price, markup, purchase_freight, ipi, st)
+            VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?)
         `);
 
         // notas do item
         const createNote = db.prepare(`
-            INSERT INTO item_reference_notes (item_reference_id, type, content)
+            INSERT INTO item_notes (item_reference_id, type, content)
             VALUES (?, ?, ?)
         `);
 
@@ -110,9 +111,11 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
             const results: AddedItemResult[] = [];
             for (const item of items) {
 
-                const dataValues = item.values;
+                // divide as informações em dados básicos(descrição e afins) e valores (preços, quantidades e etc)
                 const dataItemBasic = item.item_basic_data;
+                const dataValues = item.values;
 
+                // separa os valores para melhor manejo
                 const quantity = dataValues.quantity ?? 1;
                 const unitPrice = dataValues.unit_price ?? null;
                 const markup = dataValues.markup ?? null;
@@ -120,14 +123,20 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                 const ipi = dataValues.ipi ?? null;
                 const st = dataValues.st ?? null;
 
-                const refRow = createRef.run(
-                    dataItemBasic.description,
-                    dataItemBasic.internal_code ?? null,
-                    dataItemBasic.manufacturer_code ?? null,
-                    dataItemBasic.ncm ?? null
-                );
-
-                const itemReferenceId = refRow.lastInsertRowid as number;
+                // if para determinar se um item precisa ser criado ou não, baseado se tem um id
+                let itemReferenceId: number
+                if (dataItemBasic.id) {
+                    // informar apenas o id caso o item possua o mesmo
+                    itemReferenceId = dataItemBasic.id
+                } else {
+                    // criar item caso o não exista um id
+                    itemReferenceId = createRef.run(
+                        dataItemBasic.description,
+                        dataItemBasic.internal_code ?? null,
+                        dataItemBasic.manufacturer_code ?? null,
+                        dataItemBasic.ncm ?? null
+                    ).lastInsertRowid as number
+                }
 
                 // Cria notas de referência (se existirem)
                 if (item.notes?.length) {
@@ -140,13 +149,13 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                     }
                 }
 
-                const versionRow = createVersion.run(itemReferenceId, quantity, unitPrice, markup, purchaseShipping, ipi, st);
+                const versionRow = createVersion.run(itemReferenceId, item.position, quantity, unitPrice, markup, purchaseShipping, ipi, st);
                 const itemVersionId = versionRow.lastInsertRowid as number;
 
                 const linkRow = link.run(quotationVersionId, itemVersionId);
                 const quotationVersionItemId = linkRow.lastInsertRowid as number;
 
-                results.push({ item_reference_id: itemReferenceId, item_version_id: itemVersionId, quotation_version_item_id: quotationVersionItemId });
+                results.push({quotation_version_item_id: quotationVersionItemId });
             }
             return results;
         });

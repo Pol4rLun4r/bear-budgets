@@ -32,7 +32,7 @@ const createQuotationWithItems = (db: Database) => (payload: QuotationPayload) =
     const clientExistsById = repo.client.getById(payload.client.id);
 
     // verifica se o cliente existe baseado no documento
-    const clientExistsByDocument = repo.client.getByDocument(cleanDocument(payload.client.document!));
+    const clientExistsByDocument = repo.client.getByDocument(cleanDocument(payload.client.document));
 
     // validar regras para criar cliente
     const validateClient = createClientRules({
@@ -56,12 +56,10 @@ const createQuotationWithItems = (db: Database) => (payload: QuotationPayload) =
 
     if (hasClient) {
         // validar regras para criar cotação
-        console.log("id do cliente encontrado");
         const data: Client = validateClient.data;
         client_id = data.id
     } else {
         const data: Client = validateClient.data;
-        console.log("cria um cliente caso o mesmo não exista");
         // cria um cliente caso o mesmo não exista
         client_id = repo.client.create({ ...data })?.id as number
     };
@@ -80,18 +78,25 @@ const createQuotationWithItems = (db: Database) => (payload: QuotationPayload) =
     };
 
     // cria uma cotação e retorna o id da versão criada
-    const quotationVersionId = repo.quotation.create({ ...validadeQuotation.data })
+    const quotationVersionId = repo.quotation.create({ ...validadeQuotation.data });
+
+    // pega os dados da cotação pra ter certeza que ela existe
+    const quotationVersionExists = repo.quotation.getByVersion(quotationVersionId);
+
+    // VERIFICAR SE UM ID DE UM ITEM EXISTE --------------------------------
 
     // validar regras para criar items
     const resultItems = addItemsToQuotationRules({
         quotation_version_id: quotationVersionId,
         items: payload.items,
-        quotationVersionExists: quotationVersionId as any,
+        quotationVersionExists
     });
 
     // items errors
     if (!resultItems.success) {
         return resultItems;
+
+        // COLOCAR FUNÇÃO PARA APAGAR COTAÇÃO CASO ALGUM ITEM DE PROBLEMA AO SER CRIADO --------------------------------
     }
 
     const added = repo.item.addToQuotation(

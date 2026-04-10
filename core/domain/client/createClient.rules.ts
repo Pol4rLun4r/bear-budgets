@@ -13,8 +13,8 @@ interface CreateClient extends Omit<ClientQuery, "id"> {
 };
 
 const createClientRules = ({ clientExistsById, clientExistsByDocument, document, name, notes, type_client }: CreateClient) => {
-    const cleanedName = onlyName(name!)
-    const cleanedDocument = onlyNumbers(document!);
+    const cleanedName = onlyName(name)
+    const cleanedDocument = onlyNumbers(document);
     const cleanedTypeClient = onlyName(type_client as string);
 
     // verifica se cliente existe baseado no id
@@ -57,7 +57,8 @@ const createClientRules = ({ clientExistsById, clientExistsByDocument, document,
     return success(data);
 };
 
-export const cleanDocument = (document: string) => {
+export const cleanDocument = (document: string | undefined) => {
+    if(!document) return undefined;
     return onlyNumbers(document);
 };
 

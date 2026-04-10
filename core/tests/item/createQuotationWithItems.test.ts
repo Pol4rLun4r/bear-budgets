@@ -5,6 +5,7 @@ import request from "supertest";
 
 // utils
 import { createTestApp } from "../../utils/createTestApp";
+import { fakeItens } from "./fakeItens";
 import { fakeClients } from "../client/fakeClients";
 
 // types 
@@ -18,6 +19,7 @@ describe("POST /quotations/items - Create Quotation and Add Items", () => {
     const repo = createRepositories(db);
 
     describe("Client", () => {
+        // testes para verificar a criação ou uso do cliente
 
         it("falha ao criar um cliente para cotação, por ausência de nome", async () => {
 
@@ -121,6 +123,230 @@ describe("POST /quotations/items - Create Quotation and Add Items", () => {
             // 3. verifica o resultado
             expect(res.body.success).toBe(false);
             expect(res.body.data).toBe("Por favor, especifique o tipo do cliente. Internacional ou Nacional");
-        });        
-    })
+        });
+    });
+
+    describe("Quotation", () => {
+        // teste para verificar a criação da cotação
+
+        it("falhar se o cliente não existir", async () => {
+
+            // 1. prepara o payload
+            const payload: QuotationPayload = {
+                client: {} as any,
+                items: {} as any,
+                quotation: {} as any
+            }
+
+            // 2. envia a requisição
+            const res = await request(app)
+                .post("/quotations/items")
+                .send(payload)
+                .expect(400)
+                .expect("Content-Type", /application\/json/);
+
+            // 3. verifica o resultado
+            // como nenhum cliente foi informado, retorna ao tentar criar um cliente no fluxo de criação de cotação + items
+            expect(res.body.success).toBe(false);
+            expect(res.body.data).toBe("Nome é obrigatório");
+        });
+    });
+
+    describe("Add Items", () => {
+        // teste para verificar a adição/criação de items
+
+        it("falhar se não tiver ao menos um item", async () => {
+
+            // 1. prepara o payload
+            const payload: QuotationPayload = {
+                client: {
+                    name: "polaroid-san",
+                    document: "20039966054",
+                    notes: "novo cliente",
+                    type_client: "nacional"
+                },
+                items: [],
+                quotation: {} as any
+            }
+
+            // 2. envia a requisição
+            const res = await request(app)
+                .post("/quotations/items")
+                .send(payload)
+                .expect(400)
+                .expect("Content-Type", /application\/json/);
+
+            // 3. verifica o resultado
+            expect(res.body.success).toBe(false);
+            expect(res.body.data).toBe("Informe ao menos um item");
+        });
+
+        it("falhar se o item não tiver uma posição/ordem", async () => {
+
+            // 1. prepara o payload
+            const payload: QuotationPayload = {
+                client: {
+                    name: "polaroid-san",
+                    document: "20039966054",
+                    notes: "novo cliente",
+                    type_client: "nacional"
+                },
+                items: [
+                    {
+                        position: undefined as any,
+                        item_basic_data: { ...fakeItens[0] },
+                        notes: [],
+                        values: {
+                            quantity: 2,
+                            unit_price: 2
+                        }
+                    }
+                ],
+                quotation: {} as any
+            }
+
+            // 2. envia a requisição
+            const res = await request(app)
+                .post("/quotations/items")
+                .send(payload)
+                .expect(400)
+                .expect("Content-Type", /application\/json/);
+
+            // 3. verifica o resultado
+            expect(res.body.success).toBe(false);
+            expect(res.body.data).toBe("Cada item deve ter uma posição/ordem");
+        });
+
+        it("falhar se mais de um item tem a mesma posição/ordem", async () => {
+
+            // 1. prepara o payload
+            const payload: QuotationPayload = {
+                client: {
+                    name: "polaroid-san",
+                    document: "20039966054",
+                    notes: "novo cliente",
+                    type_client: "nacional"
+                },
+                items: [
+                    {
+                        position: 1,
+                        item_basic_data: { ...fakeItens[0] },
+                        notes: [],
+                        values: {
+                            quantity: 2,
+                            unit_price: 2
+                        }
+                    },
+                    {
+                        position: 1,
+                        item_basic_data: { ...fakeItens[1] },
+                        notes: [],
+                        values: {
+                            quantity: 2,
+                            unit_price: 2
+                        }
+                    },
+                ],
+                quotation: {} as any
+            }
+
+            // 2. envia a requisição
+            const res = await request(app)
+                .post("/quotations/items")
+                .send(payload)
+                .expect(400)
+                .expect("Content-Type", /application\/json/);
+
+            // 3. verifica o resultado
+            expect(res.body.success).toBe(false);
+            expect(res.body.data).toBe("2 items tem o mesmo numero de posição: 1");
+        });
+
+        it("falhar se o item não tiver uma descrição", async () => {
+
+            // 1. prepara o payload
+            const payload: QuotationPayload = {
+                client: {
+                    name: "polaroid-san",
+                    document: "20039966054",
+                    notes: "novo cliente",
+                    type_client: "nacional"
+                },
+                items: [
+                    {
+                        position: 1,
+                        item_basic_data: { ...fakeItens[0], description: "" },
+                        notes: [],
+                        values: {
+                            quantity: 2,
+                            unit_price: 2
+                        }
+                    }
+                ],
+                quotation: {} as any
+            }
+
+            // 2. envia a requisição
+            const res = await request(app)
+                .post("/quotations/items")
+                .send(payload)
+                .expect(400)
+                .expect("Content-Type", /application\/json/);
+
+            // 3. verifica o resultado
+            expect(res.body.success).toBe(false);
+            expect(res.body.data).toBe("Cada item deve ter uma descrição");
+        });
+
+        describe("All together")
+        // testes para verificar o sucesso de todos os processos em conjunto
+
+        it("ter sucesso ao criar um novo cliente + cotação + item", async () => {
+
+            // 1. prepara o payload
+            const payload: QuotationPayload = {
+                client: {
+                    name: "polaroid-san",
+                    document: "20039966054",
+                    notes: "novo cliente",
+                    type_client: "nacional"
+                },
+                items: [
+                    {
+                        position: 1,
+                        item_basic_data: { ...fakeItens[0] },
+                        notes: [],
+                        values: {
+                            quantity: 2,
+                            unit_price: 2
+                        }
+                    },
+                    {
+                        position: 2,
+                        item_basic_data: { ...fakeItens[0] },
+                        notes: [
+                            {type: "link", content: '312'}
+                        ],
+                        values: {
+                            quantity: 2,
+                            unit_price: 2
+                        }
+                    }
+                ],
+                quotation: {} as any
+            }
+
+            // 2. envia a requisição
+            const res = await request(app)
+                .post("/quotations/items")
+                .send(payload)
+                .expect(201)
+                .expect("Content-Type", /application\/json/);
+
+            // 3. verifica o resultado
+            const quotation_version_id = res.body
+            console.log(quotation_version_id);
+        });
+    });
+
 });

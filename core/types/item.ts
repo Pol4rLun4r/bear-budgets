@@ -56,6 +56,11 @@ export type ItemVersion = {
     updated_at: string;
 };
 
+export type ItemVersionQuery = ItemValues & {
+    item_reference_id?: number;
+    position?: number
+}
+
 // vínculo entre uma versão da cotação e uma versão do item
 // usado para buscar ou edições futuras do item
 export type QuotationVersionItem = {
@@ -75,7 +80,5 @@ export type addItemQuery = {
 
 // resultado de um item adicionado (referência, versão e link criados)
 export type AddedItemResult = {
-    item_reference_id: number;
-    item_version_id: number;
     quotation_version_item_id: number;
 };
