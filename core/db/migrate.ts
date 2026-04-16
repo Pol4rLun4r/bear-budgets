@@ -75,21 +75,23 @@ const INITIAL_UP = `
     );
     CREATE INDEX IF NOT EXISTS idx_item_versions_item_reference_id ON item_versions(item_reference_id);
 
-    CREATE TABLE IF NOT EXISTS quotation_version_items (
+    CREATE TABLE IF NOT EXISTS quotation_links (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         quotation_version_id INTEGER NOT NULL,
+        item_reference_id INTEGER NOT NULL,
         item_version_id INTEGER NOT NULL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (quotation_version_id) REFERENCES quotation_versions(id) ON DELETE CASCADE,
+        FOREIGN KEY (item_reference_id) REFERENCES item_references(id) ON DELETE CASCADE,
         FOREIGN KEY (item_version_id) REFERENCES item_versions(id) ON DELETE CASCADE,
         UNIQUE(quotation_version_id, item_version_id)
     );
-    CREATE INDEX IF NOT EXISTS idx_quotation_version_items_quotation_version_id ON quotation_version_items(quotation_version_id);
+    CREATE INDEX IF NOT EXISTS idx_quotation_links_quotation_version_id ON quotation_links(quotation_version_id);
 `;
 
 const INITIAL_DOWN = `
-    DROP INDEX IF EXISTS idx_quotation_version_items_quotation_version_id;
-    DROP TABLE IF EXISTS quotation_version_items;
+    DROP INDEX IF EXISTS idx_quotation_links_quotation_version_id;
+    DROP TABLE IF EXISTS quotation_links;
     DROP INDEX IF EXISTS idx_item_versions_item_reference_id;
     DROP TABLE IF EXISTS item_versions;
     DROP TABLE IF EXISTS item_notes;

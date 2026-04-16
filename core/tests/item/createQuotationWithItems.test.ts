@@ -344,8 +344,9 @@ describe("POST /quotations/items - Create Quotation and Add Items", () => {
                 .expect("Content-Type", /application\/json/);
 
             // 3. verifica o resultado
-            const quotation_version_id = res.body
-            console.log(quotation_version_id);
+            const response = await res.body.data;
+            
+            console.log(response);
         });
     });
 

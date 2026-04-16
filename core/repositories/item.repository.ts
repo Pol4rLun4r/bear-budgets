@@ -101,14 +101,14 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
             VALUES (?, ?, ?)
         `);
 
-        // conexão entre a versão do item e a versão da cotação
+        // conexão entre a versão do item, versão da referencia e a versão da cotação
         const link = db.prepare(`
-            INSERT INTO quotation_version_items (quotation_version_id, item_version_id)
-            VALUES (?, ?)
+            INSERT INTO quotation_links (quotation_version_id, item_reference_id, item_version_id)
+            VALUES (?, ?, ?)
         `);
 
         const run = db.transaction(() => {
-            const results: AddedItemResult[] = [];
+            const results: any[] = [];
             for (const item of items) {
 
                 // divide as informações em dados básicos(descrição e afins) e valores (preços, quantidades e etc)
@@ -149,13 +149,22 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                     }
                 }
 
-                const versionRow = createVersion.run(itemReferenceId, item.position, quantity, unitPrice, markup, purchaseShipping, ipi, st);
-                const itemVersionId = versionRow.lastInsertRowid as number;
+                // id do item_version
+                const itemVersionId = createVersion.run(itemReferenceId, item.position, quantity, unitPrice, markup, purchaseShipping, ipi, st).lastInsertRowid;
 
-                const linkRow = link.run(quotationVersionId, itemVersionId);
-                const quotationVersionItemId = linkRow.lastInsertRowid as number;
+                // id do quotation_link
+                const linkId = link.run(quotationVersionId, itemReferenceId, itemVersionId).lastInsertRowid;
 
-                results.push({quotation_version_item_id: quotationVersionItemId });
+                // pega os dados do quotation_link
+                const getLinkData = db.prepare(`
+                    SELECT *
+                    FROM quotation_links
+                    WHERE id = ?
+                    LIMIT 1
+                `).get(linkId);
+                
+                // insere os dados do quotation_link em cada "for" em results
+                results.push(getLinkData);
             }
             return results;
         });

@@ -1,5 +1,5 @@
 import type { addItemQuery, ItemNoteQuery } from "../../types/item";
-import type { QuotationVersionSummary } from "../../repositories/quotation.repository";
+import type { QuotationVersionSummary } from "../../types/quotation";
 import { success, failure } from "../../utils/handleSuccess";
 
 export type addItemQueryRules = {
