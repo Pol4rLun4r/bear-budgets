@@ -1,7 +1,7 @@
 /// <reference types="vitest/globals" />
 
 // type
-import { QuotationQuery } from "../../../types/quotation";
+import { QuotationQuery } from "../../types/quotation";
 
 // api
 import request from "supertest";

@@ -108,7 +108,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
         `);
 
         const run = db.transaction(() => {
-            const results: any[] = [];
+            const results: AddedItemResult[] = [];
             for (const item of items) {
 
                 // divide as informações em dados básicos(descrição e afins) e valores (preços, quantidades e etc)
@@ -161,7 +161,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                     FROM quotation_links
                     WHERE id = ?
                     LIMIT 1
-                `).get(linkId);
+                `).get(linkId) as AddedItemResult;
                 
                 // insere os dados do quotation_link em cada "for" em results
                 results.push(getLinkData);

@@ -80,5 +80,9 @@ export type addItemQuery = {
 
 // resultado de um item adicionado (referência, versão e link criados)
 export type AddedItemResult = {
-    quotation_version_item_id: number;
+    id: number;
+    quotation_version_id: number;
+    item_reference_id: number;
+    item_version_id: number;
+    created_at: string;
 };

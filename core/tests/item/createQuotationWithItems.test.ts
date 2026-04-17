@@ -13,6 +13,7 @@ import type { QuotationPayload } from "../../services/createQuotationWithItems.s
 
 // repositories
 import { createRepositories } from "../../repositories";
+import { AddedItemResult } from "../../types/item";
 
 describe("POST /quotations/items - Create Quotation and Add Items", () => {
     const { app, db } = createTestApp();
@@ -344,7 +345,7 @@ describe("POST /quotations/items - Create Quotation and Add Items", () => {
                 .expect("Content-Type", /application\/json/);
 
             // 3. verifica o resultado
-            const response = await res.body.data;
+            const response = await res.body.data as AddedItemResult[]
             
             console.log(response);
         });
