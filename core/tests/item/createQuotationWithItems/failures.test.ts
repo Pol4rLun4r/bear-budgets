@@ -4,20 +4,14 @@
 import request from "supertest";
 
 // utils
-import { createTestApp } from "../../utils/createTestApp";
-import { fakeItens } from "./fakeItens";
-import { fakeClients } from "../client/fakeClients";
+import { createTestApp } from "../../../utils/createTestApp";
+import { fakeItens } from "../fakeItens";
 
 // types 
-import type { QuotationPayload } from "../../services/createQuotationWithItems.service";
-
-// repositories
-import { createRepositories } from "../../repositories";
-import { AddedItemResult } from "../../types/item";
+import type { QuotationPayload } from "../../../services/createQuotationWithItems.service";
 
 describe("POST /quotations/items - Create Quotation and Add Items", () => {
-    const { app, db } = createTestApp();
-    const repo = createRepositories(db);
+    const { app } = createTestApp();
 
     describe("Client", () => {
         // testes para verificar a criação ou uso do cliente
@@ -298,57 +292,5 @@ describe("POST /quotations/items - Create Quotation and Add Items", () => {
             expect(res.body.success).toBe(false);
             expect(res.body.data).toBe("Cada item deve ter uma descrição");
         });
-
-        describe("All together")
-        // testes para verificar o sucesso de todos os processos em conjunto
-
-        it("ter sucesso ao criar um novo cliente + cotação + item", async () => {
-
-            // 1. prepara o payload
-            const payload: QuotationPayload = {
-                client: {
-                    name: "polaroid-san",
-                    document: "20039966054",
-                    notes: "novo cliente",
-                    type_client: "nacional"
-                },
-                items: [
-                    {
-                        position: 1,
-                        item_basic_data: { ...fakeItens[0] },
-                        notes: [],
-                        values: {
-                            quantity: 2,
-                            unit_price: 2
-                        }
-                    },
-                    {
-                        position: 2,
-                        item_basic_data: { ...fakeItens[0] },
-                        notes: [
-                            {type: "link", content: '312'}
-                        ],
-                        values: {
-                            quantity: 2,
-                            unit_price: 2
-                        }
-                    }
-                ],
-                quotation: {} as any
-            }
-
-            // 2. envia a requisição
-            const res = await request(app)
-                .post("/quotations/items")
-                .send(payload)
-                .expect(201)
-                .expect("Content-Type", /application\/json/);
-
-            // 3. verifica o resultado
-            const response = await res.body.data as AddedItemResult[]
-            
-            console.log(response);
-        });
     });
-
 });

@@ -23,6 +23,7 @@ import {
     createItemReferenceRepository,
     getItemReferenceByIdRepository,
     getItemReferenceNotesByReferenceIdRepository,
+    getItemVersionByIdRepository,
     searchItemReferencesByDescriptionRepository,
 } from "./item.repository";
 
@@ -38,13 +39,14 @@ export const createRepositories = (db: Database) => ({
         create: createQuotationRepository(db),
         getAll: getAllQuotationsRepository(db),
         getById: getQuotationByIdRepository(db),
-        getByVersion: getQuotationVersionByIdRepository(db),
+        getByVersionId: getQuotationVersionByIdRepository(db),
         getAllVersions: getAllQuotationsVersionsRepository(db),
         
     },
     item: {
         addToQuotation: addItemsToQuotationVersionRepository(db),
         getReferenceById: getItemReferenceByIdRepository(db),
+        getVersionById: getItemVersionByIdRepository(db),
         getReferenceNotesByReferenceId: getItemReferenceNotesByReferenceIdRepository(db),
         searchByDescription: searchItemReferencesByDescriptionRepository(db),
         createReference: createItemReferenceRepository(db),

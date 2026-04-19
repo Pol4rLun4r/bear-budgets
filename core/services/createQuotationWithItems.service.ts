@@ -81,7 +81,7 @@ const createQuotationWithItems = (db: Database) => (payload: QuotationPayload) =
     const quotationVersionId = repo.quotation.create({ ...validadeQuotation.data });
 
     // pega os dados da cotação pra ter certeza que ela existe
-    const quotationVersionExists = repo.quotation.getByVersion(quotationVersionId);
+    const quotationVersionExists = repo.quotation.getByVersionId(quotationVersionId);
 
     // VERIFICAR SE UM ID DE UM ITEM EXISTE --------------------------------
 

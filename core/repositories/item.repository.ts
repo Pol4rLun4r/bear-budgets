@@ -9,6 +9,7 @@ import type {
     addItemQuery,
     AddedItemResult,
     QuotationVersionItem,
+    ItemVersionQuery,
 } from "../types/item";
 
 // cria a referência do item (dados mestre).
@@ -39,7 +40,7 @@ export const createItemVersionRepository = (db: Database) =>
         st: number | null
     ): number => {
         const row = db.prepare(`
-            INSERT INTO item_versions (item_reference_id, version, quantity, unit_price, markup, purchase_freight, ipi, st)
+            INSERT INTO item_versions (item_reference_id, version, quantity, unit_price, markup, purchase_shipping, ipi, st)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `).run(itemReferenceId, version, quantity, unitPrice, markup, purchaseFreight, ipi, st);
         return row.lastInsertRowid as number;
@@ -49,7 +50,7 @@ export const createItemVersionRepository = (db: Database) =>
 export const createItemReferenceNoteRepository = (db: Database) =>
     (itemReferenceId: number, data: ItemNoteQuery): ItemNote => {
         const row = db.prepare(`
-            INSERT INTO item_reference_notes (item_reference_id, type, content)
+            INSERT INTO item_notes (item_reference_id, type, content)
             VALUES (?, ?, ?)
             RETURNING id, item_reference_id, type, content, created_at, updated_at
         `).get(itemReferenceId, data.type, data.content) as ItemNote;
@@ -61,7 +62,7 @@ export const getItemReferenceNotesByReferenceIdRepository = (db: Database) =>
     (itemReferenceId: number): ItemNote[] => {
         return db.prepare(`
             SELECT id, item_reference_id, type, content, created_at, updated_at
-            FROM item_reference_notes
+            FROM item_notes
             WHERE item_reference_id = ?
             ORDER BY id ASC
         `).all(itemReferenceId) as ItemNote[];
@@ -91,7 +92,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
 
         // item version
         const createVersion = db.prepare(`
-            INSERT INTO item_versions (item_reference_id, position, version, quantity, unit_price, markup, purchase_freight, ipi, st)
+            INSERT INTO item_versions (item_reference_id, position, version, quantity, unit_price, markup, purchase_shipping, ipi, st)
             VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?)
         `);
 
@@ -162,7 +163,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                     WHERE id = ?
                     LIMIT 1
                 `).get(linkId) as AddedItemResult;
-                
+
                 // insere os dados do quotation_link em cada "for" em results
                 results.push(getLinkData);
             }
@@ -172,7 +173,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
         return run();
     };
 
-// busca referência por id com notas da referência
+// busca referência do item pelo id, trazendo os dados + notas da referência
 export const getItemReferenceByIdRepository = (db: Database) =>
     (id: number): ItemWithNotes | undefined => {
         const ref = db.prepare(`
@@ -183,12 +184,22 @@ export const getItemReferenceByIdRepository = (db: Database) =>
 
         const notes = db.prepare(`
             SELECT id, item_reference_id, type, content, created_at, updated_at
-            FROM item_reference_notes
+            FROM item_notes
             WHERE item_reference_id = ?
             ORDER BY id ASC
         `).all(id) as ItemNote[];
 
         return { ...ref, notes };
+    };
+
+// busca versão do item pelo id
+export const getItemVersionByIdRepository = (db: Database) =>
+    (id: number): ItemVersionQuery | undefined => {
+        const itemVersion = db.prepare(`
+            SELECT * FROM item_versions WHERE id = ? LIMIT 1
+        `).get(id) as ItemVersionQuery | undefined;
+
+        return itemVersion;
     };
 
 // pesquisa referências por descrição
