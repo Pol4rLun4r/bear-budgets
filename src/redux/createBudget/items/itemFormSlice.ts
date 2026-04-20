@@ -119,6 +119,12 @@ const itemFormSlice = createSlice({
         ) => {
             draft(state, action.payload.scope).values = action.payload.values;
         },
+        setItemDataEdit: (
+            state,
+            action: PayloadAction<itemDataType>,
+        ) => {
+            state.edit = action.payload;
+        },
         resetItemValues: (state, action: PayloadAction<ItemFormScope>) => {
             const empty = createEmptyItemData();
             const values = draft(state, action.payload).values;
@@ -173,6 +179,7 @@ export const {
     setNcm,
     addNote,
     removeNote,
+    setItemDataEdit
 } = itemFormSlice.actions;
 
 export default itemFormSlice.reducer;

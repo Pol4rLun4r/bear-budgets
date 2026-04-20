@@ -9,7 +9,6 @@ import { useSortable } from "@dnd-kit/react/sortable";
 
 // utils
 import calcAddItem from '../../../../utils/calcAddItem';
-import { convertMarkupValue } from "../../../../utils/markupList";
 
 // components
 import RowContent from "./RowContent";
@@ -46,7 +45,7 @@ const SortableRow = ({ item, index }: SortableRowProps) => {
     return (
         <Table.Tr ref={ref}>
             <Table.Td {...tableTdProps} align="center">
-                <MenuItem tempId={item.temp_id}/>
+                <MenuItem item={item}/>
             </Table.Td>
             <Table.Td {...tableTdProps}>{item.position + 1}</Table.Td>
             <Table.Td {...tableTdProps}><RowContent disableCopyButton label={item.item_basic_data.description} /></Table.Td>

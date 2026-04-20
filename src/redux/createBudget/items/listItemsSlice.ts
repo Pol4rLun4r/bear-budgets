@@ -61,10 +61,18 @@ const listItemsSlice = createSlice({
                 });
             }
         },
+        editItem: (state, action: PayloadAction<itemDataType>) => {
+            const updatedItem = action.payload;
+            const index = state.findIndex((item) => item.temp_id === updatedItem.temp_id); // encontra o índice do item a ser atualizado
+
+            if (index !== -1) {
+                state[index] = updatedItem; // substitui o item pelo atualizado
+            }
+        },
         resetList: () => initialState,
     },
 });
 
-export const { addItem, reorderItems, resetList, deleteItem } = listItemsSlice.actions;
+export const { addItem, reorderItems, resetList, deleteItem, editItem } = listItemsSlice.actions;
 
 export default listItemsSlice.reducer;

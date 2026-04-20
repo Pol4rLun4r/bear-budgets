@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { ItemFormScope } from "../../../redux/createBudget/items/itemFormSlice";
 
-const AddItem = ({ close, scope }: { close: () => void, scope: ItemFormScope }) => {
+const ItemForm = ({ close, scope }: { close: () => void, scope: ItemFormScope }) => {
     const step = useSelector((state: RootState) => state.createBudget.itemFormSteps[scope].step);
 
     return (
@@ -29,4 +29,4 @@ const AddItem = ({ close, scope }: { close: () => void, scope: ItemFormScope }) 
     )
 }
 
-export default AddItem
+export default ItemForm;

@@ -5,9 +5,9 @@ import { Button, Group } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { incrementStep, decrementStep } from "../../../redux/createBudget/items/itemFormStepsSlice";
-import { addItem } from "../../../redux/createBudget/items/listItemsSlice";
+import { addItem, editItem } from "../../../redux/createBudget/items/listItemsSlice";
 import { ItemFormScope } from "../../../redux/createBudget/items/itemFormSlice";
-import resetAddItem from "../../../redux/createBudget/items/resetItem.thunk";
+import resetItem from "../../../redux/createBudget/items/resetItem.thunk";
 
 const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScope }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -43,8 +43,14 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
   const handleAddItem = () => {
     dispatch(addItem(data));
     close();
-    resetAddItem(dispatch, scope);
+    resetItem(dispatch, scope);
   };
+
+  const handleEditItem = () => {
+    dispatch(editItem(data));
+    close();
+    resetItem(dispatch, scope);
+  }
 
   return (
     <>
@@ -70,10 +76,10 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
           <Button
             radius='lg'
             variant="light"
-            onClick={() => handleAddItem()}
+            onClick={() => scope ==="add" ? handleAddItem() : handleEditItem()}
             disabled={!hasValues}
           >
-            Criar item
+            {scope === "add" ? "Criar item" : "Salvar alterações"} 
           </Button>
         </Group>
       )}
