@@ -30,8 +30,48 @@ const configInput: NumberInputProps = {
 
 const Calc = ({ scope }: { scope: ItemFormScope }) => {
     const itemData = useSelector((state: RootState) => state.createBudget.itemForm[scope].values);
+    const switchMode = useSelector((state: RootState) => state.createBudget.itemFormSwitchMode.mode);
 
     const { totalWithoutTaxes, ipiValue, totalWithIPIandST, markupValue, totalWithAll, finalUnitValue } = useCalcAddItem(itemData)
+
+    if (switchMode) {
+        return (
+            <>
+                <Group grow align="flex-end">
+                    <NumberInput
+                        label="Total sem Markup"
+                        leftSection={<IconCurrencyReal size={18} />}
+                        {...configInput}
+
+                        value={totalWithoutTaxes}
+                    />
+                    <NumberInput
+                        label="Valor Markup"
+                        leftSection={<IconCurrencyReal size={18} />}
+                        {...configInput}
+
+                        value={markupValue}
+                    />
+                </Group>
+                <Group grow align="flex-end">
+                    <NumberInput
+                        label="Total geral c/ Markup"
+                        leftSection={<IconCurrencyReal size={18} />}
+                        {...configInput}
+
+                        value={totalWithAll}
+                    />
+                    <NumberInput
+                        label="Valor Unit Final"
+                        leftSection={<IconCurrencyReal size={18} />}
+                        {...configInput}
+
+                        value={finalUnitValue}
+                    />
+                </Group>
+            </>
+        )
+    }
 
     return (
         <>
@@ -70,7 +110,7 @@ const Calc = ({ scope }: { scope: ItemFormScope }) => {
                     label="Total geral c/ Impostos"
                     leftSection={<IconCurrencyReal size={18} />}
                     {...configInput}
-                    
+
                     value={totalWithAll}
                 />
                 <NumberInput

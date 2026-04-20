@@ -2,6 +2,7 @@
 import FormBasicData from "./formBasicData/@FormBasicData";
 import FormItemValues from "./formItemValues/@FormItemValues";
 import StepsButtons from "./StepsButtons";
+import SwitchMode from "./SwitchMode";
 
 // mantine
 import { Stack, Stepper } from "@mantine/core";
@@ -16,6 +17,7 @@ const ItemForm = ({ close, scope }: { close: () => void, scope: ItemFormScope })
 
     return (
         <Stack gap="xl">
+            <SwitchMode />
             <Stepper active={step} size="sm" radius="xl">
                 <Stepper.Step label="Dados básicos" description="Informações iniciais do item" >
                     <FormBasicData scope={scope} />

@@ -30,8 +30,8 @@ const ClientData = () => {
             <Group align="flex-start">
               <DocumentInput />
               <NameInput />
-              <div style={{alignSelf: "flex-start", marginTop: "calc(var(--mantine-spacing-xs) * 4.6"}}>
-              <CleanData />
+              <div style={{ alignSelf: "flex-start", marginTop: "calc(var(--mantine-spacing-xs) * 4.6" }}>
+                <CleanData />
               </div>
             </Group>
             <CreateBudgetButton />

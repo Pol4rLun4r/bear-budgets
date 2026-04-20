@@ -1,5 +1,5 @@
 // mantine
-import { ActionIcon, Button, Group, Tooltip, Modal } from "@mantine/core"
+import { ActionIcon, Button, Group, Tooltip, Modal, Switch } from "@mantine/core"
 import { useDisclosure } from '@mantine/hooks';
 
 // redux
@@ -23,7 +23,7 @@ const Buttons = () => {
                 <Tooltip label='Limpar lista' >
                     <ActionIcon
                         size="lg"
-                        radius="md"
+                        radius="lg"
                         variant="light"
                         color="var(--mantine-color-red-4)"
 
@@ -32,14 +32,24 @@ const Buttons = () => {
                         <IconTrash size={20} />
                     </ActionIcon>
                 </Tooltip>
-                <Button
-                    leftSection={<IconPlus size={20} />}
-                    radius="md"
-                    variant="light"
-                    onClick={open}
-                >
-                    Adicionar Item
-                </Button>
+                <Tooltip label="Modo Simples/Completo" refProp="rootRef">
+                    <Switch
+                        size="xl"
+                        onLabel="On"
+                        offLabel="Off"
+                        radius="lg"
+                    />
+                </Tooltip>
+                <Tooltip label='Adicionar Item'>
+                    <Button
+                        leftSection={<IconPlus size={20} />}
+                        radius="lg"
+                        variant="light"
+                        onClick={open}
+                    >
+                        Item
+                    </Button>
+                </Tooltip>
             </Group>
             <Modal
                 padding='xl'
@@ -49,6 +59,11 @@ const Buttons = () => {
                 title="Adicione um item"
                 centered
                 radius='lg'
+
+                
+
+                pos={"relative"}
+
                 overlayProps={{
                     backgroundOpacity: 0.55,
                     blur: 3,
