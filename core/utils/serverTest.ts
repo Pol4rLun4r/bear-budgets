@@ -30,7 +30,8 @@ const fakeNotePairs: Array<{ type: "text" | "link"; content: string }[]> = [
 ];
 
 fakeItens.map((item, index) => {
-    const itemReferenceId = repo.item.createReference(item);
+    const ItemWrapper = {item_basic_data: item} 
+    const itemReferenceId = repo.item.createReference(ItemWrapper as any);
     const notes = fakeNotePairs[index % fakeNotePairs.length];
     notes.forEach((note) => {
         repo.item.createNoteReference(itemReferenceId, note);
