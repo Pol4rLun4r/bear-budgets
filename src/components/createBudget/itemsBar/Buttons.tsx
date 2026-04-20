@@ -15,8 +15,14 @@ import SwitchMode from "./SwitchMode";
 import { IconPlus, IconTrash } from "@tabler/icons-react"
 
 const Buttons = () => {
-    const [opened, { open, close }] = useDisclosure(false);
+    const [itemOpened, { open: itemOpen, close: itemClose }] = useDisclosure(false);
+    const [deleteOpened, { open: deleteOpen, close: deleteClose }] = useDisclosure(false);
     const dispatch = useDispatch<AppDispatch>();
+
+    const handleDelete = () => {
+        dispatch(resetList())
+        deleteClose()
+    }
 
     return (
         <>
@@ -28,28 +34,54 @@ const Buttons = () => {
                         variant="light"
                         color="var(--mantine-color-red-4)"
 
-                        onClick={() => dispatch(resetList())}
+                        onClick={deleteOpen}
                     >
                         <IconTrash size={20} />
                     </ActionIcon>
                 </Tooltip>
-                <SwitchMode/>
+                <SwitchMode />
                 <Tooltip label='Adicionar Item'>
                     <Button
                         leftSection={<IconPlus size={20} />}
                         radius="lg"
                         variant="light"
-                        onClick={open}
+                        onClick={itemOpen}
                     >
                         Item
                     </Button>
                 </Tooltip>
-            </Group>
-            <Modal
+            </Group >
+            {/* modal do botão para deletar lista */}
+            < Modal
+                opened={deleteOpened}
+                onClose={deleteClose}
+                centered
+                title="Deseja realmente deletar todos os itens da lista?"
+                radius='lg'
+                overlayProps={{
+                    backgroundOpacity: 0.55,
+                    blur: 3,
+                }
+                }
+            >
+                <Button
+                    mt="md"
+                    radius="lg"
+                    variant="light"
+                    color="red"
+                    fullWidth
+                    onClick={() => handleDelete()}
+                >
+                    Deletar todos
+                </Button>
+            </ Modal>
+
+            {/* modal do botão para adicionar um item */}
+            < Modal
                 padding='xl'
                 size='lg'
-                opened={opened}
-                onClose={close}
+                opened={itemOpened}
+                onClose={itemClose}
                 title="Adicionar item"
                 centered
                 radius='lg'
@@ -61,8 +93,8 @@ const Buttons = () => {
                     blur: 3,
                 }}
             >
-                <ItemForm scope="add" close={close} />
-            </Modal>
+                <ItemForm scope="add" close={itemClose} />
+            </Modal >
         </>
     )
 }

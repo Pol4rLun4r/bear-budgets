@@ -1,5 +1,5 @@
 // mantine
-import { Badge, Center } from "@mantine/core";
+import { Badge } from "@mantine/core";
 
 // redux
 import { useSelector } from "react-redux";
@@ -22,10 +22,9 @@ const WarningMoreValues = ({ scope }: { scope: ItemFormScope }) => {
 
             pos={"absolute"}
             top={"calc(var(--mantine-spacing-lg) * 0.3) "}
-            // right={"calc(var(--mantine-spacing-lg) * 3) "}
-            style={{ zIndex: "9999", alignSelf: "center"}}
+            style={{ zIndex: "9999", alignSelf: "center" }}
         >
-            há valores importantes ocultados!
+            Há valores importantes ocultados!
         </Badge>
     )
 }
