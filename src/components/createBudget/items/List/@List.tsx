@@ -15,6 +15,7 @@ import { DragDropProvider } from "@dnd-kit/react";
 const List = () => {
     const dispatch = useDispatch<AppDispatch>();
     const listItems = useSelector((state: RootState) => state.createBudget.listItems);
+    const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode)
 
     const handleDragEnd: React.ComponentProps<typeof DragDropProvider>["onDragEnd"] = (event) => {
         if (event.canceled) return console.log('canceled'); // cancela a operação se cancelado
@@ -25,7 +26,9 @@ const List = () => {
 
         // ------------- corrigir erro de typagem --------------- //
 
+        // @ts-ignore
         const oldIndex = source.initialIndex; // index do item que está sendo arrastado 
+        // @ts-ignore
         const newIndex = source.index; // index para onde o item está sendo arrastado
 
         if (oldIndex === newIndex) return; // cancela a operação se o item está sendo arrastado para a mesma posição
@@ -35,7 +38,7 @@ const List = () => {
 
     return (
         <DragDropProvider onDragEnd={handleDragEnd}>
-            <Table.ScrollContainer minWidth={800} w={'100%'} h={'100%'}>
+            <Table.ScrollContainer minWidth={switchMode ? 800 : 2000} w={'100%'} h={'100%'}>
                 <Table layout="fixed" highlightOnHover stickyHeader>
                     <Table.Thead>
                         <Table.Tr>
@@ -44,10 +47,22 @@ const List = () => {
                             <Table.Th w={'30%'}>Descrição</Table.Th>
                             <Table.Th w={'10%'}>Valor unitário</Table.Th>
                             <Table.Th w={'8%'}>Qtd</Table.Th>
-                            <Table.Th w={'12%'}>Total</Table.Th>
+                            <Table.Th w={'12%'}>Total c/ somas</Table.Th>
                             <Table.Th w={'10%'}>Código interno</Table.Th>
-                            <Table.Th w={'10%'}>Markup unitário</Table.Th>
-                            <Table.Th w={'10%'}>Markup total</Table.Th>
+                            <Table.Th w={'10%'}>Markup (%)</Table.Th>
+                            {!switchMode &&
+                                <>
+                                    <Table.Th w={'10%'}>Total s/ somas</Table.Th>
+                                    <Table.Th w={'10%'}>Valor unit s/ somas</Table.Th>
+                                    <Table.Th w={'10%'}>Markup unitário</Table.Th>
+                                    <Table.Th w={'10%'}>Markup total</Table.Th>
+                                    <Table.Th w={'10%'}>ST</Table.Th>
+                                    <Table.Th w={'10%'}>IPI (%)</Table.Th>
+                                    <Table.Th w={'10%'}>Valor IPI</Table.Th>
+                                    <Table.Th w={'10%'}>Valor Total + IPI + ST</Table.Th>
+                                    <Table.Th w={'10%'}>Frete de compra</Table.Th>
+                                </>
+                            }
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>

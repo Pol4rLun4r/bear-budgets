@@ -1,5 +1,5 @@
 // mantine
-import { ActionIcon, Button, Group, Tooltip, Modal, Switch } from "@mantine/core"
+import { ActionIcon, Button, Group, Tooltip, Modal } from "@mantine/core"
 import { useDisclosure } from '@mantine/hooks';
 
 // redux
@@ -9,6 +9,7 @@ import { resetList } from "../../../redux/createBudget/items/listItemsSlice";
 
 // components
 import ItemForm from "../itemForm/@itemForm";
+import SwitchMode from "./SwitchMode";
 
 // icons
 import { IconPlus, IconTrash } from "@tabler/icons-react"
@@ -32,14 +33,7 @@ const Buttons = () => {
                         <IconTrash size={20} />
                     </ActionIcon>
                 </Tooltip>
-                <Tooltip label="Modo Simples/Completo" refProp="rootRef">
-                    <Switch
-                        size="xl"
-                        onLabel="On"
-                        offLabel="Off"
-                        radius="lg"
-                    />
-                </Tooltip>
+                <SwitchMode/>
                 <Tooltip label='Adicionar Item'>
                     <Button
                         leftSection={<IconPlus size={20} />}
