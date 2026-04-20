@@ -9,7 +9,7 @@ import CleanData from "./CleanData";
 import CreateBudgetButton from "../createBudgetButton/@CreateBudgetButton";
 
 const ClientData = () => {
-  const smallScreen = useMediaQuery('(min-width: 800px)');
+  const smallScreen = useMediaQuery('(min-width: 804px)');
 
   return (
     <Paper withBorder radius="lg" w={'100%'} p="lg">
@@ -30,7 +30,9 @@ const ClientData = () => {
             <Group align="flex-start">
               <DocumentInput />
               <NameInput />
+              <div style={{alignSelf: "flex-start", marginTop: "calc(var(--mantine-spacing-xs) * 4.6"}}>
               <CleanData />
+              </div>
             </Group>
             <CreateBudgetButton />
           </>
