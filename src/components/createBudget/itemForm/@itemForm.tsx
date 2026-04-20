@@ -11,6 +11,7 @@ import { Stack, Stepper } from "@mantine/core";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { ItemFormScope } from "../../../redux/createBudget/items/itemFormSlice";
+import WarningMoreValues from "./WarningMoreValues";
 
 const ItemForm = ({ close, scope }: { close: () => void, scope: ItemFormScope }) => {
     const step = useSelector((state: RootState) => state.createBudget.itemFormSteps[scope].step);
@@ -18,6 +19,7 @@ const ItemForm = ({ close, scope }: { close: () => void, scope: ItemFormScope })
     return (
         <Stack gap="xl">
             <SwitchMode />
+            <WarningMoreValues scope={scope}/>
             <Stepper active={step} size="sm" radius="xl">
                 <Stepper.Step label="Dados básicos" description="Informações iniciais do item" >
                     <FormBasicData scope={scope} />

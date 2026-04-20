@@ -50,11 +50,9 @@ const Buttons = () => {
                 size='lg'
                 opened={opened}
                 onClose={close}
-                title="Adicione um item"
+                title="Adicionar item"
                 centered
                 radius='lg'
-
-                
 
                 pos={"relative"}
 
