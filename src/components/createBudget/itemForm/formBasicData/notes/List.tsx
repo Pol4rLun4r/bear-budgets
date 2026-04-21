@@ -22,9 +22,9 @@ const List = ({ notes, scope }: { notes: ItemNoteType[]; scope: ItemFormScope })
 
     const rows = notes.map((note: ItemNoteType, index) => (
         <Table.Tr key={note.id ? note.id : index}>
-            <Table.Td width={'95%'}>
+            <Table.Td width={'90%'} style={{userSelect: 'text'}} >
                 {note.type === 'link' ?
-                    (<Anchor target="_blank" href={note.content} size="sm">{note.content}</Anchor>) :
+                    (<Anchor target="_blank" href={note.content} size="sm" lineClamp={1} w={"100%"} style={{ wordBreak: 'break-all' }} >{note.content}</Anchor>) :
                     note.content
                 }
             </Table.Td>
@@ -42,7 +42,7 @@ const List = ({ notes, scope }: { notes: ItemNoteType[]; scope: ItemFormScope })
         </Table.Tr >
     ))
     return (
-        <ScrollArea h={notes.length >= 3 ? 100 : undefined} type="auto" scrollbarSize={8} offsetScrollbars>
+        <ScrollArea h={notes.length >= 3 ? 200 : undefined} type="auto" scrollbarSize={8} offsetScrollbars style={{ overflowX: 'hidden' }}>
             <Table>
                 <Table.Tbody>{rows}</Table.Tbody>
             </Table>
