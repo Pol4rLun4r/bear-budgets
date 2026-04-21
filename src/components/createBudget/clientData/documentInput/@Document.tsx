@@ -11,7 +11,7 @@ import Input from "./Input";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
 import { setClient } from "../../../../redux/createBudget/clientSlice";
-import { resetClient } from "../../../../redux/createBudget/clientSlice";
+import { resetClient, resetClearClientTrigger } from "../../../../redux/createBudget/clientSlice";
 
 // type
 import { Client } from "../../../../types/client";
@@ -112,11 +112,13 @@ const DocumentInput = () => {
 
   // limpa os dados do cliente
   useEffect(() => {
-    dispatch(resetClient())
-    setSuggestions([]);
-    setIsLoader(false);
-  }, [trigger]);
-
+    if (trigger) {
+      dispatch(resetClient())
+      dispatch(resetClearClientTrigger());
+      setSuggestions([]);
+      setIsLoader(false);
+    }
+  }, [trigger, dispatch]);
 
   return (
     <Combobox

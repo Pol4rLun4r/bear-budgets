@@ -39,11 +39,14 @@ const clientSlice = createSlice({
         resetClient: () => initialState,
         triggerClearClient: (state) => {
             state.clearClientTrigger! += 1;
+        },
+        resetClearClientTrigger: (state) => {
+            state.clearClientTrigger = 0;
         }
     }
 });
 
-export const { resetClient, setClient, setDocument, setName, setNotes, setError, triggerClearClient } = clientSlice.actions;
+export const { resetClient, setClient, setDocument, setName, setNotes, setError, triggerClearClient, resetClearClientTrigger } = clientSlice.actions;
 
 export default clientSlice.reducer;
 

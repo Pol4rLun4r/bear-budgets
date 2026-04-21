@@ -8,9 +8,11 @@ import clientSlice from './clientSlice';
 import itemFormStepsSlice from './items/itemFormStepsSlice';
 import listItemsSlice from "./items/listItemsSlice";
 import listItemsSwitchModeSlice from "./items/listItemsSwitchModeSlice";
+import quotationSlice from './quotationSlice';
 
 const createBudgetReducer = combineReducers({
     client: clientSlice,
+    quotation: quotationSlice,
     itemForm: itemFormSlice,
     itemNoteForm: itemNoteFormSlice,
     itemFormSteps: itemFormStepsSlice,

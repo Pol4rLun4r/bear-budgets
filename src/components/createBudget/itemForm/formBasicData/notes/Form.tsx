@@ -14,7 +14,6 @@ const Form = ({ scope }: { scope: ItemFormScope }) => {
     const dispatch = useDispatch<AppDispatch>()
     const note = useSelector((state: RootState) => state.createBudget.itemNoteForm[scope]);
 
-
     const [isError, setIsError] = useState(false);
     const cleanTimeout = useRef<any>(null);
 

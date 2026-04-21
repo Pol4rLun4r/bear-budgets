@@ -9,6 +9,7 @@ import { IconClipboardList, IconPencilMinus } from "@tabler/icons-react";
 
 // Pages
 import Items from "../items/@Items";
+import Notes from "../notes/@Notes";
 
 // redux
 import { useSelector } from "react-redux";
@@ -56,7 +57,7 @@ const Pages = () => {
           <Items />
         </Tabs.Panel>
         <Tabs.Panel value="notes">
-          Notas
+          <Notes />
         </Tabs.Panel>
       </Tabs>
     </Paper>
