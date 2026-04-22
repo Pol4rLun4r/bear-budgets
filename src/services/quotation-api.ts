@@ -1,5 +1,6 @@
 // type
 import type { QuotationQuery } from '../../core/types/quotation';
+import { QuotationPayload } from '../components/createBudget/createBudgetButton/@CreateBudgetButton';
 
 // api
 import axios from 'axios';
@@ -10,4 +11,9 @@ const create = async (data: QuotationQuery) => {
     return response.data;
 }
 
-export default { create };
+const createQuotationAndItems = async (data: QuotationPayload) => {
+    const response = await axios.post(`${baseUrl}/quotations/items`, data);
+    return response.data;
+}
+
+export default { create, createQuotationAndItems };

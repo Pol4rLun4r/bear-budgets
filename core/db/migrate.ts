@@ -70,10 +70,8 @@ const INITIAL_UP = `
         st REAL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (item_reference_id) REFERENCES item_references(id) ON DELETE CASCADE,
-        UNIQUE(item_reference_id, version)
+        FOREIGN KEY (item_reference_id) REFERENCES item_references(id) ON DELETE CASCADE
     );
-    CREATE INDEX IF NOT EXISTS idx_item_versions_item_reference_id ON item_versions(item_reference_id);
 
     CREATE TABLE IF NOT EXISTS quotation_links (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -92,7 +90,6 @@ const INITIAL_UP = `
 const INITIAL_DOWN = `
     DROP INDEX IF EXISTS idx_quotation_links_quotation_version_id;
     DROP TABLE IF EXISTS quotation_links;
-    DROP INDEX IF EXISTS idx_item_versions_item_reference_id;
     DROP TABLE IF EXISTS item_versions;
     DROP TABLE IF EXISTS item_notes;
     DROP INDEX IF EXISTS idx_item_references_description;

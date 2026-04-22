@@ -29,7 +29,7 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
         // validar ordem/posição e se os items tem a mesma posição
         const position = item.position;
 
-        if (!position) {
+        if (position === undefined) {
             return failure("Cada item deve ter uma posição/ordem");
         } else {
             const hasSamePosition = items.filter((item) => item.position === position).length;

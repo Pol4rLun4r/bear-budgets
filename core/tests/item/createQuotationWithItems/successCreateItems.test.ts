@@ -32,7 +32,7 @@ describe("POST /quotations/items - Create Quotation and Add Items - Part 3 succe
             },
             items: [
                 {
-                    position: 1,
+                    position: 0,
                     item_basic_data: { ...fakeItens[0] },
                     notes: [],
                     values: {
