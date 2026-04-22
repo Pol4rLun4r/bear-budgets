@@ -45,7 +45,7 @@ const Form = ({ scope }: { scope: ItemFormScope }) => {
         <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: isError ? 'flex-start' : 'center' }}>
             <Textarea
                 style={{ width: '65%' }}
-                maxRows={note.type === 'link' ? 1 : 3}
+                maxRows={note.type === 'link' ? 3 : 9}
                 autosize
                 radius='lg'
                 placeholder="(opcional)"
