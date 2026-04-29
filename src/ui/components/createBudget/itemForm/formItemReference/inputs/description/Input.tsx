@@ -24,9 +24,9 @@ interface InputType {
 const Input = ({ isLoader, options, combobox, handleChange, handleClearData, scope }: InputType) => {
     const dispatch = useDispatch<AppDispatch>();
 
-    const description = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_basic_data.description);
+    const description = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_reference.description);
 
-    const isHasId = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_basic_data.id);
+    const isHasId = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_reference.id);
 
     return (
         <>
@@ -36,7 +36,7 @@ const Input = ({ isLoader, options, combobox, handleChange, handleClearData, sco
                         <Text c={'violet'}>Limpar dados</Text>
                     </UnstyledButton>
                     <Tooltip
-                        disabled={description.length !== 0 ? false : true}
+                        disabled={description?.length !== 0 ? false : true}
                         label={description}
                         multiline
                         w={400}
@@ -48,7 +48,7 @@ const Input = ({ isLoader, options, combobox, handleChange, handleClearData, sco
                             description="Busque por itens já cadastrados ou adicione um novo"
                             placeholder="Digite a descrição do item"
 
-                            rightSection={description.length !== 0 ? <ClearDescription scope={scope} /> : undefined}
+                            rightSection={description?.length !== 0 ? <ClearDescription scope={scope} /> : undefined}
                             withAsterisk
 
                             value={description}

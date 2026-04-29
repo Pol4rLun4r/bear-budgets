@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ItemFormScope, setManufacturerCode } from "../../../../../redux/createBudget/items/itemFormSlice";
 
 const ManufacturerCode = ({ scope }: { scope: ItemFormScope }) => {
-    const itemData = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_basic_data);
+    const itemData = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_reference);
     const dispatch = useDispatch<AppDispatch>();
 
     return (

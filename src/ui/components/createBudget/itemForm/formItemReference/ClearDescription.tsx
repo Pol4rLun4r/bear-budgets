@@ -9,17 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../redux/store";
 import {
     type ItemFormScope,
-    resetBasicItemData,
+    resetItemReference,
     resetItemDescription,
 } from "../../../../redux/createBudget/items/itemFormSlice";
 
 const ClearDescription = ({ scope }: { scope: ItemFormScope }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const isHasId = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_basic_data.id);
+    const isHasId = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_reference.id);
 
     const handleClear = () => {
         if (isHasId) {
-            return dispatch(resetBasicItemData(scope));
+            return dispatch(resetItemReference(scope));
         }
 
         dispatch(resetItemDescription(scope));

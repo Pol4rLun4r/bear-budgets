@@ -1,10 +1,7 @@
-// types
-import type { ItemValues } from "../redux/createBudget/items/itemFormSlice";
-
 // utils
 import { convertMarkupValue } from "./markupList";
 
-const calcAddItem = ({ ipi = 0, markup = "", purchase_shipping = 0, quantity = 0, st = 0, unit_price = 0 }: ItemValues) => {
+const calcAddItem = ({ ipi = 0, markup = "", purchase_shipping = 0, quantity = 0, st = 0, unit_price = 0 }: Partial<ItemVersion>) => {
     const markupNum = convertMarkupValue(markup);
 
     const totalWithoutTaxes = quantity * unit_price;

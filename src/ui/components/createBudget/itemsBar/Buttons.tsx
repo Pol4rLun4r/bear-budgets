@@ -8,7 +8,7 @@ import { AppDispatch } from "../../../redux/store";
 import { resetList } from "../../../redux/createBudget/items/listItemsSlice";
 
 // components
-import ItemForm from "../itemForm/@itemForm";
+import ItemForm from "../itemForm/@ItemForm";
 import SwitchMode from "./SwitchMode";
 
 // icons

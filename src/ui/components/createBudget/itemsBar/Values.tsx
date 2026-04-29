@@ -14,7 +14,7 @@ const Values = () => {
     const listItems = useSelector((state: RootState) => state.createBudget.listItems);
 
     const calcValues = listItems.map(item => {
-        const values = item.values;
+        const values = item.item_version;
 
         const calcItem = calcAddItem(values)
         

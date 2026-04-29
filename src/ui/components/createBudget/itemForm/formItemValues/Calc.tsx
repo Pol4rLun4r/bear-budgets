@@ -29,7 +29,7 @@ const configInput: NumberInputProps = {
 };
 
 const Calc = ({ scope }: { scope: ItemFormScope }) => {
-    const itemData = useSelector((state: RootState) => state.createBudget.itemForm[scope].values);
+    const itemData = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_version);
     const switchMode = useSelector((state: RootState) => state.createBudget.itemFormSwitchMode.mode);
 
     const { totalWithoutTaxes, ipiValue, totalWithIPIandST, markupValue, totalWithAll, finalUnitValue } = useCalcAddItem(itemData)

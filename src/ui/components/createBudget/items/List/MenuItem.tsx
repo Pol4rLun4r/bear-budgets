@@ -9,13 +9,13 @@ import { IconCopy, IconCopyPlus, IconMenu3, IconPencilMinus, IconTrash } from "@
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../redux/store";
 import { addItem, deleteItem } from "../../../../redux/createBudget/items/listItemsSlice";
-import { itemDataType, setItemDataEdit } from "../../../../redux/createBudget/items/itemFormSlice";
+import { ItemDataState, setItemDataEdit } from "../../../../redux/createBudget/items/itemFormSlice";
 
 // component
-import ItemForm from "../../itemForm/@itemForm";
+import ItemForm from "../../itemForm/@ItemForm";
 
 interface MenuItemType {
-  item: itemDataType
+  item: ItemDataState;
 }
 
 const MenuItem = ({ item }: MenuItemType) => {
@@ -34,7 +34,7 @@ const MenuItem = ({ item }: MenuItemType) => {
   }
 
   const handleCopy = () => {
-    clipboard.copy(item.item_basic_data.description);
+    clipboard.copy(item.item_reference.description);
   }
 
   const handleEdit = () => {
@@ -96,7 +96,7 @@ const MenuItem = ({ item }: MenuItemType) => {
           blur: 3,
         }}
       >
-        <Text c="red">{item.item_basic_data.description}</Text>
+        <Text c="red">{item.item_reference.description}</Text>
         <Button
           mt="md"
           radius="lg"

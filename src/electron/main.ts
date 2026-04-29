@@ -4,6 +4,7 @@ import path from "path"; //trata os caminhos dentro dos OS
 // utils
 import { isDev } from "./utils/env.js";
 import { getPreloadPath, getDBPath } from "./utils/pathResolver.js";
+import { createFakeData } from "./utils/createFakeData.js";
 
 // database
 import { createDatabase } from "./db/connection.js";
@@ -43,6 +44,9 @@ const main = () => {
     try {
         app.whenReady().then(() => {
             db = createDatabase(getDBPath());
+
+            // cria dados fake para desenvolvimento
+            createFakeData(db);
 
             createMainWindow();
 

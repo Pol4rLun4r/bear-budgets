@@ -13,7 +13,7 @@ import { ItemFormScope } from "../../../../../redux/createBudget/items/itemFormS
 
 const Notas = ({ scope }: { scope: ItemFormScope }) => {
     const notes = useSelector((state: RootState) => state.createBudget.itemForm[scope].notes);
-    const hasId = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_basic_data.id);
+    const hasId = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_reference.id);
 
     return (
         <div>

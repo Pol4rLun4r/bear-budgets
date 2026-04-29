@@ -7,10 +7,10 @@ import { IconCurrencyReal } from "@tabler/icons-react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../../../../redux/store";
-import { ItemFormScope, setValues } from "../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, setVersion } from "../../../../../redux/createBudget/items/itemFormSlice";
 
 const UnitValue = ({ scope }: { scope: ItemFormScope }) => {
-    const itemValues = useSelector((state: RootState) => state.createBudget.itemForm[scope].values);
+    const itemValues = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_version);
     const dispatch = useDispatch<AppDispatch>();
 
     return (
@@ -35,7 +35,7 @@ const UnitValue = ({ scope }: { scope: ItemFormScope }) => {
             // configurações do valor do input
             value={itemValues.unit_price || ``}
             onChange={(value) =>
-                dispatch(setValues({ scope, values: { ...itemValues, unit_price: value as number } }))
+                dispatch(setVersion({ scope, version: { ...itemValues, unit_price: value as number } }))
             }
         />
     )

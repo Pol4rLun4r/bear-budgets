@@ -4,16 +4,14 @@ import { useState, useRef, useEffect } from "react";
 // mantine
 import { Combobox, useCombobox } from "@mantine/core"
 
-// types
-import { ItemReferenceType } from "../../../../../../redux/createBudget/items/itemFormSlice";
 
 // redux
 import { AppDispatch } from "../../../../../../redux/store";
 import { useDispatch } from "react-redux";
-import { ItemFormScope, resetBasicItemData, setDescription, setItemBasicData, setNotes } from "../../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, resetItemReference, setDescription, setItemReference, setNotes } from "../../../../../../redux/createBudget/items/itemFormSlice";
 
 // api
-import itemService from "../../../../../../services/item-api";
+import services from "../../../../../../services";
 
 // components
 import Input from "./Input";
@@ -23,7 +21,7 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
 
     const dispatch = useDispatch<AppDispatch>();
 
-    const [suggestions, setSuggestions] = useState<ItemReferenceType[]>([]);
+    const [suggestions, setSuggestions] = useState<ItemReference[]>([]);
 
     const fetchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const DEBOUNCE_MS = 500;
@@ -39,7 +37,17 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
         }
 
         try {
-            const response = await itemService.searchItem(search);
+            const response = await services.item.searchDescription(search);
+
+            if (!response.success) {
+                setSuggestions([]);
+
+                // ---------------- AJUSTAR PARA TER NOTIFICAÇÃO DE ERRO ----------------
+                console.log('Erro ao buscar sugestões:', response.data);
+
+                return;
+            }
+
             const items = response.data;
 
             setSuggestions(Array.isArray(items) ? items : []);
@@ -57,7 +65,7 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
     }, []);
 
     const handleClearData = () => {
-        dispatch(resetBasicItemData(scope));
+        dispatch(resetItemReference(scope));
         setSuggestions([]);
         setIsLoader(false);
     }
@@ -104,12 +112,12 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
         const item = suggestions.find((s) => s.id === optionValue as unknown as number);
 
         if (item) {
-            dispatch(setItemBasicData({ scope, data: item }));
+            dispatch(setItemReference({ scope, data: item }));
         }
 
-        const notes = await itemService.getNotes(item?.id!);
+        // const notes = await itemService.getNotes(item?.id!);
 
-        dispatch(setNotes({ scope, notes: notes.data }));
+        // dispatch(setNotes({ scope, notes: notes.data }));
 
         combobox.closeDropdown();
     }

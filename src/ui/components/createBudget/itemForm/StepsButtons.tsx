@@ -13,12 +13,12 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
   const dispatch = useDispatch<AppDispatch>();
 
   const step = useSelector((state: RootState) => state.createBudget.itemFormSteps[scope].step);
-  const itemBasicData = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_basic_data);
-  const itemValues = useSelector((state: RootState) => state.createBudget.itemForm[scope].values);
+  const itemReference = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_reference);
+  const itemVersion = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_version);
 
   const data = useSelector((state: RootState) => state.createBudget.itemForm[scope]);
 
-  const hasDescription = itemBasicData.description.trim().length > 0;
+  const hasDescription = itemReference?.description!.trim().length > 0;
 
   // unit_price e quantity: definidos e maiores ou iguais a zero
   const isDefinedNonNegative = (value: unknown): boolean => {
@@ -36,9 +36,9 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
   };
 
   const hasValues =
-    isDefinedNonNegative(itemValues.unit_price) &&
-    isDefinedNonNegative(itemValues.quantity) &&
-    isDefinedMarkup(itemValues.markup);
+    isDefinedNonNegative(itemVersion.unit_price) &&
+    isDefinedNonNegative(itemVersion.quantity) &&
+    isDefinedMarkup(itemVersion.markup);
 
   const handleAddItem = () => {
     dispatch(addItem(data));

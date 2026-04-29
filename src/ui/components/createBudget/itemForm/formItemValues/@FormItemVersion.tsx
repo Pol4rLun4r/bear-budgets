@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 import { ItemFormScope } from "../../../../redux/createBudget/items/itemFormSlice";
 
 
-const FormItemValues = ({ scope }: { scope: ItemFormScope }) => {
+const FormItemVersion = ({ scope }: { scope: ItemFormScope }) => {
     const switchMode = useSelector((state: RootState) => state.createBudget.itemFormSwitchMode.mode);
 
     return (
@@ -43,4 +43,4 @@ const FormItemValues = ({ scope }: { scope: ItemFormScope }) => {
     )
 }
 
-export default FormItemValues;
+export default FormItemVersion;

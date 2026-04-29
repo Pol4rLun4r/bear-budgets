@@ -1,8 +1,8 @@
 // api
 import { baseAPI } from "./path";
 
-const searchItem = async (query: Pick<ItemReference, "description">) => {
-    const response = await baseAPI.item.searchReferences(query);
+const searchDescription = async (query: SearchItemDescription) => {
+    const response = await baseAPI.item.searchDescription(query);
     return response;
 }
 
@@ -13,4 +13,4 @@ const searchItem = async (query: Pick<ItemReference, "description">) => {
 //     return response.data;
 // }
 
-export default { searchItem };
+export default { searchDescription };

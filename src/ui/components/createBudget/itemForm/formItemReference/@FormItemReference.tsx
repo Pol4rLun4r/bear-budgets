@@ -13,10 +13,9 @@ import { useSelector } from "react-redux";
 import { Group, Stack } from "@mantine/core";
 
 // types
-// types
 import type { ItemFormScope } from "../../../../redux/createBudget/items/itemFormSlice";
 
-const FormBasicData = ({ scope }: { scope: ItemFormScope }) => {
+const FormItemReference = ({ scope }: { scope: ItemFormScope }) => {
     const switchMode = useSelector((state: RootState) => state.createBudget.itemFormSwitchMode.mode);
 
     return (
@@ -36,4 +35,4 @@ const FormBasicData = ({ scope }: { scope: ItemFormScope }) => {
     )
 };
 
-export default FormBasicData;
+export default FormItemReference;
