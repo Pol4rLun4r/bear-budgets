@@ -19,8 +19,12 @@ const createMainWindow = () => {
             nodeIntegration: false, // desativa a integração do Node.js para segurança
             sandbox: true, // necessário para contextBridge funcionar corretamente
             preload: getPreloadPath() // caminho para o arquivo preload, que é responsável por expor as APIs do Electron para o renderer process de forma segura
-        }
-    })
+        },
+        width: 1200,
+        height: 800,
+        minWidth: 750,
+        minHeight: 650,
+    });
 
     if (isDev()) {
         win.loadURL('http://localhost:5173/'); // caminho em desenvolvimento
@@ -45,7 +49,7 @@ const main = () => {
             appEvents(createMainWindow);
 
             ipcHandlers(db);
-            
+
         })
     } catch (error) {
         console.error(error);

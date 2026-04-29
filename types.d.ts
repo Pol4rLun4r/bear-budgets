@@ -35,7 +35,7 @@ type EventPayloadMapping = {
     "quotation:createWithItems": Result<QuotationLink[] | undefined>;
 
     // item
-    "item:searchReferences": Result<ItemReference[] | undefined>;
+    "item:searchDescription": Result<ItemReference[] | undefined>;
 }
 
 // --------------- API ---------------
@@ -63,7 +63,7 @@ interface QuotationAPI {
 }
 
 interface ItemAPI {
-    searchReferences(references: Pick<ItemReference, "description">['description']): Promise<Result<ItemReference[] | undefined>>;
+    searchDescription(description: SearchItemDescription): Promise<Result<ItemReference[] | undefined>>;
 }
 
 interface API {

@@ -10,7 +10,7 @@ import { ipcMainHandle } from "../utils/electron.js";
 const itemHandlers = (db: Database) => {
     const services = createServices(db);
 
-    ipcMainHandle('item:searchReferences', services.item.searchReferences);
+    ipcMainHandle('item:searchDescription', services.item.searchDescription);
 }
 
 export default itemHandlers;
