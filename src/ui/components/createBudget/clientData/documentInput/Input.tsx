@@ -9,9 +9,6 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../../../../redux/store";
 import { setDocument } from "../../../../redux/createBudget/clientSlice";
 
-// types
-import type { Client } from "../../../../types/client";
-
 // util
 import { formatDocument } from "../../../../utils/formatDocument";
 import { validateDocument } from "../../../../utils/documentValidator";

@@ -2,7 +2,7 @@
 import { ScrollArea, Table, Anchor, UnstyledButton, Tooltip } from "@mantine/core";
 
 // type
-import { ItemFormScope, ItemNoteType } from "../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope } from "../../../../../redux/createBudget/items/itemFormSlice";
 
 // icon
 import { IconTrash } from "@tabler/icons-react";
@@ -12,15 +12,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../../redux/store";
 import { removeNote } from "../../../../../redux/createBudget/items/itemFormSlice";
 
-const List = ({ notes, scope }: { notes: ItemNoteType[]; scope: ItemFormScope }) => {
+const List = ({ notes, scope }: { notes: Partial<ItemNote>[]; scope: ItemFormScope }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const hasId = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_basic_data.id);
+    const hasId = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_reference.id);
 
     const handleRemove = (index: number) => {
         dispatch(removeNote({ scope, index }));
     };
 
-    const rows = notes.map((note: ItemNoteType, index) => (
+    const rows = notes.map((note: Partial<ItemNote>, index) => (
         <Table.Tr key={note.id ? note.id : index}>
             <Table.Td width={'90%'} style={{userSelect: 'text'}} >
                 {note.type === 'link' ?

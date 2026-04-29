@@ -5,25 +5,12 @@ import { notifications } from "@mantine/notifications";
 // redux
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store";
-import type { QuotationQuery } from "../../../redux/createBudget/quotationSlice";
-import type { itemDataType } from "../../../redux/createBudget/items/itemFormSlice";
 
 // utils
 import { validateDocument } from "../../../utils/documentValidator";
 
 // api
-import quotationService from "../../../services/quotation-api";
-import { AxiosError } from "axios";
-
-interface ErrorResponseData {
-    data: string;
-}
-
-export type QuotationPayload = {
-    client: Partial<Client>;
-    quotation: QuotationQuery;
-    items: itemDataType[];
-};
+import services from "../../../services";
 
 const CreateBudgetButton = () => {
     const items = useSelector((state: RootState) => state.createBudget.listItems);
@@ -34,11 +21,20 @@ const CreateBudgetButton = () => {
 
     const hasValues = items.length > 0 && isClient;
 
-    const budgetData: QuotationPayload = { client, quotation, items };
+    const budgetData: CreateWithAllData = { client, quotation, items };
 
     const handleCreateBudget = async () => {
         try {
-            await quotationService.createQuotationAndItems(budgetData);
+            const res = await services.quotation.createQuotationAndItems(budgetData);
+
+            if (!res.success) {
+                return notifications.show({
+                    title: 'Error ao criação cotação',
+                    message: res.data,
+                    position: 'top-right',
+                    color: 'pink'
+                })
+            }
 
             notifications.show({
                 title: 'Criado',
@@ -48,8 +44,7 @@ const CreateBudgetButton = () => {
             })
 
         } catch (error) {
-            const axiosError = error as AxiosError<ErrorResponseData>;
-            const errorMessage = axiosError.response?.data?.data || axiosError.message || 'Erro desconhecido';
+            const errorMessage = error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.';
 
             notifications.show({
                 title: 'Algo deu errado!',

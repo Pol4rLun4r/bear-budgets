@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // mantine
 import { Button, NativeSelect, Textarea } from "@mantine/core"
 
@@ -5,7 +6,7 @@ import { Button, NativeSelect, Textarea } from "@mantine/core"
 import { useSelector, useDispatch } from "react-redux"
 import { AppDispatch, RootState } from "../../../../../redux/store"
 import { setNoteType, setNoteContent, resetNote } from "../../../../../redux/createBudget/items/itemNoteFormSlice"
-import { addNote, type ItemFormScope, type ItemNoteType } from "../../../../../redux/createBudget/items/itemFormSlice";
+import { addNote, type ItemFormScope } from "../../../../../redux/createBudget/items/itemFormSlice";
 
 //react
 import { useState, useRef } from "react"
@@ -18,7 +19,7 @@ const Form = ({ scope }: { scope: ItemFormScope }) => {
     const cleanTimeout = useRef<any>(null);
 
     const handleAddNote = () => {
-        const data: ItemNoteType = {
+        const data: Partial<ItemNote> = {
             content: note.content,
             type: note.type
         };

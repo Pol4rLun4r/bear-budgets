@@ -1,14 +1,14 @@
 // redux
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-interface ClientState extends Partial<Client> {
+interface ClientState extends Client {
     clearClientTrigger?: number;
 }
 
 const initialState: ClientState = {
     id: undefined,
-    name: undefined,
-    document: undefined,
+    name: "",
+    document: "",
     notes: undefined,
     type_client: "nacional",
     clearClientTrigger: 0

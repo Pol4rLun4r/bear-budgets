@@ -4,7 +4,7 @@ type WithUndefined<T> = {
 };
 
 // --------------- Quotation-API ---------------
-interface CreateQuotation extends Pick<Quotation, "client_id">, Pick<QuotationVersion, "notes" | "status"> { }
+interface CreateQuotation extends Partial<Pick<Quotation, "client_id">>, Pick<QuotationVersion, "notes" | "status"> { }
 
 interface CreateWithAllData {
     client: Client;

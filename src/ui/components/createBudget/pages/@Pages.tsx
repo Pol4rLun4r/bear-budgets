@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 // mantine
 import { Paper, Tabs, Avatar } from "@mantine/core"
 
@@ -22,9 +23,9 @@ const Pages = () => {
 
   const Amount = ({ amount }: { amount: number }) => {
     if (amount === 0 || amount === undefined) {
-      return null
+      return (<></>);
     }
-
+    
     return (
       <Avatar size={iconSize} radius="xl">
         {amount.toString()}

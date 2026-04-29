@@ -1,24 +1,7 @@
 // redux
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-export type Quotation = {
-    id?: number;
-    client_id?: number;
-    created_at?: string;
-};
-
-// Status por versão: 0 = rascunho, 1 = aprovado, 2 = outro (ex.: omie) 
-export type QuotationStatus = 0 | 1 | 2;
-
-export type QuotationQuery = Omit<
-    Quotation,
-    "id" | "created_at" | "client_id"
-> & {
-    notes?: string | null;
-    status?: QuotationStatus;
-};
-
-const initialState: QuotationQuery = {
+const initialState: CreateQuotation = {
     notes: undefined,
     status: 0
 }
@@ -33,7 +16,7 @@ const quotationSlice = createSlice({
         setStatus: (state, action: PayloadAction<QuotationStatus>) => {
             state.status = action.payload;
         },
-        setQuotation: (_state, action: PayloadAction<QuotationQuery>) => action.payload,
+        setQuotation: (_state, action: PayloadAction<CreateQuotation>) => action.payload,
         resetQuotation: () => initialState,
     }
 })

@@ -19,12 +19,14 @@ const createMainWindow = () => {
         webPreferences: {
             nodeIntegration: false, // desativa a integração do Node.js para segurança
             sandbox: true, // necessário para contextBridge funcionar corretamente
-            preload: getPreloadPath() // caminho para o arquivo preload, que é responsável por expor as APIs do Electron para o renderer process de forma segura
+            preload: getPreloadPath(), // caminho para o arquivo preload, que é responsável por expor as APIs do Electron para o renderer process de forma segura
+            devTools: isDev() ? true : false,
         },
         width: 1200,
         height: 800,
         minWidth: 750,
         minHeight: 650,
+        
     });
 
     if (isDev()) {

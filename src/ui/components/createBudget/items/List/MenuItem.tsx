@@ -13,6 +13,7 @@ import { ItemDataState, setItemDataEdit } from "../../../../redux/createBudget/i
 
 // component
 import ItemForm from "../../itemForm/@ItemForm";
+import { notifications } from "@mantine/notifications";
 
 interface MenuItemType {
   item: ItemDataState;
@@ -35,6 +36,13 @@ const MenuItem = ({ item }: MenuItemType) => {
 
   const handleCopy = () => {
     clipboard.copy(item.item_reference.description);
+
+    notifications.show({
+      title: 'Descrição copiada',
+      message: 'A descrição do item foi copiada para a área de transferência!',
+      position: 'top-right',
+      color: 'teal'
+    })
   }
 
   const handleEdit = () => {
