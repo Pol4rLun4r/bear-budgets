@@ -1,18 +1,16 @@
 // redux
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-interface ClientQuery extends Partial<Client> {
-    isError?: boolean;
+interface ClientState extends Partial<Client> {
     clearClientTrigger?: number;
 }
 
-const initialState: ClientQuery = {
+const initialState: ClientState = {
     id: undefined,
     name: undefined,
     document: undefined,
     notes: undefined,
     type_client: "nacional",
-    isError: false,
     clearClientTrigger: 0
 };
 
@@ -29,10 +27,7 @@ const clientSlice = createSlice({
         setNotes: (state, action: PayloadAction<string>) => {
             state.notes = action.payload;
         },
-        setClient: (_state, action: PayloadAction<ClientQuery>) => action.payload,
-        setError: (state, action: PayloadAction<boolean>) => {
-            state.isError = action.payload;
-        },
+        setClient: (_state, action: PayloadAction<ClientState>) => action.payload,
         resetClient: () => initialState,
         triggerClearClient: (state) => {
             state.clearClientTrigger! += 1;
@@ -43,7 +38,7 @@ const clientSlice = createSlice({
     }
 });
 
-export const { resetClient, setClient, setDocument, setName, setNotes, setError, triggerClearClient, resetClearClientTrigger } = clientSlice.actions;
+export const { resetClient, setClient, setDocument, setName, setNotes, triggerClearClient, resetClearClientTrigger } = clientSlice.actions;
 
 export default clientSlice.reducer;
 

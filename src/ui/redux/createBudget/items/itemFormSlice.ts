@@ -1,37 +1,11 @@
 // redux
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-// types
-export type ItemReferenceType = {
-    id?: number | null;
-    description: string;
-    internal_code?: string | null;
-    manufacturer_code?: string | null;
-    ncm?: string | null;
-};
-
-export type ItemNoteType = {
-    id?: number | null;
-    item_reference_id?: number | null;
-    type: "text" | "link";
-    content: string;
-};
-
-export type ItemValues = {
-    unit_price?: number | undefined;
-    quantity?: number | undefined;
-    ipi?: number | undefined;
-    st?: number | undefined;
-    markup?: string | undefined;
-    purchase_shipping?: number | undefined;
-};
-
-export interface itemDataType {
+export interface ItemDataState {
     temp_id: string;
-    position: number;
-    item_basic_data: ItemReferenceType;
-    notes: ItemNoteType[];
-    values: ItemValues;
+    item_reference: Partial<ItemReference>;
+    item_version: Partial<ItemVersion>;
+    notes: Partial<ItemNote>[];
 }
 
 export type ItemFormScope = "add" | "edit";
@@ -40,23 +14,22 @@ export const ITEM_FORM_ADD: ItemFormScope = "add";
 export const ITEM_FORM_EDIT: ItemFormScope = "edit";
 
 export interface ItemFormSliceState {
-    add: itemDataType;
-    edit: itemDataType;
+    add: ItemDataState;
+    edit: ItemDataState;
 }
 
-export const createEmptyItemData = (): itemDataType => {
+export const createEmptyItemData = (): ItemDataState => {
     return {
         temp_id: "",
-        position: 0,
-        item_basic_data: {
-            id: null,
+        item_reference: {
+            id: undefined,
             description: "",
             internal_code: "",
             manufacturer_code: "",
             ncm: "",
         },
         notes: [],
-        values: {
+        item_version: {
             unit_price: undefined,
             quantity: 1,
             ipi: undefined,
@@ -72,7 +45,7 @@ const initialState: ItemFormSliceState = {
     edit: createEmptyItemData(),
 };
 
-const draft = (state: ItemFormSliceState, scope: ItemFormScope): itemDataType => {
+const draft = (state: ItemFormSliceState, scope: ItemFormScope): ItemDataState => {
     return state[scope];
 };
 
@@ -84,66 +57,66 @@ const itemFormSlice = createSlice({
             state,
             action: PayloadAction<{ scope: ItemFormScope; value: string }>,
         ) => {
-            draft(state, action.payload.scope).item_basic_data.description = action.payload.value;
+            draft(state, action.payload.scope).item_reference.description = action.payload.value;
         },
         setInternalCode: (
             state,
             action: PayloadAction<{ scope: ItemFormScope; value: string }>,
         ) => {
-            draft(state, action.payload.scope).item_basic_data.internal_code = action.payload.value;
+            draft(state, action.payload.scope).item_reference.internal_code = action.payload.value;
         },
         setManufacturerCode: (
             state,
             action: PayloadAction<{ scope: ItemFormScope; value: string }>,
         ) => {
-            draft(state, action.payload.scope).item_basic_data.manufacturer_code = action.payload.value;
+            draft(state, action.payload.scope).item_reference.manufacturer_code = action.payload.value;
         },
         setNcm: (state, action: PayloadAction<{ scope: ItemFormScope; value: string }>) => {
-            draft(state, action.payload.scope).item_basic_data.ncm = action.payload.value;
+            draft(state, action.payload.scope).item_reference.ncm = action.payload.value;
         },
-        setItemBasicData: (
+        setItemReference: (
             state,
-            action: PayloadAction<{ scope: ItemFormScope; data: ItemReferenceType }>,
+            action: PayloadAction<{ scope: ItemFormScope; data: Partial<ItemReference> }>,
         ) => {
-            draft(state, action.payload.scope).item_basic_data = action.payload.data;
+            draft(state, action.payload.scope).item_reference = action.payload.data;
         },
         setNotes: (
             state,
-            action: PayloadAction<{ scope: ItemFormScope; notes: ItemNoteType[] }>,
+            action: PayloadAction<{ scope: ItemFormScope; notes: Partial<ItemNote>[] }>,
         ) => {
             draft(state, action.payload.scope).notes = action.payload.notes;
         },
-        setValues: (
+        setVersion: (
             state,
-            action: PayloadAction<{ scope: ItemFormScope; values: ItemValues }>,
+            action: PayloadAction<{ scope: ItemFormScope; version: Partial<ItemVersion> }>,
         ) => {
-            draft(state, action.payload.scope).values = action.payload.values;
+            draft(state, action.payload.scope).item_version = action.payload.version;
         },
         setItemDataEdit: (
             state,
-            action: PayloadAction<itemDataType>,
+            action: PayloadAction<ItemDataState>,
         ) => {
             state.edit = action.payload;
         },
-        resetItemValues: (state, action: PayloadAction<ItemFormScope>) => {
+        resetItemVersion: (state, action: PayloadAction<ItemFormScope>) => {
             const empty = createEmptyItemData();
-            const values = draft(state, action.payload).values;
-            values.unit_price = empty.values.unit_price;
+            const values = draft(state, action.payload).item_version;
+            values.unit_price = empty.item_version.unit_price;
             values.quantity = 1;
-            values.ipi = empty.values.ipi;
-            values.st = empty.values.st;
-            values.markup = empty.values.markup;
-            values.purchase_shipping = empty.values.purchase_shipping;
+            values.ipi = empty.item_version.ipi;
+            values.st = empty.item_version.st;
+            values.markup = empty.item_version.markup;
+            values.purchase_shipping = empty.item_version.purchase_shipping;
         },
         resetItemDescription: (state, action: PayloadAction<ItemFormScope>) => {
             const empty = createEmptyItemData();
-            const item = draft(state, action.payload).item_basic_data;
-            item.description = empty.item_basic_data.description;
+            const item = draft(state, action.payload).item_reference;
+            item.description = empty.item_reference.description;
         },
-        resetBasicItemData: (state, action: PayloadAction<ItemFormScope>) => {
+        resetItemReference: (state, action: PayloadAction<ItemFormScope>) => {
             const empty = createEmptyItemData();
             const item = draft(state, action.payload);
-            item.item_basic_data = empty.item_basic_data;
+            item.item_reference = empty.item_reference;
             item.notes = empty.notes;
         },
         resetItemData: (state, action: PayloadAction<ItemFormScope>) => {
@@ -152,7 +125,7 @@ const itemFormSlice = createSlice({
         },
         addNote: (
             state,
-            action: PayloadAction<{ scope: ItemFormScope; note: ItemNoteType }>,
+            action: PayloadAction<{ scope: ItemFormScope; note: Partial<ItemNote> }>,
         ) => {
             draft(state, action.payload.scope).notes.push(action.payload.note);
         },
@@ -166,13 +139,13 @@ const itemFormSlice = createSlice({
 });
 
 export const {
-    setItemBasicData,
+    setItemReference,
     setNotes,
-    setValues,
-    resetBasicItemData,
+    setVersion,
+    resetItemReference,
     resetItemData,
     resetItemDescription,
-    resetItemValues,
+    resetItemVersion,
     setDescription,
     setInternalCode,
     setManufacturerCode,
