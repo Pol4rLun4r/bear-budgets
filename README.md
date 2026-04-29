@@ -1,81 +1,83 @@
-# Bear Quotes
+# Electron + Vite + React
 
-> **Status: Alpha** — Aplicação em desenvolvimento ativo. Funcionalidades e APIs podem mudar.
+Base pré-configurada para desenvolvimento de aplicações desktop com **Electron**, **Vite** e **React** usando **TypeScript**.
 
-Aplicativo desktop para criação e gestão de orçamentos (cotações), com busca de clientes, cadastro e fluxo guiado por etapas.
+## 🚀 Características
 
-## Stack
+- ⚡ Vite com HMR (Hot Module Replacement)
+- ⚛️ React 19 com TypeScript
+- 🔧 Electron 41+ totalmente integrado
+- 📦 Electron Builder para gerar builds em Windows, macOS e Linux
+- ✅ ESLint configurado
+- 🎨 Estrutura clara entre UI e processo principal
 
-- **Desktop:** [Tauri 2](https://tauri.app/) + [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) + [Vite 7](https://vitejs.dev/)
-- **UI:** [Mantine 8](https://mantine.dev/), [Framer Motion](https://www.framer.com/motion/), [Tabler Icons](https://tabler.io/icons)
-- **Estado:** [Redux Toolkit](https://redux-toolkit.js.org/) + [React Redux](https://react-redux.js.org/)
-- **Backend:** [Express 5](https://expressjs.com/) (API REST na porta 4000)
-- **Banco:** [better-sqlite3](https://github.com/JoshuaWise/better-sqlite3) com [migrations](https://github.com/BlackGlory/better-sqlite3-migrations)
-- **Testes:** [Vitest](https://vitest.dev/) no core
+## 📁 Estrutura
 
-## O que existe hoje (Alpha)
+```
+src/
+├── electron/          # Processo principal do Electron
+│   ├── main.ts
+│   ├── utils.ts
+│   └── tsconfig.json
+└── ui/                # Interface React
+    ├── App.tsx
+    ├── main.tsx
+    ├── App.css
+    └── assets/
+```
 
-### Interface
+## 🔨 Scripts Disponíveis
 
-- **Sidebar** colapsável com abas de navegação e opções (alternar tema claro/escuro, Settings).
-- **Tema:** dark por padrão, suporte a light/dark com Mantine.
-- **Fluxo “Criar orçamento”** em slides e steps:
-  1. **Buscar cliente** — busca por documento ou nome (com debounce).
-  2. **Criar ou usar cliente** — se não existir, formulário para cadastro (nome, documento, tipo nacional/internacional, notas); validação de CPF/CNPJ.
-  3. **Iniciar orçamento** — status (rascunho / aprovado / omie) e notas.
-  4. **Definir itens** — passo presente na stepper, conteúdo ainda placeholder.
-  5. **Ajustes finais** — tela de conclusão, conteúdo ainda placeholder.
-- **Notificações** (Mantine Notifications) disponíveis na app.
+```bash
+# Desenvolvimento - React + Electron em paralelo
+npm run dev
 
-### Backend (core)
+# Apenas React (Vite)
+npm run dev:react
 
-- **API REST** em Express:
-  - `POST /clients/search` — busca clientes por documento ou nome.
-  - `POST /clients/` — cria cliente (ou retorna existente por documento).
-  - `GET /clients/get?client_id=` — obtém cliente por ID.
-  - `POST /quotations/` — cria cotação para um cliente (com status e notas).
-- **Banco SQLite** com migrations; schema com `quotations`, `quotation_versions` (versões imutáveis) e `clients`.
-- **Regras de domínio** no core (ex.: validação de documento, tipo do cliente, existência de cliente na cotação).
-- **Testes** no core via `npm run test-core` (Vitest).
+# Apenas Electron
+npm run dev:electron
 
-### Limitações conhecidas (Alpha)
+# Build para produção
+npm run build
 
-- Servidor backend precisa ser iniciado separadamente (por exemplo `core/server.ts` na porta 4000).
-- URL da API está fixa em `http://localhost:4000` em `src/services/url.ts`.
-- Passos “Definir itens” e “Ajustes finais” ainda não implementados.
-- Outras abas da sidebar (além de “Criar orçamento”) mostram conteúdo placeholder.
+# Verificar linting
+npm run lint
 
-## Como rodar
+# Gerar executável
+npm run dist:mac      # macOS (ARM64)
+npm run dist:win      # Windows (x64)
+npm run dist:linux    # Linux (x64)
+```
 
-1. **Instalar dependências**
-   ```bash
-   npm install
-   ```
+## 🛠️ Stack Tecnológico
 
-2. **Subir o backend** (em um terminal)
-   - Garantir que o servidor Express do `core` está rodando na porta 4000 (ex.: `core/server.ts` ou script equivalente).
+- **React** 19.2.5
+- **TypeScript** 6.0
+- **Vite** 8.0
+- **Electron** 41.3.0
+- **Electron Builder** 26.8
+- **ESLint** 10.2
 
-3. **Rodar o app desktop**
-   ```bash
-   npm run tauri dev
-   ```
-   Ou apenas o frontend:
-   ```bash
-   npm run dev
-   ```
+## 📝 Primeiros Passos
 
-4. **Testes do core**
-   ```bash
-   npm run test-core
-   ```
+1. Instale as dependências:
+```bash
+npm install
+```
 
-## Estrutura resumida
+2. Inicie o desenvolvimento:
+```bash
+npm run dev
+```
 
-- `src/` — frontend React (componentes, Redux, serviços de API, estilos).
-- `src-tauri/` — app Tauri (Rust).
-- `core/` — backend em Node: `app.ts`, `server.ts`, `db/`, `domain/`, `services/`, `controller/`, `routes/`, `repositories/`.
-- `types/` — tipos compartilhados (ex.: `quotation`, `client`).
+3. Edite os arquivos em `src/ui/` para a interface React ou `src/electron/main.ts` para lógica do processo principal.
 
-## IDE recomendada
+## 📦 Build de Produção
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+```bash
+npm run build      # Compila React e TypeScript
+npm run dist:win   # Gera .exe para Windows
+```
+
+O executável estará em `dist/`.

@@ -9,14 +9,14 @@ lerna-debug.log*
 
 node_modules
 dist
+dist-react
+dist-electron
 dist-ssr
-dist-core
 *.local
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-!.vscode/settings.json
 .idea
 .DS_Store
 *.suo
@@ -24,10 +24,3 @@ dist-core
 *.njsproj
 *.sln
 *.sw?
-
-# Playwright
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
