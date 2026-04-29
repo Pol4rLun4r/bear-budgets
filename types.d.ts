@@ -17,12 +17,15 @@ interface CreateWithAllData {
 };
 
 // --------------- Item-API ---------------
+type GetItemNotes = ItemNote['item_reference_id'];
+
+type SearchItemDescription = Pick<ItemReference, "description">['description'];
+
+// --------------- Client-API ---------------
 interface SearchClient {
     value: string;
     type: 'document' | 'name';
 }
-
-type SearchItemDescription = Pick<ItemReference, "description">['description'];
 
 // --------------- channels and API ---------------
 type EventPayloadMapping = {
@@ -36,6 +39,7 @@ type EventPayloadMapping = {
 
     // item
     "item:searchDescription": Result<ItemReference[] | undefined>;
+    "item:getNotes": Result<ItemNote[] | undefined>;
 }
 
 // --------------- API ---------------
@@ -64,6 +68,7 @@ interface QuotationAPI {
 
 interface ItemAPI {
     searchDescription(description: SearchItemDescription): Promise<Result<ItemReference[] | undefined>>;
+    getNotes(itemReference: ItemNote['item_reference_id']): Promise<Result<ItemNote[] | undefined>>;
 }
 
 interface API {

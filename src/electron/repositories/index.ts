@@ -22,9 +22,10 @@ import {
     addItemsToQuotationVersionRepository,
     createItemReferenceRepository,
     getItemReferenceByIdRepository,
-    getItemReferenceNotesByReferenceIdRepository,
+    getItemRNotesByReferenceIdRepository,
     getItemVersionByIdRepository,
     searchItemReferencesByDescriptionRepository,
+    createItemNoteRepository
 } from "./item.repository.js";
 
 export const createRepositories = (db: Database) => ({
@@ -45,11 +46,12 @@ export const createRepositories = (db: Database) => ({
         
     },
     item: {
+        createNote: createItemNoteRepository(db),
         createReference: createItemReferenceRepository(db),
         addToQuotation: addItemsToQuotationVersionRepository(db),
         getReferenceById: getItemReferenceByIdRepository(db),
         getVersionById: getItemVersionByIdRepository(db),
-        getReferenceNotesByReferenceId: getItemReferenceNotesByReferenceIdRepository(db),
+        getReferenceNotesByReferenceId: getItemRNotesByReferenceIdRepository(db),
         searchByDescription: searchItemReferencesByDescriptionRepository(db),
     },
 });

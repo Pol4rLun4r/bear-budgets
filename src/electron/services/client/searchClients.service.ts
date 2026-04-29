@@ -2,13 +2,13 @@
 import type { Database } from "better-sqlite3";
 
 // repositories
-import { createRepositories } from "../repositories/index.js";
+import { createRepositories } from "../../repositories/index.js";
 
 // utils
-import { success } from "../utils/handleSuccess.js";
+import { success } from "../../utils/handleSuccess.js";
 
 // rules
-import searchClientsRules from "../rules/client/searchClients.rules.js";
+import searchClientsRules from "../../rules/client/searchClients.rules.js";
 
 const searchClientsService = (db: Database) => {
     const repo = createRepositories(db);

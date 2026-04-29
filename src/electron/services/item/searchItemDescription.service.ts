@@ -1,14 +1,14 @@
 // utils
-import { success } from "../utils/handleSuccess.js";
+import { success } from "../../utils/handleSuccess.js";
 
 // repositories
-import { createRepositories } from "../repositories/index.js";
+import { createRepositories } from "../../repositories/index.js";
 
 // types
 import { Database } from "better-sqlite3";
 
 // rules
-import searchItemDescriptionRules from "../rules/item/searchItemDescription.rules.js";
+import searchItemDescriptionRules from "../../rules/item/searchItemDescription.rules.js";
 
 const searchItemDescriptionService = (db: Database) => {
     const repo = createRepositories(db);

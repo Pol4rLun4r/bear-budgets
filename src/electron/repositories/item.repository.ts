@@ -17,17 +17,17 @@ export const createItemReferenceRepository = (db: Database) =>
 
 // cria uma nota de referência do item (texto ou link).
 export const createItemNoteRepository = (db: Database) =>
-    (item_reference_id: number, data: ItemNote): ItemNote => {
+    (item_reference_id: number, data: ItemNote): number => {
         const row = db.prepare(`
             INSERT INTO item_notes (item_reference_id, type, content)
             VALUES (?, ?, ?)
             RETURNING id, item_reference_id, type, content, created_at, updated_at
-        `).get(item_reference_id, data.type, data.content) as ItemNote;
-        return row;
+        `).run(item_reference_id, data.type, data.content)
+        return row.lastInsertRowid as number;
     };
 
 // busca as notas de referência de um item_reference pelo id da referência.
-export const getItemReferenceNotesByReferenceIdRepository = (db: Database) =>
+export const getItemRNotesByReferenceIdRepository = (db: Database) =>
     (item_reference_id: number): ItemNote[] => {
         return db.prepare(`
             SELECT id, item_reference_id, type, content, created_at, updated_at

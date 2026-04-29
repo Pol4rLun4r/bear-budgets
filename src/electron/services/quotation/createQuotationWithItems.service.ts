@@ -2,15 +2,15 @@
 import type { Database } from "better-sqlite3";
 
 // rules
-import addItemRules from "../rules/item/addItem.rules.js";
-import createQuotationRules from "../rules/quotation/createQuotation.rules.js";
-import createClientRules, { cleanDocument } from "../rules/client/createClient.rules.js";
+import addItemRules from "../../rules/item/addItem.rules.js";
+import createQuotationRules from "../../rules/quotation/createQuotation.rules.js";
+import createClientRules, { cleanDocument } from "../../rules/client/createClient.rules.js";
 
 // utils
-import { success } from "../utils/handleSuccess.js";
+import { success } from "../../utils/handleSuccess.js";
 
 // repositories
-import { createRepositories } from "../repositories/index.js";
+import { createRepositories } from "../../repositories/index.js";
 
 const createQuotationWithItems = (db: Database) => (payload: CreateWithAllData) => {
     const repo = createRepositories(db);

@@ -2,11 +2,11 @@
 import type { Database } from "better-sqlite3";
 
 // rules
-import createQuotationRules from "../rules/quotation/createQuotation.rules.js";
-import { success } from "../utils/handleSuccess.js";
+import createQuotationRules from "../../rules/quotation/createQuotation.rules.js";
+import { success } from "../../utils/handleSuccess.js";
 
 // repositories
-import { createRepositories } from "../repositories/index.js";
+import { createRepositories } from "../../repositories/index.js";
 
 const createQuotationService = (db: Database) => {
     const repo = createRepositories(db);

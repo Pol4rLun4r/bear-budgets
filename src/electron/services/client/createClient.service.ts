@@ -2,13 +2,13 @@
 import type { Database } from "better-sqlite3";
 
 // repositories
-import { createRepositories } from "../repositories/index.js";
+import { createRepositories } from "../../repositories/index.js";
 
 // rules
-import createClientRules, { cleanDocument } from "../rules/client/createClient.rules.js";
+import createClientRules, { cleanDocument } from "../../rules/client/createClient.rules.js";
 
 // utils
-import { success } from "../utils/handleSuccess.js";
+import { success } from "../../utils/handleSuccess.js";
 
 const createClientService = (db: Database) => {
     const repo = createRepositories(db);
