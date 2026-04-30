@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 
 // mantine
 import { Combobox, useCombobox } from "@mantine/core"
-
+import { notifications } from "@mantine/notifications";
 
 // redux
 import { AppDispatch } from "../../../../../../redux/store";
@@ -36,25 +36,21 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
             return;
         }
 
-        try {
-            const response = await services.item.searchDescription(search);
+        const response = await services.item.searchDescription(search);
 
-            if (!response.success) {
-                setSuggestions([]);
-
-                // ---------------- AJUSTAR PARA TER NOTIFICAÇÃO DE ERRO ----------------
-                console.log('Erro ao buscar sugestões:', response.data);
-
-                return;
-            }
-
-            const items = response.data;
-
-            setSuggestions(Array.isArray(items) ? items : []);
-        } catch (error) {
-            console.log(error);
+        if (!response.success) {
             setSuggestions([]);
+
+            return notifications.show({
+                title: 'Error ao pesquisar pela descrição',
+                message: response.data,
+                position: 'top-right',
+                color: 'pink'
+            })
         }
+
+        const items = response.data;
+        setSuggestions(Array.isArray(items) ? items : []);
     }
 
     useEffect(() => {
@@ -115,9 +111,22 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
             dispatch(setItemReference({ scope, data: item }));
         }
 
-        // const notes = await itemService.getNotes(item?.id!);
+        const response = await services.item.getNotes(item?.id as number);
 
-        // dispatch(setNotes({ scope, notes: notes.data }));
+        if (!response.success) {
+            setSuggestions([]);
+
+            return notifications.show({
+                title: 'Error ao buscar notas',
+                message: response.data,
+                position: 'top-right',
+                color: 'pink'
+            })
+        }
+   
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        dispatch(setNotes({ scope, notes: response.data as any }));
 
         combobox.closeDropdown();
     }

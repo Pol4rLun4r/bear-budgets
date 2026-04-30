@@ -4,13 +4,16 @@ import { baseAPI } from "./path";
 const searchDescription = async (query: SearchItemDescription) => {
     const response = await baseAPI.item.searchDescription(query);
     return response;
-}
+};
 
-// const getNotes = async (item_reference_id: number) => {
-//     const response = await axios.get(`${baseUrl}/quotations/items/reference-notes`, {
-//         params: { item_reference_id }
-//     });
-//     return response.data;
-// }
+const getNotes = async (item_reference_id: GetItemNotes) => {
+    const response = await baseAPI.item.getNotes(item_reference_id);
+    return response
+};
 
-export default { searchDescription };
+const createNote = async (note: CreateItemNote) => {
+    const response = await baseAPI.item.createNote(note);
+    return response
+};
+
+export default { searchDescription, getNotes, createNote };

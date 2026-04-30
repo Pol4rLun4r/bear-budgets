@@ -11,11 +11,4 @@ const create = async (data: Client) => {
     return response;
 };
 
-// const get = async (client_id: number) => {
-//     const response = await axios.get(`${baseUrl}/clients/get`, {
-//         params: { client_id }
-//     });
-//     return response.data;
-// };
-
 export default { search, create };

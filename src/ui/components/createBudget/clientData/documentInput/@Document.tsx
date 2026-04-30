@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 // mantine
 import { Combobox, useCombobox } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 
 // components
 import Input from "./Input";
@@ -41,15 +42,21 @@ const DocumentInput = () => {
       return;
     }
 
-    try {
-      const response = await clientService.search({ value: search, type: 'document' });
-      const clients = response.data;
+    const response = await clientService.search({ value: search, type: 'document' });
 
-      setSuggestions(Array.isArray(clients) ? clients : []);
-    } catch (error) {
-      console.log(error);
+    if (!response.success) {
       setSuggestions([]);
+
+      return notifications.show({
+        title: 'Error ao buscar cliente',
+        message: response.data,
+        position: 'top-right',
+        color: 'pink'
+      })
     }
+
+    const clients = response.data;
+    setSuggestions(Array.isArray(clients) ? clients : []);
   };
 
   // lida com a mudança no input de pesquisa
