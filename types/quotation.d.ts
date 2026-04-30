@@ -49,6 +49,16 @@ type QuotationVersionSummary = {
     notes: string | null;
 };
 
+// apenas os valores do ItemVersion, utilitário para a cotação com dados resumido
+type SummaryValues = Pick<ItemVersion, 'quantity' | 'unit_price' | 'markup' | 'ipi' | 'st' | 'purchase_shipping'>;
+
+// cotações feitas com dados resumidos, dados da cotação, do cliente e valores dos itens
+type QuotationWithSummaryData = {
+    client: Client;
+    quotation_version: QuotationVersion
+    values: SummaryValues[]
+};
+
 // --------------- Item ---------------
 
 // referência do item – dados mestres (descrição, código, NCM). Criada uma vez
