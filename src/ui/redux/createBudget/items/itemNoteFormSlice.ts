@@ -2,14 +2,14 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 // type
-import type { ItemFormScope, ItemNoteType } from "./itemFormSlice";
+import type { ItemFormScope } from "./itemFormSlice";
 
 export interface ItemNoteFormSliceState {
-    add: ItemNoteType;
-    edit: ItemNoteType;
+    add: Partial<ItemNote>;
+    edit: Partial<ItemNote>;
 };
 
-const createEmptyNoteData = (): ItemNoteType => {
+const createEmptyNoteData = (): Partial<ItemNote> => {
     return {
         content: '',
         type: 'text'
@@ -21,7 +21,7 @@ const initialState: ItemNoteFormSliceState = {
     edit: createEmptyNoteData(),
 };
 
-const draft = (state: ItemNoteFormSliceState, scope: ItemFormScope): ItemNoteType => {
+const draft = (state: ItemNoteFormSliceState, scope: ItemFormScope): Partial<ItemNote> => {
     return state[scope];
 };
 

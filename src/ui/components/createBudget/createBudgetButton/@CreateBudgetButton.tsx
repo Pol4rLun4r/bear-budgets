@@ -3,8 +3,9 @@ import { Button } from "@mantine/core"
 import { notifications } from "@mantine/notifications";
 
 // redux
-import { useSelector } from "react-redux";
-import type { RootState } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../../../redux/store";
+import resetAllCreateBudgetData from "../../../redux/createBudget/resetAllCreateBudgetData.thunk";
 
 // utils
 import { validateDocument } from "../../../utils/documentValidator";
@@ -16,6 +17,8 @@ const CreateBudgetButton = () => {
     const items = useSelector((state: RootState) => state.createBudget.listItems);
     const client = useSelector((state: RootState) => state.createBudget.client);
     const quotation = useSelector((state: RootState) => state.createBudget.quotation);
+
+    const dispatch = useDispatch<AppDispatch>();
 
     const isClient = validateDocument(client.document ?? "") && (client.name ?? "").trim().length > 0;
 
@@ -41,7 +44,9 @@ const CreateBudgetButton = () => {
                 message: 'Orçamento criado com sucesso!',
                 position: 'top-right',
                 color: 'teal'
-            })
+            });
+
+            dispatch(resetAllCreateBudgetData);
 
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.';

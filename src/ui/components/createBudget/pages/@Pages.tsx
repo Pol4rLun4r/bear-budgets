@@ -19,13 +19,27 @@ import { RootState } from "../../../redux/store";
 const Pages = () => {
   const listItems = useSelector((state: RootState) => state.createBudget.listItems);
 
+  const hasClientNotes = useSelector((state: RootState) => state.createBudget?.client.notes) === undefined ? false : true;
+
+  const quotationNotes = useSelector((state: RootState) => state.createBudget?.quotation.notes);
+  const hasQuotationNotes = quotationNotes === undefined ? false : quotationNotes.trim().length > 0 ? true : false;
+
+  const hasNotes = () => {
+    let numberNotes: number = 0;
+
+    if (hasClientNotes) numberNotes += 1
+    if (hasQuotationNotes) numberNotes += 1
+
+    return numberNotes
+  }
+
   const iconSize = 25;
 
   const Amount = ({ amount }: { amount: number }) => {
     if (amount === 0 || amount === undefined) {
       return (<></>);
     }
-    
+
     return (
       <Avatar size={iconSize} radius="xl">
         {amount.toString()}
@@ -48,7 +62,7 @@ const Pages = () => {
           <Tabs.Tab value="items" leftSection={<IconClipboardList size={iconSize} />} rightSection={<Amount amount={listItems.length > 0 ? listItems.length : 0} />} >
             Items
           </Tabs.Tab>
-          <Tabs.Tab value="notes" leftSection={<IconPencilMinus size={iconSize} />} rightSection={<Amount amount={2} />} >
+          <Tabs.Tab value="notes" leftSection={<IconPencilMinus size={iconSize} />} rightSection={<Amount amount={hasNotes()} />} >
             Notas
           </Tabs.Tab>
         </Tabs.List>
