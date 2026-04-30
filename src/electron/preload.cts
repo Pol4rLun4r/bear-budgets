@@ -18,7 +18,9 @@ const api: API = {
         createWithItems: (allData) => ipcInvoke('quotation:createWithItems', allData)
     },
     item: {
-        searchDescription: (description) => ipcInvoke('item:searchDescription', description)
+        searchDescription: (description) => ipcInvoke('item:searchDescription', description),
+        createNote: (note) => ipcInvoke('item:createNote', note),
+        getNotes: (itemReferenceId) => ipcInvoke('item:getNotes', itemReferenceId)
     }
 }
 

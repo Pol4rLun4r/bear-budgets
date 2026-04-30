@@ -5,14 +5,9 @@ export interface CreateItemNoteRules extends ItemNote {
 }
 
 const createItemNoteRules = ({ content, type, item_reference_id, itemReferenceIdExists }: CreateItemNoteRules) => {
-    // verifica se o id do item de referencia existe
-    if (!item_reference_id) {
-        return failure('item_reference_id não foi informado');
-    }
-
     // verifica se o id existe
     if (!itemReferenceIdExists) {
-        return failure("item_reference_id não existe");
+        return failure("item_reference_id não existe ou não foi informado");
     }
 
     // verifica se o conteúdo foi informado

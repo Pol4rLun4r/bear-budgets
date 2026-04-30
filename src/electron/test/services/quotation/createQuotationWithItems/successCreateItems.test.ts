@@ -60,7 +60,7 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
                         unit_price: 2,
                         purchase_shipping: 31,
                         st: 43,
-                        position: 1
+                        position: 2
                     }
                 }
             ],
@@ -69,10 +69,10 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
 
         // 2. envia a requisição
         const response = services.quotation.createWithItems(payload);
-
+        
         if (!response.success) {
             throw new Error("Falha ao criar cotação com itens: " + response.data);
-        }
+        };
 
         const quotationLinks = response.data;
 

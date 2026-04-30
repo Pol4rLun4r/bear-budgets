@@ -1,20 +1,15 @@
 // utils
 import { success, failure } from "../../utils/handleSuccess.js";
 
-const getItemNotesRules = (item_reference_id: ItemNote['item_reference_id']) => {
-    // check if item_reference_id is informed
-    if (item_reference_id == null || item_reference_id === undefined) {
-        return failure("ID da referência do item não informado");
-    }
+interface GetItemNotesRules {
+    itemReferenceIdExists: number | undefined,
+    item_reference_id: GetItemNotes
+}
 
-    // check if item_reference_id is a number
-    if (typeof item_reference_id !== "number" || Number.isNaN(item_reference_id)) {
-        return failure("ID da referência do item deve ser um número");
-    }
-
-    // check if item_reference_id is a positive integer
-    if (!Number.isInteger(item_reference_id) || item_reference_id < 1) {
-        return failure("ID da referência do item deve ser um número inteiro positivo");
+const getItemNotesRules = ({ itemReferenceIdExists, item_reference_id }: GetItemNotesRules) => {
+    // check if item_reference_id exists in the database
+    if (!itemReferenceIdExists) {
+        return failure("ID da referência do item não existe");
     }
 
     return success(item_reference_id);

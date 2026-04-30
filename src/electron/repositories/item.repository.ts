@@ -184,3 +184,21 @@ export const searchItemReferencesByDescriptionRepository = (db: Database) =>
 
         return db.prepare(sql).all(query) as ItemReference[];
     };
+
+export const deleteAllItemReferencesRepository = (db: Database) => () => {
+    const deleteAll = db.prepare(`
+        DELETE FROM item_references
+    `).run();
+
+    return deleteAll;
+};
+
+export const deleteAllItemNotesByIdReference = (db: Database) =>
+    (item_reference_id: ItemNote['item_reference_id']) => {
+        const deleteAll = db.prepare(`
+            DELETE FROM item_notes
+            WHERE item_reference_id = ?
+        `).run(item_reference_id);
+
+        return deleteAll;
+    };

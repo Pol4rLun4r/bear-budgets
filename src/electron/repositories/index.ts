@@ -25,7 +25,9 @@ import {
     getItemRNotesByReferenceIdRepository,
     getItemVersionByIdRepository,
     searchItemReferencesByDescriptionRepository,
-    createItemNoteRepository
+    createItemNoteRepository,
+    deleteAllItemReferencesRepository,
+    deleteAllItemNotesByIdReference
 } from "./item.repository.js";
 
 export const createRepositories = (db: Database) => ({
@@ -53,6 +55,8 @@ export const createRepositories = (db: Database) => ({
         getVersionById: getItemVersionByIdRepository(db),
         getReferenceNotesByReferenceId: getItemRNotesByReferenceIdRepository(db),
         searchByDescription: searchItemReferencesByDescriptionRepository(db),
+        deleteAllReferences: deleteAllItemReferencesRepository(db),
+        deleteAllNotesByReferenceId: deleteAllItemNotesByIdReference(db),
     },
 });
 

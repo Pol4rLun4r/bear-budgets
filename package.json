@@ -20,7 +20,7 @@
     "dist:mac": "npm run transpile:electron && npm run build && electron-builder --mac --arm64",
     "dist:win": "npm run transpile:electron && npm run build && electron-builder --win --x64",
     "dist:linux": "npm run transpile:electron && npm run build && electron-builder --linux --x64",
-    "test": "NODE_ENV=test npm rebuild better-sqlite3 && vitest",
+    "test": "cross-env NODE_ENV=test npm rebuild better-sqlite3 && vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "postinstall": "npx @electron/rebuild",

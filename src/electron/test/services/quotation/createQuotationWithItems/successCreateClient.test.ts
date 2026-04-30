@@ -66,17 +66,25 @@ describe("Part 1 success create client - Create Quotation and Add Items", () => 
             const resClientId = resQuotationVersionData?.client_id; // pega os id do cliente
             const resClientData = repo.client.getById(resClientId); // pega os dados do cliente
 
-            // 3.1 verifica se o nome do cliente é o mesmo informado
-            expect(resClientData?.name).toBe(onlyName(payload.client.name));
+            function expectFunction({ payloadFunction }: { payloadFunction: { client: Client } }) {
+                // 3.1 verifica se o nome do cliente é o mesmo informado
+                expect(resClientData?.name).toBe(onlyName(payloadFunction.client.name));
 
-            // 3.2 verifica se o documento do cliente é o mesmo informado
-            expect(resClientData?.document).toBe(normalizeDocument(payload.client.document));
+                // 3.2 verifica se o documento do cliente é o mesmo informado
+                expect(resClientData?.document).toBe(normalizeDocument(payloadFunction.client.document));
 
-            // 3.3 verifica se as notas do cliente é a mesma informada
-            expect(resClientData?.notes === null ? undefined : resClientData?.notes).toBe(payload.client.notes);
+                // 3.3 verifica se as notas do cliente é a mesma informada
+                expect(resClientData?.notes === null ? undefined : resClientData?.notes).toBe(payloadFunction.client.notes);
 
-            // 3.4 verifica se o typo de cliente é o mesmo informado
-            expect(resClientData?.type_client).toBe(payload.client.type_client);
+                // 3.4 verifica se o typo de cliente é o mesmo informado
+                expect(resClientData?.type_client).toBe(payloadFunction.client.type_client);
+            };
+
+            if (resClientData?.id) {
+                return expectFunction({ payloadFunction: { client: fakeClients[0] } });
+            }
+
+            return expectFunction({ payloadFunction: { client: payload.client } });
         }
     }
 

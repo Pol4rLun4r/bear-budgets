@@ -11,6 +11,8 @@ const itemHandlers = (db: Database) => {
     const services = createServices(db);
 
     ipcMainHandle('item:searchDescription', services.item.searchDescription);
+    ipcMainHandle('item:getNotes', services.item.getNotes);
+    ipcMainHandle('item:createNote', services.item.createNote);
 }
 
 export default itemHandlers;
