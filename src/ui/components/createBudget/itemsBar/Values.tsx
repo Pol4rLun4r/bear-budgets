@@ -4,26 +4,34 @@ import { Group, NumberInput, NumberInputProps } from "@mantine/core";
 import { IconCurrencyReal } from "@tabler/icons-react";
 
 // redux
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
+import { setTotalValue, setAmount } from "../../../redux/createBudget/quotationSlice.ts";
 
 // utils
 import calcAddItem from "../../../utils/calcAddItem";
+import { useEffect } from "react";
 
 const Values = () => {
+    const dispatch = useDispatch<AppDispatch>();
+
     const listItems = useSelector((state: RootState) => state.createBudget.listItems);
 
     const calcValues = listItems.map(item => {
         const values = item.item_version;
 
         const calcItem = calcAddItem(values)
-        
+
         return calcItem;
-    })
+    });
 
     const totalBudget = calcValues.reduce((sum, value) => sum + value.totalWithAll, 0);
     const totalMarkup = calcValues.reduce((sum, value) => sum + value.markupValue, 0);
 
+    useEffect(() => {
+        dispatch(setTotalValue(totalBudget));
+        dispatch(setAmount(listItems.length));
+    }, [dispatch, listItems.length, totalBudget]);
 
     const configInput: NumberInputProps = {
         decimalSeparator: ",",

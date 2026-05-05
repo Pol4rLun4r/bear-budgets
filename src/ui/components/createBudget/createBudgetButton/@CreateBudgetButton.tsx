@@ -24,7 +24,11 @@ const CreateBudgetButton = () => {
 
     const hasValues = items.length > 0 && isClient;
 
-    const budgetData: CreateWithAllData = { client, quotation, items };
+    const budgetData: CreateWithAllData = {
+        client,
+        quotation,
+        items
+    };
 
     const handleCreateBudget = async () => {
         try {
@@ -57,7 +61,6 @@ const CreateBudgetButton = () => {
                 color: 'pink',
                 position: 'top-right'
             })
-
         }
     };
 
