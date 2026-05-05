@@ -7,6 +7,7 @@ import searchClientsService from "./client/searchClients.service.js";
 // quotation
 import createQuotationService from "./quotation/createQuotation.service.js";
 import createQuotationWithItemsService from "./quotation/createQuotationWithItems.service.js";
+import getAllQuotationsSummaryService from "./quotation/getAllQuotationsSummary.service.js";
 
 // item
 import searchItemDescriptionService from "./item/searchItemDescription.service.js";
@@ -20,7 +21,8 @@ export const createServices = (db: Database) => ({
     },
     quotation: {
         create: createQuotationService(db),
-        createWithItems: createQuotationWithItemsService(db)
+        createWithItems: createQuotationWithItemsService(db),
+        getAllSummary: getAllQuotationsSummaryService(db)
     },
     item: {
         getNotes: getItemNotesService(db),

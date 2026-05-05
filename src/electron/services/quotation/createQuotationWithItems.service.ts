@@ -57,7 +57,9 @@ const createQuotationWithItems = (db: Database) => (payload: CreateWithAllData) 
         notes: payload.quotation.notes,
         status: payload.quotation.status,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        clientExists: client_id as any
+        clientExists: client_id as any,
+        amount: payload.quotation.amount,
+        total_value: payload.quotation.total_value
     });
 
     // quotation errors

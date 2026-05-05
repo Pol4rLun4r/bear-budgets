@@ -4,7 +4,7 @@ type WithUndefined<T> = {
 };
 
 // --------------- Quotation-API ---------------
-interface CreateQuotation extends Partial<Pick<Quotation, "client_id">>, Pick<QuotationVersion, "notes" | "status"> { }
+interface CreateQuotation extends Partial<Pick<Quotation, "client_id">>, Pick<QuotationVersion, "notes" | "status" | 'total_value' | 'amount'> { }
 
 interface CreateWithAllData {
     client: Client;
@@ -36,8 +36,9 @@ type EventPayloadMapping = {
     "client:search": Result<Client[] | undefined>;
 
     // quotation
-    "quotation:create": Result<QuotationVersionSummary | undefined>;
+    "quotation:create": Result<QuotationSummary | undefined>;
     "quotation:createWithItems": Result<QuotationLink[] | undefined>;
+    "quotation:getAllSummary": Result<QuotationSummary[] | undefined>;
 
     // item
     "item:searchDescription": Result<ItemReference[] | undefined>;
@@ -65,8 +66,9 @@ interface ClientAPI {
 };
 
 interface QuotationAPI {
-    create(quotation: CreateQuotation): Promise<Result<QuotationVersionSummary | undefined>>;
+    create(quotation: CreateQuotation): Promise<Result<QuotationSummary | undefined>>;
     createWithItems(quotation: CreateWithAllData): Promise<Result<QuotationLink[] | undefined>>;
+    getAllSummary(): Promise<Result<QuotationSummary[] | undefined>>;
 }
 
 interface ItemAPI {

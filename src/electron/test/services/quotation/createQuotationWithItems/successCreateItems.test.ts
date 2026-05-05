@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /// <reference types="vitest/globals" />
 
 // service and repo
@@ -64,7 +63,7 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
                     }
                 }
             ],
-            quotation: { notes: "nova cotação", status: 2 } as any
+            quotation: { amount: 12, total_value: 431.32, status: 1 }
         }
 
         // 2. envia a requisição

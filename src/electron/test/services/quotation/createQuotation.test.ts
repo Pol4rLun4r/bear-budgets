@@ -43,7 +43,9 @@ describe("Create Quotation", () => {
         const payload: CreateQuotation = {
             client_id: clientId!,
             notes: 'hello world',
-            status: undefined
+            status: undefined,
+            amount: 12,
+            total_value: 123.32
         };
 
         // 2. chama o serviço
@@ -57,7 +59,9 @@ describe("Create Quotation", () => {
         const payload: CreateQuotation = {
             client_id: clientId!,
             notes: '',
-            status: undefined
+            status: undefined,
+            amount: 12,
+            total_value: 123.32
         };
 
         // 2. chama o serviço
@@ -72,7 +76,9 @@ describe("Create Quotation", () => {
         const payload: CreateQuotation = {
             client_id: clientId!,
             notes: '',
-            status: 1
+            status: 1,
+            amount: 12,
+            total_value: 123.32
         };
 
         // 2. chama o serviço
@@ -85,7 +91,9 @@ describe("Create Quotation", () => {
         const payload: CreateQuotation = {
             client_id: 99999999,
             notes: 'Client',
-            status: 0
+            status: 0,
+            amount: 12,
+            total_value: 123.32
         };
 
         // 2. chama o serviço

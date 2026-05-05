@@ -27,6 +27,8 @@ const INITIAL_UP = `
         version INTEGER NOT NULL,
         status INTEGER NOT NULL CHECK (status IN (0, 1, 2)) DEFAULT 0,
         notes TEXT,
+        total_value REAL NOT NULL,
+        amount INTEGER NOT NULL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (quotation_id) REFERENCES quotations(id) ON DELETE CASCADE,

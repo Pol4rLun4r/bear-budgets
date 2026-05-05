@@ -93,7 +93,7 @@ describe("Part 1 success create client - Create Quotation and Add Items", () => 
         const payload: CreateWithAllData = {
             client: fakeClients[0],
             items: itemsPayload,
-            quotation: { notes: "Hello world" } as any
+            quotation: { amount: 12, total_value: 431.32, status: 1 }
         }
 
         // 2. envia a requisição
@@ -108,7 +108,7 @@ describe("Part 1 success create client - Create Quotation and Add Items", () => 
         const payload: CreateWithAllData = {
             client: { id: clientId } as any,
             items: itemsPayload,
-            quotation: { notes: "Hello world" } as any
+            quotation: { amount: 12, total_value: 431.32, status: 1 }
         }
 
         // 2. envia a requisição
@@ -123,7 +123,7 @@ describe("Part 1 success create client - Create Quotation and Add Items", () => 
         const payload: CreateWithAllData = {
             client: { ...fakeClients[0] },
             items: itemsPayload,
-            quotation: { notes: "Hello world" } as any
+            quotation: { amount: 12, total_value: 431.32, status: 1 }
         }
 
         // 2. envia a requisição

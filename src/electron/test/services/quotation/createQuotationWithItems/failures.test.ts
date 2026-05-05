@@ -142,7 +142,7 @@ describe("Failures - Create Quotation and Add Items", () => {
             const payload: CreateWithAllData = {
                 client: fakeClients[0],
                 items: [],
-                quotation: {} as any
+                quotation: { amount: 12, total_value: 431.32, status: 1 }
             }
 
             // 2. envia a requisição
@@ -169,7 +169,7 @@ describe("Failures - Create Quotation and Add Items", () => {
                         }
                     }
                 ],
-                quotation: {} as any
+                quotation: { amount: 12, total_value: 431.32, status: 1 }
             }
 
             // 2. envia a requisição
@@ -209,7 +209,7 @@ describe("Failures - Create Quotation and Add Items", () => {
                         }
                     },
                 ],
-                quotation: {} as any
+                quotation: { amount: 12, total_value: 431.32, status: 1 }
             }
 
             // 2. envia a requisição
@@ -240,7 +240,7 @@ describe("Failures - Create Quotation and Add Items", () => {
                         }
                     }
                 ],
-                quotation: {} as any
+                quotation: { amount: 12, total_value: 431.32, status: 1 }
             }
 
             // 2. envia a requisição

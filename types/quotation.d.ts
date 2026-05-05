@@ -33,12 +33,14 @@ type QuotationVersion = {
     version: number;
     status: QuotationStatus | undefined;
     notes?: string;
+    total_value: number;
+    amount: number;
     created_at?: string;
     updated_at?: string;
 };
 
 // versão resumida da cotação para listagem
-type QuotationVersionSummary = {
+type QuotationSummary = {
     quotation_id: number;
     quotation_version_id: number;
     client_id: number;
@@ -47,6 +49,8 @@ type QuotationVersionSummary = {
     version: number;
     status: QuotationStatus;
     notes: string | null;
+    total_value: number;
+    amount: number;
 };
 
 // apenas os valores do ItemVersion, utilitário para a cotação com dados resumido

@@ -48,7 +48,7 @@ describe("Part 2 success create quotation - Create Quotation and Add Items", () 
                     }
                 }
             ],
-            quotation: { notes: "nova cotação", status: 2 } as any
+            quotation: { amount: 12, total_value: 431.32, status: 1, notes: "Hello World" }
         }
 
         // 2. envia a requisição
