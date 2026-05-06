@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // mantine
 import { Tooltip, CopyButton, Button } from "@mantine/core"
 import { useHover } from "@mantine/hooks";

@@ -32,7 +32,7 @@ const CreateBudgetButton = () => {
 
     const handleCreateBudget = async () => {
         try {
-            const res = await services.quotation.createQuotationAndItems(budgetData);
+            const res = await services.quotation.createWithItems(budgetData);
 
             if (!res.success) {
                 return notifications.show({

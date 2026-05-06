@@ -26,9 +26,9 @@ const List = () => {
 
         // ------------- corrigir erro de typagem --------------- //
 
-        // @ts-ignore
+        // @ts-expect-error source tem initialIndex
         const oldIndex = source.initialIndex; // index do item que está sendo arrastado 
-        // @ts-ignore
+        // @ts-expect-error source tem index
         const newIndex = source.index; // index para onde o item está sendo arrastado
 
         if (oldIndex === newIndex) return; // cancela a operação se o item está sendo arrastado para a mesma posição

@@ -51,6 +51,8 @@ type QuotationSummary = {
     notes: string | null;
     total_value: number;
     amount: number;
+    created_at: string;
+    updated_at: string;
 };
 
 // apenas os valores do ItemVersion, utilitário para a cotação com dados resumido

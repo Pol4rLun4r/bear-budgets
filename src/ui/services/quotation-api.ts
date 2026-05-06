@@ -6,9 +6,14 @@ const create = async (data: CreateQuotation) => {
     return response;
 }
 
-const createQuotationAndItems = async (data: CreateWithAllData) => {
+const createWithItems = async (data: CreateWithAllData) => {
     const response = await baseAPI.quotation.createWithItems(data);
     return response;
 }
 
-export default { create, createQuotationAndItems };
+const getAllSummary = async () => {
+    const response = await baseAPI.quotation.getAllSummary();
+    return response;
+}
+
+export default { create, createWithItems, getAllSummary };

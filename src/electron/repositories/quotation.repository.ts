@@ -82,7 +82,9 @@ export const getAllQuotationsSummaryRepository = (db: Database) =>
             quotation_versions.status,
             quotation_versions.notes,
             quotation_versions.amount,
-            quotation_versions.total_value
+            quotation_versions.total_value,
+            datetime(quotation_versions.updated_at, 'localtime') as updated_at,
+            datetime(quotations.created_at, 'localtime') as created_at
         FROM quotations
         JOIN (
             SELECT quotation_id, MAX(version) AS latest_version
