@@ -8,7 +8,8 @@ import { fakeClients } from "../test/fakeClients.js";
 import { createServices } from "../services/index.js";
 
 export const createFakeData = (db: Database) => {
-    if (!isDev) return;
+    // cuidado: tem de ser isDev() com parênteses — escrever !isDev sem chamar é sempre truthy na função e eu estava a injectar fake na build de produção sem perceber
+    if (!isDev()) return;
 
     const repo = createRepositories(db);
     const services = createServices(db);

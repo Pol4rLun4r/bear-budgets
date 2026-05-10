@@ -1,9 +1,8 @@
 import { app, BrowserWindow } from "electron";
-import path from "path"; //trata os caminhos dentro dos OS
 
 // utils
 import { isDev } from "./utils/env.js";
-import { getPreloadPath, getDBPath } from "./utils/pathResolver.js";
+import { getPreloadPath, getDBPath, getUIPath } from "./utils/pathResolver.js";
 import { createFakeData } from "./utils/createFakeData.js";
 
 // database
@@ -33,12 +32,13 @@ const createMainWindow = () => {
     if (isDev()) {
         win.loadURL('http://localhost:5173/'); // caminho em desenvolvimento
     } else {
-        win.loadFile(path.join(app.getAppPath() + '/dist-react/index.html')) // caminho em produção
+        // sempre o mesmo path que uso no validateEventFrame do IPC — evita inconsistência prod vs validação
+        win.loadFile(getUIPath());
     }
 };
 
-// banco de dados
-let db: ReturnType<typeof createDatabase>;
+// banco pode ainda não existir antes do whenReady / before-quit raro falhar no arranque
+let db: ReturnType<typeof createDatabase> | undefined;
 
 process.on('uncaughtException', console.error);
 process.on('unhandledRejection', console.error);
@@ -70,6 +70,15 @@ const main = () => {
     // se o programa já está sendo executado em outra instância, foca ou cria a janela principal
     app.on("second-instance", () => focusOrCreateMainWindow());
 
+    // fecha explicitamente pra soltar locks do sqlite (principalmente Win/Linux); sem isso ficava processo zombie e single-instance partia aos trambolhões
+    app.on("before-quit", () => {
+        try {
+            db?.close();
+        } catch {
+            //
+        }
+    });
+
     try {
         app.whenReady().then(() => {
             db = createDatabase(getDBPath());
@@ -77,12 +86,10 @@ const main = () => {
             // cria dados fake para desenvolvimento
             createFakeData(db);
 
-            createMainWindow();
-
-            appEvents(focusOrCreateMainWindow);
-
+            // registo dos handlers antes de abrir a janela — assim nenhum invoke dispara “meio a meio” sem listener
             ipcHandlers(db);
-
+            appEvents(focusOrCreateMainWindow);
+            createMainWindow();
         })
     } catch (error) {
         console.error(error);
