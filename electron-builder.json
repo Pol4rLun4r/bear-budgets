@@ -2,7 +2,7 @@
   "appId": "com.polaroid.bear-budgets",
   "files": ["dist-electron", "dist-react"],
   "extraResources": ["dist-electron/preload.cjs", "src/assets/**"],
-  "icon": "./desktopIcon.png",
+  "icon": "./src/assets/bear-budgets-icon.png",
   "mac": {
     "target": "dmg"
   },

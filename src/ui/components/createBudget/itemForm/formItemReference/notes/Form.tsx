@@ -28,7 +28,7 @@ const Form = ({ scope }: { scope: ItemFormScope }) => {
             clearTimeout(cleanTimeout.current);
         };
 
-        if (note.content.trim().length <= 0) {
+        if (note.content!.trim().length <= 0) {
             cleanTimeout.current = setTimeout(() => {
                 setIsError(false);
             }, 2000);

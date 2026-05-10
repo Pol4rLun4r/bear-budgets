@@ -25,5 +25,5 @@ export const getDBPath = () => {
 
     if (isTest()) return ":memory:"
 
-    return path.join(app.getPath('documents'), "app.db");
+    return path.join(app.getPath('documents'), "bear-budgets.db");
 }
