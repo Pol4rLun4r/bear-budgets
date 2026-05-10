@@ -16,4 +16,9 @@ const getAllSummary = async () => {
     return response;
 }
 
-export default { create, createWithItems, getAllSummary };
+const getFullDetail = async (quotationId: number) => {
+    const response = await baseAPI.quotation.getFullDetail(quotationId);
+    return response;
+};
+
+export default { create, createWithItems, getAllSummary, getFullDetail };

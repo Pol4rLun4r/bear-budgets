@@ -20,9 +20,22 @@ export const createItemNoteRepository = (db: Database) =>
     (item_reference_id: number, data: ItemNote): number => {
         const row = db.prepare(`
             INSERT INTO item_notes (item_reference_id, type, content)
-            VALUES (?, ?, ?)
-            RETURNING id, item_reference_id, type, content, created_at, updated_at
-        `).run(item_reference_id, data.type, data.content)
+            SELECT ?, ?, ?
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM item_notes
+                WHERE item_reference_id = ?
+                  AND type = ?
+                  AND content = ?
+            )
+        `).run(
+            item_reference_id,
+            data.type,
+            data.content,
+            item_reference_id,
+            data.type,
+            data.content
+        )
         return row.lastInsertRowid as number;
     };
 
@@ -67,13 +80,20 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
         // notas do item
         const createNote = db.prepare(`
             INSERT INTO item_notes (item_reference_id, type, content)
-            VALUES (?, ?, ?)
+            SELECT ?, ?, ?
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM item_notes
+                WHERE item_reference_id = ?
+                  AND type = ?
+                  AND content = ?
+            )
         `);
 
         // conexão entre a versão do item, versão da referencia e a versão da cotação
         const link = db.prepare(`
-            INSERT INTO quotation_links (quotation_id, quotation_version_id, item_reference_id, item_version_id)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO quotation_links (quotation_id, item_reference_id, item_version_id)
+            VALUES (?, ?, ?)
         `);
 
         const run = db.transaction(() => {
@@ -96,6 +116,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
 
                 // if para determinar se um item precisa ser criado ou não, baseado se tem um id
                 let itemReferenceId: number
+                let shouldCreateNotes = false;
                 if (itemReference.id) {
                     // informar apenas o id caso o item possua o mesmo
                     itemReferenceId = itemReference.id
@@ -107,12 +128,17 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                         itemReference.manufacturer_code ?? undefined,
                         itemReference.ncm ?? undefined
                     ).lastInsertRowid as number
+                    shouldCreateNotes = true;
                 }
 
-                // Cria notas de referência (se existirem)
-                if (item.notes?.length) {
+                // Só cria notas quando a referência é nova.
+                // Se item_reference.id foi informado, a referência já existe e não deve receber novas notas aqui.
+                if (shouldCreateNotes && item.notes?.length) {
                     for (const note of item.notes) {
                         createNote.run(
+                            itemReferenceId,
+                            note.type,
+                            note.content,
                             itemReferenceId,
                             note.type,
                             note.content
@@ -124,7 +150,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                 const itemVersionId = createVersion.run(itemReferenceId, position, quantity, unitPrice, markup, purchaseShipping, ipi, st).lastInsertRowid;
 
                 // id do quotation_link
-                const linkId = link.run(quotationId, quotationVersionId, itemReferenceId, itemVersionId).lastInsertRowid;
+                const linkId = link.run(quotationId, itemReferenceId, itemVersionId).lastInsertRowid;
 
                 // pega os dados do quotation_link
                 const getLinkData = db.prepare(`

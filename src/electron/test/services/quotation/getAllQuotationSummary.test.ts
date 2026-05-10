@@ -3,6 +3,7 @@
 // service and repo
 import { createDatabase } from "../../../db/connection.js";
 import { createServices } from "../../../services/index.js";
+import { normalizeDocument } from "../../../utils/clean.js";
 
 // utils
 import { getDBPath } from "../../../utils/pathResolver.js";
@@ -58,15 +59,31 @@ describe("Get all quotations summary", () => {
     }
 
     it("ter sucesso ao pegar as cotações resumidas", () => {
+        // 1. prepara os dados
         services.quotation.createWithItems(payload);
         services.quotation.createWithItems(payload);
 
+        // 2. chama o serviço
         const quotations = services.quotation.getAllSummary();
 
-        if(!quotations.success) {
+        // 3. verifica se houve o retorno correto
+        if (!quotations.success) {
             throw new Error(quotations.data);
         }
 
-        console.log(quotations.data);
+        const quotationData = quotations.data
+
+        // deve retornar dois orçamentos
+        expect(quotationData.length).toBe(2);
+
+        for (let index = 0; index < quotationData.length; index++) {
+            const quotationSummary = quotationData[index];
+
+            expect(quotationSummary.client_name).toBe(payload.client.name.toLocaleLowerCase());
+            expect(quotationSummary.client_document).toBe(normalizeDocument(payload.client.document));
+            expect(quotationSummary.total_value).toBe(payload.quotation.total_value);
+            expect(quotationSummary.status).toBe(payload.quotation.status);
+            expect(quotationSummary.amount).toBe(payload.quotation.amount);
+        }
     });
 });

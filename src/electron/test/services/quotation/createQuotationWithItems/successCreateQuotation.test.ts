@@ -59,18 +59,23 @@ describe("Part 2 success create quotation - Create Quotation and Add Items", () 
 
         const quotationLinks = response.data;
 
-        // 3. verifica o resultado
-        const sameQuotationVersionId = quotationLinks[0].quotation_version_id; // o id de quotation_version_id deve ser o mesmo para todos os quotation_link, no caso o primeiro link tem o mesmo quotation_version_id dos demais
+        const quotationId = quotationLinks[0].quotation_id;
+        const sameQuotationVersionId = (
+            db.prepare(`
+                SELECT id FROM quotation_versions
+                WHERE quotation_id = ?
+                ORDER BY version DESC
+                LIMIT 1
+            `).get(quotationId) as { id: number }
+        ).id;
 
+        // 3. verifica o resultado
         for (let index = 0; index < quotationLinks.length; index++) {
             const quotation_link = quotationLinks[index];
 
-            // verifica se o orçamento foi criado e se é o mesmo em cada "quotation_link" 
-            const resQuotationVersionId = quotation_link.quotation_version_id; // pega o id de quotation version
-            const resQuotationVersionData = repo.quotation.getByVersionId(resQuotationVersionId); // pega os dados de quotation version
+            expect(quotation_link.quotation_id).toBe(quotationId);
 
-            // 3.1 verifica se o id da cotação é o mesmo para todos os "quotation_link"
-            expect(resQuotationVersionId).toBe(sameQuotationVersionId);
+            const resQuotationVersionData = repo.quotation.getByVersionId(sameQuotationVersionId);
 
             // 3.2 verifica se as notas da cotação é a mesma informada
             expect(resQuotationVersionData?.notes).toBe(payload.quotation.notes);

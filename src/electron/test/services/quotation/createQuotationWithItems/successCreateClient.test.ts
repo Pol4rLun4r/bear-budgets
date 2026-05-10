@@ -56,15 +56,24 @@ describe("Part 1 success create client - Create Quotation and Add Items", () => 
 
         const quotationLinks = response.data;
 
+        const quotationId = quotationLinks[0].quotation_id;
+        const latestVersionId = (
+            db.prepare(`
+                SELECT id FROM quotation_versions
+                WHERE quotation_id = ?
+                ORDER BY version DESC
+                LIMIT 1
+            `).get(quotationId) as { id: number }
+        ).id;
+        const resQuotationVersionData = repo.quotation.getByVersionId(latestVersionId);
+        const resClientId = resQuotationVersionData?.client_id;
+        const resClientData = repo.client.getById(resClientId);
+
         // 3. verifica o resultado
         for (let index = 0; index < quotationLinks.length; index++) {
             const quotation_link = quotationLinks[index];
 
-            // verifica se o cliente foi criado e se é o mesmo em cada "quotation_link" 
-            const resQuotationVersionId = quotation_link.quotation_version_id; // pega o id de quotation version
-            const resQuotationVersionData = repo.quotation.getByVersionId(resQuotationVersionId); // pega os dados de quotation version 
-            const resClientId = resQuotationVersionData?.client_id; // pega os id do cliente
-            const resClientData = repo.client.getById(resClientId); // pega os dados do cliente
+            expect(quotation_link.quotation_id).toBe(quotationId);
 
             function expectFunction({ payloadFunction }: { payloadFunction: { client: Client } }) {
                 // 3.1 verifica se o nome do cliente é o mesmo informado

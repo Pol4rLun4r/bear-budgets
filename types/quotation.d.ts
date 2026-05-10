@@ -110,8 +110,23 @@ type ItemData = {
 type QuotationLink = {
     id?: number;
     quotation_id: number;
-    quotation_version_id: number;
     item_reference_id: number;
     item_version_id: number;
     created_at?: string;
+};
+
+/** Uma linha da cotação completa: vínculo + snapshot do item na última versão. */
+type QuotationDetailLine = {
+    quotation_link_id: number;
+    item_reference: ItemReference;
+    item_version: ItemVersion;
+    notes: ItemNote[];
+};
+
+/** Cotação completa para a tela “ver detalhes”: pai, cliente, última revisão e itens via quotation_links. */
+type QuotationFullDetail = {
+    quotation: Quotation;
+    client: Client;
+    quotation_version: QuotationVersion;
+    items: QuotationDetailLine[];
 };

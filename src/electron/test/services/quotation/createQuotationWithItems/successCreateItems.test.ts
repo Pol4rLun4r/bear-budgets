@@ -19,62 +19,10 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
     // apaga os clientes a cada teste
     afterEach(() => {
         repo.client.deleteAll();
+        repo.item.deleteAllReferences();
     })
 
-    it("ter sucesso ao criar items com e sem notas e valores", async () => {
-        // 1. prepara o payload
-        const payload: CreateWithAllData = {
-            client: { ...fakeClients[0] },
-            items: [
-                {
-                    item_reference: { ...fakeItens[0] },
-                    notes: [],
-                    item_version: {
-                        quantity: 2,
-                        unit_price: 2,
-                        ipi: 1.3,
-                        position: 0
-                    }
-                },
-                {
-                    item_reference: { ...fakeItens[1] },
-                    notes: [
-                        { type: "link", content: '312' }
-                    ],
-                    item_version: {
-                        quantity: 2,
-                        unit_price: 2,
-                        markup: "40.1",
-                        position: 1
-                    }
-                },
-                {
-                    item_reference: { ...fakeItens[2] },
-                    notes: [
-                        { type: "link", content: 'https://nota1.com' },
-                        { type: "text", content: 'nota 2' }
-                    ],
-                    item_version: {
-                        quantity: 2,
-                        unit_price: 2,
-                        purchase_shipping: 31,
-                        st: 43,
-                        position: 2
-                    }
-                }
-            ],
-            quotation: { amount: 12, total_value: 431.32, status: 1 }
-        }
-
-        // 2. envia a requisição
-        const response = services.quotation.createWithItems(payload);
-        
-        if (!response.success) {
-            throw new Error("Falha ao criar cotação com itens: " + response.data);
-        };
-
-        const quotationLinks = response.data;
-
+    const expectFunction = (quotationLinks: QuotationLink[], payload: CreateWithAllData) => {
         for (let index = 0; index < quotationLinks.length; index++) {
             const quotation_link = quotationLinks[index];
 
@@ -146,5 +94,107 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
                 expect(itemVersionData?.st).toBe(null);
             }
         }
+    }
+
+    it("ter sucesso ao criar items com e sem notas e valores", async () => {
+        // 1. prepara o payload
+        const payload: CreateWithAllData = {
+            client: { ...fakeClients[0] },
+            items: [
+                {
+                    item_reference: { ...fakeItens[0] },
+                    notes: [],
+                    item_version: {
+                        quantity: 2,
+                        unit_price: 2,
+                        ipi: 1.3,
+                        position: 0
+                    }
+                },
+                {
+                    item_reference: { ...fakeItens[1] },
+                    notes: [
+                        { type: "link", content: '312' }
+                    ],
+                    item_version: {
+                        quantity: 2,
+                        unit_price: 2,
+                        markup: "40.1",
+                        position: 1
+                    }
+                },
+                {
+                    item_reference: { ...fakeItens[2] },
+                    notes: [
+                        { type: "link", content: 'https://nota1.com' },
+                        { type: "text", content: 'nota 2' }
+                    ],
+                    item_version: {
+                        quantity: 2,
+                        unit_price: 2,
+                        purchase_shipping: 31,
+                        st: 43,
+                        position: 2
+                    }
+                }
+            ],
+            quotation: { amount: 12, total_value: 431.32, status: 1 }
+        }
+
+        // 2. envia a requisição
+        const response = services.quotation.createWithItems(payload);
+
+        if (!response.success) {
+            throw new Error("Falha ao criar cotação com itens: " + response.data);
+        };
+
+        const quotationLinks = response.data;
+
+        expectFunction(quotationLinks, payload);
+    });
+
+    it("ter sucesso ao criar items que já existem no banco de dados", async () => {
+        const itemPayload = fakeItens[1];
+
+        const itemId = repo.item.createReference(itemPayload);
+
+        // 1. prepara o payload
+        const payload: CreateWithAllData = {
+            client: { ...fakeClients[0] },
+            items: [
+                {
+                    item_reference: { ...fakeItens[1], id: itemId },
+                    notes: [],
+                    item_version: {
+                        quantity: 2,
+                        unit_price: 2,
+                        ipi: 1.3,
+                        position: 0
+                    }
+                },
+                {
+                    item_reference: { ...fakeItens[1], id: itemId },
+                    notes: [],
+                    item_version: {
+                        quantity: 22,
+                        unit_price: 43,
+                        ipi: 1.3,
+                        position: 1
+                    }
+                }
+            ],
+            quotation: { amount: 2, total_value: 431.32, status: 1 }
+        }
+
+        // 2. envia a requisição
+        const response = services.quotation.createWithItems(payload);
+
+        if (!response.success) {
+            throw new Error("Falha ao criar cotação com itens: " + response.data);
+        };
+
+        const quotationLinks = response.data;
+
+        expectFunction(quotationLinks, payload);
     });
 });
