@@ -26,6 +26,7 @@ const createMainWindow = () => {
         height: 800,
         minWidth: 750,
         minHeight: 650,
+        frame: false
         
     });
 

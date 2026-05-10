@@ -1,5 +1,5 @@
 // icons
-import { IconCurrencyDollar } from '@tabler/icons-react';
+import { IconSnowflake } from '@tabler/icons-react';
 
 // mantine
 import { Avatar, Title } from '@mantine/core';
@@ -28,7 +28,7 @@ const ToggleSidebar = () => {
         >
             <div className={classes.iconContainer}>
                 <Avatar size='md'>
-                    <IconCurrencyDollar />
+                    <IconSnowflake />
                 </Avatar>
             </div>
             <Title order={3}

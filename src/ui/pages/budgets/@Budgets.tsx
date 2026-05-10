@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 // components
-import List from "./List/@List.tsx";
+import List from "../../components/budgets/List/@List.tsx"
 
 // api
 import services from "../../services/index.ts";

@@ -2,15 +2,16 @@
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import { MantineProvider } from "@mantine/core"
+import { Notifications } from '@mantine/notifications';
 
 // components
 import Main from './components/main/@Main';
 import Sidebar from './components/sidebar/@Sidebar';
+import FrameBar from './components/frameBar/@FrameBar.tsx';
 import ManagerPage from './pages/managerPage/@ManagerPage';
 
 // styles
 import './style/Global.css';
-import { Notifications } from '@mantine/notifications';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
     >
       <Notifications />
       <Main>
+        <FrameBar />
         <Sidebar />
         <ManagerPage />
       </Main>
