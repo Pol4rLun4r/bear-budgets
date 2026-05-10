@@ -38,7 +38,7 @@ const CreateBudgetButton = () => {
                 return notifications.show({
                     title: 'Error ao criação cotação',
                     message: res.data,
-                    position: 'top-right',
+                    position: 'bottom-right',
                     color: 'pink'
                 })
             }
@@ -46,7 +46,7 @@ const CreateBudgetButton = () => {
             notifications.show({
                 title: 'Criado',
                 message: 'Orçamento criado com sucesso!',
-                position: 'top-right',
+                position: 'bottom-right',
                 color: 'teal'
             });
 
@@ -59,7 +59,7 @@ const CreateBudgetButton = () => {
                 title: 'Algo deu errado!',
                 message: errorMessage,
                 color: 'pink',
-                position: 'top-right'
+                position: 'bottom-right'
             })
         }
     };

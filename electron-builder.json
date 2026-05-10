@@ -1,5 +1,6 @@
 {
   "appId": "com.polaroid.bear-budgets",
+  "productName": "Bear Budgets",
   "files": ["dist-electron", "dist-react"],
   "extraResources": ["dist-electron/preload.cjs", "src/assets/**"],
   "icon": "./src/assets/bear-budgets-icon.png",
@@ -8,7 +9,8 @@
   },
   "linux": {
     "target": "deb",
-    "category": "Utility"
+    "category": "Utility",
+    "executableName": "bear-budgets"
   },
   "win": {
     "target": ["portable", "msi"]

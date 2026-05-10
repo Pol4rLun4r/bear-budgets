@@ -45,6 +45,11 @@ type EventPayloadMapping = {
     "item:searchDescription": Result<ItemReference[] | undefined>;
     "item:getNotes": Result<ItemNote[] | undefined>;
     "item:createNote": Result<ItemNote['item_reference_id'] | undefined>;
+
+    // janela (frame personalizado)
+    "window:minimize": void;
+    "window:maximizeToggle": void;
+    "window:close": void;
 }
 
 // --------------- API ---------------
@@ -79,10 +84,17 @@ interface ItemAPI {
     createNote(note: CreateItemNote): Promise<Result<ItemNote['item_reference_id'] | undefined>>;
 }
 
+interface WindowAPI {
+    minimize(): Promise<void>;
+    maximizeToggle(): Promise<void>;
+    close(): Promise<void>;
+}
+
 interface API {
     client: ClientAPI;
     quotation: QuotationAPI;
     item: ItemAPI;
+    window: WindowAPI;
 };
 
 interface Window {

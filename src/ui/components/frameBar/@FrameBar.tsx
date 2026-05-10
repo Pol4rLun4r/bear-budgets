@@ -8,8 +8,11 @@ import { useSelector } from 'react-redux';
 // icons
 import { IconMaximize, IconMinus, IconX } from '@tabler/icons-react';
 import { ActionIcon, ActionIconProps, Group } from '@mantine/core';
+import services from '../../services/index';
 
 const FrameBar = () => {
+    const window = services.window;
+
     const tabState = useSelector((state: RootState) => state.sidebar.tab.activeTab);
 
     interface Props extends HTMLOrSVGElement, ActionIconProps { }
@@ -34,13 +37,25 @@ const FrameBar = () => {
         <div className={classes.frameBar} >
             <div style={{ justifySelf: 'center' }}>{tabs[tabState]}</div>
             <Group gap={2}>
-                <ActionIcon {...actionIconProps}>
+                <ActionIcon
+                    {...actionIconProps}
+                    aria-label="Minimizar"
+                    onClick={async () => await window.minimize()}
+                >
                     <IconMinus size={iconSize} />
                 </ActionIcon>
-                <ActionIcon {...actionIconProps}>
-                    <IconMaximize size={iconSize} /> {/* IconLayersSubtract */}
+                <ActionIcon
+                    {...actionIconProps}
+                    aria-label="Maximizar ou restaurar"
+                    onClick={async () => await window.maximizeToggle()}
+                >
+                    <IconMaximize size={iconSize} />
                 </ActionIcon>
-                <ActionIcon {...actionIconProps}>
+                <ActionIcon
+                    {...actionIconProps}
+                    aria-label="Fechar"
+                    onClick={async () => await window.close()}
+                >
                     <IconX size={iconSize} />
                 </ActionIcon>
             </Group>

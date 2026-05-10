@@ -40,7 +40,7 @@ const MenuItem = ({ item }: MenuItemType) => {
     notifications.show({
       title: 'Descrição copiada',
       message: 'A descrição do item foi copiada para a área de transferência!',
-      position: 'top-right',
+      position: 'bottom-right',
       color: 'teal'
     })
   }

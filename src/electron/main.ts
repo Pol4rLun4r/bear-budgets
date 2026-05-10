@@ -43,7 +43,33 @@ let db: ReturnType<typeof createDatabase>;
 process.on('uncaughtException', console.error);
 process.on('unhandledRejection', console.error);
 
+// função para focar ou criar a janela principal
+const focusOrCreateMainWindow = () => {
+    const wins = BrowserWindow.getAllWindows();
+    if (wins.length === 0) {
+        createMainWindow();
+        return;
+    }
+
+    // foca ou cria a janela principal
+    for (const win of wins) {
+        if (win.isMinimized()) win.restore();
+        win.show();
+        win.focus();
+    }
+};
+
+
 const main = () => {
+    // verifica se o programa já está sendo executado em outra instância
+    const gotLock = app.requestSingleInstanceLock();
+    if (!gotLock) {
+        app.quit();
+        return;
+    }
+    // se o programa já está sendo executado em outra instância, foca ou cria a janela principal
+    app.on("second-instance", () => focusOrCreateMainWindow());
+
     try {
         app.whenReady().then(() => {
             db = createDatabase(getDBPath());
@@ -53,7 +79,7 @@ const main = () => {
 
             createMainWindow();
 
-            appEvents(createMainWindow);
+            appEvents(focusOrCreateMainWindow);
 
             ipcHandlers(db);
 

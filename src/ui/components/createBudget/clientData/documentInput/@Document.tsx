@@ -50,7 +50,7 @@ const DocumentInput = () => {
       return notifications.show({
         title: 'Error ao buscar cliente',
         message: response.data,
-        position: 'top-right',
+        position: 'bottom-right',
         color: 'pink'
       })
     }

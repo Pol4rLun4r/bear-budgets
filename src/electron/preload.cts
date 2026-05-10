@@ -23,6 +23,11 @@ const api: API = {
         searchDescription: (description) => ipcInvoke('item:searchDescription', description),
         createNote: (note) => ipcInvoke('item:createNote', note),
         getNotes: (itemReferenceId) => ipcInvoke('item:getNotes', itemReferenceId)
+    },
+    window: {
+        minimize: () => ipcInvoke('window:minimize'),
+        maximizeToggle: () => ipcInvoke('window:maximizeToggle'),
+        close: () => ipcInvoke('window:close'),
     }
 }
 
