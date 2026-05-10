@@ -42,6 +42,16 @@ export const getItemRNotesByReferenceIdRepository = (db: Database) =>
 export const addItemsToQuotationVersionRepository = (db: Database) =>
     (quotationVersionId: number, items: ItemData[]): QuotationLink[] => {
 
+        const quotationParent = db.prepare(`
+            SELECT quotation_id FROM quotation_versions WHERE id = ?
+        `).get(quotationVersionId) as { quotation_id: number } | undefined;
+
+        if (!quotationParent) {
+            throw new Error(`quotation_versions inexistente: ${quotationVersionId}`);
+        }
+
+        const quotationId = quotationParent.quotation_id;
+
         // item reference
         const createRef = db.prepare(`
             INSERT INTO item_references (description, internal_code, manufacturer_code, ncm)
@@ -62,8 +72,8 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
 
         // conexão entre a versão do item, versão da referencia e a versão da cotação
         const link = db.prepare(`
-            INSERT INTO quotation_links (quotation_version_id, item_reference_id, item_version_id)
-            VALUES (?, ?, ?)
+            INSERT INTO quotation_links (quotation_id, quotation_version_id, item_reference_id, item_version_id)
+            VALUES (?, ?, ?, ?)
         `);
 
         const run = db.transaction(() => {
@@ -114,7 +124,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                 const itemVersionId = createVersion.run(itemReferenceId, position, quantity, unitPrice, markup, purchaseShipping, ipi, st).lastInsertRowid;
 
                 // id do quotation_link
-                const linkId = link.run(quotationVersionId, itemReferenceId, itemVersionId).lastInsertRowid;
+                const linkId = link.run(quotationId, quotationVersionId, itemReferenceId, itemVersionId).lastInsertRowid;
 
                 // pega os dados do quotation_link
                 const getLinkData = db.prepare(`

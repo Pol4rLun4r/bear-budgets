@@ -36,33 +36,25 @@ type QuotationVersion = {
     total_value: number;
     amount: number;
     created_at?: string;
-    updated_at?: string;
 };
 
 // versão resumida da cotação para listagem
 type QuotationSummary = {
     quotation_id: number;
     quotation_version_id: number;
+    /** Número da revisão exibida (MAX(version) por cotação). */
+    version: number;
     client_id: number;
     client_name: string;
     client_document: string;
-    version: number;
     status: QuotationStatus;
     notes: string | null;
     total_value: number;
     amount: number;
+    /** Criação do registro pai em `quotations` (abertura da cotação). */
     created_at: string;
+    /** Momento em que a versão atual foi gravada (`quotation_versions.created_at`). */
     updated_at: string;
-};
-
-// apenas os valores do ItemVersion, utilitário para a cotação com dados resumido
-type SummaryValues = Pick<ItemVersion, 'quantity' | 'unit_price' | 'markup' | 'ipi' | 'st' | 'purchase_shipping'>;
-
-// cotações feitas com dados resumidos, dados da cotação, do cliente e valores dos itens
-type QuotationWithSummaryData = {
-    client: Client;
-    quotation_version: QuotationVersion
-    values: SummaryValues[]
 };
 
 // --------------- Item ---------------
@@ -103,7 +95,6 @@ type ItemVersion = {
     ipi?: number;
     st?: number;
     created_at?: string;
-    updated_at?: string;
 };
 
 type ItemWithNotes = ItemReference & {
@@ -118,6 +109,7 @@ type ItemData = {
 
 type QuotationLink = {
     id?: number;
+    quotation_id: number;
     quotation_version_id: number;
     item_reference_id: number;
     item_version_id: number;

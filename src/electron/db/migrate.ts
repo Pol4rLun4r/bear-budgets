@@ -30,7 +30,6 @@ const INITIAL_UP = `
         total_value REAL NOT NULL,
         amount INTEGER NOT NULL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (quotation_id) REFERENCES quotations(id) ON DELETE CASCADE,
         UNIQUE(quotation_id, version)
     );
@@ -64,33 +63,36 @@ const INITIAL_UP = `
         item_reference_id INTEGER NOT NULL,
         position INTEGER NOT NULL,
         version INTEGER NOT NULL,
-        quantity REAL NOT NULL DEFAULT 1,
-        unit_price REAL,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        unit_price REAL NOT NULL,
         markup TEXT,
         purchase_shipping REAL,
         ipi REAL,
         st REAL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (item_reference_id) REFERENCES item_references(id) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS quotation_links (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        quotation_id INTEGER NOT NULL,
         quotation_version_id INTEGER NOT NULL,
         item_reference_id INTEGER NOT NULL,
         item_version_id INTEGER NOT NULL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (quotation_id) REFERENCES quotations(id) ON DELETE CASCADE,
         FOREIGN KEY (quotation_version_id) REFERENCES quotation_versions(id) ON DELETE CASCADE,
         FOREIGN KEY (item_reference_id) REFERENCES item_references(id) ON DELETE CASCADE,
         FOREIGN KEY (item_version_id) REFERENCES item_versions(id) ON DELETE CASCADE,
         UNIQUE(quotation_version_id, item_version_id)
     );
+    CREATE INDEX IF NOT EXISTS idx_quotation_links_quotation_id ON quotation_links(quotation_id);
     CREATE INDEX IF NOT EXISTS idx_quotation_links_quotation_version_id ON quotation_links(quotation_version_id);
 `;
 
 const INITIAL_DOWN = `
     DROP INDEX IF EXISTS idx_quotation_links_quotation_version_id;
+    DROP INDEX IF EXISTS idx_quotation_links_quotation_id;
     DROP TABLE IF EXISTS quotation_links;
     DROP TABLE IF EXISTS item_versions;
     DROP TABLE IF EXISTS item_notes;
