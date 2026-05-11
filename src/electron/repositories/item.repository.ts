@@ -201,10 +201,11 @@ export const getItemVersionByIdRepository = (db: Database) =>
 // pesquisa referências por descrição
 export const searchItemReferencesByDescriptionRepository = (db: Database) =>
     (rawQuery: Pick<ItemReference, 'description'>['description']): ItemReference[] => {
-        const query = rawQuery
-            .trim()
-            .split(/\s+/)
-            .map(word => `${word}*`)
+        // Evita erro de sintaxe do FTS5 e preserva tokenchars usados no índice
+        // para permitir buscas por códigos como 3LD2164-0TB53-0US2.
+        const terms = rawQuery.match(/[\p{L}\p{N}._,/-]+/gu) ?? [];
+        const query = terms
+            .map(term => `"${term.replace(/"/g, '""')}"*`)
             .join(" ");
 
         if (!query) return [];

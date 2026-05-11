@@ -145,9 +145,84 @@ const SEARCH_DOWN = `
     ON item_references(description);
 `;
 
+const SEARCH_TOKENIZER_FIX_UP = `
+    DROP TRIGGER IF EXISTS item_references_ai;
+    DROP TRIGGER IF EXISTS item_references_ad;
+    DROP TRIGGER IF EXISTS item_references_au;
+    DROP TABLE IF EXISTS item_references_search;
+
+    CREATE VIRTUAL TABLE item_references_search USING fts5(
+        description,
+        content='item_references',
+        content_rowid='id',
+        tokenize='unicode61 remove_diacritics 2 tokenchars ''-.,/_''',
+        prefix='2 3 4'
+    );
+
+    INSERT INTO item_references_search(rowid, description)
+    SELECT id, description
+    FROM item_references;
+
+    CREATE TRIGGER item_references_ai AFTER INSERT ON item_references BEGIN
+        INSERT INTO item_references_search(rowid, description)
+        VALUES (new.id, new.description);
+    END;
+
+    CREATE TRIGGER item_references_ad AFTER DELETE ON item_references BEGIN
+        INSERT INTO item_references_search(item_references_search, rowid, description)
+        VALUES ('delete', old.id, old.description);
+    END;
+
+    CREATE TRIGGER item_references_au AFTER UPDATE ON item_references BEGIN
+        INSERT INTO item_references_search(item_references_search, rowid, description)
+        VALUES ('delete', old.id, old.description);
+
+        INSERT INTO item_references_search(rowid, description)
+        VALUES (new.id, new.description);
+    END;
+`;
+
+const SEARCH_TOKENIZER_FIX_DOWN = `
+    DROP TRIGGER IF EXISTS item_references_ai;
+    DROP TRIGGER IF EXISTS item_references_ad;
+    DROP TRIGGER IF EXISTS item_references_au;
+    DROP TABLE IF EXISTS item_references_search;
+
+    CREATE VIRTUAL TABLE item_references_search USING fts5(
+        description,
+        content='item_references',
+        content_rowid='id',
+        tokenize='unicode61 remove_diacritics 2',
+        prefix='2 3 4'
+    );
+
+    INSERT INTO item_references_search(rowid, description)
+    SELECT id, description
+    FROM item_references;
+
+    CREATE TRIGGER item_references_ai AFTER INSERT ON item_references BEGIN
+        INSERT INTO item_references_search(rowid, description)
+        VALUES (new.id, new.description);
+    END;
+
+    CREATE TRIGGER item_references_ad AFTER DELETE ON item_references BEGIN
+        INSERT INTO item_references_search(item_references_search, rowid, description)
+        VALUES ('delete', old.id, old.description);
+    END;
+
+    CREATE TRIGGER item_references_au AFTER UPDATE ON item_references BEGIN
+        INSERT INTO item_references_search(item_references_search, rowid, description)
+        VALUES ('delete', old.id, old.description);
+
+        INSERT INTO item_references_search(rowid, description)
+        VALUES (new.id, new.description);
+    END;
+`;
+
 const MIGRATIONS = [
     { version: 1, up: INITIAL_UP, down: INITIAL_DOWN },
     { version: 2, up: SEARCH_UP, down: SEARCH_DOWN },
+    { version: 3, up: SEARCH_TOKENIZER_FIX_UP, down: SEARCH_TOKENIZER_FIX_DOWN },
 ];
 
 export function runMigrations(db: DatabaseType): void {

@@ -29,7 +29,7 @@ const List = ({ notes, scope }: { notes: Partial<ItemNote>[]; scope: ItemFormSco
                 }
             </Table.Td>
             <Table.Td>
-                {hasId === null ? (
+                {hasId === undefined ? (
                     <Tooltip label='Deletar nota' position="right">
                         <UnstyledButton onClick={() => handleRemove(index)}>
                             <IconTrash size={15} color="var(--mantine-color-dimmed)" />
