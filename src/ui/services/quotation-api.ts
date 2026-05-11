@@ -16,7 +16,7 @@ const getAllSummary = async () => {
     return response;
 }
 
-const getFullDetail = async (quotationId: number) => {
+const getFullDetail = async (quotationId: Quotation['id']) => {
     const response = await baseAPI.quotation.getFullDetail(quotationId);
     return response;
 };

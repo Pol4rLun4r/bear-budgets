@@ -1,5 +1,5 @@
 // mantine
-import { Paper, Table } from "@mantine/core";
+import { Paper, Table, VisuallyHidden } from "@mantine/core";
 
 // components
 import Rows from "./Rows.tsx";
@@ -14,6 +14,7 @@ const List = ({ budgets }: { budgets: QuotationSummary[] }) => {
                 <Table layout="fixed" highlightOnHover stickyHeader w={'100%'} h={'100%'}>
                     <Table.Thead>
                         <Table.Tr>
+                            <Table.Th w={'5%'}><VisuallyHidden /></Table.Th>
                             <Table.Th w={'30%'}>Cliente</Table.Th>
                             <Table.Th w={'20%'}>Documento</Table.Th>
                             <Table.Th w={'10%'}>Valor Total</Table.Th>
