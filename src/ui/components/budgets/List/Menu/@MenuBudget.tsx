@@ -8,9 +8,12 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCopyPlus, IconEye, IconMenu3, IconPencilMinus, IconTrash } from "@tabler/icons-react";
 import services from '../../../../services/index';
 
+// components
+import { ViewBudget } from "../../viewBudget/@ViewBudget";
+
 const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
     const [opened, { open, close }] = useDisclosure(false);
-    const [quotation, setQuotation] = useState<QuotationFullDetail | null | undefined>(null);
+    const [quotation, setQuotation] = useState<QuotationFullDetail | undefined>(undefined);
     const [loading, setLoading] = useState(false);
 
     const handleSeeData = () => {
@@ -71,7 +74,7 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
 
             <Modal
                 padding='xl'
-                size='xl'
+                size='100%'
                 opened={opened}
                 onClose={close}
                 title="Informações do orçamento"
@@ -82,7 +85,7 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
                     blur: 3,
                 }}
             >
-                {loading ? <div>Carregando...</div> : <div>{quotation ? JSON.stringify(quotation.items) : 'Dados não encontrados'}</div>}
+                {loading ? <div>Carregando...</div> : <ViewBudget budget={quotation} />}
             </Modal>
         </>
     )

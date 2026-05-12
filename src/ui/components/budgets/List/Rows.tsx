@@ -18,7 +18,7 @@ const Rows = ({ budgets }: { budgets: QuotationSummary[] }) => {
         <Table.Td align="center">
           <MenuBudget quotationId={budget.quotation_id}/>
         </Table.Td>
-        <Table.Td>{budget.client_name}</Table.Td>
+        <Table.Td>{budget.client_name.toLocaleUpperCase()}</Table.Td>
         <Table.Td>{formatDocument(budget.client_document)}</Table.Td>
         <Table.Td>{brl.format(budget.total_value)}</Table.Td>
         <Table.Td>{budget.amount}</Table.Td>

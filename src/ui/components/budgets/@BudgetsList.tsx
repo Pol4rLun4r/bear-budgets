@@ -1,43 +1,36 @@
-// react
-import { useEffect, useState } from "react";
-
 // components
 import List from "./List/@List.tsx"
+
+// react-query
+import { useQuery } from "@tanstack/react-query";
 
 // api
 import services from "../../services/index.ts";
 
 const BudgetsList = () => {
-  const [budgets, setBudgets] = useState<QuotationSummary[]>([]);
-
   // puxa os dados dos orçamentos
-  useEffect(() => {
-    let isMounted = true;
+  const fetchData = async () => {
+    const result = await services.quotation.getAllSummary();
 
-    const fetchData = async () => {
-      const response = await services.quotation.getAllSummary();
+    if (!result.success) {
+      return [];
+    }
 
-      if (!response.success) {
-        console.log('fetch error');
-        if (isMounted) setBudgets([]);
-        return;
-      }
+    const data = result.data
+    return data === undefined ? [] : data;
+  }
 
-      if (!isMounted) return;
+  const { isPending ,data } = useQuery({
+    queryKey: ['budgetsData'],
+    queryFn: () => fetchData().then((res) => res)
+  })
 
-      const data = response.data;
-      setBudgets(Array.isArray(data) ? data : []);
-    };
-
-    void fetchData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  if (isPending) return 'Carregando...'
 
   return (
-    <List budgets={budgets} />
+    <>
+      {data!.length <= 0 ? <div>Sem orçamentos</div> : <List budgets={data!} />}
+    </>
   )
 }
 
