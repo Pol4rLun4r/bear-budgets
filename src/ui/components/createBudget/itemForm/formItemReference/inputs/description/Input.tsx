@@ -10,7 +10,7 @@ import ClearDescription from "../../ClearDescription";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../../../redux/store";
-import { ItemFormScope, setDescription } from "../../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, setReferenceField } from "../../../../../../redux/createBudget/items/itemFormSlice";
 
 interface InputType {
     isLoader: boolean;
@@ -53,7 +53,7 @@ const Input = ({ isLoader, options, combobox, handleChange, handleClearData, sco
 
                             value={description}
                             onChange={(e) => {
-                                dispatch(setDescription({ scope, value: e.currentTarget.value }))
+                                dispatch(setReferenceField({ scope, key: 'description', value: e.currentTarget.value }))
                                 handleChange(e)
                             }}
 

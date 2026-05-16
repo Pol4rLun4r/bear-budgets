@@ -11,13 +11,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../../../../redux/store";
 
 // utils
-import { ItemFormScope, setVersion } from "../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, setVersionField } from "../../../../../redux/createBudget/items/itemFormSlice";
 import {
     normalizeBrazilianCurrency,
     convertToNumber,
 } from "../../../../../utils/formatBrazilPrice";
 
-type CurrencyInputs = Pick<ItemVersion, 'purchase_shipping' | 'st' | 'unit_price'>
+type CurrencyInputs = Pick<ItemVersion, 'purchase_shipping' | 'st' | 'unit_price' | 'extra_value'>
 
 type Inputs = keyof CurrencyInputs
 
@@ -43,10 +43,7 @@ const CurrencyInput = ({ scope, itemVersionInput, label, placeholder, widthInput
         value: CurrencyInputs[K]
     ) => {
         dispatch(
-            setVersion({
-                scope,
-                version: { ...itemValues, [key]: value },
-            })
+            setVersionField({ scope, key, value })
         );
     }
 

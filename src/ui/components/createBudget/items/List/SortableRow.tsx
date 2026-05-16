@@ -58,6 +58,7 @@ const SortableRow = ({ item, index }: SortableRowProps) => {
             <Table.Td {...tableTdProps}><RowContent label={item.item_version.quantity} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={brl.format(total)} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={item.item_reference.internal_code} /></Table.Td>
+            <Table.Td {...tableTdProps}><RowContent label={item.item_version.boarding} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={convertMarkupValue(item.item_version.markup) + "%"} /></Table.Td>
             {!switchMode &&
                 <>
@@ -68,8 +69,9 @@ const SortableRow = ({ item, index }: SortableRowProps) => {
                     <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_version.st ? 0 : item.item_version.st)} /></Table.Td>
                     <Table.Td {...tableTdProps}><RowContent label={(!item.item_version.ipi ? 0 : item.item_version.ipi) + "%"} /></Table.Td>
                     <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.ipiValue)} /></Table.Td>
-                    <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.totalWithIPIandST)} /></Table.Td>
                     <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_version.purchase_shipping ? 0 : item.item_version.purchase_shipping)} /></Table.Td>
+                    <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_version.extra_value ? 0 : item.item_version.extra_value)} /></Table.Td>
+                    <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.totalWithIPIandST)} /></Table.Td>
                 </>
             }
         </Table.Tr>

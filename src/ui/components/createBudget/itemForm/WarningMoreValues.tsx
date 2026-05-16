@@ -11,7 +11,7 @@ const WarningMoreValues = ({ scope }: { scope: ItemFormScope }) => {
     const formStep = useSelector((state: RootState) => state.createBudget.itemFormSteps[scope].step);
     const itemVersion = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_version);
 
-    if ((!itemVersion.ipi && !itemVersion.st && !itemVersion.purchase_shipping) || formStep === 0 || !switchMode) {
+    if ((!itemVersion.ipi && !itemVersion.st && !itemVersion.extra_value) || formStep === 0 || !switchMode) {
         return;
     }
 

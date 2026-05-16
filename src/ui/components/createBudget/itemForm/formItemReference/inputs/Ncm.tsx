@@ -4,7 +4,7 @@ import { TextInput } from "@mantine/core";
 // redux
 import { AppDispatch, RootState } from "../../../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { ItemFormScope, setNcm } from "../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, setReferenceField } from "../../../../../redux/createBudget/items/itemFormSlice";
 
 const NCM = ({ scope }: { scope: ItemFormScope }) => {
     const itemData = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_reference);
@@ -19,7 +19,7 @@ const NCM = ({ scope }: { scope: ItemFormScope }) => {
 
             // configurações do valor do input
             value={itemData.ncm as string || ''}
-            onChange={(e) => dispatch(setNcm({ scope, value: e.currentTarget.value }))}
+            onChange={(e) => dispatch(setReferenceField({ scope, key: 'ncm', value: e.currentTarget.value }))}
         />
     )
 }

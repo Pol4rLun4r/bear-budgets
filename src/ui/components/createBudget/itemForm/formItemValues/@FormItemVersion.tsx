@@ -10,6 +10,8 @@ import ST from "./inputs/ST";
 import Markup from "./inputs/Markup";
 import PurchaseShipping from "./inputs/PurchaseShipping";
 import ClearValues from "./ClearValues";
+import ExtraValue from "./inputs/ExtraValue";
+import Boarding from "./inputs/Boarding";
 
 // redux
 import { RootState } from "../../../../redux/store";
@@ -29,10 +31,21 @@ const FormItemVersion = ({ scope }: { scope: ItemFormScope }) => {
                 <Quantity scope={scope} />
                 <Markup scope={scope} />
             </Group>
-            {!switchMode &&
+            {!switchMode ?
+                <Stack gap="md">
+                    <Group grow justify="center" align="flex-end">
+                        <IPI scope={scope} />
+                        <ST scope={scope} />
+                        <PurchaseShipping scope={scope} />
+                    </Group>
+                    <Group grow justify="center" align="flex-end">
+                        <Boarding scope={scope} />
+                        <ExtraValue scope={scope} />
+                    </Group>
+                </Stack>
+                :
                 <Group grow justify="center" align="flex-end">
-                    <IPI scope={scope} />
-                    <ST scope={scope} />
+                    <Boarding scope={scope} />
                     <PurchaseShipping scope={scope} />
                 </Group>
             }

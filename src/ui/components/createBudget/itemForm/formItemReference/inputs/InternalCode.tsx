@@ -4,7 +4,7 @@ import { TextInput } from "@mantine/core";
 // redux
 import { AppDispatch, RootState } from "../../../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { ItemFormScope, setInternalCode } from "../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, setReferenceField } from "../../../../../redux/createBudget/items/itemFormSlice";
 
 const InternalCode = ({ scope }: { scope: ItemFormScope }) => {
     const itemData = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_reference);
@@ -19,7 +19,7 @@ const InternalCode = ({ scope }: { scope: ItemFormScope }) => {
 
             // configurações do valor do input
             value={itemData.internal_code as string || ''}
-            onChange={(e) => dispatch(setInternalCode({ scope, value: e.currentTarget.value }))}
+            onChange={(e) => dispatch(setReferenceField({ scope, key:'internal_code', value: e.currentTarget.value }))}
         />
     )
 }

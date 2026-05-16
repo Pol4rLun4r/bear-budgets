@@ -10,7 +10,7 @@ import { markupList } from "../../../../../utils/markupList";
 // redux
 import { RootState, AppDispatch } from "../../../../../redux/store"
 import { useSelector, useDispatch } from "react-redux"
-import { ItemFormScope, setVersion } from "../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, setVersionField } from "../../../../../redux/createBudget/items/itemFormSlice";
 
 const Markup = ({ scope }: { scope: ItemFormScope }) => {
     const itemData = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_version);
@@ -42,7 +42,7 @@ const Markup = ({ scope }: { scope: ItemFormScope }) => {
             // configurações do valor do input
             value={itemData.markup}
             onChange={(value) =>
-                dispatch(setVersion({ scope, version: { ...itemData, markup: value as string } }))
+                dispatch(setVersionField({ scope, key: 'markup', value: value as string }))
             }
         />
     )

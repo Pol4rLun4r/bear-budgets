@@ -4,7 +4,7 @@ import { NumberInput } from "@mantine/core"
 // redux
 import { RootState, AppDispatch } from "../../../../../redux/store"
 import { useSelector, useDispatch } from "react-redux"
-import { ItemFormScope, setVersion } from "../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, setVersionField } from "../../../../../redux/createBudget/items/itemFormSlice";
 
 const Quantity = ({ scope }: { scope: ItemFormScope }) => {
     const itemValues = useSelector((state: RootState) => state.createBudget.itemForm[scope].item_version);
@@ -30,7 +30,7 @@ const Quantity = ({ scope }: { scope: ItemFormScope }) => {
             // configurações do valor do input
             value={itemValues.quantity || ''}
             onChange={(value) =>
-                dispatch(setVersion({ scope, version: { ...itemValues, quantity: value as number } }))
+                dispatch(setVersionField({ scope, key: 'quantity', value }))
             }
         />
     )

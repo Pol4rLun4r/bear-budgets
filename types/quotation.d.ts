@@ -95,6 +95,8 @@ type ItemVersion = {
     ipi?: number;
     st?: number;
     created_at?: string;
+    extra_value?: number;
+    boarding?: string;
 };
 
 type ItemWithNotes = ItemReference & {

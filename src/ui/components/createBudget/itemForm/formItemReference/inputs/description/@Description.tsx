@@ -8,7 +8,7 @@ import { notifications } from "@mantine/notifications";
 // redux
 import { AppDispatch } from "../../../../../../redux/store";
 import { useDispatch } from "react-redux";
-import { ItemFormScope, resetItemReference, setDescription, setItemReference, setNotes } from "../../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, resetItemReference, setReferenceField, setItemReference, setNotes } from "../../../../../../redux/createBudget/items/itemFormSlice";
 
 // api
 import services from "../../../../../../services";
@@ -100,7 +100,7 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
         combobox.updateSelectedOptionIndex(); // atualiza a lista de opções do input
         combobox.openDropdown(); // abre o dropdown ao digitar e atualiza as opções
 
-        dispatch(setDescription({ scope, value }));
+        dispatch(setReferenceField({ scope, key: 'description', value }));
     }
 
     // lida com o item selecionado (clicado ou pressionado Enter)
