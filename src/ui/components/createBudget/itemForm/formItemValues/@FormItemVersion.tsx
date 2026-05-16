@@ -18,7 +18,6 @@ import { useSelector } from "react-redux";
 // types
 import { ItemFormScope } from "../../../../redux/createBudget/items/itemFormSlice";
 
-
 const FormItemVersion = ({ scope }: { scope: ItemFormScope }) => {
     const switchMode = useSelector((state: RootState) => state.createBudget.itemFormSwitchMode.mode);
 
