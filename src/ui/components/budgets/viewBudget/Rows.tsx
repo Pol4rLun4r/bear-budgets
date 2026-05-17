@@ -42,7 +42,7 @@ const Rows = ({ item }: { item: QuotationDetailLine }) => {
             <Table.Td {...tableTdProps}><RowContent label={itemVersion.quantity} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={brl.format(total)} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={itemReference.internal_code} /></Table.Td>
-            <Table.Td {...tableTdProps}><RowContent label={itemVersion.boarding} /></Table.Td>
+            <Table.Td {...tableTdProps}><RowContent extraText="Embarque:" label={itemVersion.boarding} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={convertMarkupValue(itemVersion.markup) + "%"} /></Table.Td>
             {!switchMode &&
                 <>

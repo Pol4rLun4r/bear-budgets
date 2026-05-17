@@ -161,7 +161,7 @@ describe("Failures - Create Quotation and Add Items", () => {
                 items: [
                     {
                         item_reference: { ...fakeItens[0] },
-                        notes: [],
+                        reference_links: [],
                         item_version: {
                             quantity: 2,
                             unit_price: 2,
@@ -192,7 +192,7 @@ describe("Failures - Create Quotation and Add Items", () => {
                 items: [
                     {
                         item_reference: { ...fakeItens[0] },
-                        notes: [],
+                        reference_links: [],
                         item_version: {
                             quantity: 2,
                             unit_price: 2,
@@ -201,7 +201,7 @@ describe("Failures - Create Quotation and Add Items", () => {
                     },
                     {
                         item_reference: { ...fakeItens[0] },
-                        notes: [],
+                        reference_links: [],
                         item_version: {
                             quantity: 2,
                             unit_price: 2,
@@ -232,7 +232,7 @@ describe("Failures - Create Quotation and Add Items", () => {
                 items: [
                     {
                         item_reference: { ...fakeItens[0], description: "" },
-                        notes: [],
+                        reference_links: [],
                         item_version: {
                             quantity: 2,
                             unit_price: 2,

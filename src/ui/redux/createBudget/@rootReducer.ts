@@ -2,7 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 
 // slicers
 import itemFormSlice from "./items/itemFormSlice";
-import itemNoteFormSlice from "./items/itemNoteFormSlice";
+import ReferenceLinkFormSlice from "./items/ReferenceLinkFormSlice.ts";
 import itemFormSwitchModeSlice from "./items/itemFormSwitchModeSlice";
 import clientSlice from './clientSlice';
 import itemFormStepsSlice from './items/itemFormStepsSlice';
@@ -14,7 +14,7 @@ const createBudgetReducer = combineReducers({
     client: clientSlice,
     quotation: quotationSlice,
     itemForm: itemFormSlice,
-    itemNoteForm: itemNoteFormSlice,
+    referenceLinkForm: ReferenceLinkFormSlice,
     itemFormSteps: itemFormStepsSlice,
     itemFormSwitchMode: itemFormSwitchModeSlice,
     listItems: listItemsSlice,

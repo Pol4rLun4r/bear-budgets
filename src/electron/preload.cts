@@ -22,7 +22,8 @@ const api: API = {
     item: {
         searchDescription: (description) => ipcInvoke('item:searchDescription', description),
         createNote: (note) => ipcInvoke('item:createNote', note),
-        getNotes: (itemReferenceId) => ipcInvoke('item:getNotes', itemReferenceId)
+        getNotes: (itemReferenceId) => ipcInvoke('item:getNotes', itemReferenceId),
+        getReferenceLinks: (itemReferenceId) => ipcInvoke('item:getReferenceLinks', itemReferenceId),
     },
     window: {
         minimize: () => ipcInvoke('window:minimize'),

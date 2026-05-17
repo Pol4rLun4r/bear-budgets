@@ -12,12 +12,14 @@ interface CreateWithAllData {
     items: {
         item_reference: Partial<ItemReference>;
         item_version: Partial<ItemVersion>;
-        notes: Partial<ItemNote>[];
+        reference_links: Partial<ReferenceLink>[];
     }[];
 };
 
 // --------------- Item-API ---------------
 type GetItemNotes = ItemNote['item_reference_id'];
+
+type GetReferenceLinks = ReferenceLink['item_reference_id'];
 
 type CreateItemNote = Omit<ItemNote, "id" | "created_at" | "updated_at">;
 
@@ -44,6 +46,7 @@ type EventPayloadMapping = {
     // item
     "item:searchDescription": Result<ItemReference[] | undefined>;
     "item:getNotes": Result<ItemNote[] | undefined>;
+    "item:getReferenceLinks": Result<ReferenceLink[] | undefined>;
     "item:createNote": Result<ItemNote['item_reference_id'] | undefined>;
 
     // janela (frame personalizado)
@@ -81,6 +84,7 @@ interface QuotationAPI {
 interface ItemAPI {
     searchDescription(description: SearchItemDescription): Promise<Result<ItemReference[] | undefined>>;
     getNotes(itemReferenceId: GetItemNotes): Promise<Result<ItemNote[] | undefined>>;
+    getReferenceLinks(itemReferenceId: GetReferenceLinks): Promise<Result<ReferenceLink[] | undefined>>;
     createNote(note: CreateItemNote): Promise<Result<ItemNote['item_reference_id'] | undefined>>;
 }
 

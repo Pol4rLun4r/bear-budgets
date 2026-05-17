@@ -12,6 +12,7 @@ const itemHandlers = (db: Database) => {
 
     ipcMainHandle('item:searchDescription', services.item.searchDescription);
     ipcMainHandle('item:getNotes', services.item.getNotes);
+    ipcMainHandle('item:getReferenceLinks', services.item.getReferenceLinks);
     ipcMainHandle('item:createNote', services.item.createNote);
 }
 

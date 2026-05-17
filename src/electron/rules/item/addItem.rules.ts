@@ -24,8 +24,8 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
     // validar cada item
     for (const item of items) {
 
-        // separa os dados básicos, valores e notas do item para melhor manejo
-        const {item_reference, item_version, notes: itemNotes} = item;
+        // separa os dados básicos, valores e links do item para melhor manejo
+        const { item_reference, item_version, reference_links: itemReferenceLinks } = item;
 
         // validar ordem/posição e se os items tem a mesma posição
         const position = item_version.position;
@@ -49,17 +49,17 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
         // validar quantidade
         const quantity = item_version.quantity ?? 1;
 
-        // validá as notas se existirem
-        const notes = itemNotes?.map((note: Partial<ItemNote>) => ({
-            type: note.type,
-            content: note.content?.trim(),
-        })).filter((note) => (note.content ?? "").length > 0);
+        // valida os links de referência se existirem
+        const reference_links = itemReferenceLinks
+            ?.map((link: Partial<ReferenceLink>) => ({
+                content: (link.content ?? "").trim(),
+            }))
+            .filter((link) => link.content.length > 0) as ReferenceLink[];
 
-        // adiciona cada nota ao array de item válidos
         validItems.push({
             item_reference: { ...item_reference, description },
             item_version: { ...item_version, quantity },
-            notes: notes as ItemNote[]
+            reference_links: reference_links ?? [],
         });
     }
 

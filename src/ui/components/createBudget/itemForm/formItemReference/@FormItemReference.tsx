@@ -3,17 +3,18 @@ import Description from "./inputs/description/@Description";
 import InternalCode from "./inputs/InternalCode";
 import NCM from "./inputs/Ncm";
 import ManufacturerCode from "./inputs/ManufacturerCode";
-import Notes from "./notes/@Notes";
 
 // redux
 import type { RootState } from "../../../../redux/store";
 import { useSelector } from "react-redux";
 
 // mantine
-import { Group, Stack } from "@mantine/core";
+import { Divider, Group, Stack } from "@mantine/core";
 
 // types
 import type { ItemFormScope } from "../../../../redux/createBudget/items/itemFormSlice";
+import Links from "./links/@Links";
+import Notes from "./notes/@Notes.tsx";
 
 const FormItemReference = ({ scope }: { scope: ItemFormScope }) => {
     const switchMode = useSelector((state: RootState) => state.createBudget.itemFormSwitchMode.mode);
@@ -30,7 +31,11 @@ const FormItemReference = ({ scope }: { scope: ItemFormScope }) => {
                     </Group>
                 }
             </Stack>
-            <Notes scope={scope} />
+            <Divider />
+            <Group grow>
+                <Links scope={scope} />
+                <Notes />
+            </Group>
         </Stack>
     )
 };

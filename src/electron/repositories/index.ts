@@ -23,11 +23,13 @@ import {
     createItemReferenceRepository,
     getItemReferenceByIdRepository,
     getItemRNotesByReferenceIdRepository,
+    getReferenceLinksByReferenceIdRepository,
     getItemVersionByIdRepository,
     searchItemReferencesByDescriptionRepository,
     createItemNoteRepository,
     deleteAllItemReferencesRepository,
-    deleteAllItemNotesByIdReference
+    deleteAllItemNotesByIdReference,
+    createReferenceLinkRepository
 } from "./item.repository.js";
 
 export const createRepositories = (db: Database) => ({
@@ -48,12 +50,14 @@ export const createRepositories = (db: Database) => ({
         getFullDetail: getQuotationFullDetailRepository(db),
     },
     item: {
+        createReferenceLink: createReferenceLinkRepository(db),
         createNote: createItemNoteRepository(db),
         createReference: createItemReferenceRepository(db),
         addToQuotation: addItemsToQuotationVersionRepository(db),
         getReferenceById: getItemReferenceByIdRepository(db),
         getVersionById: getItemVersionByIdRepository(db),
         getReferenceNotesByReferenceId: getItemRNotesByReferenceIdRepository(db),
+        getReferenceLinksByReferenceId: getReferenceLinksByReferenceIdRepository(db),
         searchByDescription: searchItemReferencesByDescriptionRepository(db),
         deleteAllReferences: deleteAllItemReferencesRepository(db),
         deleteAllNotesByReferenceId: deleteAllItemNotesByIdReference(db),

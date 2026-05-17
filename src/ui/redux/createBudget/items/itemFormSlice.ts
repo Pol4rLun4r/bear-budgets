@@ -7,6 +7,7 @@ export interface ItemDataState {
     item_reference: Partial<ItemReference>;
     item_version: Partial<ItemVersion>;
     notes: Partial<ItemNote>[];
+    reference_links: Partial<ReferenceLink>[];
 }
 
 export type ItemFormScope = "add" | "edit";
@@ -30,6 +31,7 @@ export const createEmptyItemData = (): ItemDataState => {
             ncm: "",
         },
         notes: [],
+        reference_links: [],
         item_version: {
             unit_price: undefined,
             quantity: 1,
@@ -75,12 +77,6 @@ const itemReferenceReducers = {
     ) => {
         draft(state, action.payload.scope).item_reference = action.payload.data;
     },
-    setNotes: (
-        state: ItemFormSliceState,
-        action: PayloadAction<{ scope: ItemFormScope; notes: Partial<ItemNote>[] }>,
-    ) => {
-        draft(state, action.payload.scope).notes = action.payload.notes;
-    },
     resetItemDescription: (state: ItemFormSliceState, action: PayloadAction<ItemFormScope>) => {
         const empty = createEmptyItemData();
         const item = draft(state, action.payload).item_reference;
@@ -90,7 +86,7 @@ const itemReferenceReducers = {
         const empty = createEmptyItemData();
         const item = draft(state, action.payload);
         item.item_reference = empty.item_reference;
-        item.notes = empty.notes;
+        item.reference_links = empty.reference_links;
     },
 }
 
@@ -126,6 +122,29 @@ const itemVersionReducers = {
         values.st = empty.item_version.st;
         values.markup = empty.item_version.markup;
         values.purchase_shipping = empty.item_version.purchase_shipping;
+        values.boarding = empty.item_version.boarding;
+        values.extra_value = empty.item_version.extra_value;
+    },
+}
+
+const referenceLinksReducers = {
+    addLink: (
+        state: ItemFormSliceState,
+        action: PayloadAction<{ scope: ItemFormScope; link: Partial<ReferenceLink> }>,
+    ) => {
+        draft(state, action.payload.scope).reference_links.push(action.payload.link);
+    },
+    removeLink: (
+        state: ItemFormSliceState,
+        action: PayloadAction<{ scope: ItemFormScope; index: number }>,
+    ) => {
+        draft(state, action.payload.scope).reference_links.splice(action.payload.index, 1);
+    },
+    setReferenceLinks: (
+        state: ItemFormSliceState,
+        action: PayloadAction<{ scope: ItemFormScope; links: Partial<ReferenceLink>[] }>,
+    ) => {
+        draft(state, action.payload.scope).reference_links = action.payload.links;
     },
 }
 
@@ -135,6 +154,7 @@ const itemFormSlice = createSlice({
     reducers: {
         ...itemReferenceReducers,
         ...itemVersionReducers,
+        ...referenceLinksReducers,
         setItemDataEdit: (
             state,
             action: PayloadAction<ItemDataState>,
@@ -145,33 +165,21 @@ const itemFormSlice = createSlice({
             const empty = createEmptyItemData();
             state[action.payload] = empty;
         },
-        addNote: (
-            state,
-            action: PayloadAction<{ scope: ItemFormScope; note: Partial<ItemNote> }>,
-        ) => {
-            draft(state, action.payload.scope).notes.push(action.payload.note);
-        },
-        removeNote: (
-            state,
-            action: PayloadAction<{ scope: ItemFormScope; index: number }>,
-        ) => {
-            draft(state, action.payload.scope).notes.splice(action.payload.index, 1);
-        },
     },
 });
 
 export const {
     setReferenceField,
     setItemReference,
-    setNotes,
+    setReferenceLinks,
     setVersionField,
     setVersion,
     resetItemReference,
     resetItemData,
     resetItemDescription,
     resetItemVersion,
-    addNote,
-    removeNote,
+    addLink,
+    removeLink,
     setItemDataEdit,
 } = itemFormSlice.actions;
 

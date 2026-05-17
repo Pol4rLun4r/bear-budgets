@@ -82,6 +82,13 @@ type ItemNote = {
     updated_at?: string;
 };
 
+type ReferenceLink = {
+    id?: number;
+    item_reference_id: number;
+    content: string;
+    created_at?: string;
+}
+
 // valores do item – dados mutáveis (preço, quantidade, etc). Criada a cada edição.
 type ItemVersion = {
     id?: number;
@@ -106,7 +113,7 @@ type ItemWithNotes = ItemReference & {
 type ItemData = {
     item_reference: ItemReference;
     item_version: ItemVersion;
-    notes: ItemNote[];
+    reference_links: ReferenceLink[];
 };
 
 type QuotationLink = {
@@ -122,7 +129,7 @@ type QuotationDetailLine = {
     quotation_link_id: number;
     item_reference: ItemReference;
     item_version: ItemVersion;
-    notes: ItemNote[];
+    reference_links: ReferenceLink[];
 };
 
 /** Cotação completa para a tela “ver detalhes”: pai, cliente, última revisão e itens via quotation_links. */

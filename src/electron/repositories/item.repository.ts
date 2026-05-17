@@ -1,5 +1,20 @@
 import type { Database } from "better-sqlite3";
 
+const getReferenceLinksFromItem = (item: ItemData): Pick<ReferenceLink, "content">[] => {
+    return (item.reference_links ?? [])
+        .map((link) => ({ content: (link.content ?? "").trim() }))
+        .filter((link) => link.content.length > 0);
+};
+
+export const createReferenceLinkRepository = (db: Database) =>
+    (item_reference_id: number, data: ReferenceLink): number => {
+        const row = db.prepare(`
+            INSERT INTO reference_links (item_reference_id, content)
+            VALUES (?, ?)
+        `).run(item_reference_id, data.content);
+        return row.lastInsertRowid as number;
+    };
+
 // cria a referência do item (dados mestre).
 export const createItemReferenceRepository = (db: Database) =>
     (item_reference: ItemReference): number => {
@@ -37,6 +52,21 @@ export const createItemNoteRepository = (db: Database) =>
             data.content
         )
         return row.lastInsertRowid as number;
+    };
+
+// busca os links de referência de um item_reference pelo id da referência.
+export const getReferenceLinksByReferenceIdRepository = (db: Database) =>
+    (item_reference_id: number): ReferenceLink[] => {
+        return db.prepare(`
+            SELECT
+                id,
+                item_reference_id,
+                content,
+                datetime(created_at, 'localtime') AS created_at
+            FROM reference_links
+            WHERE item_reference_id = ?
+            ORDER BY id ASC
+        `).all(item_reference_id) as ReferenceLink[];
     };
 
 // busca as notas de referência de um item_reference pelo id da referência.
@@ -77,15 +107,14 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
             VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?)
         `);
 
-        // notas do item
-        const createNote = db.prepare(`
-            INSERT INTO item_notes (item_reference_id, type, content)
-            SELECT ?, ?, ?
+        // links de referência do item
+        const createReferenceLink = db.prepare(`
+            INSERT INTO reference_links (item_reference_id, content)
+            SELECT ?, ?
             WHERE NOT EXISTS (
                 SELECT 1
-                FROM item_notes
+                FROM reference_links
                 WHERE item_reference_id = ?
-                  AND type = ?
                   AND content = ?
             )
         `);
@@ -118,7 +147,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
 
                 // if para determinar se um item precisa ser criado ou não, baseado se tem um id
                 let itemReferenceId: number
-                let shouldCreateNotes = false;
+                let shouldCreateReferenceLinks = false;
                 if (itemReference.id) {
                     // informar apenas o id caso o item possua o mesmo
                     itemReferenceId = itemReference.id
@@ -130,20 +159,20 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                         itemReference.manufacturer_code ?? undefined,
                         itemReference.ncm ?? undefined
                     ).lastInsertRowid as number
-                    shouldCreateNotes = true;
+                    shouldCreateReferenceLinks = true;
                 }
 
-                // Só cria notas quando a referência é nova.
-                // Se item_reference.id foi informado, a referência já existe e não deve receber novas notas aqui.
-                if (shouldCreateNotes && item.notes?.length) {
-                    for (const note of item.notes) {
-                        createNote.run(
+                const referenceLinks = getReferenceLinksFromItem(item);
+
+                // Só cria links quando a referência é nova.
+                // Se item_reference.id foi informado, a referência já existe e não deve receber novos links aqui.
+                if (shouldCreateReferenceLinks && referenceLinks.length) {
+                    for (const link of referenceLinks) {
+                        createReferenceLink.run(
                             itemReferenceId,
-                            note.type,
-                            note.content,
+                            link.content,
                             itemReferenceId,
-                            note.type,
-                            note.content
+                            link.content
                         );
                     }
                 }

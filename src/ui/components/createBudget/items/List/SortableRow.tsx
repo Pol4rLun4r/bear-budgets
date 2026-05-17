@@ -58,7 +58,7 @@ const SortableRow = ({ item, index }: SortableRowProps) => {
             <Table.Td {...tableTdProps}><RowContent label={item.item_version.quantity} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={brl.format(total)} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={item.item_reference.internal_code} /></Table.Td>
-            <Table.Td {...tableTdProps}><RowContent label={item.item_version.boarding} /></Table.Td>
+            <Table.Td {...tableTdProps}><RowContent extraText="Embarque:" label={item.item_version.boarding} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={convertMarkupValue(item.item_version.markup) + "%"} /></Table.Td>
             {!switchMode &&
                 <>

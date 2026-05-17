@@ -15,13 +15,13 @@ import { normalizeDocument, onlyName } from "../../../../utils/clean.js";
 const itemsPayload: CreateWithAllData['items'] = [
     {
         item_reference: { ...fakeItens[0] },
-        notes: [],
+        reference_links: [],
         item_version: fakeItemVersion(0, { boarding: "FOB" }),
     },
     {
         item_reference: { ...fakeItens[0] },
-        notes: [
-            { type: "link", content: '312' }
+        reference_links: [
+            { content: '312' }
         ],
         item_version: fakeItemVersion(1, { extra_value: 12 }),
     }

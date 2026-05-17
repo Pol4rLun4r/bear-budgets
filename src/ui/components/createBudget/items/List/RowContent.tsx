@@ -11,10 +11,11 @@ import classes from './Row.module.css';
 
 interface RowContentProps {
     label: any;
-    disableCopyButton?: boolean
+    disableCopyButton?: boolean;
+    extraText?: string;
 }
 
-const RowContent = ({ label, disableCopyButton }: RowContentProps) => {
+const RowContent = ({ label, disableCopyButton, extraText }: RowContentProps) => {
     const { hovered, ref } = useHover();
 
     const rowContentProps = {
@@ -29,7 +30,7 @@ const RowContent = ({ label, disableCopyButton }: RowContentProps) => {
                 {disableCopyButton ? (
                     label
                 ) : hovered ? (
-                    <CopyButton value={label}>
+                    <CopyButton value={extraText ? `${extraText} ${label}` : label}>
                         {({ copied, copy }) => (
                             <Button fullWidth size="compact-xs" color={copied ? 'teal' : 'var(--mantine-primary-color-filled)'} onClick={copy}>
                                 {copied ? <IconCheck size={iconsSize} /> : <IconCopy size={iconsSize} />}

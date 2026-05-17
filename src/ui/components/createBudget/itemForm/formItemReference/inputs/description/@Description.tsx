@@ -8,7 +8,7 @@ import { notifications } from "@mantine/notifications";
 // redux
 import { AppDispatch } from "../../../../../../redux/store";
 import { useDispatch } from "react-redux";
-import { ItemFormScope, resetItemReference, setReferenceField, setItemReference, setNotes } from "../../../../../../redux/createBudget/items/itemFormSlice";
+import { ItemFormScope, resetItemReference, setReferenceField, setItemReference, setReferenceLinks } from "../../../../../../redux/createBudget/items/itemFormSlice";
 
 // api
 import services from "../../../../../../services";
@@ -111,7 +111,7 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
             dispatch(setItemReference({ scope, data: item }));
         }
 
-        const response = await services.item.getNotes(item?.id as number);
+        const response = await services.item.getReferenceLinks(item?.id as number);
 
         if (!response.success) {
             setSuggestions([]);
@@ -123,10 +123,11 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
                 color: 'pink'
             })
         }
-   
-        
+
+
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        dispatch(setNotes({ scope, notes: response.data as any }));
+        dispatch(setReferenceLinks({ scope, links: response.data as any }));
+        setSuggestions([]);
 
         combobox.closeDropdown();
     }

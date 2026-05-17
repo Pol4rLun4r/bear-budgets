@@ -18,11 +18,12 @@ describe("Get full quotation with details", () => {
     const repo = createRepositories(db);
 
     beforeAll(() => {
-        // create item para gerar um id
         const itemId = repo.item.createReference(fakeItens[2]);
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        repo.item.createNote(itemId, { type: "link", content: 'https://family.com' } as any)
+        db.prepare(`
+            INSERT INTO reference_links (item_reference_id, content)
+            VALUES (?, ?)
+        `).run(itemId, 'https://family.com');
     })
 
     const payload: CreateWithAllData = {
@@ -30,8 +31,8 @@ describe("Get full quotation with details", () => {
         items: [
             {
                 item_reference: { ...fakeItens[1] },
-                notes: [
-                    { type: "text", content: 'mother' }
+                reference_links: [
+                    { content: 'mother' }
                 ],
                 item_version: fakeItemVersion(1, {
                     quantity: 22,
@@ -42,8 +43,8 @@ describe("Get full quotation with details", () => {
             },
             {
                 item_reference: { ...fakeItens[2], id: 1 },
-                notes: [
-                    { type: "link", content: 'https://family.com' }
+                reference_links: [
+                    { content: 'https://family.com' }
                 ],
                 item_version: fakeItemVersion(2, {
                     quantity: 122,
@@ -54,8 +55,8 @@ describe("Get full quotation with details", () => {
             },
             {
                 item_reference: { ...fakeItens[2], id: 1 },
-                notes: [
-                    { type: "link", content: 'https://family.brazil.com' }
+                reference_links: [
+                    { content: 'https://family.brazil.com' }
                 ],
                 item_version: fakeItemVersion(3, {
                     quantity: 20,
@@ -119,15 +120,15 @@ describe("Get full quotation with details", () => {
             expect(item.item_version).toMatchObject(itemPayload.item_version);
 
             if (index === 0) {
-                expect(item.notes[0]).toMatchObject(itemPayload.notes[0]);
+                expect(item.reference_links[0]).toMatchObject({ content: itemPayload.reference_links[0].content });
             }
 
             if (index === 1) {
-                expect(item.notes[0]).toMatchObject({ type: "link", content: 'https://family.com' });
+                expect(item.reference_links[0]).toMatchObject({ content: 'https://family.com' });
             }
 
             if (index === 2) {
-                expect(item.notes[0]).toMatchObject({ type: "link", content: 'https://family.com' });
+                expect(item.reference_links[0]).toMatchObject({ content: 'https://family.com' });
             }
         }
     });

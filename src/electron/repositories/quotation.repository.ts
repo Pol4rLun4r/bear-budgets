@@ -145,7 +145,7 @@ type QuotationLinkRows = {
   1) quotations + clients
   2) quotation_versions mais recente (metadados da revisão)
   3) quotation_links por quotation_id (referência + item_version ligada ao link)
-  4) Por link: item_reference → notas → item_version pelo quotation_links.item_version_id; ordena linhas por position
+  4) Por link: item_reference → reference_links → item_version pelo quotation_links.item_version_id; ordena linhas por position
 */
 
 export const getQuotationFullDetailRepository = (db: Database) =>
@@ -212,16 +212,14 @@ export const getQuotationFullDetailRepository = (db: Database) =>
             WHERE id = ?
         `);
 
-        // comando para buscar as notas de um item
-        const stmtNotesForRef = db.prepare(`
+        // comando para buscar os links de referência de um item
+        const stmtReferenceLinksForRef = db.prepare(`
             SELECT
                 id,
                 item_reference_id,
-                type,
                 content,
-                datetime(created_at, 'localtime') AS created_at,
-                datetime(updated_at, 'localtime') AS updated_at
-            FROM item_notes
+                datetime(created_at, 'localtime') AS created_at
+            FROM reference_links
             WHERE item_reference_id = ?
             ORDER BY id ASC
         `);
@@ -256,7 +254,7 @@ export const getQuotationFullDetailRepository = (db: Database) =>
             const item_reference = stmtItemReference.get(link.item_reference_id) as ItemReference | undefined;
             if (!item_reference?.id) continue;
 
-            const notes = stmtNotesForRef.all(link.item_reference_id) as ItemNote[];
+            const reference_links = stmtReferenceLinksForRef.all(link.item_reference_id) as ReferenceLink[];
 
             const item_version = stmtItemVersionByLink.get(link.item_version_id) as ItemVersion | undefined;
             if (!item_version?.id) continue;
@@ -265,7 +263,7 @@ export const getQuotationFullDetailRepository = (db: Database) =>
                 quotation_link_id: link.quotation_link_id,
                 item_reference,
                 item_version,
-                notes,
+                reference_links,
             });
         }
 

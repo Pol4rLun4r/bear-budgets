@@ -42,16 +42,17 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
             // 3.4 verifica se o ncm é o mesmo informado
             expect(itemReferenceData?.ncm).toBe(payload.items[index].item_reference.ncm);
 
-            // verifica as notas do item
-            if (itemReferenceData?.notes) {
-                for (let noteIndex = 0; noteIndex < itemReferenceData?.notes.length; noteIndex++) {
-                    const note = itemReferenceData?.notes[noteIndex];
+            // verifica os links de referência do item
+            const payloadLinks = payload.items[index].reference_links ?? [];
+            if (payloadLinks.length) {
+                const referenceLinks = db.prepare(`
+                    SELECT content FROM reference_links
+                    WHERE item_reference_id = ?
+                    ORDER BY id ASC
+                `).all(quotation_link.item_reference_id) as { content: string }[];
 
-                    // 3.5 verifica se o conteúdo da nota é a mesma informada
-                    expect(note.content).toBe(payload.items[index].notes[noteIndex].content);
-
-                    // 3.6 verifica se o tipo da nota é a mesma informada
-                    expect(note.type).toBe(payload.items[index].notes[noteIndex].type);
+                for (let linkIndex = 0; linkIndex < payloadLinks.length; linkIndex++) {
+                    expect(referenceLinks[linkIndex]?.content).toBe(payloadLinks[linkIndex].content);
                 }
             }
 
@@ -110,14 +111,14 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
         }
     }
 
-    it("ter sucesso ao criar items com e sem notas e valores", async () => {
+    it("ter sucesso ao criar items com e sem links e valores", async () => {
         // 1. prepara o payload
         const payload: CreateWithAllData = {
             client: { ...fakeClients[0] },
             items: [
                 {
                     item_reference: { ...fakeItens[0] },
-                    notes: [],
+                    reference_links: [],
                     item_version: fakeItemVersion(0, {
                         ipi: 1.3,
                         boarding: "FOB",
@@ -125,8 +126,8 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
                 },
                 {
                     item_reference: { ...fakeItens[1] },
-                    notes: [
-                        { type: "link", content: '312' }
+                    reference_links: [
+                        { content: '312' }
                     ],
                     item_version: fakeItemVersion(1, {
                         markup: "40.1",
@@ -135,9 +136,9 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
                 },
                 {
                     item_reference: { ...fakeItens[2] },
-                    notes: [
-                        { type: "link", content: 'https://nota1.com' },
-                        { type: "text", content: 'nota 2' }
+                    reference_links: [
+                        { content: 'https://nota1.com' },
+                        { content: 'nota 2' }
                     ],
                     item_version: fakeItemVersion(2, {
                         purchase_shipping: 31,
@@ -173,7 +174,7 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
             items: [
                 {
                     item_reference: { ...fakeItens[1], id: itemId },
-                    notes: [],
+                    reference_links: [],
                     item_version: fakeItemVersion(0, {
                         ipi: 1.3,
                         boarding: "EXW",
@@ -181,7 +182,7 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
                 },
                 {
                     item_reference: { ...fakeItens[1], id: itemId },
-                    notes: [],
+                    reference_links: [],
                     item_version: fakeItemVersion(1, {
                         quantity: 22,
                         unit_price: 43,

@@ -20,7 +20,7 @@ describe("Get all quotations summary", () => {
         items: [
             {
                 item_reference: { ...fakeItens[0] },
-                notes: [],
+                reference_links: [],
                 item_version: fakeItemVersion(0, {
                     ipi: 1.3,
                     boarding: "FOB",
@@ -28,8 +28,8 @@ describe("Get all quotations summary", () => {
             },
             {
                 item_reference: { ...fakeItens[1] },
-                notes: [
-                    { type: "link", content: '312' }
+                reference_links: [
+                    { content: '312' }
                 ],
                 item_version: fakeItemVersion(1, {
                     markup: "40.1",
@@ -38,9 +38,9 @@ describe("Get all quotations summary", () => {
             },
             {
                 item_reference: { ...fakeItens[2] },
-                notes: [
-                    { type: "link", content: 'https://nota1.com' },
-                    { type: "text", content: 'nota 2' }
+                reference_links: [
+                    { content: 'https://nota1.com' },
+                    { content: 'nota 2' }
                 ],
                 item_version: fakeItemVersion(2, {
                     purchase_shipping: 31,

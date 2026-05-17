@@ -14,6 +14,7 @@ import getQuotationFullDetailService from "./quotation/getQuotationFullDetail.se
 import searchItemDescriptionService from "./item/searchItemDescription.service.js";
 import createItemNoteService from "./item/createItemNote.service.js";
 import getItemNotesService from "./item/getItemNotes.service.js";
+import getReferenceLinksService from "./item/getReferenceLinks.service.js";
 
 export const createServices = (db: Database) => ({
     client: {
@@ -28,6 +29,7 @@ export const createServices = (db: Database) => ({
     },
     item: {
         getNotes: getItemNotesService(db),
+        getReferenceLinks: getReferenceLinksService(db),
         createNote: createItemNoteService(db),
         searchDescription: searchItemDescriptionService(db)
     }
