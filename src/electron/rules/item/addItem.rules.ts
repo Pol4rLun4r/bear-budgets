@@ -46,6 +46,8 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
             return failure("Cada item deve ter uma descrição");
         }
 
+        const notes = (item_reference.notes ?? "").trim();
+
         // validar quantidade
         const quantity = item_version.quantity ?? 1;
 
@@ -57,7 +59,11 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
             .filter((link) => link.content.length > 0) as ReferenceLink[];
 
         validItems.push({
-            item_reference: { ...item_reference, description },
+            item_reference: {
+                ...item_reference,
+                description,
+                notes: notes.length !== 0 ? notes : undefined,
+            },
             item_version: { ...item_version, quantity },
             reference_links: reference_links ?? [],
         });

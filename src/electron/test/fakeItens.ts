@@ -13,7 +13,8 @@ export const fakeItens = [
     description: "Cabo flexível 2,5mm 750V azul",
     internal_code: "INT-EL-001",
     manufacturer_code: "FAB-CAB-250-AZ",
-    ncm: "85444900"
+    ncm: "85444900",
+    notes: "Uso em quadros elétricos",
   },
   {
     description: "Cabo flexivel 2.5 mm 750V preto",

@@ -11,19 +11,21 @@ import { createRepositories } from "../../repositories/index.js";
 const createItemNoteService = (db: Database) => {
     const repo = createRepositories(db);
 
-    return db.transaction((data: ItemNote) => {
+    return db.transaction((data: CreateItemNote) => {
         const itemReferenceIdExists = repo.item.getReferenceById(data.item_reference_id)?.id;
 
         const result = createItemNoteRules({ itemReferenceIdExists, ...data });
 
-        // any errors
         if (!result.success) {
             return result;
         }
 
-        const createItemNote = repo.item.createNote(result.data.notes.item_reference_id, result.data.notes);
+        const itemReferenceId = repo.item.updateReferenceNotes(
+            result.data.item_reference_id,
+            result.data.notes
+        );
 
-        return success(createItemNote);
+        return success(itemReferenceId);
     });
 };
 

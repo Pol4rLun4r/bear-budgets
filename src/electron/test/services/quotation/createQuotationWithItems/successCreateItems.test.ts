@@ -42,6 +42,14 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
             // 3.4 verifica se o ncm é o mesmo informado
             expect(itemReferenceData?.ncm).toBe(payload.items[index].item_reference.ncm);
 
+            // 3.5 verifica se as notas são as mesmas informadas
+            const payloadNotes = payload.items[index].item_reference.notes;
+            if (payloadNotes !== undefined && payloadNotes !== "") {
+                expect(itemReferenceData?.notes).toBe(payloadNotes);
+            } else {
+                expect(itemReferenceData?.notes ?? null).toBe(null);
+            }
+
             // verifica os links de referência do item
             const payloadLinks = payload.items[index].reference_links ?? [];
             if (payloadLinks.length) {
@@ -117,7 +125,7 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
             client: { ...fakeClients[0] },
             items: [
                 {
-                    item_reference: { ...fakeItens[0] },
+                    item_reference: { ...fakeItens[0], notes: "Cabo para instalação interna" },
                     reference_links: [],
                     item_version: fakeItemVersion(0, {
                         ipi: 1.3,

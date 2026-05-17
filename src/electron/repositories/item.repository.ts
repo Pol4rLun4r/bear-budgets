@@ -19,40 +19,41 @@ export const createReferenceLinkRepository = (db: Database) =>
 export const createItemReferenceRepository = (db: Database) =>
     (item_reference: ItemReference): number => {
         const row = db.prepare(`
-            INSERT INTO item_references (description, internal_code, manufacturer_code, ncm)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO item_references (description, internal_code, manufacturer_code, ncm, notes)
+            VALUES (?, ?, ?, ?, ?)
         `).run(
             item_reference.description,
             item_reference.internal_code ?? null,
             item_reference.manufacturer_code ?? null,
-            item_reference.ncm ?? null
+            item_reference.ncm ?? null,
+            item_reference.notes ?? null
         );
         return row.lastInsertRowid as number;
     };
 
 // cria uma nota de referência do item (texto ou link).
-export const createItemNoteRepository = (db: Database) =>
-    (item_reference_id: number, data: ItemNote): number => {
-        const row = db.prepare(`
-            INSERT INTO item_notes (item_reference_id, type, content)
-            SELECT ?, ?, ?
-            WHERE NOT EXISTS (
-                SELECT 1
-                FROM item_notes
-                WHERE item_reference_id = ?
-                  AND type = ?
-                  AND content = ?
-            )
-        `).run(
-            item_reference_id,
-            data.type,
-            data.content,
-            item_reference_id,
-            data.type,
-            data.content
-        )
-        return row.lastInsertRowid as number;
-    };
+// export const createItemNoteRepository = (db: Database) =>
+//     (item_reference_id: number, data: ItemNote): number => {
+//         const row = db.prepare(`
+//             INSERT INTO item_notes (item_reference_id, type, content)
+//             SELECT ?, ?, ?
+//             WHERE NOT EXISTS (
+//                 SELECT 1
+//                 FROM item_notes
+//                 WHERE item_reference_id = ?
+//                   AND type = ?
+//                   AND content = ?
+//             )
+//         `).run(
+//             item_reference_id,
+//             data.type,
+//             data.content,
+//             item_reference_id,
+//             data.type,
+//             data.content
+//         )
+//         return row.lastInsertRowid as number;
+//     };
 
 // busca os links de referência de um item_reference pelo id da referência.
 export const getReferenceLinksByReferenceIdRepository = (db: Database) =>
@@ -70,15 +71,15 @@ export const getReferenceLinksByReferenceIdRepository = (db: Database) =>
     };
 
 // busca as notas de referência de um item_reference pelo id da referência.
-export const getItemRNotesByReferenceIdRepository = (db: Database) =>
-    (item_reference_id: number): ItemNote[] => {
-        return db.prepare(`
-            SELECT id, item_reference_id, type, content, created_at, updated_at
-            FROM item_notes
-            WHERE item_reference_id = ?
-            ORDER BY id ASC
-        `).all(item_reference_id) as ItemNote[];
-    };
+// export const getItemRNotesByReferenceIdRepository = (db: Database) =>
+//     (item_reference_id: number): ItemNote[] => {
+//         return db.prepare(`
+//             SELECT id, item_reference_id, type, content, created_at, updated_at
+//             FROM item_notes
+//             WHERE item_reference_id = ?
+//             ORDER BY id ASC
+//         `).all(item_reference_id) as ItemNote[];
+//     };
 
 // adiciona um ou mais itens à versão da cotação em uma única transação:
 // para cada item: cria referência → cria versão 1 → vincula à quotation_version.
@@ -97,8 +98,8 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
 
         // item reference
         const createRef = db.prepare(`
-            INSERT INTO item_references (description, internal_code, manufacturer_code, ncm)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO item_references (description, internal_code, manufacturer_code, ncm, notes)
+            VALUES (?, ?, ?, ?, ?)
         `);
 
         // item version
@@ -157,7 +158,8 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                         itemReference.description,
                         itemReference.internal_code ?? undefined,
                         itemReference.manufacturer_code ?? undefined,
-                        itemReference.ncm ?? undefined
+                        itemReference.ncm ?? undefined,
+                        itemReference.notes ?? undefined
                     ).lastInsertRowid as number
                     shouldCreateReferenceLinks = true;
                 }
@@ -200,23 +202,22 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
         return run();
     };
 
-// busca referência do item pelo id, trazendo os dados + notas da referência
+// busca referência do item pelo id, trazendo os dados + links de referência
 export const getItemReferenceByIdRepository = (db: Database) =>
-    (item_reference_id: number): ItemWithNotes | undefined => {
+    (item_reference_id: number): ItemWithReferenceLinks | undefined => {
         const ref = db.prepare(`
             SELECT * FROM item_references WHERE id = ? LIMIT 1
         `).get(item_reference_id) as ItemReference | undefined;
 
         if (!ref) return undefined;
 
-        const notes = db.prepare(`
-            SELECT id, item_reference_id, type, content, created_at, updated_at
-            FROM item_notes
+        const links = db.prepare(`
+            SELECT * FROM reference_links
             WHERE item_reference_id = ?
             ORDER BY id ASC
-        `).all(item_reference_id) as ItemNote[];
+        `).all(item_reference_id) as ReferenceLink[];
 
-        return { ...ref, notes };
+        return { ...ref, reference_links: links };
     };
 
 // busca versão do item pelo id
@@ -232,7 +233,7 @@ export const getItemVersionByIdRepository = (db: Database) =>
 // pesquisa referências por descrição
 export const searchItemReferencesByDescriptionRepository = (db: Database) =>
     (rawQuery: Pick<ItemReference, 'description'>['description']): ItemReference[] => {
-        // Evita erro de sintaxe do FTS5 e preserva tokenchars usados no índice
+        // Evita erro de sintaxe do FTS5 e preserva tokenizers usados no índice
         // para permitir buscas por códigos como 3LD2164-0TB53-0US2.
         const terms = rawQuery.match(/[\p{L}\p{N}._,/-]+/gu) ?? [];
         const query = terms
@@ -261,12 +262,13 @@ export const deleteAllItemReferencesRepository = (db: Database) => () => {
     return deleteAll;
 };
 
-export const deleteAllItemNotesByIdReference = (db: Database) =>
-    (item_reference_id: ItemNote['item_reference_id']) => {
-        const deleteAll = db.prepare(`
-            DELETE FROM item_notes
-            WHERE item_reference_id = ?
-        `).run(item_reference_id);
+export const updateItemReferenceNotesRepository = (db: Database) =>
+    (item_reference_id: number, notes: string | undefined): number => {
+        db.prepare(`
+            UPDATE item_references
+            SET notes = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `).run(notes ?? null, item_reference_id);
 
-        return deleteAll;
+        return item_reference_id;
     };

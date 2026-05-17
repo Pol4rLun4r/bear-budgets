@@ -211,6 +211,14 @@ const REFERENCE_LINKS_DOWN = `
     DROP TABLE IF EXISTS reference_links;
 `;
 
+const ITEM_REFERENCE_NOTES_UP = `
+    ALTER TABLE item_references ADD COLUMN notes TEXT;
+`;
+
+const ITEM_REFERENCE_NOTES_DOWN = `
+    ALTER TABLE item_references DROP COLUMN notes;
+`;
+
 const SEARCH_TOKENIZER_FIX_DOWN = `
     DROP TRIGGER IF EXISTS item_references_ai;
     DROP TRIGGER IF EXISTS item_references_ad;
@@ -254,6 +262,7 @@ const MIGRATIONS = [
     { version: 3, up: SEARCH_TOKENIZER_FIX_UP, down: SEARCH_TOKENIZER_FIX_DOWN },
     { version: 4, up: ITEM_VERSION_EXTRA_FIELDS_UP, down: ITEM_VERSION_EXTRA_FIELDS_DOWN },
     { version: 5, up: REFERENCE_LINKS_UP, down: REFERENCE_LINKS_DOWN },
+    { version: 6, up: ITEM_REFERENCE_NOTES_UP, down: ITEM_REFERENCE_NOTES_DOWN },
 ];
 
 export function runMigrations(db: DatabaseType): void {

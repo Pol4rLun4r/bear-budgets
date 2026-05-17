@@ -22,12 +22,11 @@ describe('Create Item note', () => {
     const itemReferenceId = repo.item.createReference(itemReference);
 
     afterEach(() => {
-        repo.item.deleteAllNotesByReferenceId(itemReferenceId);
+        repo.item.updateReferenceNotes(itemReferenceId, undefined);
     });
 
-    const notePayload: ItemNote = {
-        content: 'material caro',
-        type: 'text',
+    const notePayload: CreateItemNote = {
+        notes: 'material caro',
         item_reference_id: itemReferenceId
     };
 
@@ -41,8 +40,8 @@ describe('Create Item note', () => {
         // 3. verifica se houve o retorno correto
         if (!res.success) throw new Error("Falha ao criar nota: " + res.data);
 
-        const notes = repo.item.getReferenceNotesByReferenceId(itemReferenceId);;
-        expect(notes[0]).toMatchObject(notePayload);
+        const itemReferenceData = repo.item.getReferenceById(itemReferenceId);
+        expect(itemReferenceData?.notes).toBe(notePayload.notes);
     });
 
     it('falhar ao criar uma nota para uma referência de item que não existe', () => {
@@ -59,7 +58,7 @@ describe('Create Item note', () => {
 
     it('falhar ao criar uma nota quando o conteúdo não é informado', () => {
         // 1. prepara o payload
-        const payload = { ...notePayload, content: undefined } as any;
+        const payload = { ...notePayload, notes: undefined } as any;
 
         // 2. chama o serviço
         const note = services.item.createNote(payload);
@@ -69,18 +68,19 @@ describe('Create Item note', () => {
         expect(note.data).toBe("Conteúdo não foi informado");
     });
 
-    it('falhar ao criar uma nota quando o tipo não é válido', () => {
-        // 1. prepara o payload
-        const payload = { ...notePayload, type: 'invalid' } as any;
+    // 1. prepara o payload
+    it('falhar ao criar uma nota quando o conteúdo é vazio', () => {
+        const payload = { ...notePayload, notes: '   ' };
 
         // 2. chama o serviço
         const note = services.item.createNote(payload);
 
         // 3. verifica se houve o retorno correto
         expect(note.success).toBe(false);
-        expect(note.data).toBe(`Este tipo:${payload.type} de nota não é válido`);
+        expect(note.data).toBe("Conteúdo não foi informado");
+
+        // 4. verifica se a nota não foi criada
+        const itemReferenceData = repo.item.getReferenceById(itemReferenceId);
+        expect(itemReferenceData?.notes).toBeNull();
     });
 });
-
-
-

@@ -34,7 +34,7 @@ const FormItemReference = ({ scope }: { scope: ItemFormScope }) => {
             <Divider />
             <Group grow>
                 <Links scope={scope} />
-                <Notes />
+                <Notes scope={scope} />
             </Group>
         </Stack>
     )

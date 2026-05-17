@@ -66,21 +66,12 @@ type ItemReference = {
     internal_code?: string;
     manufacturer_code?: string;
     ncm?: string;
+    notes?: string;
     created_at?: string;
     updated_at?: string;
 };
 
-type ItemNoteType = "text" | "link";
-
-// nota da referência como retornada do banco
-type ItemNote = {
-    id?: number;
-    item_reference_id: number;
-    type: ItemNoteType;
-    content: string;
-    created_at?: string;
-    updated_at?: string;
-};
+// type ItemNoteType = "text" | "link";
 
 type ReferenceLink = {
     id?: number;
@@ -106,8 +97,8 @@ type ItemVersion = {
     boarding?: string;
 };
 
-type ItemWithNotes = ItemReference & {
-    notes: ItemNote[];
+type ItemWithReferenceLinks = ItemReference & {
+    reference_links: ReferenceLink[];
 };
 
 type ItemData = {

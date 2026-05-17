@@ -206,6 +206,7 @@ export const getQuotationFullDetailRepository = (db: Database) =>
                 internal_code,
                 manufacturer_code,
                 ncm,
+                notes,
                 datetime(created_at, 'localtime') AS created_at,
                 datetime(updated_at, 'localtime') AS updated_at
             FROM item_references

@@ -6,7 +6,6 @@ export interface ItemDataState {
     temp_id: string;
     item_reference: Partial<ItemReference>;
     item_version: Partial<ItemVersion>;
-    notes: Partial<ItemNote>[];
     reference_links: Partial<ReferenceLink>[];
 }
 
@@ -30,7 +29,6 @@ export const createEmptyItemData = (): ItemDataState => {
             manufacturer_code: "",
             ncm: "",
         },
-        notes: [],
         reference_links: [],
         item_version: {
             unit_price: undefined,
