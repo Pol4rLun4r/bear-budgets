@@ -21,13 +21,14 @@ export const ViewBudget = ({ budget }: { budget: QuotationFullDetail | undefined
             <Table layout="fixed" highlightOnHover stickyHeader>
                 <Table.Thead>
                     <Table.Tr>
-                        <Table.Th w={'7%'}>Item</Table.Th>
-                        <Table.Th w={'30%'}>Descrição</Table.Th>
+                        <Table.Th w={'5%'}>Item</Table.Th>
+                        <Table.Th w={'20%'}>Descrição</Table.Th>
                         <Table.Th w={'10%'}>Valor unitário</Table.Th>
                         <Table.Th w={'8%'}>Qtd</Table.Th>
-                        <Table.Th w={'12%'}>Total c/ somas</Table.Th>
+                        <Table.Th w={'10%'}>Total c/ somas</Table.Th>
                         <Table.Th w={'10%'}>Código interno</Table.Th>
-                        <Table.Th w={'10%'}>Markup (%)</Table.Th>
+                        <Table.Th w={'10%'}>Embarque</Table.Th>
+                        <Table.Th w={'8%'}>Markup (%)</Table.Th>
                         {!switchMode &&
                             <>
                                 <Table.Th w={'10%'}>Total s/ somas</Table.Th>
@@ -37,8 +38,9 @@ export const ViewBudget = ({ budget }: { budget: QuotationFullDetail | undefined
                                 <Table.Th w={'10%'}>ST</Table.Th>
                                 <Table.Th w={'10%'}>IPI (%)</Table.Th>
                                 <Table.Th w={'10%'}>Valor IPI</Table.Th>
-                                <Table.Th w={'10%'}>Valor Total + IPI + ST</Table.Th>
                                 <Table.Th w={'10%'}>Frete de compra</Table.Th>
+                                <Table.Th w={'10%'}>Valor extra</Table.Th>
+                                <Table.Th w={'10%'}>Valor Total + IPI + ST</Table.Th>
                             </>
                         }
                     </Table.Tr>
