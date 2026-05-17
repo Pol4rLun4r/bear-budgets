@@ -1,3 +1,13 @@
+export const fakeItemVersion = (
+  position: number,
+  overrides: Partial<ItemVersion> = {},
+): Partial<ItemVersion> => ({
+  quantity: 2,
+  unit_price: 2,
+  position,
+  ...overrides,
+});
+
 export const fakeItens = [
   {
     description: "Cabo flexível 2,5mm 750V azul",

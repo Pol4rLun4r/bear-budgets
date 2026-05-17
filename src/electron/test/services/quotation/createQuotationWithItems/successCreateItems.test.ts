@@ -7,7 +7,7 @@ import { createServices } from "../../../../services/index.js";
 
 // utils
 import { getDBPath } from "../../../../utils/pathResolver.js";
-import { fakeItens } from "../../../fakeItens.js";
+import { fakeItens, fakeItemVersion } from "../../../fakeItens.js";
 import { fakeClients } from "../../../fakeClients.js";
 
 describe("Part 3 success create items - Create Quotation and Add Items", () => {
@@ -93,6 +93,20 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
             } else {
                 expect(itemVersionData?.st).toBe(null);
             }
+
+            // 3.14 verifica se o valor extra é o mesmo informado
+            if (payload.items[index].item_version.extra_value !== null && payload.items[index].item_version.extra_value !== undefined) {
+                expect(itemVersionData?.extra_value).toBe(payload.items[index].item_version.extra_value);
+            } else {
+                expect(itemVersionData?.extra_value).toBe(null);
+            }
+
+            // 3.15 verifica se o embarque é o mesmo informado
+            if (payload.items[index].item_version.boarding !== null && payload.items[index].item_version.boarding !== undefined) {
+                expect(itemVersionData?.boarding).toBe(payload.items[index].item_version.boarding);
+            } else {
+                expect(itemVersionData?.boarding).toBe(null);
+            }
         }
     }
 
@@ -104,24 +118,20 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
                 {
                     item_reference: { ...fakeItens[0] },
                     notes: [],
-                    item_version: {
-                        quantity: 2,
-                        unit_price: 2,
+                    item_version: fakeItemVersion(0, {
                         ipi: 1.3,
-                        position: 0
-                    }
+                        boarding: "FOB",
+                    }),
                 },
                 {
                     item_reference: { ...fakeItens[1] },
                     notes: [
                         { type: "link", content: '312' }
                     ],
-                    item_version: {
-                        quantity: 2,
-                        unit_price: 2,
+                    item_version: fakeItemVersion(1, {
                         markup: "40.1",
-                        position: 1
-                    }
+                        extra_value: 15.5,
+                    }),
                 },
                 {
                     item_reference: { ...fakeItens[2] },
@@ -129,13 +139,12 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
                         { type: "link", content: 'https://nota1.com' },
                         { type: "text", content: 'nota 2' }
                     ],
-                    item_version: {
-                        quantity: 2,
-                        unit_price: 2,
+                    item_version: fakeItemVersion(2, {
                         purchase_shipping: 31,
                         st: 43,
-                        position: 2
-                    }
+                        extra_value: 88,
+                        boarding: "CIF",
+                    }),
                 }
             ],
             quotation: { amount: 12, total_value: 431.32, status: 1 }
@@ -165,22 +174,20 @@ describe("Part 3 success create items - Create Quotation and Add Items", () => {
                 {
                     item_reference: { ...fakeItens[1], id: itemId },
                     notes: [],
-                    item_version: {
-                        quantity: 2,
-                        unit_price: 2,
+                    item_version: fakeItemVersion(0, {
                         ipi: 1.3,
-                        position: 0
-                    }
+                        boarding: "EXW",
+                    }),
                 },
                 {
                     item_reference: { ...fakeItens[1], id: itemId },
                     notes: [],
-                    item_version: {
+                    item_version: fakeItemVersion(1, {
                         quantity: 22,
                         unit_price: 43,
                         ipi: 1.3,
-                        position: 1
-                    }
+                        extra_value: 10,
+                    }),
                 }
             ],
             quotation: { amount: 2, total_value: 431.32, status: 1 }

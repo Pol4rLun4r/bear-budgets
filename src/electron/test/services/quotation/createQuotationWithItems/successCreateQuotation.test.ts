@@ -7,7 +7,7 @@ import { createServices } from "../../../../services/index.js";
 
 // utils
 import { getDBPath } from "../../../../utils/pathResolver.js";
-import { fakeItens } from "../../../fakeItens.js";
+import { fakeItens, fakeItemVersion } from "../../../fakeItens.js";
 import { fakeClients } from "../../../fakeClients.js";
 
 describe("Part 2 success create quotation - Create Quotation and Add Items", () => {
@@ -29,22 +29,14 @@ describe("Part 2 success create quotation - Create Quotation and Add Items", () 
                 {
                     item_reference: { ...fakeItens[0] },
                     notes: [],
-                    item_version: {
-                        quantity: 2,
-                        unit_price: 2,
-                        position: 0
-                    }
+                    item_version: fakeItemVersion(0, { boarding: "FOB" }),
                 },
                 {
                     item_reference: { ...fakeItens[0] },
                     notes: [
                         { type: "link", content: '312' }
                     ],
-                    item_version: {
-                        quantity: 2,
-                        unit_price: 2,
-                        position: 1
-                    }
+                    item_version: fakeItemVersion(1, { extra_value: 12 }),
                 }
             ],
             quotation: { amount: 12, total_value: 431.32, status: 1, notes: "Hello World" }

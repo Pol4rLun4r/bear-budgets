@@ -73,8 +73,8 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
 
         // item version
         const createVersion = db.prepare(`
-            INSERT INTO item_versions (item_reference_id, position, version, quantity, unit_price, markup, purchase_shipping, ipi, st)
-            VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?)
+            INSERT INTO item_versions (item_reference_id, position, version, quantity, unit_price, markup, purchase_shipping, ipi, st, extra_value, boarding)
+            VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?)
         `);
 
         // notas do item
@@ -113,6 +113,8 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                 const ipi = itemVersion.ipi ?? undefined;
                 const st = itemVersion.st ?? undefined;
                 const position = itemVersion.position;
+                const extraValue = itemVersion.extra_value ?? undefined;
+                const boarding = itemVersion.boarding ?? undefined;
 
                 // if para determinar se um item precisa ser criado ou não, baseado se tem um id
                 let itemReferenceId: number
@@ -147,7 +149,7 @@ export const addItemsToQuotationVersionRepository = (db: Database) =>
                 }
 
                 // id do item_version
-                const itemVersionId = createVersion.run(itemReferenceId, position, quantity, unitPrice, markup, purchaseShipping, ipi, st).lastInsertRowid;
+                const itemVersionId = createVersion.run(itemReferenceId, position, quantity, unitPrice, markup, purchaseShipping, ipi, st, extraValue, boarding).lastInsertRowid;
 
                 // id do quotation_link
                 const linkId = link.run(quotationId, itemReferenceId, itemVersionId).lastInsertRowid;

@@ -8,7 +8,7 @@ import { normalizeDocument } from "../../../utils/clean.js";
 // utils
 import { getDBPath } from "../../../utils/pathResolver.js";
 import { fakeClients } from "../../fakeClients.js";
-import { fakeItens } from "../../fakeItens.js";
+import { fakeItens, fakeItemVersion } from "../../fakeItens.js";
 
 describe("Get all quotations summary", () => {
     // criar banco de dados antes dos testes
@@ -21,24 +21,20 @@ describe("Get all quotations summary", () => {
             {
                 item_reference: { ...fakeItens[0] },
                 notes: [],
-                item_version: {
-                    quantity: 2,
-                    unit_price: 2,
+                item_version: fakeItemVersion(0, {
                     ipi: 1.3,
-                    position: 0
-                }
+                    boarding: "FOB",
+                }),
             },
             {
                 item_reference: { ...fakeItens[1] },
                 notes: [
                     { type: "link", content: '312' }
                 ],
-                item_version: {
-                    quantity: 2,
-                    unit_price: 2,
+                item_version: fakeItemVersion(1, {
                     markup: "40.1",
-                    position: 1
-                }
+                    extra_value: 15.5,
+                }),
             },
             {
                 item_reference: { ...fakeItens[2] },
@@ -46,13 +42,12 @@ describe("Get all quotations summary", () => {
                     { type: "link", content: 'https://nota1.com' },
                     { type: "text", content: 'nota 2' }
                 ],
-                item_version: {
-                    quantity: 2,
-                    unit_price: 2,
+                item_version: fakeItemVersion(2, {
                     purchase_shipping: 31,
                     st: 43,
-                    position: 2
-                }
+                    extra_value: 88,
+                    boarding: "CIF",
+                }),
             }
         ],
         quotation: { amount: 12, total_value: 431.32, status: 1, notes: "Hello world" }

@@ -239,6 +239,8 @@ export const getQuotationFullDetailRepository = (db: Database) =>
                 purchase_shipping,
                 ipi,
                 st,
+                extra_value,
+                boarding,
                 datetime(created_at, 'localtime') AS created_at
             FROM item_versions
             WHERE id = ?

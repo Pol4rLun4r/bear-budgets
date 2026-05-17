@@ -182,6 +182,16 @@ const SEARCH_TOKENIZER_FIX_UP = `
     END;
 `;
 
+const ITEM_VERSION_EXTRA_FIELDS_UP = `
+    ALTER TABLE item_versions ADD COLUMN extra_value REAL;
+    ALTER TABLE item_versions ADD COLUMN boarding TEXT;
+`;
+
+const ITEM_VERSION_EXTRA_FIELDS_DOWN = `
+    ALTER TABLE item_versions DROP COLUMN boarding;
+    ALTER TABLE item_versions DROP COLUMN extra_value;
+`;
+
 const SEARCH_TOKENIZER_FIX_DOWN = `
     DROP TRIGGER IF EXISTS item_references_ai;
     DROP TRIGGER IF EXISTS item_references_ad;
@@ -223,6 +233,7 @@ const MIGRATIONS = [
     { version: 1, up: INITIAL_UP, down: INITIAL_DOWN },
     { version: 2, up: SEARCH_UP, down: SEARCH_DOWN },
     { version: 3, up: SEARCH_TOKENIZER_FIX_UP, down: SEARCH_TOKENIZER_FIX_DOWN },
+    { version: 4, up: ITEM_VERSION_EXTRA_FIELDS_UP, down: ITEM_VERSION_EXTRA_FIELDS_DOWN },
 ];
 
 export function runMigrations(db: DatabaseType): void {

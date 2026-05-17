@@ -8,7 +8,7 @@ import { createServices } from "../../../../services/index.js";
 
 // utils
 import { getDBPath } from "../../../../utils/pathResolver.js";
-import { fakeItens } from "../../../fakeItens.js";
+import { fakeItens, fakeItemVersion } from "../../../fakeItens.js";
 import { fakeClients } from "../../../fakeClients.js";
 import { normalizeDocument, onlyName } from "../../../../utils/clean.js";
 
@@ -16,22 +16,14 @@ const itemsPayload: CreateWithAllData['items'] = [
     {
         item_reference: { ...fakeItens[0] },
         notes: [],
-        item_version: {
-            quantity: 2,
-            unit_price: 2,
-            position: 0
-        }
+        item_version: fakeItemVersion(0, { boarding: "FOB" }),
     },
     {
         item_reference: { ...fakeItens[0] },
         notes: [
             { type: "link", content: '312' }
         ],
-        item_version: {
-            quantity: 2,
-            unit_price: 2,
-            position: 1
-        }
+        item_version: fakeItemVersion(1, { extra_value: 12 }),
     }
 ]
 

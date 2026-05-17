@@ -8,7 +8,7 @@ import { createServices } from "../../../services/index.js";
 // utils
 import { getDBPath } from "../../../utils/pathResolver.js";
 import { fakeClients } from "../../fakeClients.js";
-import { fakeItens } from "../../fakeItens.js";
+import { fakeItens, fakeItemVersion } from "../../fakeItens.js";
 import { normalizeDocument } from "../../../utils/clean.js";
 
 describe("Get full quotation with details", () => {
@@ -33,36 +33,37 @@ describe("Get full quotation with details", () => {
                 notes: [
                     { type: "text", content: 'mother' }
                 ],
-                item_version: {
+                item_version: fakeItemVersion(1, {
                     quantity: 22,
                     unit_price: 12,
                     markup: "40.1",
-                    position: 1
-                }
+                    extra_value: 15.5,
+                }),
             },
             {
                 item_reference: { ...fakeItens[2], id: 1 },
                 notes: [
                     { type: "link", content: 'https://family.com' }
                 ],
-                item_version: {
+                item_version: fakeItemVersion(2, {
                     quantity: 122,
                     unit_price: 24,
                     markup: "40.1",
-                    position: 2
-                }
+                    boarding: "FOB",
+                }),
             },
             {
                 item_reference: { ...fakeItens[2], id: 1 },
                 notes: [
                     { type: "link", content: 'https://family.brazil.com' }
                 ],
-                item_version: {
+                item_version: fakeItemVersion(3, {
                     quantity: 20,
                     unit_price: 2,
                     markup: "40.1",
-                    position: 3
-                }
+                    extra_value: 88,
+                    boarding: "CIF",
+                }),
             },
         ],
         quotation: { amount: 12, total_value: 431.32, status: 1, notes: "Hello world" }
