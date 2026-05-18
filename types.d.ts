@@ -21,12 +21,16 @@ type GetItemNotes = NonNullable<ItemReference['id']>;
 
 type GetReferenceLinks = ReferenceLink['item_reference_id'];
 
+type GetByReferenceId = ItemVersion['item_reference_id'];
+
 type CreateItemNote = {
     item_reference_id: number;
     notes: string;
 };
 
 type SearchItemDescription = Pick<ItemReference, "description">['description'];
+
+type SearchItemDescriptionIsOptional = SearchItemDescription | undefined;
 
 // --------------- Client-API ---------------
 interface SearchClient {
@@ -51,6 +55,8 @@ type EventPayloadMapping = {
     "item:getNotes": Result<ItemReference['notes'] | undefined>;
     "item:getReferenceLinks": Result<ReferenceLink[] | undefined>;
     "item:createNote": Result<ItemReference['id'] | undefined>;
+    "item:getAllBySearch": Result<ItemReference[] | undefined>;
+    "item:getAllVersionByReferenceId": Result<ItemVersion[] | undefined>;
 
     // janela (frame personalizado)
     "window:minimize": void;
@@ -89,6 +95,8 @@ interface ItemAPI {
     getNotes(itemReferenceId: GetItemNotes): Promise<Result<ItemReference['notes'] | undefined>>;
     getReferenceLinks(itemReferenceId: GetReferenceLinks): Promise<Result<ReferenceLink[] | undefined>>;
     createNote(note: CreateItemNote): Promise<Result<ItemReference['id'] | undefined>>;
+    getAllBySearch(description: SearchItemDescriptionIsOptional): Promise<Result<ItemReference[] | undefined>>;
+    getAllVersionByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemVersion[] | undefined>>;
 }
 
 interface WindowAPI {

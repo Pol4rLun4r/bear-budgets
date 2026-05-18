@@ -2,7 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 
 // slicers
 import itemFormSlice from "./items/itemFormSlice";
-import ReferenceLinkFormSlice from "./items/ReferenceLinkFormSlice.ts";
+import ReferenceLinkFormSlice from "./items/ReferenceLinkFormSlice";
 import itemFormSwitchModeSlice from "./items/itemFormSwitchModeSlice";
 import clientSlice from './clientSlice';
 import itemFormStepsSlice from './items/itemFormStepsSlice';

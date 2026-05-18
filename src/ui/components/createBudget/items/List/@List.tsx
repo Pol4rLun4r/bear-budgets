@@ -15,7 +15,7 @@ import { DragDropProvider } from "@dnd-kit/react";
 const List = () => {
     const dispatch = useDispatch<AppDispatch>();
     const listItems = useSelector((state: RootState) => state.createBudget.listItems);
-    const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode)
+    const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode);
 
     const handleDragEnd: React.ComponentProps<typeof DragDropProvider>["onDragEnd"] = (event) => {
         if (event.canceled) return console.log('canceled'); // cancela a operação se cancelado

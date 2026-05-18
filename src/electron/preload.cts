@@ -24,7 +24,9 @@ const api: API = {
         createNote: (note) => ipcInvoke('item:createNote', note),
         getNotes: (itemReferenceId) => ipcInvoke('item:getNotes', itemReferenceId),
         getReferenceLinks: (itemReferenceId) => ipcInvoke('item:getReferenceLinks', itemReferenceId),
-    },
+        getAllBySearch: (description) => ipcInvoke('item:getAllBySearch', description),
+        getAllVersionByReferenceId: (itemReferenceId) => ipcInvoke('item:getAllVersionByReferenceId', itemReferenceId)
+     },
     window: {
         minimize: () => ipcInvoke('window:minimize'),
         maximizeToggle: () => ipcInvoke('window:maximizeToggle'),

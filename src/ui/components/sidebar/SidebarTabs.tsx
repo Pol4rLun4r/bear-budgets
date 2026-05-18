@@ -11,10 +11,10 @@ import { type RootState } from '../../redux/store';
 
 // icons
 import {
-    IconHeart,
     IconBook,
     IconPencilPlus,
-    IconFiles
+    IconFiles,
+    IconClipboardList
 } from '@tabler/icons-react';
 
 interface TabsProps {
@@ -67,6 +67,6 @@ export const SidebarTab = ({ icon: Icon, label, active, onClick, ref }: TabsProp
 export const tabsData = [
     { icon: IconPencilPlus, label: 'Create budget' },
     { icon: IconFiles, label: 'Budgets' },
+    { icon: IconClipboardList, label: 'Items'},
     { icon: IconBook, label: 'Scripts' },
-    { icon: IconHeart, label: 'Sponsors' },
 ]

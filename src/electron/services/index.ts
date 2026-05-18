@@ -15,6 +15,8 @@ import searchItemDescriptionService from "./item/searchItemDescription.service.j
 import createItemNoteService from "./item/createItemNote.service.js";
 import getItemNotesService from "./item/getItemNotes.service.js";
 import getReferenceLinksService from "./item/getReferenceLinks.service.js";
+import getAllItemReferenceBySearchService from "./item/getAllItemReferenceBySearch.service.js";
+import getAllItemVersionReferenceIdService from './item/getAllItemVersionByReferenceId.service.js';
 
 export const createServices = (db: Database) => ({
     client: {
@@ -31,7 +33,9 @@ export const createServices = (db: Database) => ({
         getNotes: getItemNotesService(db),
         getReferenceLinks: getReferenceLinksService(db),
         createNote: createItemNoteService(db),
-        searchDescription: searchItemDescriptionService(db)
+        searchDescription: searchItemDescriptionService(db),
+        getAllBySearch: getAllItemReferenceBySearchService(db),
+        getAllVersionByReferenceId: getAllItemVersionReferenceIdService(db)
     }
 })
 

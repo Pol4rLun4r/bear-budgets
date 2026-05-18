@@ -18,7 +18,17 @@ const getReferenceLinks = async (item_reference_id: GetReferenceLinks) => {
 
 const createNote = async (note: CreateItemNote) => {
     const response = await baseAPI.item.createNote(note);
-    return response
+    return response;
 };
 
-export default { searchDescription, getNotes, getReferenceLinks, createNote };
+const getAllBySearch = async (query: SearchItemDescriptionIsOptional) => {
+    const response = await baseAPI.item.getAllBySearch(query);
+    return response;
+};
+
+const getAllVersionByReferenceId = async (referenceId: GetByReferenceId) => {
+    const response = await baseAPI.item.getAllVersionByReferenceId(referenceId);
+    return response;
+};
+
+export default { searchDescription, getNotes, getReferenceLinks, createNote, getAllBySearch, getAllVersionByReferenceId };

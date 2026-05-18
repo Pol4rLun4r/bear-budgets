@@ -28,6 +28,8 @@ import {
     deleteAllItemReferencesRepository,
     createReferenceLinkRepository,
     updateItemReferenceNotesRepository,
+    getAllItemReferencesRepository,
+    getAllItemVersionByIdRepository
 } from "./item.repository.js";
 
 export const createRepositories = (db: Database) => ({
@@ -54,9 +56,11 @@ export const createRepositories = (db: Database) => ({
         getReferenceById: getItemReferenceByIdRepository(db),
         getVersionById: getItemVersionByIdRepository(db),
         getReferenceLinksByReferenceId: getReferenceLinksByReferenceIdRepository(db),
+        getAllVersionByReferenceId: getAllItemVersionByIdRepository(db),
         searchByDescription: searchItemReferencesByDescriptionRepository(db),
         deleteAllReferences: deleteAllItemReferencesRepository(db),
         updateReferenceNotes: updateItemReferenceNotesRepository(db),
+        getAllItemReferences: getAllItemReferencesRepository(db)
     },
 });
 

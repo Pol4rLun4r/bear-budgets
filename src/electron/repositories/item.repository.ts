@@ -230,6 +230,20 @@ export const getItemVersionByIdRepository = (db: Database) =>
         return itemVersion;
     };
 
+// busca todas versão do item pelo id
+export const getAllItemVersionByIdRepository = (db: Database) =>
+    (item_version_id: number): ItemVersion[] => {
+        const itemVersion = db.prepare(`
+            SELECT *
+            FROM item_versions
+            WHERE item_reference_id = ?
+            ORDER BY created_at ASC
+            LIMIT 15
+        `).all(item_version_id);
+
+        return itemVersion as ItemVersion[];
+    };
+
 // pesquisa referências por descrição
 export const searchItemReferencesByDescriptionRepository = (db: Database) =>
     (rawQuery: Pick<ItemReference, 'description'>['description']): ItemReference[] => {
@@ -271,4 +285,16 @@ export const updateItemReferenceNotesRepository = (db: Database) =>
         `).run(notes ?? null, item_reference_id);
 
         return item_reference_id;
+    };
+
+export const getAllItemReferencesRepository = (db: Database) =>
+    (): ItemReference[] => {
+        const references = db.prepare(`
+            SELECT *
+            FROM item_references
+            ORDER BY created_at ASC
+            LIMIT 30
+        `).all();
+
+        return references as ItemReference[];
     };

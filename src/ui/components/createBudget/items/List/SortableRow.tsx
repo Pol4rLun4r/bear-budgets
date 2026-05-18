@@ -5,12 +5,14 @@ import { Table, TableTdProps } from "@mantine/core"
 // redux
 import { RootState } from "../../../../redux/store";
 import { useSelector } from "react-redux";
+import { ItemDataState } from "../../../../redux/createBudget/items/itemFormSlice";
 
 // DragAndDrop
 import { useSortable } from "@dnd-kit/react/sortable";
 
 // utils
 import calcAddItem from '../../../../utils/calcAddItem';
+import { convertMarkupValue } from "../../../../utils/markupList";
 
 // components
 import RowContent from "./RowContent";
@@ -18,8 +20,6 @@ import MenuItem from "./MenuItem";
 
 // style
 import classes from './Row.module.css';
-import { convertMarkupValue } from "../../../../utils/markupList";
-import { ItemDataState } from "../../../../redux/createBudget/items/itemFormSlice";
 
 const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",

@@ -37,7 +37,8 @@ const List = ({ links, scope }: { links: Partial<ReferenceLink>[]; scope: ItemFo
                 }
             </Table.Td>
         </Table.Tr >
-    ))
+    ));
+    
     return (
         <Table.ScrollContainer minWidth={0} w="100%" maxHeight={300}>
             <Table>
