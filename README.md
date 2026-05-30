@@ -1,83 +1,21 @@
-# Electron + Vite + React
+# Bear Budgets
 
-Base pré-configurada para desenvolvimento de aplicações desktop com **Electron**, **Vite** e **React** usando **TypeScript**.
+**Bear Budgets é um programa open-source para criar orçamentos, feito principalmente para registrar referencias de itens, valores e rascunhos, assim mantendo a organização e evitando a necessidade de ter que relembrar informações sobre um orçamento feito a um cliente.**
 
-## 🚀 Características
+## Características
 
-- ⚡ Vite com HMR (Hot Module Replacement)
-- ⚛️ React 19 com TypeScript
-- 🔧 Electron 41+ totalmente integrado
-- 📦 Electron Builder para gerar builds em Windows, macOS e Linux
-- ✅ ESLint configurado
-- 🎨 Estrutura clara entre UI e processo principal
-
-## 📁 Estrutura
-
-```
-src/
-├── electron/          # Processo principal do Electron
-│   ├── main.ts
-│   ├── utils.ts
-│   └── tsconfig.json
-└── ui/                # Interface React
-    ├── App.tsx
-    ├── main.tsx
-    ├── App.css
-    └── assets/
-```
-
-## 🔨 Scripts Disponíveis
-
-```bash
-# Desenvolvimento - React + Electron em paralelo
-npm run dev
-
-# Apenas React (Vite)
-npm run dev:react
-
-# Apenas Electron
-npm run dev:electron
-
-# Build para produção
-npm run build
-
-# Verificar linting
-npm run lint
-
-# Gerar executável
-npm run dist:mac      # macOS (ARM64)
-npm run dist:win      # Windows (x64)
-npm run dist:linux    # Linux (x64)
-```
-
-## 🛠️ Stack Tecnológico
-
-- **React** 19.2.5
-- **TypeScript** 6.0
-- **Vite** 8.0
-- **Electron** 41.3.0
-- **Electron Builder** 26.8
-- **ESLint** 10.2
-
-## 📝 Primeiros Passos
-
-1. Instale as dependências:
-```bash
-npm install
-```
-
-2. Inicie o desenvolvimento:
-```bash
-npm run dev
-```
-
-3. Edite os arquivos em `src/ui/` para a interface React ou `src/electron/main.ts` para lógica do processo principal.
-
-## 📦 Build de Produção
-
-```bash
-npm run build      # Compila React e TypeScript
-npm run dist:win   # Gera .exe para Windows
-```
-
-O executável estará em `dist/`.
+- Criação de orçamento
+    - Definir dados básico do cliente, como nome, documento e anotações
+    - Anotar informações sobre aquele orçamento
+    - Criar um item de referencia com: 
+        > Links de referencia, Notas, NCM, Descrição, Código interno e Código de fabricante
+    - Definir os valores daquele item:
+        > Quantidade, Valor unit, Markup, IPI, ST, Frete de compra, Embarque e Valor extra
+    - Editar item durante a criação do orçamento
+    - Usar um item já "cadastrado" durante a adição de um item ao orçamento
+    - Reordenar ordem dos itens
+    - Puxar dados de um cliente já cadastrado, baseado no documento
+- Visualizar todos os orçamentos criados
+- Visualizar/Buscar todos os items "cadastrados" e seus valores
+- Tema claro e escuro
+- 100% offline, dados nunca saem da sua máquina
