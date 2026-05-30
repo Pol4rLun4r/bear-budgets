@@ -9,6 +9,14 @@
     "email": "polaroid@hotmail.com",
     "name": "Polaroid"
   },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+    "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development npx @electron/rebuild -f -w better-sqlite3 && npm-run-all --parallel dev:react dev:electron",
     "dev:react": "vite",
@@ -25,7 +33,8 @@
     "test:run": "vitest run",
     "postinstall": "npx @electron/rebuild",
     "rebuild:node": "npm rebuild better-sqlite3",
-    "rebuild:electron": "electron-rebuild -f -w better-sqlite3"
+    "rebuild:electron": "electron-rebuild -f -w better-sqlite3",
+    "prepare": "husky"
   },
   "dependencies": {
     "@blackglory/better-sqlite3-migrations": "^0.2.2",
@@ -44,9 +53,17 @@
     "react-redux": "^9.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
     "@electron/rebuild": "^4.0.4",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.59.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.8",
+    "@semantic-release/npm": "^13.1.5",
+    "@semantic-release/release-notes-generator": "^14.1.1",
     "@types/better-sqlite3": "^7.6.13",
     "@types/lodash": "^4.17.24",
     "@types/node": "^24.12.2",
@@ -62,12 +79,15 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
     "happy-dom": "^20.9.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "lodash": "^4.18.1",
     "npm-run-all": "^4.1.5",
     "playwright": "^1.59.1",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
+    "semantic-release": "^25.0.3",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10",
