@@ -1,7 +1,7 @@
 {
   "name": "bear-budgets",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist-electron/main.js",
   "homepage": "https://github.com/Pol4rLun4r/bear-budgets",
@@ -14,7 +14,7 @@
       "eslint --fix"
     ]
   },
-    "engines": {
+  "engines": {
     "node": ">=22"
   },
   "scripts": {
