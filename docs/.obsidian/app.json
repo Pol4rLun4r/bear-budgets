@@ -2,5 +2,6 @@
   "defaultViewMode": "preview",
   "propertiesInDocument": "hidden",
   "showInlineTitle": false,
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "readableLineLength": true
 }
