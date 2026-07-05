@@ -27,12 +27,8 @@ failure(message)
 Exemplo de como escrever o [service](Services/examples/services-example)
 
 ## Definição de cada `service`
-### client
-services que envolve o cliente.
 
-- [createClient](Services/client/createClient) -> `service` para `criar` um novo cliente
-- [getClient](Services/client/getClient) -> `service` para `pegar` um cliente (falta criar)
-- [getAllClients](Services/client/getAllClients) -> `service` para `pegar` todos os clientes (falta criar)
-- [searchClients](Services/client/searchClients) -> `service` para `buscar` clientes (falta criar)
-- [editClient](Services/client/editClient) -> `service` para `editar` um cliente (falta criar)
+### quotation
+services que envolve as cotações.
 
+- [createQuotation](Services/quotation/createQuotation) -> `service` para `criar` uma nova cotação

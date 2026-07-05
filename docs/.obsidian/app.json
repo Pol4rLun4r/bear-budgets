@@ -3,5 +3,6 @@
   "propertiesInDocument": "hidden",
   "showInlineTitle": false,
   "alwaysUpdateLinks": true,
-  "readableLineLength": true
+  "readableLineLength": true,
+  "promptDelete": false
 }

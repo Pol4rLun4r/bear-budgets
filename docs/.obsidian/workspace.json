@@ -4,11 +4,27 @@
     "type": "split",
     "children": [
       {
-        "id": "a99cd907e60921e4",
+        "id": "94593efa9c8670d2",
         "type": "tabs",
         "children": [
           {
-            "id": "e20549ba4835b55d",
+            "id": "766f57257730a351",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Database/@Database.md",
+                "mode": "preview",
+                "source": false
+              },
+              "pinned": true,
+              "icon": "lucide-file",
+              "title": "@Database"
+            }
+          },
+          {
+            "id": "de553aec44a30540",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -20,39 +36,19 @@
               "icon": "lucide-file",
               "title": "@Services"
             }
-          }
-        ]
-      },
-      {
-        "id": "3ae9f94640c92ed2",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "b19b3396c346c469",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Services/client/createClient.md",
-                "mode": "preview",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "createClient"
-            }
           },
           {
-            "id": "cedf72d59681a2f7",
+            "id": "2ca4a3667deb3499",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Database/@Database.md",
+                "file": "Services/quotation/createQuotation.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "@Database"
+              "title": "createQuotation"
             }
           }
         ],
@@ -138,7 +134,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "ab3586800dd354ac",
@@ -224,25 +221,33 @@
       "bases:Create new base": false
     }
   },
-  "active": "e20549ba4835b55d",
+  "active": "de553aec44a30540",
   "lastOpenFiles": [
-    "Database/@Database.md",
-    "@Docs.md",
-    "Services/@Services.md",
-    "Services/client/createClient.md",
-    "Project.md",
     "Services/examples/services-example.md",
-    "Services/examples/rules-example.md",
+    "Services/@Services.md",
+    "Services/quotation/createQuotation.md",
     "Database/quotations.md",
-    "Services/examples",
-    "Database/clients.md",
-    "Services/client",
-    "Services",
-    "Architecture.md",
+    "Services/client/createClient.md",
+    "Services/quotation",
+    "@Docs.md",
+    "Database/@Database.md",
     "Database/quotation_links.md",
     "Database/reference_links.md",
-    "Database/item_references.md",
     "Database/item_values.md",
+    "Database/item_references.md",
+    "Services/examples/rules-example.md",
+    "Architecture.md",
+    "Project.md",
+    "Database/clients.md",
+    "Decisions/@Decisions.md",
+    "BreakChanges/decisions.md",
+    "Decisions",
+    "Services/client/searchClients.md",
+    "Services/client/getClient.md",
+    "Services/client/getAllClients.md",
+    "Services/examples",
+    "Services/client",
+    "Services",
     "@Database",
     "Database/item.md",
     "().md",

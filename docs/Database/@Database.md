@@ -7,9 +7,8 @@ Definições e explicações do banco de dados e regras de negócio de suas tabe
 Explicações das tabelas, campos e regras de negócios da mesma.
 
 > [!Note]
-> `Obrigátorio` seria: `NOT NULL` em `sqlite`
+> `Obrigatório` seria: `NOT NULL` em `sqlite`
 
- - [clients](clients) -> dados do cliente
  - [quotations](quotations) -> dados da cotação
  - [item_references](item_references)  -> dados básicos do item
  - [item_values](item_values) -> valores do item

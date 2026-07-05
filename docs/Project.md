@@ -1,6 +1,6 @@
 # Projeto
 
-Nome do projeto: Bear Budgets
+Nome do projeto: `Bear Budgets`
 
 ___
 
@@ -22,12 +22,6 @@ ___
   
 - `Criar` orçamento  
 - `Visualizar` orçamento  
-
-### Clientes  
-  
-- `Cadastrar` cliente  (apenas dentro do orçamento por enquanto)
-- `Buscar` cliente por documento  (apenas dentro do orçamento por enquanto)
-
 ### Itens  
   
 - `Criar` item de referência  (apenas dentro do orçamento por enquanto)

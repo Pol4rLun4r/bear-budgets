@@ -1,20 +1,110 @@
 # item_references
 
-Defini os dados base do item, dados de referencia, tornando o item reutilizável para montar outros orçamentos, sem a necessidade de definir os mesmos dados novamente.
+Representa um cadastro reutilizável de um item.
 
-## Campos importantes da tabela
+Seu objetivo é armazenar as informações permanentes de um produto para que possam ser reutilizadas em diferentes cotações, evitando o preenchimento repetitivo dos mesmos dados.
 
-- `id` ID único (`Auto incrementado`)
-- `description`: descrição do item (`Obrigatório`)
-- `internal_code`: código interno do item (referente a empresa) (`Opcional`)
-- `manufacturer_code`: código do fabricante (referente ao fabricante) (`Opcional`)
-- `ncm`: código fiscal (Nomenclatura Comum do Mercosul) (`Opcional`)
-- `notes`: anotações sobre o item (`Opcional`)
+## Responsabilidades
 
-## Regras de negócios
+A tabela é responsável por:
 
--  Sempre deve ter uma descrição
-- Nunca deve ser deletado se associado a alguma [cotação](quotations)
+* armazenar as informações permanentes de um item;
+* servir como base para criação de itens em cotações;
+* evitar duplicação de dados entre diferentes orçamentos;
+* centralizar alterações em informações reutilizáveis do item.
+
+## Campos importantes
+
+* `id`
+
+  * Identificador único do item.
+  * Tipo: Inteiro.
+  * Obrigatório.
+  * Auto incrementado.
+
+* `description`
+
+  * Descrição do item.
+  * Tipo: Texto.
+  * Obrigatório.
+
+* `internal_code`
+
+  * Código interno utilizado pela empresa.
+  * Tipo: Texto.
+  * Opcional.
+
+* `manufacturer_code`
+
+  * Código informado pelo fabricante.
+  * Tipo: Texto.
+  * Opcional.
+
+* `ncm`
+
+  * Código fiscal (NCM) do produto.
+  * Tipo: Texto.
+  * Opcional.
+
+* `notes`
+
+  * Observações sobre o item.
+  * Tipo: Texto.
+  * Opcional.
+
+## Regras de negócio
+
+* Todo item deve possuir uma descrição.
+* Um cadastro de item pode ser reutilizado em diversas cotações.
+* As informações cadastradas representam apenas dados permanentes do item, não dados específicos de uma cotação.
+* Um cadastro não pode ser removido enquanto estiver sendo utilizado por alguma cotação.
 
 ## Relações
-item_references não usa nenhuma `FK`
+
+* Um item de referência pode ser utilizado por vários itens de cotação.
+
+## Notas sobre os campos
+
+### description
+
+É o principal identificador visual do item.
+
+Deve ser suficientemente descritiva para permitir que o usuário encontre o item em pesquisas e o reutilize em novos orçamentos.
+
+---
+
+### internal_code
+
+Representa um código interno utilizado pela empresa.
+
+Seu preenchimento é opcional e serve como identificação interna do item.
+
+---
+
+### manufacturer_code
+
+Representa o código informado pelo fabricante.
+
+Seu preenchimento é opcional e serve como informação complementar para identificação do produto.
+
+---
+
+### ncm
+
+Código fiscal utilizado para identificação tributária do produto.
+
+É armazenado apenas como informação de referência.
+
+---
+
+### notes
+
+Permite registrar informações adicionais sobre o item.
+
+Seu preenchimento é opcional e não influencia nas regras de negócio.
+
+## Invariantes
+
+* `description` não pode ser vazia.
+* Todo cadastro deve possuir um identificador único.
+* Um cadastro utilizado em alguma cotação não pode ser removido.

@@ -1,24 +1,161 @@
 # item_values
 
-Defini os dados dos valores do item, os mesmos podem ser reutilizados em outros orçamentos para usar como base de valores.
+Representa os dados variáveis de um item de referência.
 
-## Campos importantes da tabela
+Seu objetivo é armazenar as informações que podem variar entre diferentes utilizações do mesmo item, como preço, quantidade, impostos e demais valores utilizados na composição de uma cotação.
 
-- `id` ID único (`Auto incrementado`)
-- `item_reference_id`: id do item de referencia (`FK`)
-- `position`: defini a posição do item na lista da cotação (`Obrigatório`)
-- `quantity`: quantidade daquele item (`Opcional`)
-- `unit_price`: preço unitário do item (`Opcional`)
-- `markup`: margem de lucro do item (`Opcional`)
-- `purchase_shipping`: frete de compra do item (`Opcional`)
-- `ipi`: imposto sobre produtos industrializados (`Opcional`)
-- `st`: substituição tributária (`Opcional`)
-## Regras de negócios
+Esses dados podem ser reutilizados como base para novos orçamentos quando desejado, mas sua principal responsabilidade é representar a configuração variável de um item.
 
-- Sempre deve ter uma posição
-- Só pode ser criado com um `item_reference_id`
-- Nunca deve ser deletado se associado a algum [item](item_references)
+## Conceito
+
+O sistema divide as informações de um item em duas partes:
+
+* `item_reference` contém os dados permanentes do item.
+* `item_values` contém os dados variáveis, que podem ser alterados entre diferentes utilizações do mesmo item.
+
+Essa separação evita alterações desnecessárias no cadastro principal e permite reutilizar tanto o item quanto suas configurações de precificação quando necessário.
+
+## Responsabilidades
+
+A tabela é responsável por:
+
+* armazenar os dados variáveis de um item;
+* separar informações permanentes das informações que mudam entre diferentes utilizações;
+* servir como base para criação de itens em uma cotação;
+* permitir a reutilização de configurações de precificação quando conveniente.
+
+## Campos importantes
+
+* `id`
+
+  * Identificador único do conjunto de valores.
+  * Tipo: Inteiro.
+  * Obrigatório.
+  * Auto incrementado.
+
+* `item_reference_id`
+
+  * Item de referência ao qual os dados pertencem.
+  * Tipo: Inteiro.
+  * Obrigatório.
+
+* `position`
+
+  * Posição de exibição do item na cotação.
+  * Tipo: Inteiro.
+  * Obrigatório.
+
+* `quantity`
+
+  * Quantidade do item.
+  * Tipo: Inteiro.
+  * Opcional.
+
+* `unit_price`
+
+  * Valor unitário do item.
+  * Tipo: Número real.
+  * Opcional.
+
+* `markup`
+
+  * Margem de lucro aplicada ao item.
+  * Tipo: Número real.
+  * Opcional.
+
+* `purchase_shipping`
+
+  * Valor do frete de compra.
+  * Tipo: Número real.
+  * Opcional.
+
+* `ipi`
+
+  * Valor ou percentual do IPI.
+  * Tipo: Número real.
+  * Opcional.
+
+* `st`
+
+  * Valor da Substituição Tributária.
+  * Tipo: Número real.
+  * Opcional.
+
+* `boarding`
+
+  * Prazo de embarque ou informação relacionada ao embarque.
+  * Tipo: Texto.
+  * Opcional.
+
+* `extra_value`
+
+  * Valor adicional aplicado ao item.
+  * Tipo: Número real.
+  * Opcional.
+
+## Regras de negócio
+
+* Todo conjunto de valores deve estar associado a um `item_reference`.
+* Todo conjunto de valores deve possuir uma posição.
+* Os dados armazenados representam a configuração variável de um item.
+* Um conjunto de valores pode ser reutilizado como base para novos orçamentos.
+* Um conjunto de valores não pode ser removido enquanto estiver sendo utilizado.
 
 ## Relações
 
-- `item_values.item_reference_id` -> [item_references.id](item_references)
+* Cada `item_values` pertence a um `item_reference`.
+* Um `item_reference` pode possuir vários `item_values`.
+
+## Notas sobre os campos
+
+### position
+
+Define a posição do item dentro da cotação.
+
+Embora faça parte do conjunto de dados reutilizáveis, normalmente não é reaproveitado ao utilizar um `item_values` como base para uma nova cotação, pois a ordenação depende do contexto da cotação atual.
+
+---
+
+### quantity
+
+Representa a quantidade utilizada para aquele conjunto de valores.
+
+Pode variar entre diferentes utilizações do mesmo item.
+
+---
+
+### unit_price
+
+Representa o preço unitário do item.
+
+Seu valor pode variar conforme cliente, fornecedor, negociação ou qualquer outro fator comercial.
+
+---
+
+### markup
+
+Representa a margem de lucro aplicada ao item.
+
+Seu preenchimento é opcional e pode variar conforme cada orçamento.
+
+---
+
+### boarding
+
+Armazena o prazo de embarque ou outra informação relacionada ao fornecimento do item.
+
+Seu preenchimento é opcional e depende das informações disponíveis para cada orçamento.
+
+---
+
+### extra_value
+
+Representa um valor adicional aplicado ao item.
+
+Pode ser utilizado para complementar o custo do item em situações específicas.
+
+## Invariantes
+
+* Todo registro deve possuir um identificador único.
+* Todo `item_values` deve estar associado a um `item_reference`.
+* `position` deve possuir um valor válido.
