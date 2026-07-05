@@ -4,12 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "d5a70f9b1e1ba4c7",
+        "id": "94593efa9c8670d2",
         "type": "tabs",
         "children": [
           {
-            "id": "2fac795a5d6c07b1",
+            "id": "766f57257730a351",
             "type": "leaf",
+            "pinned": true,
             "state": {
               "type": "markdown",
               "state": {
@@ -17,25 +18,41 @@
                 "mode": "preview",
                 "source": false
               },
+              "pinned": true,
               "icon": "lucide-file",
               "title": "@Database"
             }
           },
           {
-            "id": "30c71118e0947de2",
+            "id": "de553aec44a30540",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Database/quotations.md",
-                "mode": "source",
+                "file": "Services/@Services.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "quotations"
+              "title": "@Services"
+            }
+          },
+          {
+            "id": "2ca4a3667deb3499",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Services/quotation/createQuotation.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "createQuotation"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -89,10 +106,36 @@
             }
           }
         ]
+      },
+      {
+        "id": "4f6a7af789f766f5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "951b5f9581fb8030",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Services/@Services.md",
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for @Services"
+            }
+          }
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "ab3586800dd354ac",
@@ -103,36 +146,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "951b5f9581fb8030",
-            "type": "leaf",
-            "state": {
-              "type": "backlink",
-              "state": {
-                "file": "Database/@Database.md",
-                "collapseAll": false,
-                "extraContext": true,
-                "sortOrder": "alphabetical",
-                "showSearch": false,
-                "searchQuery": "",
-                "backlinkCollapsed": false,
-                "unlinkedCollapsed": false
-              },
-              "icon": "links-coming-in",
-              "title": "Backlinks for @Database"
-            }
-          },
-          {
             "id": "4987f218a6c0ffff",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Database/@Database.md",
+                "file": "Services/@Services.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from @Database"
+              "title": "Outgoing links from @Services"
             }
           },
           {
@@ -170,17 +194,16 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Database/@Database.md",
+                "file": "Services/@Services.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of @Database"
+              "title": "Outline of @Services"
             }
           }
-        ],
-        "currentTab": 4
+        ]
       }
     ],
     "direction": "horizontal",
@@ -198,19 +221,34 @@
       "bases:Create new base": false
     }
   },
-  "active": "9cf767d2a2e5b296",
+  "active": "de553aec44a30540",
   "lastOpenFiles": [
-    "Database/clients.md",
-    "Database/@Database.md",
-    "Architecture.md",
+    "Services/examples/services-example.md",
+    "Services/@Services.md",
+    "Services/quotation/createQuotation.md",
+    "Database/quotations.md",
+    "Services/client/createClient.md",
+    "Services/quotation",
     "@Docs.md",
+    "Database/@Database.md",
     "Database/quotation_links.md",
     "Database/reference_links.md",
-    "Database/item_references.md",
     "Database/item_values.md",
-    "Database/quotations.md",
-    "@Database",
+    "Database/item_references.md",
+    "Services/examples/rules-example.md",
+    "Architecture.md",
     "Project.md",
+    "Database/clients.md",
+    "Decisions/@Decisions.md",
+    "BreakChanges/decisions.md",
+    "Decisions",
+    "Services/client/searchClients.md",
+    "Services/client/getClient.md",
+    "Services/client/getAllClients.md",
+    "Services/examples",
+    "Services/client",
+    "Services",
+    "@Database",
     "Database/item.md",
     "().md",
     "Database/tables",
