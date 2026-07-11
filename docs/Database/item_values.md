@@ -60,7 +60,7 @@ A tabela é responsável por:
 * `markup`
 
   * Margem de lucro aplicada ao item.
-  * Tipo: Número real.
+  * Tipo: Inteiro.
   * Opcional.
 
 * `purchase_shipping`

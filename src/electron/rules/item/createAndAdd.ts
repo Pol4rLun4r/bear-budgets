@@ -1,21 +1,29 @@
 import { success, failure } from "../../utils/handleSuccess.js";
 
-export interface AddItemRules {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    quotationVersionExists: any | undefined;
-    quotation_version_id: number;
+export interface CreateAndAdd {
     items: ItemData[];
-};
+    quotationExists: boolean;
+}
 
-const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersionExists, }: AddItemRules) => {
+export const rulesCode = {
+    NO_ITEMS: "Informe ao menos um item",
+    POSITION_NOT_INFORMED: "Cada item deve ter uma posição/ordem",
+    SAME_POSITION: "Não é permitido ter mais de um item com a mesma posição/ordem",
+    DESCRIPTION_NOT_INFORMED: "Cada item deve ter uma descrição",
+    QUOTATION_NOT_EXISTS: "Não é possível adicionar itens a uma cotação que não existe",
+}
+
+/** Verifica a criação e adição de um item ou mais de um a uma cotação (informando referencias e valores de um item) */
+const createAndAdd = ({ items, quotationExists }: CreateAndAdd) => {
+
     // verifica se a cotação existe
-    if (!quotationVersionExists) {
-        return failure("Versão da cotação não existe");
+    if (!quotationExists) {
+        return failure(rulesCode.QUOTATION_NOT_EXISTS);
     }
 
     // verifica se o array não é vazio
     if (!items?.length) {
-        return failure("Informe ao menos um item");
+        return failure(rulesCode.NO_ITEMS);
     }
 
     // items validados
@@ -25,17 +33,17 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
     for (const item of items) {
 
         // separa os dados básicos, valores e links do item para melhor manejo
-        const { item_reference, item_version, reference_links: itemReferenceLinks } = item;
+        const { item_reference, item_values, reference_links: itemReferenceLinks } = item;
 
         // validar ordem/posição e se os items tem a mesma posição
-        const position = item_version.position;
+        const position = item_values.position;
 
         if (position === undefined) {
-            return failure("Cada item deve ter uma posição/ordem");
+            return failure(rulesCode.POSITION_NOT_INFORMED);
         } else {
             // checar se tem outro item com a mesma posição usando filter + length, caso tenha mais de 1 item com a mesma posição, retorna erro;
-            const hasSamePosition = items.filter((item) => item.item_version.position === position).length;
-            if(hasSamePosition > 1) return failure(`${hasSamePosition} items tem o mesmo numero de posição: ${position}`);
+            const hasSamePosition = items.filter((item) => item.item_values.position === position).length;
+            if (hasSamePosition > 1) return failure(rulesCode.SAME_POSITION);
         }
 
         // validar descrição
@@ -43,13 +51,14 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
 
         // checar se descrição não está vazia
         if (!description) {
-            return failure("Cada item deve ter uma descrição");
+            return failure(rulesCode.DESCRIPTION_NOT_INFORMED);
         }
 
+        // validar notas do item, caso existam
         const notes = (item_reference.notes ?? "").trim();
 
         // validar quantidade
-        const quantity = item_version.quantity ?? 1;
+        const quantity = item_values.quantity ?? 1;
 
         // valida os links de referência se existirem
         const reference_links = itemReferenceLinks
@@ -64,15 +73,12 @@ const addItemsToQuotationRules = ({ quotation_version_id, items, quotationVersio
                 description,
                 notes: notes.length !== 0 ? notes : undefined,
             },
-            item_version: { ...item_version, quantity },
+            item_values: { ...item_values, quantity },
             reference_links: reference_links ?? [],
         });
     }
 
-    return success({
-        quotation_version_id,
-        items: validItems,
-    });
-};
+    return success({ items: validItems });
+}
 
-export default addItemsToQuotationRules;
+export default createAndAdd;

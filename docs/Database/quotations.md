@@ -54,9 +54,8 @@ A tabela é responsável por:
 ## Regras de negócio
 
 * Toda cotação inicia como rascunho.
-* Uma cotação enviada não pode voltar para o estado de rascunho.
 * Toda cotação deve possuir pelo menos um item.
-* O valor total deve representar a soma dos valores de todos os itens da cotação.
+* O valor total é informado pelo frontend e persistido pelo backend.
 * A quantidade de itens deve refletir exatamente o número de itens vinculados à cotação.
 
 ## Relações
@@ -73,13 +72,21 @@ Uma cotação sem itens não possui utilidade dentro do sistema.
 
 Esse campo deve sempre representar a quantidade real de itens relacionados à cotação.
 
+Na criação, o valor é calculado no frontend e enviado no payload. O backend valida se corresponde ao número de itens informados.
+
 ---
 
 ### total_value
 
-Não deve ser informado manualmente.
+Representa o valor total da cotação.
 
-Seu valor deve ser calculado a partir da soma dos valores de todos os itens da cotação.
+Na criação, o valor é calculado no frontend e enviado no payload. O backend valida sua presença e persiste o valor recebido.
+
+---
+
+### status
+
+Na criação, o status é sempre definido pelo backend como rascunho (`0`). Não faz parte da entrada do usuário.
 
 ## Invariantes
 

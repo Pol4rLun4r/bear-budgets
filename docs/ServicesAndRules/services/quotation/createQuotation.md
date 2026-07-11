@@ -14,30 +14,28 @@ As regras relacionadas à entidade podem ser encontradas em [Database/quotations
 O serviço utiliza:
 
 - `quotations`
-    
 - `quotation_links`
-    
 - `item_references`
-    
 - `item_values`
-    
 
 ## Entrada
 
 ### Payload
 
 ```ts
-payload: CreateQuotationPayload
+payload: CreateQuotation
 ```
 
 O payload deve conter todas as informações necessárias para criação da cotação.
+
+A cotação (`quotation`) aceita apenas `notes`, `amount` e `total_value`. O campo `status` não faz parte da entrada — é sempre definido pelo backend como rascunho.
 
 ## Saída
 
 Em caso de sucesso:
 
 ```ts
-success(Quotation)
+success(QuotationLink[])
 ```
 
 Em caso de erro:
@@ -51,51 +49,28 @@ failure(ErrorCode)
 Além das regras definidas em [Database/quotations](Database/quotations), este serviço deve garantir que:
 
 - toda cotação seja criada como rascunho;
-    
 - exista pelo menos um item válido;
-    
 - cada item possua um `item_reference`;
-    
 - cada item possua um `item_values`;
-    
-- o valor total seja calculado automaticamente;
-    
-- a quantidade de itens represente exatamente os itens associados à cotação.
-    
+- o valor total (`total_value`) seja informado pelo frontend;
+- a quantidade de itens (`amount`) informada corresponda exatamente ao número de itens enviados no payload.
 
 ## Fluxo
 
-1. Validar o payload recebido.
-    
-2. Aplicar as regras de negócio da cotação.
-    
+1. Validar dados da cotação (não os dados dos itens).
+2. Criar "casca" da cotação.
 3. Validar todos os itens.
-    
-4. Criar a cotação.
-    
-5. Associar todos os itens à cotação.
-    
-6. Calcular o valor total.
-    
-7. Atualizar os campos derivados.
-    
-8. Retornar a cotação criada.
-    
-
-## Erros conhecidos
-
-|Código|Quando ocorre|
-|---|---|
-|`INVALID_PAYLOAD`|O payload é inválido.|
-|`QUOTATION_WITHOUT_ITEMS`|Nenhum item foi informado.|
-|`INVALID_ITEM_REFERENCE`|O item de referência não existe.|
-|`INVALID_ITEM_VALUES`|A configuração do item é inválida.|
-
+4. Criar e adicionar itens a cotação.
+5. Retornar "quotation_links"
 ## Observações
 
 Este serviço nunca deve receber o campo `status` informado pelo usuário.
 
 O estado inicial da cotação é sempre `Rascunho`.
+
+O `total_value` é calculado no frontend e enviado junto ao payload. O backend valida sua presença, mas não recalcula o valor.
+
+O `amount` também é calculado no frontend (quantidade de itens na lista) e enviado junto ao payload. O backend valida se corresponde ao número de itens informados.
 
 ## Garantias
 
@@ -104,5 +79,5 @@ Após executar este serviço com sucesso:
 - a cotação existe no banco;
 - o status é Rascunho;
 - existe ao menos um item associado;
-- o valor total está atualizado;
+- o valor total informado foi persistido;
 - a quantidade de itens corresponde aos itens associados.

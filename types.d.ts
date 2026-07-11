@@ -4,14 +4,15 @@ type WithUndefined<T> = {
 };
 
 // --------------- Quotation-API ---------------
-interface CreateQuotation extends Partial<Pick<Quotation, "client_id">>, Pick<QuotationVersion, "notes" | "status" | 'total_value' | 'amount'> { }
 
-interface CreateWithAllData {
-    client: Client;
-    quotation: CreateQuotation;
+/** Dados da cotação aceitos na criação. `status` é definido pelo backend (sempre rascunho). */
+type CreateQuotationData = Pick<Quotation, "notes" | "amount" | "total_value">;
+
+interface CreateQuotation {
+    quotation: CreateQuotationData;
     items: {
         item_reference: Partial<ItemReference>;
-        item_version: Partial<ItemVersion>;
+        item_values: Partial<ItemValues>;
         reference_links: Partial<ReferenceLink>[];
     }[];
 };
@@ -21,7 +22,7 @@ type GetItemNotes = NonNullable<ItemReference['id']>;
 
 type GetReferenceLinks = ReferenceLink['item_reference_id'];
 
-type GetByReferenceId = ItemVersion['item_reference_id'];
+type GetByReferenceId = ItemValues['item_reference_id'];
 
 type CreateItemNote = {
     item_reference_id: number;
@@ -32,21 +33,11 @@ type SearchItemDescription = Pick<ItemReference, "description">['description'];
 
 type SearchItemDescriptionIsOptional = SearchItemDescription | undefined;
 
-// --------------- Client-API ---------------
-interface SearchClient {
-    value: string;
-    type: 'document' | 'name';
-}
 
 // --------------- channels and API ---------------
 type EventPayloadMapping = {
-    // client
-    "client:create": Result<Client | undefined>;
-    "client:search": Result<Client[] | undefined>;
-
     // quotation
-    "quotation:create": Result<QuotationSummary | undefined>;
-    "quotation:createWithItems": Result<QuotationLink[] | undefined>;
+    "quotation:create": Result<QuotationLink[] | undefined>;
     "quotation:getAllSummary": Result<QuotationSummary[] | undefined>;
     "quotation:getFullDetail": Result<QuotationFullDetail | undefined>;
 
@@ -56,7 +47,7 @@ type EventPayloadMapping = {
     "item:getReferenceLinks": Result<ReferenceLink[] | undefined>;
     "item:createNote": Result<ItemReference['id'] | undefined>;
     "item:getAllBySearch": Result<ItemReference[] | undefined>;
-    "item:getAllVersionByReferenceId": Result<ItemVersion[] | undefined>;
+    "item:getAllVersionByReferenceId": Result<ItemValues[] | undefined>;
 
     // janela (frame personalizado)
     "window:minimize": void;
@@ -78,14 +69,8 @@ type FailureResponse = {
 
 type Result<T> = FailureResponse | SuccessResponse<T>;
 
-interface ClientAPI {
-    create(client: Client): Promise<Result<Client | undefined>>;
-    search(query: SearchClient): Promise<Result<Client[] | undefined>>;
-};
-
 interface QuotationAPI {
-    create(quotation: CreateQuotation): Promise<Result<QuotationSummary | undefined>>;
-    createWithItems(quotation: CreateWithAllData): Promise<Result<QuotationLink[] | undefined>>;
+    create(quotation: CreateQuotation): Promise<Result<QuotationLink[] | undefined>>;
     getAllSummary(): Promise<Result<QuotationSummary[] | undefined>>;
     getFullDetail(quotationId: Quotation['id']): Promise<Result<QuotationFullDetail | undefined>>;
 }
@@ -96,7 +81,7 @@ interface ItemAPI {
     getReferenceLinks(itemReferenceId: GetReferenceLinks): Promise<Result<ReferenceLink[] | undefined>>;
     createNote(note: CreateItemNote): Promise<Result<ItemReference['id'] | undefined>>;
     getAllBySearch(description: SearchItemDescriptionIsOptional): Promise<Result<ItemReference[] | undefined>>;
-    getAllVersionByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemVersion[] | undefined>>;
+    getAllVersionByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemValues[] | undefined>>;
 }
 
 interface WindowAPI {
@@ -106,7 +91,6 @@ interface WindowAPI {
 }
 
 interface API {
-    client: ClientAPI;
     quotation: QuotationAPI;
     item: ItemAPI;
     window: WindowAPI;

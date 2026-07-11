@@ -15,5 +15,6 @@
     "rowid",
     "tokenchars",
     "unmaximize"
-  ]
+  ],
+  "js/ts.experimental.useTsgo": false
 }

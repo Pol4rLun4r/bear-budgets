@@ -8,7 +8,7 @@ A principio, services dentro do electron deve ser apenas um orquestrador, chaman
 
 ### Regras dentro do service e  onde devem ficar
 
-Todas as regras dentro de `service`, devem ser tratadas em um arquivo separado, no caso `rules`, leia [Exemplo de rules](Services/examples/rules-example), para entender mais como organizar.
+Todas as regras dentro de `service`, devem ser tratadas em um arquivo separado, no caso `rules`, leia [Exemplo de rules](rules-example.md), para entender mais como organizar.
 ### Entrada padrão do `service`
 
 Como cada service trata os dados de forma diferente, a entrada padrão será definida dentro do próprio `service` especifico, onde será normalmente algum `type`.
@@ -24,11 +24,11 @@ failure(message)
 - `failure`: trata qualquer erro esperado, ou erros lançados pelo `try catch` dentro de `service`
 
 ## Como o código do `service`
-Exemplo de como escrever o [service](Services/examples/services-example)
+Exemplo de como escrever o [service](services-example.md)
 
 ## Definição de cada `service`
 
 ### quotation
 services que envolve as cotações.
 
-- [createQuotation](Services/quotation/createQuotation) -> `service` para `criar` uma nova cotação
+- [createQuotation](createQuotation.md) -> `service` para `criar` uma nova cotação
