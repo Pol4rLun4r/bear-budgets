@@ -38,7 +38,7 @@ type SearchItemDescriptionIsOptional = SearchItemDescription | undefined;
 type EventPayloadMapping = {
     // quotation
     "quotation:create": Result<QuotationLink[] | undefined>;
-    "quotation:getAllSummary": Result<QuotationSummary[] | undefined>;
+    "quotation:getAllSummary": Result<Quotation[] | undefined>;
     "quotation:getFullDetail": Result<QuotationFullDetail | undefined>;
 
     // item

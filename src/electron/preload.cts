@@ -9,13 +9,8 @@ export const ipcInvoke = <Key extends keyof EventPayloadMapping>(
 
 // funções que o react irá chamar
 const api: API = {
-    client: {
-        create: (client) => ipcInvoke('client:create', client),
-        search: (query) => ipcInvoke('client:search', query)
-    },
     quotation: {
         create: (quotation) => ipcInvoke('quotation:create', quotation),
-        createWithItems: (allData) => ipcInvoke('quotation:createWithItems', allData),
         getAllSummary: () => ipcInvoke('quotation:getAllSummary'),
         getFullDetail: (quotationId: Quotation['id']) => ipcInvoke('quotation:getFullDetail', quotationId),
     },

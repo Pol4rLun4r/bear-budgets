@@ -33,3 +33,11 @@ export const deleteQuotationRepository = (db: Database) =>
     `).run(id);
 
     };
+
+//** pega todas as cotações resumidas */
+export const getAllQuotationSummaryRepository = (db: Database) =>
+    () => {
+        return db.prepare(`
+            SELECT * FROM quotations
+        `).all() as Quotation[];
+    };

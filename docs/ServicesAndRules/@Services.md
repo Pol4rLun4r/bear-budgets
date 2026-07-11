@@ -32,3 +32,4 @@ Exemplo de como escrever o [service](services-example.md)
 services que envolve as cotações.
 
 - [createQuotation](createQuotation.md) -> `service` para `criar` uma nova cotação
+- [getAllQuotationSummary](getAllQuotationSummary.md) -> `service` para `pegar` todas as cotações, sem os dados dos itens

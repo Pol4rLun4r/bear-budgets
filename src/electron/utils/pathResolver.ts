@@ -13,7 +13,7 @@ export const getPreloadPath = () => {
     return path.normalize(resolved);
 };
 
-// path canónico do index do React — tem de bater certo com o que o WebFrame reporta no IPC
+// path canônico do index do React — tem de bater certo com o que o WebFrame reporta no IPC
 export function getUIPath() {
     return path.normalize(
         path.resolve(app.getAppPath(), "dist-react", "index.html"),

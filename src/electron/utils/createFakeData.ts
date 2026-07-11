@@ -2,10 +2,9 @@ import type { Database } from "better-sqlite3";
 
 // utils
 import { isDev } from "./env.js"
-import { createRepositories } from "../_repositories/index.js";
+import { createRepositories } from "../repositories/index.js";
 import { fakeItens } from "../test/fakeItens.js";
-import { fakeClients } from "../test/fakeClients.js";
-import { createServices } from "../_services/index.js";
+import { createServices } from "../services/index.js";
 
 export const createFakeData = (db: Database) => {
     if (!isDev()) return;
@@ -26,19 +25,12 @@ export const createFakeData = (db: Database) => {
         });
     });
 
-    // Cria clientes falsos
-    fakeClients.forEach(client => {
-        repo.client.create(client);
-    });
-
-
-    const payloadQuotation: CreateWithAllData = {
-        client: { ...fakeClients[0] },
+    const payloadQuotation: CreateQuotation = {
         items: [
             {
                 item_reference: { ...fakeItens[0] },
                 reference_links: [],
-                item_version: {
+                item_values: {
                     quantity: 2,
                     unit_price: 2,
                     position: 0
@@ -49,18 +41,18 @@ export const createFakeData = (db: Database) => {
                 reference_links: [
                     { content: 'https://mantine.dev/llms/getting-started.md' }
                 ],
-                item_version: {
+                item_values: {
                     quantity: 2,
                     unit_price: 2,
                     position: 1
                 }
             }
         ],
-        quotation: { amount: 12, total_value: 431.32, status: 1, notes: "Hello World" }
+        quotation: { amount: 12, total_value: 431.32, notes: "Hello World" }
     }
 
     // Cria falsos orçamentos
     for (let index = 0; index < 50; index++) {
-        services.quotation.createWithItems(payloadQuotation);
+        services.quotation.create(payloadQuotation);
     }
 }

@@ -2,14 +2,12 @@
 
 // service and repo
 import { createDatabase } from "../../../db/connection.js";
-import { createRepositories } from "../../../_repositories/index.js";
-import { createServices } from "../../../_services/index.js";
+import { createRepositories } from "../../../repositories/index.js";
+import { createServices } from "../../../services/index.js";
 
 // utils
 import { getDBPath } from "../../../utils/pathResolver.js";
-import { fakeClients } from "../../fakeClients.js";
-import { fakeItens, fakeItemVersion } from "../../fakeItens.js";
-import { normalizeDocument } from "../../../utils/clean.js";
+import { fakeItens, fakeItemValues } from "../../fakeItens.js";
 
 describe("Get full quotation with details", () => {
     // criar banco de dados antes dos testes
@@ -26,18 +24,17 @@ describe("Get full quotation with details", () => {
         `).run(itemId, 'https://family.com');
     })
 
-    const payload: CreateWithAllData = {
-        client: { ...fakeClients[0] },
+    const payload: CreateQuotation = {
         items: [
             {
                 item_reference: { ...fakeItens[1] },
                 reference_links: [
                     { content: 'mother' }
                 ],
-                item_version: fakeItemVersion(1, {
+                item_values: fakeItemValues(1, {
                     quantity: 22,
                     unit_price: 12,
-                    markup: "40.1",
+                    markup: 40,
                     extra_value: 15.5,
                 }),
             },
@@ -46,10 +43,10 @@ describe("Get full quotation with details", () => {
                 reference_links: [
                     { content: 'https://family.com' }
                 ],
-                item_version: fakeItemVersion(2, {
+                item_values: fakeItemValues(2, {
                     quantity: 122,
                     unit_price: 24,
-                    markup: "40.1",
+                    markup: 40,
                     boarding: "FOB",
                 }),
             },
@@ -58,21 +55,21 @@ describe("Get full quotation with details", () => {
                 reference_links: [
                     { content: 'https://family.brazil.com' }
                 ],
-                item_version: fakeItemVersion(3, {
+                item_values: fakeItemValues(3, {
                     quantity: 20,
                     unit_price: 2,
-                    markup: "40.1",
+                    markup: 40,
                     extra_value: 88,
                     boarding: "CIF",
                 }),
             },
         ],
-        quotation: { amount: 12, total_value: 431.32, status: 1, notes: "Hello world" }
+        quotation: { amount: 12, total_value: 431.32, notes: "Hello world" }
     }
 
     it("ter sucesso ao pegar cotação completa com detalhes", () => {
         // 1. Prepara os dados
-        const create = services.quotation.createWithItems(payload);
+        const create = services.quotation.create(payload);
 
         if (!create.success) {
             throw new Error(create.data);
@@ -117,7 +114,7 @@ describe("Get full quotation with details", () => {
             const itemPayload = itemPayloadData[index]
             
             expect(item.item_reference).toMatchObject(itemPayload.item_reference);
-            expect(item.item_version).toMatchObject(itemPayload.item_version);
+            expect(item.item_values).toMatchObject(itemPayload.item_values);
 
             if (index === 0) {
                 expect(item.reference_links[0]).toMatchObject({ content: itemPayload.reference_links[0].content });

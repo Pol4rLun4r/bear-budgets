@@ -57,9 +57,9 @@ Além das regras definidas em [Database/quotations](Database/quotations), este s
 
 ## Fluxo
 
-1. Validar dados da cotação (não os dados dos itens).
+1. Validar dados da cotação (não os dados dos itens) em [create](ServicesAndRules/rules/quotation/create).
 2. Criar "casca" da cotação.
-3. Validar todos os itens.
+3. Validar todos os itens em [createAndAdd](ServicesAndRules/rules/item/createAndAdd) .
 4. Criar e adicionar itens a cotação.
 5. Retornar "quotation_links"
 ## Observações
