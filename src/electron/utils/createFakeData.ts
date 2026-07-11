@@ -2,10 +2,10 @@ import type { Database } from "better-sqlite3";
 
 // utils
 import { isDev } from "./env.js"
-import { createRepositories } from "../repositories/index.js";
+import { createRepositories } from "../_repositories/index.js";
 import { fakeItens } from "../test/fakeItens.js";
 import { fakeClients } from "../test/fakeClients.js";
-import { createServices } from "../services/index.js";
+import { createServices } from "../_services/index.js";
 
 export const createFakeData = (db: Database) => {
     if (!isDev()) return;

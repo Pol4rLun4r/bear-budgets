@@ -2,7 +2,7 @@
 
 // service and repo
 import { createDatabase } from "../../../db/connection.js";
-import { createServices } from "../../../services/index.js";
+import { createServices } from "../../../_services/index.js";
 import { normalizeDocument } from "../../../utils/clean.js";
 
 // utils

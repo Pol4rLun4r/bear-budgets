@@ -2,8 +2,8 @@
 
 // service and repo
 import { createDatabase } from "../../../db/connection.js";
-import { createRepositories } from "../../../repositories/index.js";
-import { createServices } from "../../../services/index.js";
+import { createRepositories } from "../../../_repositories/index.js";
+import { createServices } from "../../../_services/index.js";
 
 // utils
 import { getDBPath } from "../../../utils/pathResolver.js";

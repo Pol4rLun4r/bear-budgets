@@ -1,7 +1,7 @@
-export const fakeItemVersion = (
+export const fakeItemValues = (
   position: number,
-  overrides: Partial<ItemVersion> = {},
-): Partial<ItemVersion> => ({
+  overrides: Partial<ItemValues> = {},
+): Partial<ItemValues> => ({
   quantity: 2,
   unit_price: 2,
   position,
