@@ -16,8 +16,8 @@ export const rulesCode = {
 
 const DEFAULT_STATUS = 0;
 
-/** Cria a cotação para "encapsular" os dados */
-const Create = ({ notes, amount, total_value, itemsCount }: CreateQuotationRuleInput) => {
+/** valida a cotação para "encapsular" os dados */
+const create = ({ notes, amount, total_value, itemsCount }: CreateQuotationRuleInput) => {
     // validar quantidade
     if (!amount) {
         return failure(rulesCode.AMOUNT_NOT_INFORMED);
@@ -46,4 +46,4 @@ const Create = ({ notes, amount, total_value, itemsCount }: CreateQuotationRuleI
     return success(data);
 };
 
-export default Create;
+export default create;

@@ -13,14 +13,18 @@ import {
 import {
     createQuotationRepository,
     deleteQuotationRepository,
-    getAllQuotationSummaryRepository
+    getAllQuotationSummaryRepository,
+    getQuotationFullRepository,
+    getQuotationByIdRepository
 } from "./quotation.repository.js"
 
 export const createRepositories = (db: Database) => ({
     quotation: {
         create: createQuotationRepository(db),
         deleteByID: deleteQuotationRepository(db),
-        getAllSummary: getAllQuotationSummaryRepository(db)
+        getAllSummary: getAllQuotationSummaryRepository(db),
+        getComplete: getQuotationFullRepository(db),
+        getById: getQuotationByIdRepository(db)
     },
     item: {
         createReference: createItemReferenceRepository(db),

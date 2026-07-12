@@ -9,7 +9,7 @@ import { createServices } from "../../../services/index.js";
 import { getDBPath } from "../../../utils/pathResolver.js";
 import { fakeItens, fakeItemValues } from "../../fakeItens.js";
 
-describe("Get full quotation with details", () => {
+describe("Pegar cotação completa", () => {
     // criar banco de dados antes dos testes
     const db = createDatabase(getDBPath());
     const services = createServices(db);
@@ -64,7 +64,7 @@ describe("Get full quotation with details", () => {
                 }),
             },
         ],
-        quotation: { amount: 12, total_value: 431.32, notes: "Hello world" }
+        quotation: { amount: 3, total_value: 431.32, notes: "Hello world" }
     }
 
     it("ter sucesso ao pegar cotação completa com detalhes", () => {
@@ -81,11 +81,11 @@ describe("Get full quotation with details", () => {
             throw new Error(quotations.data);
         }
 
-        const quotationId = quotations.data[0].quotation_id;
+        const quotationId = quotations.data[0].id;
 
         // 2. chama o serviço
-        const quotation = services.quotation.getFullDetail(quotationId);
-
+        const quotation = services.quotation.getFull(quotationId);
+                        
         if (!quotation.success) {
             throw new Error(quotation.data);
         }
@@ -93,19 +93,14 @@ describe("Get full quotation with details", () => {
         // 3. verifica se houve o retorno correto
         const quotationData = quotation.data;
 
-        // 3.1 verificação do cliente
-        expect(quotationData.client.name).toBe(payload.client.name.toLocaleLowerCase());
-        expect(quotationData.client.document).toBe(normalizeDocument(payload.client.document));
-        expect(quotationData.client.type_client).toBe(payload.client.type_client);
-        expect(quotationData.client.notes).toBe(payload.client.notes);
+        // 3.1 verificar orçamento
 
-        // 3.2 verificar orçamento
-        expect(quotationData.quotation_version.total_value).toBe(payload.quotation.total_value);
-        expect(quotationData.quotation_version.amount).toBe(payload.quotation.amount);
-        expect(quotationData.quotation_version.notes).toBe(payload.quotation.notes);
-        expect(quotationData.quotation_version.status).toBe(payload.quotation.status);
+        expect(quotationData.quotation.total_value).toBe(payload.quotation.total_value);
+        expect(quotationData.quotation.amount).toBe(payload.quotation.amount);
+        expect(quotationData.quotation.notes).toBe(payload.quotation.notes);
+        expect(quotationData.quotation.status).toBe(0);
 
-        // 3.3 verifica itens
+        // 3.2 verifica itens
         const itemsData = quotationData.items;
         const itemPayloadData = payload.items;
 
@@ -128,5 +123,19 @@ describe("Get full quotation with details", () => {
                 expect(item.reference_links[0]).toMatchObject({ content: 'https://family.com' });
             }
         }
+    });
+
+    it("falhar se o id da cotação não for informado", () => {
+        const quotation = services.quotation.getFull(undefined as unknown as number);
+
+        expect(quotation.success).toBe(false);
+        expect(quotation.data).toBe("ID da cotação não informado.");
+    });
+
+    it("falhar se a cotação não existir", () => {
+        const quotation = services.quotation.getFull(9999);
+
+        expect(quotation.success).toBe(false);
+        expect(quotation.data).toBe("Cotação com ID 9999 não encontrada.");
     });
 });

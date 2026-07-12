@@ -39,7 +39,7 @@ type EventPayloadMapping = {
     // quotation
     "quotation:create": Result<QuotationLink[] | undefined>;
     "quotation:getAllSummary": Result<Quotation[] | undefined>;
-    "quotation:getFullDetail": Result<QuotationFullDetail | undefined>;
+    "quotation:getFull": Result<QuotationFull | undefined>;
 
     // item
     "item:searchDescription": Result<ItemReference[] | undefined>;
@@ -47,7 +47,7 @@ type EventPayloadMapping = {
     "item:getReferenceLinks": Result<ReferenceLink[] | undefined>;
     "item:createNote": Result<ItemReference['id'] | undefined>;
     "item:getAllBySearch": Result<ItemReference[] | undefined>;
-    "item:getAllVersionByReferenceId": Result<ItemValues[] | undefined>;
+    "item:getAllValuesByReferenceId": Result<ItemValues[] | undefined>;
 
     // janela (frame personalizado)
     "window:minimize": void;
@@ -72,7 +72,7 @@ type Result<T> = FailureResponse | SuccessResponse<T>;
 interface QuotationAPI {
     create(quotation: CreateQuotation): Promise<Result<QuotationLink[] | undefined>>;
     getAllSummary(): Promise<Result<QuotationSummary[] | undefined>>;
-    getFullDetail(quotationId: Quotation['id']): Promise<Result<QuotationFullDetail | undefined>>;
+    getFull(quotationId: Quotation['id']): Promise<Result<QuotationFull | undefined>>;
 }
 
 interface ItemAPI {
@@ -81,7 +81,7 @@ interface ItemAPI {
     getReferenceLinks(itemReferenceId: GetReferenceLinks): Promise<Result<ReferenceLink[] | undefined>>;
     createNote(note: CreateItemNote): Promise<Result<ItemReference['id'] | undefined>>;
     getAllBySearch(description: SearchItemDescriptionIsOptional): Promise<Result<ItemReference[] | undefined>>;
-    getAllVersionByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemValues[] | undefined>>;
+    getAllValuesByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemValues[] | undefined>>;
 }
 
 interface WindowAPI {

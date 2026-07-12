@@ -3,6 +3,7 @@ import type { Database } from "better-sqlite3";
 // quotation
 import createQuotationService from "./quotation/createQuotation.service.js";
 import getAllQuotationsSummaryService from "./quotation/getAllQuotationsSummary.service.js";
+import getQuotationFullService from "./quotation/getQuotationFull.service.js";
 
 // item
 
@@ -10,7 +11,8 @@ import getAllQuotationsSummaryService from "./quotation/getAllQuotationsSummary.
 export const createServices = (db: Database) => ({
     quotation: {
         create: createQuotationService(db),
-        getAllSummary: getAllQuotationsSummaryService(db)
+        getAllSummary: getAllQuotationsSummaryService(db),
+        getFull: getQuotationFullService(db)
     },
     item: {
 

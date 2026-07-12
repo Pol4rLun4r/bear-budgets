@@ -12,7 +12,7 @@ const api: API = {
     quotation: {
         create: (quotation) => ipcInvoke('quotation:create', quotation),
         getAllSummary: () => ipcInvoke('quotation:getAllSummary'),
-        getFullDetail: (quotationId: Quotation['id']) => ipcInvoke('quotation:getFullDetail', quotationId),
+        getFull: (quotationId: Quotation['id']) => ipcInvoke('quotation:getFull', quotationId),
     },
     item: {
         searchDescription: (description) => ipcInvoke('item:searchDescription', description),
@@ -20,7 +20,7 @@ const api: API = {
         getNotes: (itemReferenceId) => ipcInvoke('item:getNotes', itemReferenceId),
         getReferenceLinks: (itemReferenceId) => ipcInvoke('item:getReferenceLinks', itemReferenceId),
         getAllBySearch: (description) => ipcInvoke('item:getAllBySearch', description),
-        getAllVersionByReferenceId: (itemReferenceId) => ipcInvoke('item:getAllVersionByReferenceId', itemReferenceId)
+        getAllValuesByReferenceId: (itemReferenceId) => ipcInvoke('item:getAllValuesByReferenceId', itemReferenceId)
      },
     window: {
         minimize: () => ipcInvoke('window:minimize'),

@@ -71,7 +71,7 @@ type QuotationLink = {
     updated_at?: string;
 };
 
-/** Uma linha da cotação completa: vínculo + snapshot do item na última versão. */
+/** Uma linha da cotação completa */
 type QuotationDetailLine = {
     quotation_link_id: number;
     item_reference: ItemReference;
@@ -79,9 +79,8 @@ type QuotationDetailLine = {
     reference_links: ReferenceLink[];
 };
 
-/** Cotação completa para a tela “ver detalhes”: pai, cliente, última revisão e itens via quotation_links. */
-type QuotationFullDetail = {
+/** Cotação completa */
+type QuotationFull = {
     quotation: Quotation;
-    client: Client;
     items: QuotationDetailLine[];
 };
