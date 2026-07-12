@@ -16,10 +16,8 @@ const api: API = {
     },
     item: {
         searchDescription: (description) => ipcInvoke('item:searchDescription', description),
-        createNote: (note) => ipcInvoke('item:createNote', note),
-        getNotes: (itemReferenceId) => ipcInvoke('item:getNotes', itemReferenceId),
+        findItemReferences: (description) => ipcInvoke('item:findItemReferences', description),
         getReferenceLinks: (itemReferenceId) => ipcInvoke('item:getReferenceLinks', itemReferenceId),
-        getAllBySearch: (description) => ipcInvoke('item:getAllBySearch', description),
         getAllValuesByReferenceId: (itemReferenceId) => ipcInvoke('item:getAllValuesByReferenceId', itemReferenceId)
      },
     window: {

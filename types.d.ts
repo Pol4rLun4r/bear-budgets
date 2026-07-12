@@ -18,16 +18,9 @@ interface CreateQuotation {
 };
 
 // --------------- Item-API ---------------
-type GetItemNotes = NonNullable<ItemReference['id']>;
-
 type GetReferenceLinks = ReferenceLink['item_reference_id'];
 
 type GetByReferenceId = ItemValues['item_reference_id'];
-
-type CreateItemNote = {
-    item_reference_id: number;
-    notes: string;
-};
 
 type SearchItemDescription = Pick<ItemReference, "description">['description'];
 
@@ -46,7 +39,7 @@ type EventPayloadMapping = {
     "item:getNotes": Result<ItemReference['notes'] | undefined>;
     "item:getReferenceLinks": Result<ReferenceLink[] | undefined>;
     "item:createNote": Result<ItemReference['id'] | undefined>;
-    "item:getAllBySearch": Result<ItemReference[] | undefined>;
+    "item:findItemReferences": Result<ItemReference[] | undefined>;
     "item:getAllValuesByReferenceId": Result<ItemValues[] | undefined>;
 
     // janela (frame personalizado)
@@ -77,10 +70,8 @@ interface QuotationAPI {
 
 interface ItemAPI {
     searchDescription(description: SearchItemDescription): Promise<Result<ItemReference[] | undefined>>;
-    getNotes(itemReferenceId: GetItemNotes): Promise<Result<ItemReference['notes'] | undefined>>;
+    findItemReferences(description: SearchItemDescriptionIsOptional): Promise<Result<ItemReference[] | undefined>>;
     getReferenceLinks(itemReferenceId: GetReferenceLinks): Promise<Result<ReferenceLink[] | undefined>>;
-    createNote(note: CreateItemNote): Promise<Result<ItemReference['id'] | undefined>>;
-    getAllBySearch(description: SearchItemDescriptionIsOptional): Promise<Result<ItemReference[] | undefined>>;
     getAllValuesByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemValues[] | undefined>>;
 }
 

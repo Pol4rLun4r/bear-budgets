@@ -1,6 +1,7 @@
 // item rules
 import createAndAddItem from "./item/createAndAdd.js";
 import searchDescriptionRules from "./item/searchDescription.js";
+import findItemReferencesRules from "./item/findItemReferences.js";
 
 // quotation rules
 import createQuotation from "./quotation/create.js";
@@ -13,7 +14,8 @@ export const createRules = () => ({
     },
     item: {
         createAndAdd: createAndAddItem,
-        searchDescription: searchDescriptionRules
+        searchDescription: searchDescriptionRules,
+        findItemReferences: findItemReferencesRules
     }
 });
 
