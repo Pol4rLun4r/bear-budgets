@@ -6,7 +6,7 @@ import getAllQuotationsSummaryService from "./quotation/getAllQuotationsSummary.
 import getQuotationFullService from "./quotation/getQuotationFull.service.js";
 
 // item
-
+import searchDescriptionService from "./item/searchDescription.service.js";
 
 export const createServices = (db: Database) => ({
     quotation: {
@@ -15,7 +15,7 @@ export const createServices = (db: Database) => ({
         getFull: getQuotationFullService(db)
     },
     item: {
-
+        searchDescription: searchDescriptionService(db)
     }
 })
 

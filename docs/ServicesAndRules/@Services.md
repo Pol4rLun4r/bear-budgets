@@ -34,3 +34,8 @@ services que envolve as cotações.
 - [createQuotation](createQuotation.md) -> `service` para `criar` uma nova cotação
 - [getAllQuotationSummary](getAllQuotationSummary.md) -> `service` para `pegar` todas as cotações, sem os dados dos itens
 - [getQuotationFull](getQuotationFull.md) -> `service` para `pegar` uma cotação completa com base no `id`
+
+### item
+services que envolve os itens
+
+- [searchDescription](ServicesAndRules/services/item/searchDescription.md) -> `service` para `buscar` um item pela descrição

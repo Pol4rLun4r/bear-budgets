@@ -9,6 +9,9 @@ import { createServices } from "../../../services/index.js";
 import { getDBPath } from "../../../utils/pathResolver.js";
 import { fakeItens } from "../../fakeItens.js";
 
+// rules
+import { rulesCode } from "../../../rules/item/searchDescription.js";
+
 describe("Search Item Description", () => {
     // criar banco de dados antes dos testes
     const db = createDatabase(getDBPath());
@@ -63,7 +66,7 @@ describe("Search Item Description", () => {
         const res = services.item.searchDescription(payload);
 
         // 3. verifica se a requisição teve exito
-        expect(res.data).toBe("Nenhum valor informado");
+        expect(res.data).toBe(rulesCode.DESCRIPTION_NOT_INFORMED);
     });
 });
 
