@@ -1,7 +1,7 @@
 // utils
 import { success, failure } from "../../utils/handleSuccess.js";
 
-export interface getFullQuotationRuleInput {
+export interface GetFullQuotationRuleInput {
     quotationExists: boolean;
     quotation_id: Quotation['id'];
 }
@@ -12,7 +12,7 @@ export const rulesCode = {
 }
 
 /** valida a busca a busca de dados, para saber se a cotação existe */
-const getFull = ({ quotationExists, quotation_id }: getFullQuotationRuleInput) => {
+const getFull = ({ quotationExists, quotation_id }: GetFullQuotationRuleInput) => {
 
     // valida se o id foi informado
     if (!quotation_id) {

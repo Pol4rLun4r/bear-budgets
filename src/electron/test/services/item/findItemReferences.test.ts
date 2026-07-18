@@ -9,7 +9,7 @@ import { createServices } from "../../../services/index.js";
 import { getDBPath } from "../../../utils/pathResolver.js";
 import { fakeItens } from "../../fakeItens.js";
 
-describe("pegar referências de itens", () => {
+describe("Pegar referências de itens", () => {
     // criar banco de dados antes dos testes
     const db = createDatabase(getDBPath());
     const services = createServices(db);

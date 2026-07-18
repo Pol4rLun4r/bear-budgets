@@ -12,7 +12,7 @@ import { fakeItens } from "../../fakeItens.js";
 // rules
 import { rulesCode } from "../../../rules/item/searchDescription.js";
 
-describe("Search Item Description", () => {
+describe("Pesquisar descrição de itens", () => {
     // criar banco de dados antes dos testes
     const db = createDatabase(getDBPath());
     const services = createServices(db);

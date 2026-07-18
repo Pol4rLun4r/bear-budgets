@@ -40,3 +40,4 @@ services que envolve os itens
 
 - [searchDescription](ServicesAndRules/services/item/searchDescription.md) -> `service` para `buscar` um item pela descrição
 - [findItemReferences](ServicesAndRules/services/item/findItemReferences.md) -> `service` para `buscar` todos os `item_references` com base no filtro de pesquisa
+- [getReferenceLinks](ServicesAndRules/services/item/getReferenceLinks) -> `service` para `pegar` todos os `reference_links` de um `item_references`

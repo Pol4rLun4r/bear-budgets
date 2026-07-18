@@ -6,7 +6,7 @@ const getReferenceLinksFromItem = (item: ItemData): Pick<ReferenceLink, "content
         .filter((link) => link.content.length > 0);
 };
 
-// ** adiciona/cria um item ou vários itens na cotação *//
+// ** adiciona/cria um item ou vários itens na cotação */
 export const addToQuotationRepository = (db: Database) =>
     (quotationId: number, items: ItemData[]): QuotationLink[] => {
 
@@ -116,7 +116,7 @@ export const addToQuotationRepository = (db: Database) =>
         return run();
     };
 
-//** apaga todos os item_references */
+/** apaga todos os item_references */
 export const deleteAllItemReferencesRepository = (db: Database) => () => {
     const deleteAll = db.prepare(`
         DELETE FROM item_references
@@ -125,7 +125,7 @@ export const deleteAllItemReferencesRepository = (db: Database) => () => {
     return deleteAll;
 };
 
-//** pega todos os item_references */
+/** pega todos os item_references */
 export const getAllItemReferencesRepository = (db: Database) =>
     (): ItemReference[] => {
         const references = db.prepare(`
@@ -138,7 +138,7 @@ export const getAllItemReferencesRepository = (db: Database) =>
         return references as ItemReference[];
     };
 
-//** pesquisa item_references pela descrição */
+/** pesquisa item_references pela descrição */
 export const searchItemReferencesByDescriptionRepository = (db: Database) =>
     (rawQuery: Pick<ItemReference, 'description'>['description']): ItemReference[] => {
         // Evita erro de sintaxe do FTS5 e preserva tokenizers usados no índice
@@ -163,7 +163,7 @@ export const searchItemReferencesByDescriptionRepository = (db: Database) =>
     };
 
 
-//**  busca item_values pelo id */
+/**  busca item_values pelo id */
 export const getItemValuesByIDRepository = (db: Database) =>
     (item_values_id: number): ItemValues | undefined => {
         const itemValues = db.prepare(`
@@ -173,7 +173,7 @@ export const getItemValuesByIDRepository = (db: Database) =>
         return itemValues;
     };
 
-//** busca item_reference pelo id, trazendo os dados + links de referência  */
+/** busca item_reference pelo id, trazendo os dados + links de referência  */
 export const getItemReferenceByIDRepository = (db: Database) =>
     (item_reference_id: number): ItemWithReferenceLinks | undefined => {
         const ref = db.prepare(`
@@ -192,7 +192,7 @@ export const getItemReferenceByIDRepository = (db: Database) =>
     };
 
 
-//** cria a referência do item (dados mestre) */
+/** cria a referência do item (dados mestre) */
 export const createItemReferenceRepository = (db: Database) =>
     (item_reference: ItemReference): number => {
         const row = db.prepare(`
@@ -206,4 +206,19 @@ export const createItemReferenceRepository = (db: Database) =>
             item_reference.notes ?? null
         );
         return row.lastInsertRowid as number;
+    };
+
+/** pega os links de referência por ID da referência do item */
+export const getReferenceLinksByReferenceIdRepository = (db: Database) =>
+    (item_reference_id: number): ReferenceLink[] => {
+        return db.prepare(`
+            SELECT
+                id,
+                item_reference_id,
+                content,
+                datetime(created_at, 'localtime') AS created_at
+            FROM reference_links
+            WHERE item_reference_id = ?
+            ORDER BY id ASC
+        `).all(item_reference_id) as ReferenceLink[];
     };

@@ -6,19 +6,14 @@ const create = async (data: CreateQuotation) => {
     return response;
 }
 
-const createWithItems = async (data: CreateWithAllData) => {
-    const response = await baseAPI.quotation.createWithItems(data);
-    return response;
-}
-
 const getAllSummary = async () => {
     const response = await baseAPI.quotation.getAllSummary();
     return response;
 }
 
-const getFullDetail = async (quotationId: Quotation['id']) => {
-    const response = await baseAPI.quotation.getFullDetail(quotationId);
+const getFull = async (quotationId: Quotation['id']) => {
+    const response = await baseAPI.quotation.getFull(quotationId);
     return response;
 };
 
-export default { create, createWithItems, getAllSummary, getFullDetail };
+export default { create, getAllSummary, getFull };

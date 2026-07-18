@@ -8,6 +8,7 @@ import getQuotationFullService from "./quotation/getQuotationFull.service.js";
 // item
 import searchDescriptionService from "./item/searchDescription.service.js";
 import findItemReferences from "./item/findItemReferences.service.js";
+import getReferenceLinksService from "./item/getReferenceLinks.service.js";
 
 export const createServices = (db: Database) => ({
     quotation: {
@@ -17,7 +18,8 @@ export const createServices = (db: Database) => ({
     },
     item: {
         searchDescription: searchDescriptionService(db),
-        findItemReferences: findItemReferences(db)
+        findItemReferences: findItemReferences(db),
+        getReferenceLinks: getReferenceLinksService(db)
     }
 })
 
