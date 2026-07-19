@@ -9,7 +9,8 @@ import {
     searchItemReferencesByDescriptionRepository,
     createItemReferenceRepository,
     getReferenceLinksByReferenceIdRepository,
-    getAllItemValuesByReferenceIdRepository
+    getAllItemValuesByReferenceIdRepository,
+    createReferenceLinkRepository
 } from "./item.repository.js";
 
 import {
@@ -37,7 +38,8 @@ export const createRepositories = (db: Database) => ({
         getValuesById: getItemValuesByIDRepository(db),
         searchDescription: searchItemReferencesByDescriptionRepository(db),
         getReferenceLinksByReferenceId: getReferenceLinksByReferenceIdRepository(db),
-        getAllValuesByReferenceId: getAllItemValuesByReferenceIdRepository(db)
+        getAllValuesByReferenceId: getAllItemValuesByReferenceIdRepository(db),
+        createReferenceLink: createReferenceLinkRepository(db)
     },
 });
 

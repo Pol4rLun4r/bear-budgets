@@ -236,3 +236,13 @@ export const getAllItemValuesByReferenceIdRepository = (db: Database) =>
 
         return values;
     };
+
+/** cria um link de referência para um item */
+export const createReferenceLinkRepository = (db: Database) =>
+    (item_reference_id: number, data: ReferenceLink): number => {
+        const row = db.prepare(`
+            INSERT INTO reference_links (item_reference_id, content)
+            VALUES (?, ?)
+        `).run(item_reference_id, data.content);
+        return row.lastInsertRowid as number;
+    };

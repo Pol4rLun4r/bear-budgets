@@ -36,9 +36,7 @@ type EventPayloadMapping = {
 
     // item
     "item:searchDescription": Result<ItemReference[] | undefined>;
-    "item:getNotes": Result<ItemReference['notes'] | undefined>;
     "item:getReferenceLinks": Result<ReferenceLink[] | undefined>;
-    "item:createNote": Result<ItemReference['id'] | undefined>;
     "item:findItemReferences": Result<ItemReference[] | undefined>;
     "item:getAllValuesByReferenceId": Result<ItemValues[] | undefined>;
 

@@ -6,6 +6,42 @@ import { createRepositories } from "../repositories/index.js";
 import { fakeItens } from "../test/fakeItens.js";
 import { createServices } from "../services/index.js";
 
+const createRandomQuotationPayload = (): CreateQuotation => {
+    const itemCount = Math.floor(Math.random() * 5) + 1;
+
+    const items = Array.from({ length: itemCount }, (_, position) => {
+        const randomItem = fakeItens[Math.floor(Math.random() * fakeItens.length)];
+        const quantity = Math.floor(Math.random() * 5) + 1;
+        const unitPrice = Number((Math.random() * 100 + 1).toFixed(2));
+        const hasReferenceLink = Math.random() > 0.5;
+
+        return {
+            item_reference: { ...randomItem },
+            reference_links: hasReferenceLink
+                ? [{ content: 'https://mantine.dev/llms/getting-started.md' }]
+                : [],
+            item_values: {
+                quantity,
+                unit_price: unitPrice,
+                position
+            }
+        };
+    });
+
+    const totalValue = Number(
+        items.reduce((sum, item) => sum + item.item_values.quantity * item.item_values.unit_price, 0).toFixed(2)
+    );
+
+    return {
+        items,
+        quotation: {
+            amount: items.length,
+            total_value: totalValue,
+            notes: `Orçamento aleatório ${Math.floor(Math.random() * 1000)}`
+        }
+    };
+};
+
 export const createFakeData = (db: Database) => {
     if (!isDev()) return;
 
@@ -25,34 +61,8 @@ export const createFakeData = (db: Database) => {
         });
     });
 
-    const payloadQuotation: CreateQuotation = {
-        items: [
-            {
-                item_reference: { ...fakeItens[0] },
-                reference_links: [],
-                item_values: {
-                    quantity: 2,
-                    unit_price: 2,
-                    position: 0
-                }
-            },
-            {
-                item_reference: { ...fakeItens[0] },
-                reference_links: [
-                    { content: 'https://mantine.dev/llms/getting-started.md' }
-                ],
-                item_values: {
-                    quantity: 2,
-                    unit_price: 2,
-                    position: 1
-                }
-            }
-        ],
-        quotation: { amount: 12, total_value: 431.32, notes: "Hello World" }
-    }
-
     // Cria falsos orçamentos
     for (let index = 0; index < 50; index++) {
-        services.quotation.create(payloadQuotation);
+        services.quotation.create(createRandomQuotationPayload());
     }
 }
