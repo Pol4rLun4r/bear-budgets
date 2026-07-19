@@ -222,3 +222,17 @@ export const getReferenceLinksByReferenceIdRepository = (db: Database) =>
             ORDER BY id ASC
         `).all(item_reference_id) as ReferenceLink[];
     };
+
+/**  busca todas versão do item pelo id */
+export const getAllItemValuesByReferenceIdRepository = (db: Database) =>
+    (item_reference_id: number): ItemValues[] => {
+        const values = db.prepare(`
+            SELECT *
+            FROM item_values
+            WHERE item_reference_id = ?
+            ORDER BY created_at ASC
+            LIMIT 15
+        `).all(item_reference_id) as ItemValues[];
+
+        return values;
+    };
