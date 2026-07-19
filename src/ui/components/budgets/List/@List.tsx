@@ -7,7 +7,7 @@ import Rows from "./Rows.tsx";
 // style
 import classes from "./Items.module.css"
 
-const List = ({ budgets }: { budgets: QuotationSummary[] }) => {
+const List = ({ budgets }: { budgets: Quotation[] }) => {
     return (
         <Paper withBorder radius="lg" w={'100%'} h={'100%'} className={classes.items}>
             <Table.ScrollContainer minWidth={700} w={'100%'} h={'100%'}>
@@ -15,8 +15,6 @@ const List = ({ budgets }: { budgets: QuotationSummary[] }) => {
                     <Table.Thead>
                         <Table.Tr>
                             <Table.Th w={'5%'}><VisuallyHidden /></Table.Th>
-                            <Table.Th w={'30%'}>Cliente</Table.Th>
-                            <Table.Th w={'20%'}>Documento</Table.Th>
                             <Table.Th w={'10%'}>Valor Total</Table.Th>
                             <Table.Th w={'5%'}>Itens</Table.Th>
                             <Table.Th w={'10%'}>Data de criação</Table.Th>

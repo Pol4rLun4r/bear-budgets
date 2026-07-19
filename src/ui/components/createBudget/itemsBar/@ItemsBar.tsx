@@ -6,7 +6,12 @@ import Values from "./Values";
 
 const ItemsBar = () => {
     return (
-        <Group justify="space-between" w={'100%'} align="flex-end">
+        <Group
+            justify="space-between"
+            w={'100%'}
+            align="flex-end"
+            p="md"
+        >
             <Values />
             <Buttons />
         </Group>

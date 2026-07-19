@@ -25,7 +25,7 @@ const FetchReferences = () => {
     const DEBOUNCE_MS = 500;
 
     const fetchReferences = async (querySearch: SearchItemDescriptionIsOptional) => {
-        const response = await services.item.getAllBySearch(querySearch);
+        const response = await services.item.findItemReferences(querySearch);
 
         if (!response.success) {
             setReferences([]);

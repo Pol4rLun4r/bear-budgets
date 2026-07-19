@@ -2,14 +2,12 @@
 import classes from './CreateBudget.module.css'
 
 // components
-import ClientData from '../../components/createBudget/clientData/@ClientData';
-import Pages from '../../components/createBudget/pages/@Pages';
+import Items from "../../components/createBudget/items/@Items";
 
 const CreateBudget = () => {
     return (
         <div className={classes.container}>
-            <ClientData />
-            <Pages />
+            <Items />
         </div>
     )
 };

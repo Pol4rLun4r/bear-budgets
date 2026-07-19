@@ -18,9 +18,13 @@ const Items = () => {
 
     return (
         <Stack className={classes.container}>
-            <ItemsBar />
             <Paper withBorder radius="lg" className={classes.items}>
-                {listItems.length === 0 ? <NoItems /> : <List/>}
+                <div className={classes.header}>
+                    <ItemsBar />
+                </div>
+                <div className={classes.content}>
+                    {listItems.length === 0 ? <NoItems /> : <List />}
+                </div>
             </Paper>
         </Stack>
     )

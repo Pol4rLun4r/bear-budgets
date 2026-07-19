@@ -17,9 +17,9 @@ const findItemReferences = async (query: SearchItemDescriptionIsOptional) => {
     return response;
 };
 
-const getAllVersionByReferenceId = async (referenceId: GetByReferenceId) => {
-    const response = await baseAPI.item.getAllVersionByReferenceId(referenceId);
+const getAllValuesByReferenceId = async (referenceId: GetByReferenceId) => {
+    const response = await baseAPI.item.getAllValuesByReferenceId(referenceId);
     return response;
 };
 
-export default { searchDescription, getReferenceLinks, findItemReferences, getAllVersionByReferenceId };
+export default { searchDescription, getReferenceLinks, findItemReferences, getAllValuesByReferenceId };
