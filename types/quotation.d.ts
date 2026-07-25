@@ -42,7 +42,7 @@ type ItemValues = {
     version: number;
     quantity: number;
     unit_price?: number;
-    markup?: number;
+    markup?: string;
     purchase_shipping?: number;
     ipi?: number;
     st?: number;

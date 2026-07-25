@@ -30,7 +30,7 @@ const INITIAL_UP = `
         position INTEGER NOT NULL,
         quantity INTEGER,
         unit_price REAL,
-        markup INTEGER,
+        markup TEXT,
         purchase_shipping REAL,
         ipi REAL,
         st REAL,

@@ -3,7 +3,7 @@ import type { AppDispatch } from "../store";
 
 // redux resets
 import { resetClient } from "./clientSlice";
-import { resetItemData } from "./items/itemFormSlice";
+import { resetItemData } from "../itemForm/itemFormSlice.ts";
 import { resetStep } from "./items/itemFormStepsSlice";
 import { resetReferenceLink } from "./items/ReferenceLinkFormSlice.ts";
 import { resetList } from "./items/listItemsSlice";

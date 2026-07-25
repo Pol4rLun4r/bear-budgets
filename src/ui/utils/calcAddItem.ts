@@ -1,7 +1,7 @@
 // utils
 import { convertMarkupValue } from "./markupList";
 
-const calcAddItem = ({ ipi = 0, markup = "", purchase_shipping = 0, quantity = 0, st = 0, unit_price = 0, extra_value = 0 }: Partial<ItemVersion>) => {
+const calcAddItem = ({ ipi = 0, markup = "", purchase_shipping = 0, quantity = 0, st = 0, unit_price = 0, extra_value = 0 }: Partial<ItemValues>) => {
     const markupNum = convertMarkupValue(markup);
 
     const totalWithoutTaxes = quantity * unit_price;

@@ -34,7 +34,7 @@ describe("Pegar cotação completa", () => {
                 item_values: fakeItemValues(1, {
                     quantity: 22,
                     unit_price: 12,
-                    markup: 40,
+                    markup: "40%",
                     extra_value: 15.5,
                 }),
             },
@@ -46,7 +46,7 @@ describe("Pegar cotação completa", () => {
                 item_values: fakeItemValues(2, {
                     quantity: 122,
                     unit_price: 24,
-                    markup: 40,
+                    markup: "40%",
                     boarding: "FOB",
                 }),
             },
@@ -58,7 +58,7 @@ describe("Pegar cotação completa", () => {
                 item_values: fakeItemValues(3, {
                     quantity: 20,
                     unit_price: 2,
-                    markup: 40,
+                    markup: "40%",
                     extra_value: 88,
                     boarding: "CIF",
                 }),

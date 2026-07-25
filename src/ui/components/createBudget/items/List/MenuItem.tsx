@@ -9,10 +9,10 @@ import { IconCopy, IconCopyPlus, IconMenu3, IconPencilMinus, IconTrash } from "@
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../redux/store";
 import { addItem, deleteItem } from "../../../../redux/createBudget/items/listItemsSlice";
-import { ItemDataState, setItemDataEdit } from "../../../../redux/createBudget/items/itemFormSlice";
+import { ItemDataState, setItemDataEdit } from "../../../../redux/itemForm/itemFormSlice";
 
 // component
-import ItemForm from "../../itemForm/@ItemForm";
+import ItemForm from "../../../itemForm/@ItemForm";
 import { notifications } from "@mantine/notifications";
 
 interface MenuItemType {

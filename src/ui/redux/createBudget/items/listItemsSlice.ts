@@ -1,6 +1,6 @@
 // redux
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { ItemDataState } from "./itemFormSlice";
+import { ItemDataState } from "../../itemForm/itemFormSlice";
 
 const initialState: ItemDataState[] = [];
 
@@ -19,8 +19,8 @@ const listItemsSlice = createSlice({
             state.push({
                 ...action.payload,
                 temp_id: newTemId(),
-                item_version: {
-                    ...action.payload.item_version,
+                item_values: {
+                    ...action.payload.item_values,
                     position: state.length, // define a posição do item como o último índice da lista
                 }
             });
@@ -47,7 +47,7 @@ const listItemsSlice = createSlice({
 
             // atualiza a posição de todos os itens
             state.forEach((item, index) => {
-                item.item_version.position = index;
+                item.item_values.position = index;
             });
         },
         deleteItem: (state, action: PayloadAction<string>) => {
@@ -59,7 +59,7 @@ const listItemsSlice = createSlice({
 
                 // atualiza a posição de todos os itens
                 state.forEach((item, index) => {
-                    item.item_version.position = index;
+                    item.item_values.position = index;
                 });
             }
         },

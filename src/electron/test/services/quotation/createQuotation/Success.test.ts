@@ -133,7 +133,7 @@ describe("Sucessos ao criar cotação", () => {
                         { content: '312' }
                     ],
                     item_values: fakeItemValues(1, {
-                        markup: 40,
+                        markup: "40",
                         extra_value: 15.5,
                     }),
                 },

@@ -23,7 +23,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <MantineProvider
         defaultColorScheme='dark'
-        theme={{ fontFamily: 'primary_font', primaryColor: 'violet' }}
+        theme={{ fontFamily: 'primary_font', primaryColor: 'violet', defaultGradient: { from: 'violet', to: 'grape', deg: 45 } }}
       >
         <Notifications />
         <Main>
