@@ -1,6 +1,6 @@
 // components
 import FormItemReference from "./formItemReference/@FormItemReference";
-import FormItemVersion from "./formItemValues/@FormItemVersion";
+import FormItemValues from "./formItemValues/@FormItemValues";
 import StepsButtons from "./StepsButtons";
 import SwitchMode from "./SwitchMode";
 
@@ -25,7 +25,7 @@ const ItemForm = ({ close, scope }: { close: () => void, scope: ItemFormScope })
                     <FormItemReference scope={scope} />
                 </Stepper.Step>
                 <Stepper.Step label="Valores" description="Defina os valores do item">
-                    <FormItemVersion scope={scope} />
+                    <FormItemValues scope={scope} />
                 </Stepper.Step>
             </Stepper>
             <Divider />

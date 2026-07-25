@@ -2,10 +2,13 @@
 // redux
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
+type ItemValuesDataState = Partial<ItemValues> & { stInPercentage?: number | undefined; }
+
 export interface ItemDataState {
+    toggleStMode: boolean;
     temp_id: string;
     item_reference: Partial<ItemReference>;
-    item_values: Partial<ItemValues>;
+    item_values: ItemValuesDataState
     reference_links: Partial<ReferenceLink>[];
 }
 
@@ -21,6 +24,7 @@ export interface ItemFormSliceState {
 
 export const createEmptyItemData = (): ItemDataState => {
     return {
+        toggleStMode: false,
         temp_id: "",
         item_reference: {
             id: undefined,
@@ -35,6 +39,7 @@ export const createEmptyItemData = (): ItemDataState => {
             quantity: 1,
             ipi: undefined,
             st: undefined,
+            stInPercentage: undefined,
             markup: '40',
             purchase_shipping: undefined,
             extra_value: undefined,
@@ -107,17 +112,30 @@ const itemVersionReducers = {
     },
     setVersion: (
         state: ItemFormSliceState,
-        action: PayloadAction<{ scope: ItemFormScope; version: Partial<ItemValues> }>,
+        action: PayloadAction<{ scope: ItemFormScope; values: Partial<ItemValues> }>,
     ) => {
-        draft(state, action.payload.scope).item_values = action.payload.version;
+        draft(state, action.payload.scope).item_values = action.payload.values;
     },
-    resetItemVersion: (state: ItemFormSliceState, action: PayloadAction<ItemFormScope>) => {
+    switchStMode: (
+        state: ItemFormSliceState,
+        action: PayloadAction<{ scope: ItemFormScope; }>,
+    ) => {
+        const actualState = draft(state, action.payload.scope);
+
+        actualState.toggleStMode = !actualState.toggleStMode;
+    },
+    resetItemValues: (state: ItemFormSliceState, action: PayloadAction<ItemFormScope>) => {
         const empty = createEmptyItemData();
+        const payload = draft(state, action.payload)
         const values = draft(state, action.payload).item_values;
+
+        payload.toggleStMode = empty.toggleStMode;
+
         values.unit_price = empty.item_values.unit_price;
         values.quantity = 1;
         values.ipi = empty.item_values.ipi;
         values.st = empty.item_values.st;
+        values.stInPercentage = empty.item_values.stInPercentage;
         values.markup = empty.item_values.markup;
         values.purchase_shipping = empty.item_values.purchase_shipping;
         values.boarding = empty.item_values.boarding;
@@ -175,10 +193,11 @@ export const {
     resetItemReference,
     resetItemData,
     resetItemDescription,
-    resetItemVersion,
+    resetItemValues,
     addLink,
     removeLink,
     setItemDataEdit,
+    switchStMode
 } = itemFormSlice.actions;
 
 export default itemFormSlice.reducer;

@@ -4,7 +4,8 @@ type listStructure = {
 }
 
 export const markupList: listStructure[] = [
-    { label: '(5%) Markup', value: '5' },
+    { label: '(00%) Zero', value: '0' },
+    { label: '(05%) Markup', value: '5' },
     { label: '(10%) Markup', value: '10' },
     { label: '(15%) Markup', value: '15' },
     { label: '(20%) Markup', value: '20' },

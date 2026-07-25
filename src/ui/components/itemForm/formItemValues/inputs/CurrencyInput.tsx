@@ -4,7 +4,7 @@ import { useState, type ClipboardEvent } from "react";
 import { NumberInput } from "@mantine/core";
 
 // icons
-import { IconCurrencyReal } from "@tabler/icons-react";
+import { IconCurrencyReal, IconPercentage } from "@tabler/icons-react";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
@@ -24,17 +24,20 @@ type Inputs = keyof CurrencyInputs
 interface CurrencyInputProps {
     // config
     scope: ItemFormScope;
-    itemVersionInput: Inputs;
+    itemValuesInput: Inputs;
 
     // custom
     label: string;
     placeholder?: string;
     widthInput?: string | number;
     withAsterisk?: boolean;
+    stPercentageMode?: boolean;
+    toggleStMode?: boolean;
 }
 
-const CurrencyInput = ({ scope, itemVersionInput, label, placeholder, widthInput, withAsterisk }: CurrencyInputProps) => {
+const CurrencyInput = ({ scope, itemValuesInput, label, placeholder, widthInput, withAsterisk, stPercentageMode, toggleStMode }: CurrencyInputProps) => {
     const itemValues = useSelector((state: RootState) => state.itemForm.form[scope].item_values);
+
     const dispatch = useDispatch<AppDispatch>();
     const [focused, setFocused] = useState(false);
 
@@ -50,7 +53,7 @@ const CurrencyInput = ({ scope, itemVersionInput, label, placeholder, widthInput
     const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {
         const text = event.clipboardData.getData("text");
         event.preventDefault();
-        setCurrencyValue(itemVersionInput, normalizeBrazilianCurrency(text));
+        setCurrencyValue(itemValuesInput, normalizeBrazilianCurrency(text));
     };
 
     return (
@@ -63,20 +66,27 @@ const CurrencyInput = ({ scope, itemVersionInput, label, placeholder, widthInput
 
             // design do input
             radius='lg'
-            leftSection={<IconCurrencyReal size={18} />}
+            leftSection={!toggleStMode ? <IconCurrencyReal size={18} /> : <IconPercentage size={18} />}
             decimalSeparator=","
-            thousandSeparator={focused ? false : "."}
+            thousandSeparator={focused ? false : stPercentageMode ? false : "."}
             decimalScale={2}
             min={0.00}
             stepHoldDelay={500}
             stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
 
             // tratamento de valores
-            value={itemValues[itemVersionInput] ?? ""}
+            value={itemValues[itemValuesInput] ?? ""}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             onPaste={handlePaste}
-            onChange={(value) => setCurrencyValue(itemVersionInput, convertToNumber(value))}
+            onChange={(value) => setCurrencyValue(itemValuesInput, convertToNumber(value))}
+
+            styles={{
+                input: {
+                    borderTopRightRadius: stPercentageMode ? 0 : '',
+                    borderBottomRightRadius: stPercentageMode ? 0 : '',
+                }
+            }}
         />
     )
 }

@@ -7,7 +7,7 @@ import { ItemFormScope } from "../../../../redux/itemForm/itemFormSlice";
 const PurchaseShipping = ({ scope }: { scope: ItemFormScope }) => {
     return (
         <CurrencyInput
-            itemVersionInput="purchase_shipping"
+            itemValuesInput="purchase_shipping"
             label="Frete de compra"
             placeholder="(opcional)"
             scope={scope}

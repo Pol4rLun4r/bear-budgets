@@ -4,13 +4,13 @@ import { UnstyledButton, Text } from "@mantine/core"
 // redux
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
-import { ItemFormScope, resetItemVersion } from "../../../redux/itemForm/itemFormSlice";
+import { ItemFormScope, resetItemValues } from "../../../redux/itemForm/itemFormSlice";
 
 const ClearValues = ({ scope }: { scope: ItemFormScope }) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleClear = () => {
-        dispatch(resetItemVersion(scope));
+        dispatch(resetItemValues(scope));
     };
 
     return (

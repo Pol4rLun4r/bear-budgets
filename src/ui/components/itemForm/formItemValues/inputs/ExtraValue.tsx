@@ -7,7 +7,7 @@ import { ItemFormScope } from "../../../../redux/itemForm/itemFormSlice";
 const ExtraValue = ({ scope }: { scope: ItemFormScope }) => {
     return (
         <CurrencyInput
-            itemVersionInput="extra_value"
+            itemValuesInput="extra_value"
             label="Valor extra"
             placeholder="00"
             scope={scope}

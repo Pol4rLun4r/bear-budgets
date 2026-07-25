@@ -6,8 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { incrementStep, decrementStep } from "../../redux/itemForm/itemFormStepsSlice";
 import { addItem, editItem } from "../../redux/createBudget/items/listItemsSlice";
-import { ItemFormScope } from "../../redux/itemForm/itemFormSlice";
+import { ItemDataState, ItemFormScope } from "../../redux/itemForm/itemFormSlice";
 import resetItem from "../../redux/itemForm/resetItem.thunk";
+
+// util
+import useCalcAddItem from "../../utils/calcAddItem";
 
 const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScope }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,7 +19,12 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
   const itemReference = useSelector((state: RootState) => state.itemForm.form[scope].item_reference);
   const itemValues = useSelector((state: RootState) => state.itemForm.form[scope].item_values);
 
+  // dados do item bruto
   const data = useSelector((state: RootState) => state.itemForm.form[scope]);
+
+  const { stValue } = useCalcAddItem({ ...data.item_values, switchStMode: data.toggleStMode });
+
+  const convertedData: ItemDataState = { ...data, item_values: { ...data.item_values, st: stValue }, toggleStMode: false };
 
   const hasDescription = itemReference?.description!.trim().length > 0;
 
@@ -41,13 +49,13 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
     hasDescription;
 
   const handleAddItem = () => {
-    dispatch(addItem(data));
+    dispatch(addItem(convertedData));
     close();
     resetItem(dispatch, scope);
   };
 
   const handleEditItem = () => {
-    dispatch(editItem(data));
+    dispatch(editItem(convertedData));
     close();
     resetItem(dispatch, scope);
   }

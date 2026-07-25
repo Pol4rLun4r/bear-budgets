@@ -30,9 +30,10 @@ const configInput: NumberInputProps = {
 
 const Calc = ({ scope }: { scope: ItemFormScope }) => {
     const itemData = useSelector((state: RootState) => state.itemForm.form[scope].item_values);
+    const switchStMode = useSelector((state: RootState) => state.itemForm.form[scope].toggleStMode);
     const switchMode = useSelector((state: RootState) => state.itemForm.switchMode.mode);
 
-    const { totalWithoutTaxes, ipiValue, totalWithIPIandST, markupValue, totalWithAll, finalUnitValue } = useCalcAddItem(itemData)
+    const { totalWithoutTaxes, ipiValue, stValue, totalWithIPIandST, markupValue, totalWithAll, finalUnitValue } = useCalcAddItem({ ...itemData, switchStMode })
 
     if (switchMode) {
         return (
@@ -77,7 +78,7 @@ const Calc = ({ scope }: { scope: ItemFormScope }) => {
         <>
             <Group grow align="flex-end">
                 <NumberInput
-                    label="Total sem impostos"
+                    label="Total S/ impostos"
                     leftSection={<IconCurrencyReal size={18} />}
                     {...configInput}
 
@@ -97,6 +98,15 @@ const Calc = ({ scope }: { scope: ItemFormScope }) => {
 
                     value={ipiValue}
                 />
+                {switchStMode && (
+                    <NumberInput
+                        label="Valor ST"
+                        leftSection={<IconCurrencyReal size={18} />}
+                        {...configInput}
+
+                        value={stValue}
+                    />
+                )}
             </Group>
             <Group grow align="flex-end">
                 <NumberInput

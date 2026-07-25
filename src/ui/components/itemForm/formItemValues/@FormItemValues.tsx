@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 // types
 import { ItemFormScope } from "../../../redux/itemForm/itemFormSlice";
 
-const FormItemVersion = ({ scope }: { scope: ItemFormScope }) => {
+const FormItemValues = ({ scope }: { scope: ItemFormScope }) => {
     const switchMode = useSelector((state: RootState) => state.itemForm.switchMode.mode);
 
     return (
@@ -55,4 +55,4 @@ const FormItemVersion = ({ scope }: { scope: ItemFormScope }) => {
     )
 }
 
-export default FormItemVersion;
+export default FormItemValues;

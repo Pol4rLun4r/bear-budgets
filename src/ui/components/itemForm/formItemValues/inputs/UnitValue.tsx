@@ -7,7 +7,7 @@ import { ItemFormScope } from "../../../../redux/itemForm/itemFormSlice";
 const UnitValue = ({ scope }: { scope: ItemFormScope }) => {
     return (
         <CurrencyInput
-            itemVersionInput="unit_price"
+            itemValuesInput="unit_price"
             label="Valor unitário"
             placeholder="00"
             withAsterisk

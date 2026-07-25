@@ -45,10 +45,10 @@ const List = () => {
                             <Table.Th w={'5%'}><VisuallyHidden /></Table.Th>
                             <Table.Th w={'5%'}>Item</Table.Th>
                             <Table.Th w={'20%'}>Descrição</Table.Th>
+                            <Table.Th w={'10%'}>Código interno</Table.Th>
                             <Table.Th w={'10%'}>Valor unitário</Table.Th>
                             <Table.Th w={'8%'}>Qtd</Table.Th>
                             <Table.Th w={'10%'}>Total c/ somas</Table.Th>
-                            <Table.Th w={'10%'}>Código interno</Table.Th>
                             <Table.Th w={'10%'}>Embarque</Table.Th>
                             <Table.Th w={'8%'}>Markup (%)</Table.Th>
                             {!switchMode &&
