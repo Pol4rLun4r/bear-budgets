@@ -22,8 +22,6 @@ export const Rows = ({ references }: { references: ItemReference[] }) => {
         <Table.Td {...tableTdProps} ><RowContent label={reference.internal_code} /></Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.manufacturer_code} /></Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.ncm} /></Table.Td>
-        {/* <Table.Td {...tableTdProps} >Em manutenção</Table.Td> */}
-        {/* <Table.Td {...tableTdProps} >Em manutenção</Table.Td> */}
       </Table.Tr>
     ))
   )
