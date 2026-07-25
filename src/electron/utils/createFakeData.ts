@@ -6,25 +6,22 @@ import { createRepositories } from "../repositories/index.js";
 import { fakeItens } from "../test/fakeItens.js";
 import { createServices } from "../services/index.js";
 
-const createRandomQuotationPayload = (): CreateQuotation => {
+const createRandomQuotationPayload = (itemReferences: ItemReference[]): CreateQuotation => {
     const itemCount = Math.floor(Math.random() * 5) + 1;
 
     const items = Array.from({ length: itemCount }, (_, position) => {
-        const randomItem = fakeItens[Math.floor(Math.random() * fakeItens.length)];
+        const itemReference = itemReferences[Math.floor(Math.random() * itemReferences.length)];
         const quantity = Math.floor(Math.random() * 5) + 1;
         const unitPrice = Number((Math.random() * 100 + 1).toFixed(2));
-        const hasReferenceLink = Math.random() > 0.5;
 
         return {
-            item_reference: { ...randomItem },
-            reference_links: hasReferenceLink
-                ? [{ content: 'https://mantine.dev/llms/getting-started.md' }]
-                : [],
+            item_reference: { ...itemReference },
             item_values: {
                 quantity,
                 unit_price: unitPrice,
                 position
-            }
+            },
+            reference_links: []
         };
     });
 
@@ -54,15 +51,21 @@ export const createFakeData = (db: Database) => {
     ];
 
     // Cria itens falsos
-    fakeItens.forEach((item) => {
+    const itemReferences = fakeItens.map((item) => {
         const itemReferenceId = repo.item.createReference(item);
         fakeReferenceLinks.forEach((link) => {
-            repo.item.createReferenceLink(itemReferenceId, {...link, item_reference_id: itemReferenceId});
+            repo.item.createReferenceLink(itemReferenceId, { ...link, item_reference_id: itemReferenceId });
         });
+
+        return { ...item, id: itemReferenceId };
     });
 
     // Cria falsos orçamentos
     for (let index = 0; index < 50; index++) {
-        services.quotation.create(createRandomQuotationPayload());
+        const result = services.quotation.create(createRandomQuotationPayload(itemReferences));
+
+        if (!result.success) {
+            throw new Error(`Falha ao criar orçamento falso: ${result.data}`);
+        }
     }
 }
