@@ -19,13 +19,13 @@ const VersionInfo = ({ itemReferenceId, open }: MenuProps) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleOpen = async () => {
-        const versions = await services.item.getAllVersionByReferenceId(itemReferenceId!);
+        const values = await services.item.getAllValuesByReferenceId(itemReferenceId!);
 
-        if (!versions.success) return console.log(versions.data);
+        if (!values.success) return console.log(values.data);
 
-        const hasVersions = versions.data === undefined ? false : versions.data === null ? false : versions.data.length <= 0 ? false : true;
+        const hasValues = values.data === undefined ? false : values.data === null ? false : values.data.length <= 0 ? false : true;
 
-        dispatch(setVersion(hasVersions ? versions.data! : []));
+        dispatch(setVersion(hasValues ? values.data! : []));
         open();
     };
 

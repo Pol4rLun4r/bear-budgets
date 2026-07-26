@@ -28,6 +28,8 @@ const CreateBudgetButton = () => {
             const res = await services.quotation.create(budgetData);
 
             if (!res.success) {
+                console.log(budgetData);
+
                 return notifications.show({
                     title: 'Error ao criação cotação',
                     message: res.data,
@@ -59,8 +61,10 @@ const CreateBudgetButton = () => {
 
     return (
         <Button
+            variant="gradient"
             radius="lg"
             size="md"
+            w={250}
             disabled={!hasValues}
             onClick={() => handleCreateBudget()}
         >

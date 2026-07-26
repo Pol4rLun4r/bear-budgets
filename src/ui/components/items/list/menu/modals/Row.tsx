@@ -25,10 +25,10 @@ const tableTdProps: TableTdProps = {
   height: 40,
 }
 
-const Row = ({ item_version }: { item_version: ItemVersion }) => {
+const Row = ({ item_values }: { item_values: ItemValues }) => {
   const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode);
 
-  const values = item_version;
+  const values = item_values;
 
   const calcItem = calcAddItem(values);
 
@@ -38,21 +38,21 @@ const Row = ({ item_version }: { item_version: ItemVersion }) => {
   return (
     <Table.Tr >
       <Table.Td {...tableTdProps}><RowContent label={brl.format(unitValue)} /></Table.Td>
-      <Table.Td {...tableTdProps}><RowContent label={item_version.quantity} /></Table.Td>
+      <Table.Td {...tableTdProps}><RowContent label={item_values.quantity} /></Table.Td>
       <Table.Td {...tableTdProps}><RowContent label={brl.format(total)} /></Table.Td>
-      <Table.Td {...tableTdProps}><RowContent extraText="Embarque:" label={item_version.boarding} /></Table.Td>
-      <Table.Td {...tableTdProps}><RowContent label={convertMarkupValue(item_version.markup) + "%"} /></Table.Td>
+      <Table.Td {...tableTdProps}><RowContent extraText="Embarque:" label={item_values.boarding} /></Table.Td>
+      <Table.Td {...tableTdProps}><RowContent label={convertMarkupValue(item_values.markup) + "%"} /></Table.Td>
       {!switchMode &&
         <>
           <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.totalWithoutTaxes)} /></Table.Td>
-          <Table.Td {...tableTdProps}><RowContent label={brl.format(item_version.unit_price as number)} /></Table.Td>
+          <Table.Td {...tableTdProps}><RowContent label={brl.format(item_values.unit_price as number)} /></Table.Td>
           <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.markupUnitValue)} /></Table.Td>
           <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.markupValue)} /></Table.Td>
-          <Table.Td {...tableTdProps}><RowContent label={brl.format(!item_version.st ? 0 : item_version.st)} /></Table.Td>
-          <Table.Td {...tableTdProps}><RowContent label={(!item_version.ipi ? 0 : item_version.ipi) + "%"} /></Table.Td>
+          <Table.Td {...tableTdProps}><RowContent label={brl.format(!item_values.st ? 0 : item_values.st)} /></Table.Td>
+          <Table.Td {...tableTdProps}><RowContent label={(!item_values.ipi ? 0 : item_values.ipi) + "%"} /></Table.Td>
           <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.ipiValue)} /></Table.Td>
-          <Table.Td {...tableTdProps}><RowContent label={brl.format(!item_version.purchase_shipping ? 0 : item_version.purchase_shipping)} /></Table.Td>
-          <Table.Td {...tableTdProps}><RowContent label={brl.format(!item_version.extra_value ? 0 : item_version.extra_value)} /></Table.Td>
+          <Table.Td {...tableTdProps}><RowContent label={brl.format(!item_values.purchase_shipping ? 0 : item_values.purchase_shipping)} /></Table.Td>
+          <Table.Td {...tableTdProps}><RowContent label={brl.format(!item_values.extra_value ? 0 : item_values.extra_value)} /></Table.Td>
           <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.totalWithIPIandST)} /></Table.Td>
         </>
       }

@@ -14,18 +14,19 @@ const QuotationNotes = () => {
     return (
         <Textarea
             label="Notas da cotação"
-            description="Espaço para notas sobre a cotação"
-            placeholder="(Opcional)"
+            placeholder="Espaço para notas sobre a cotação (Opcional)"
 
-            size="md"
             radius="lg"
 
+            size="md"
+
             autosize
-            minRows={4}
-            maxRows={4}
+            maxRows={2}
 
             value={notes || ""}
             onChange={(e) => dispatch(setNotes(e.currentTarget.value))}
+
+            flex={1}
         />
     )
 }

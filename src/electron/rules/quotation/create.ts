@@ -19,12 +19,12 @@ const DEFAULT_STATUS = 0;
 /** valida a cotação para "encapsular" os dados */
 const create = ({ notes, amount, total_value, itemsCount }: CreateQuotationRuleInput) => {
     // validar quantidade
-    if (!amount) {
+    if (amount === undefined || amount === null) {
         return failure(rulesCode.AMOUNT_NOT_INFORMED);
     }
 
     // validar valor total
-    if (!total_value) {
+    if (total_value === undefined || total_value === null) {
         return failure(rulesCode.TOTAL_VALUE_NOT_INFORMED);
     }
 

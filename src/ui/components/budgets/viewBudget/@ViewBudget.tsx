@@ -8,7 +8,7 @@ import { RootState } from "../../../redux/store.ts";
 // components
 import Rows from "./Rows.tsx";
 
-export const ViewBudget = ({ budget }: { budget: QuotationFullDetail | undefined }) => {
+export const ViewBudget = ({ budget }: { budget: QuotationFull | undefined }) => {
 
     const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode)
 

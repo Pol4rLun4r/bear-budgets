@@ -13,14 +13,14 @@ import { ViewBudget } from "../../viewBudget/@ViewBudget";
 
 const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
     const [opened, { open, close }] = useDisclosure(false);
-    const [quotation, setQuotation] = useState<QuotationFullDetail | undefined>(undefined);
+    const [quotation, setQuotation] = useState<QuotationFull | undefined>(undefined);
     const [loading, setLoading] = useState(false);
 
     const handleSeeData = () => {
         const fetchQuotation = async () => {
             setLoading(true);
             try {
-                const result = await services.quotation.getFullDetail(quotationId);
+                const result = await services.quotation.getFull(quotationId);
                 if (result.success) {
                     setQuotation(result.data);
                 } else {

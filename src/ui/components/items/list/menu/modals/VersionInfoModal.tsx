@@ -40,7 +40,7 @@ const VersionInfoModal = () => {
                 </Table.Thead>
                 <Table.Tbody>
                     {versions.map((version) => (
-                        <Row key={version.id} item_version={version} />
+                        <Row key={version.id} item_values={version} />
                     ))}
                 </Table.Tbody>
             </Table>
