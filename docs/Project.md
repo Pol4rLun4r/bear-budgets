@@ -71,7 +71,6 @@ ___
  - `Buscar` orçamento
  - Definir/Alterar status do orçamento
  - `Reutilizar` valores de itens já registrados em outros orçamentos
- - `Criar` orçamento sem valores
  - `Buscar` cliente
  - `Editar` cliente
 
