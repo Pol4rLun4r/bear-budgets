@@ -2,13 +2,13 @@
 import { Switch, Tooltip } from "@mantine/core"
 
 // redux
-import type { AppDispatch, RootState } from "../../../redux/store"
+import type { AppDispatch, RootState } from "../../../../redux/store"
 import { useDispatch, useSelector } from "react-redux"
-import { setModeOff, setModeOn } from "../../../redux/createBudget/items/listItemsSwitchModeSlice"
+import { setModeOff, setModeOn } from "../../../../redux/budgetForm/items/listItemsSwitchModeSlice"
 
 const SwitchMode = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode);
+    const switchMode = useSelector((state: RootState) => state.budgetForm.listItemsSwitchMode.mode);
 
     const handleSwitch = (mode: boolean) => {
         if (!mode) {

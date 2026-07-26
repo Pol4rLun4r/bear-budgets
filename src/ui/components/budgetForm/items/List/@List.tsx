@@ -4,7 +4,8 @@ import { Table, VisuallyHidden } from "@mantine/core"
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
-import { reorderItems } from "../../../../redux/createBudget/items/listItemsSlice";
+import { reorderItems } from "../../../../redux/budgetForm/items/listItemsSlice";
+import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
 
 // components
 import SortableRow from "./SortableRow";
@@ -12,10 +13,10 @@ import SortableRow from "./SortableRow";
 // dnd-kit
 import { DragDropProvider } from "@dnd-kit/react";
 
-const List = () => {
+const List = ({ scope }: { scope: BudgetFormScope }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const listItems = useSelector((state: RootState) => state.createBudget.listItems);
-    const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode);
+    const listItems = useSelector((state: RootState) => state.budgetForm.listItems[scope]);
+    const switchMode = useSelector((state: RootState) => state.budgetForm.listItemsSwitchMode.mode);
 
     const handleDragEnd: React.ComponentProps<typeof DragDropProvider>["onDragEnd"] = (event) => {
         if (event.canceled) return console.log('canceled'); // cancela a operação se cancelado
@@ -33,7 +34,7 @@ const List = () => {
 
         if (oldIndex === newIndex) return; // cancela a operação se o item está sendo arrastado para a mesma posição
 
-        dispatch(reorderItems({ oldIndex, newIndex }));
+        dispatch(reorderItems({ scope, position: { oldIndex, newIndex } }));
     };
 
     return (
@@ -69,7 +70,7 @@ const List = () => {
                     </Table.Thead>
                     <Table.Tbody>
                         {listItems.map((item, index) => (
-                            <SortableRow key={item.temp_id} item={item} index={index} />
+                            <SortableRow scope={scope} key={item.temp_id} item={item} index={index} />
                         ))}
                     </Table.Tbody>
                 </Table>

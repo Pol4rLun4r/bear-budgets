@@ -3,12 +3,14 @@ import { combineReducers } from "@reduxjs/toolkit";
 // slicers
 import listItemsSlice from "./items/listItemsSlice";
 import listItemsSwitchModeSlice from "./items/listItemsSwitchModeSlice";
-import quotationSlice from './quotationSlice';
+import quotationInfoSlice from './quotationInfoSlice';
 
-const createBudgetReducer = combineReducers({
-    quotation: quotationSlice,
+export type BudgetFormScope = "budget_create" | "budget_edit";
+
+const BudgetFormReducer = combineReducers({
+    quotationInfo: quotationInfoSlice,
     listItems: listItemsSlice,
     listItemsSwitchMode: listItemsSwitchModeSlice,
 });
 
-export default createBudgetReducer;
+export default BudgetFormReducer;

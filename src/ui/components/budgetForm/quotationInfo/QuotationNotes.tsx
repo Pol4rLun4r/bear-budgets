@@ -4,12 +4,12 @@ import { Textarea } from "@mantine/core"
 // redux
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setNotes } from "../../../redux/createBudget/quotationSlice";
+import { setNotes } from "../../../redux/budgetForm/quotationInfoSlice";
+import { BudgetFormScope } from "../../../redux/budgetForm/@rootReducer";
 
-const QuotationNotes = () => {
-    const notes = useSelector((state: RootState) => state.createBudget.quotation.notes);
+const QuotationNotes = ({ scope }: { scope: BudgetFormScope }) => {
+    const notes = useSelector((state: RootState) => state.budgetForm.quotationInfo[scope].notes);
     const dispatch = useDispatch<AppDispatch>();
-
 
     return (
         <Textarea
@@ -24,7 +24,7 @@ const QuotationNotes = () => {
             maxRows={2}
 
             value={notes || ""}
-            onChange={(e) => dispatch(setNotes(e.currentTarget.value))}
+            onChange={(e) => dispatch(setNotes({ scope, data: e.currentTarget.value }))}
 
             flex={1}
         />

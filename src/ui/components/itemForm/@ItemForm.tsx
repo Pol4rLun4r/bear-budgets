@@ -11,6 +11,8 @@ import { Divider, Stack, Stepper } from "@mantine/core";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { ItemFormScope } from "../../redux/itemForm/itemFormSlice";
+
+// components
 import WarningMoreValues from "./WarningMoreValues";
 
 const ItemForm = ({ close, scope }: { close: () => void, scope: ItemFormScope }) => {

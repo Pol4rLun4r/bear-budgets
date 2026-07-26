@@ -5,17 +5,18 @@ import { IconCurrencyReal } from "@tabler/icons-react";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "../../../redux/store";
-import { setTotalValue, setAmount } from "../../../redux/createBudget/quotationSlice.ts";
+import { RootState, AppDispatch } from "../../../../redux/store.ts";
+import { setTotalValue, setAmount } from "../../../../redux/budgetForm/quotationInfoSlice.ts";
+import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer.ts";
 
 // utils
-import calcAddItem from "../../../utils/calcAddItem";
+import calcAddItem from "../../../../utils/calcAddItem.ts";
 import { useEffect } from "react";
 
-const Values = () => {
+const Values = ({ scope }: { scope: BudgetFormScope }) => {
     const dispatch = useDispatch<AppDispatch>();
 
-    const listItems = useSelector((state: RootState) => state.createBudget.listItems);
+    const listItems = useSelector((state: RootState) => state.budgetForm.listItems[scope]);
 
     const calcValues = listItems.map(item => {
         const values = item.item_values;
@@ -29,9 +30,9 @@ const Values = () => {
     const totalMarkup = calcValues.reduce((sum, value) => sum + value.markupValue, 0);
 
     useEffect(() => {
-        dispatch(setTotalValue(totalBudget));
-        dispatch(setAmount(listItems.length));
-    }, [dispatch, listItems.length, totalBudget]);
+        dispatch(setTotalValue({ scope, data: totalBudget }));
+        dispatch(setAmount({scope, data: listItems.length}));
+    }, [dispatch, listItems.length, scope, totalBudget]);
 
     const configInput: NumberInputProps = {
         decimalSeparator: ",",

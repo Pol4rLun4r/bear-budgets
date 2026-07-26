@@ -1,11 +1,14 @@
 // components
-import CreateBudgetButton from "./CreateBudgetButton";
+import BudgetButton from "./BudgetButton";
 import QuotationNotes from "./QuotationNotes";
+
+// redux
+import { BudgetFormScope } from "../../../redux/budgetForm/@rootReducer";
 
 // mantine
 import { Group } from "@mantine/core";
 
-const QuotationInfo = () => {
+const QuotationInfo = ({ scope }: { scope: BudgetFormScope }) => {
     return (
         <Group
             w="100%"
@@ -14,8 +17,8 @@ const QuotationInfo = () => {
                 alignItems: 'flex-end'
 
             }} >
-            <QuotationNotes />
-            <CreateBudgetButton />
+            <QuotationNotes scope={scope} />
+            <BudgetButton scope={scope} />
         </Group>
     )
 }

@@ -8,18 +8,20 @@ import { IconCopy, IconCopyPlus, IconMenu3, IconPencilMinus, IconTrash } from "@
 // redux
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../redux/store";
-import { addItem, deleteItem } from "../../../../redux/createBudget/items/listItemsSlice";
+import { addItem, deleteItem } from "../../../../redux/budgetForm/items/listItemsSlice";
 import { ItemDataState, setItemDataCreateBudgetEdit } from "../../../../redux/itemForm/itemFormSlice";
 
 // component
 import ItemForm from "../../../itemForm/@ItemForm";
 import { notifications } from "@mantine/notifications";
+import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
 
 interface MenuItemType {
   item: ItemDataState;
+  scope: BudgetFormScope;
 }
 
-const MenuItem = ({ item }: MenuItemType) => {
+const MenuItem = ({ item, scope }: MenuItemType) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const clipboard = useClipboard({ timeout: 200 })
@@ -31,7 +33,7 @@ const MenuItem = ({ item }: MenuItemType) => {
   const [editOpened, { open: editOpen, close: editClose }] = useDisclosure(false);
 
   const handleDelete = () => {
-    dispatch(deleteItem(item.temp_id));
+    dispatch(deleteItem({ scope, tempItemId: item.temp_id }));
   }
 
   const handleCopy = () => {
@@ -51,7 +53,7 @@ const MenuItem = ({ item }: MenuItemType) => {
   }
 
   const handleDuplicate = () => {
-    dispatch(addItem(item))
+    dispatch(addItem({ scope, data: item }))
   }
 
   return (

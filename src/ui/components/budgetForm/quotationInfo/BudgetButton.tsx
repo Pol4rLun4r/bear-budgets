@@ -6,13 +6,15 @@ import { notifications } from "@mantine/notifications";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../redux/store";
 import resetAllCreateBudgetData from "../../../redux/createBudget/resetAllCreateBudgetData.thunk";
+import { BudgetFormScope } from "../../../redux/budgetForm/@rootReducer";
 
 // api
 import services from "../../../services";
 
-const CreateBudgetButton = () => {
-    const items = useSelector((state: RootState) => state.createBudget.listItems);
-    const quotation = useSelector((state: RootState) => state.createBudget.quotation);
+/** botão para lidar com a criação e edição de um orçamento */
+const BudgetButton = ({ scope }: { scope: BudgetFormScope }) => {
+    const items = useSelector((state: RootState) => state.budgetForm.listItems[scope]);
+    const quotation = useSelector((state: RootState) => state.budgetForm.quotationInfo[scope]);
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -23,13 +25,11 @@ const CreateBudgetButton = () => {
         items
     };
 
-    const handleCreateBudget = async () => {
+    const handleBudget = async () => {
         try {
             const res = await services.quotation.create(budgetData);
 
             if (!res.success) {
-                console.log(budgetData);
-
                 return notifications.show({
                     title: 'Error ao criação cotação',
                     message: res.data,
@@ -66,11 +66,11 @@ const CreateBudgetButton = () => {
             size="md"
             w={250}
             disabled={!hasValues}
-            onClick={() => handleCreateBudget()}
+            onClick={() => handleBudget()}
         >
             Criar Orçamento
         </Button>
     )
 }
 
-export default CreateBudgetButton;
+export default BudgetButton;

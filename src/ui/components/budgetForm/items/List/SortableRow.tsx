@@ -18,6 +18,9 @@ import { convertMarkupValue } from "../../../../utils/markupList";
 import RowContent from "./RowContent";
 import MenuItem from "./MenuItem";
 
+// redux
+import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
+
 // style
 import classes from './Row.module.css';
 
@@ -34,11 +37,12 @@ const tableTdProps: TableTdProps = {
 interface SortableRowProps {
     item: ItemDataState;
     index: number;
+    scope: BudgetFormScope
 }
 
-const SortableRow = ({ item, index }: SortableRowProps) => {
+const SortableRow = ({ item, index, scope }: SortableRowProps) => {
     const { ref } = useSortable({ id: item.temp_id, index })
-    const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode)
+    const switchMode = useSelector((state: RootState) => state.budgetForm.listItemsSwitchMode.mode)
 
     const values = item.item_values;
 
@@ -50,7 +54,7 @@ const SortableRow = ({ item, index }: SortableRowProps) => {
     return (
         <Table.Tr ref={ref}>
             <Table.Td {...tableTdProps} align="center">
-                <MenuItem item={item} />
+                <MenuItem scope={scope} item={item} />
             </Table.Td>
             <Table.Td {...tableTdProps}>{item.item_values?.position! + 1}</Table.Td>
             <Table.Td {...tableTdProps}><RowContent disableCopyButton label={item.item_reference.description} /></Table.Td>

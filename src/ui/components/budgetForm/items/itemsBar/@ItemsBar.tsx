@@ -1,10 +1,14 @@
+// mantine
 import { Group } from "@mantine/core"
 
 // components
 import Buttons from "./Buttons";
 import Values from "./Values";
 
-const ItemsBar = () => {
+// redux
+import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
+
+const ItemsBar = ({ scope }: { scope: BudgetFormScope }) => {
     return (
         <Group
             justify="space-between"
@@ -12,8 +16,8 @@ const ItemsBar = () => {
             align="flex-end"
             p="md"
         >
-            <Values />
-            <Buttons />
+            <Values scope={scope} />
+            <Buttons scope={scope} />
         </Group>
     )
 }

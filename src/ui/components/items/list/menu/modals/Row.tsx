@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from "../../../../../redux/store.ts";
 
 // components
-import RowContent from "../../../../createBudget/items/List/RowContent.tsx";
+import RowContent from "../../../../budgetForm/items/List/RowContent.tsx";
 
 const brl = new Intl.NumberFormat("pt-BR", {
   style: "currency",

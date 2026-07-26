@@ -5,7 +5,7 @@ import { Button, Group } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { incrementStep, decrementStep } from "../../redux/itemForm/itemFormStepsSlice";
-import { addItem, editItem } from "../../redux/createBudget/items/listItemsSlice";
+import { addItem, editItem } from "../../redux/budgetForm/items/listItemsSlice";
 import { ItemDataState, ItemFormScope } from "../../redux/itemForm/itemFormSlice";
 import resetItem from "../../redux/itemForm/resetItem.thunk";
 
@@ -49,13 +49,13 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
     hasDescription;
 
   const handleAddItem = () => {
-    dispatch(addItem(convertedData));
+    dispatch(addItem({scope: scope === 'create_budget_add' ? 'budget_create' : 'budget_edit', data: convertedData}));
     close();
     resetItem(dispatch, scope);
   };
 
   const handleEditItem = () => {
-    dispatch(editItem(convertedData));
+    dispatch(editItem({scope: 'budget_edit', data: convertedData}));
     close();
     resetItem(dispatch, scope);
   }

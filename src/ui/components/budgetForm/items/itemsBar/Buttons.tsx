@@ -4,23 +4,24 @@ import { useDisclosure } from '@mantine/hooks';
 
 // redux
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
-import { resetList } from "../../../redux/createBudget/items/listItemsSlice";
+import { AppDispatch } from "../../../../redux/store";
+import { resetList } from "../../../../redux/budgetForm/items/listItemsSlice";
+import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
 
 // components
-import ItemForm from "../../itemForm/@ItemForm";
+import ItemForm from "../../../itemForm/@ItemForm";
 import SwitchMode from "./SwitchMode";
 
 // icons
 import { IconPlus, IconTrash } from "@tabler/icons-react"
 
-const Buttons = () => {
+const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
     const [itemOpened, { open: itemOpen, close: itemClose }] = useDisclosure(false);
     const [deleteOpened, { open: deleteOpen, close: deleteClose }] = useDisclosure(false);
     const dispatch = useDispatch<AppDispatch>();
 
     const handleDelete = () => {
-        dispatch(resetList())
+        dispatch(resetList(scope))
         deleteClose()
     }
 
@@ -93,7 +94,7 @@ const Buttons = () => {
                     blur: 3,
                 }}
             >
-                <ItemForm scope="create_budget_add" close={itemClose} />
+                <ItemForm scope={scope === 'budget_create' ? 'create_budget_add' : 'create_budget_edit'} close={itemClose} />
             </Modal >
         </>
     )
