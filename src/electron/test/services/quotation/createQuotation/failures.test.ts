@@ -18,8 +18,16 @@ describe("Falhas ao criar cotação", () => {
     describe("Quotation", () => {
         it("falhar se a quantidade de itens não for informada", async () => {
             const payload: CreateQuotation = {
-                items: [],
-                quotation: { amount: 0, total_value: 431.32 }
+                items: [{
+                    item_reference: { ...fakeItens[0] },
+                    reference_links: [],
+                    item_values: {
+                        quantity: 2,
+                        unit_price: 2,
+                        position: 1,
+                    }
+                }],
+                quotation: { amount: undefined as unknown as number, total_value: 431.32 }
             }
 
             const quotation = services.quotation.create(payload);
@@ -30,8 +38,18 @@ describe("Falhas ao criar cotação", () => {
 
         it("falhar se o valor total não for informado", async () => {
             const payload: CreateQuotation = {
-                items: [],
-                quotation: { amount: 1, total_value: 0 }
+                items: [
+                    {
+                        item_reference: { ...fakeItens[0] },
+                        reference_links: [],
+                        item_values: {
+                            quantity: 2,
+                            unit_price: 2,
+                            position: 1,
+                        }
+                    }
+                ],
+                quotation: { amount: 1, total_value: undefined as unknown as number }
             }
 
             const quotation = services.quotation.create(payload);
