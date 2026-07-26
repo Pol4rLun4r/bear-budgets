@@ -131,8 +131,8 @@ export const getAllItemReferencesRepository = (db: Database) =>
         const references = db.prepare(`
             SELECT *
             FROM item_references
-            ORDER BY created_at ASC
-            LIMIT 30
+            ORDER BY created_at DESC, id DESC
+            LIMIT 50
         `).all();
 
         return references as ItemReference[];

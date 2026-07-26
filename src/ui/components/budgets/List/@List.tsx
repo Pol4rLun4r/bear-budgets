@@ -15,6 +15,8 @@ const List = ({ budgets }: { budgets: Quotation[] }) => {
                     <Table.Thead>
                         <Table.Tr>
                             <Table.Th w={'5%'}><VisuallyHidden /></Table.Th>
+                            <Table.Th w={'10%'}>Nº do Orçamento</Table.Th>
+                            <Table.Th w={'20%'}>Notas</Table.Th>
                             <Table.Th w={'10%'}>Valor Total</Table.Th>
                             <Table.Th w={'5%'}>Itens</Table.Th>
                             <Table.Th w={'10%'}>Data de criação</Table.Th>

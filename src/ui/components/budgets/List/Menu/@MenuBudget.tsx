@@ -1,35 +1,43 @@
 import { useState } from "react";
 
 // mantine
-import { ActionIcon, Menu, Modal } from "@mantine/core";
+import { ActionIcon, Group, Menu, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 // icons
-import { IconCopyPlus, IconEye, IconMenu3, IconPencilMinus, IconTrash } from "@tabler/icons-react";
+import { IconCopyPlus, IconEyeSpark, IconMenu3, IconTrash } from "@tabler/icons-react";
 import services from '../../../../services/index';
+import BudgetForm from "../../../budgetForm/@BudgetForm";
 
-// components
-import { ViewBudget } from "../../viewBudget/@ViewBudget";
+// redux
+import { setListItems } from "../../../../redux/budgetForm/items/listItemsSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../redux/store";
 
 const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
     const [opened, { open, close }] = useDisclosure(false);
-    const [quotation, setQuotation] = useState<QuotationFull | undefined>(undefined);
-    const [loading, setLoading] = useState(false);
+    const [quotation, setQuotation] = useState<Quotation | undefined>(undefined);
+    // const [loading, setLoading] = useState(false);
+
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleSeeData = () => {
         const fetchQuotation = async () => {
-            setLoading(true);
+            // setLoading(true);
             try {
                 const result = await services.quotation.getFull(quotationId);
                 if (result.success) {
-                    setQuotation(result.data);
+                    const items = result.data?.items
+
+                    setQuotation(result.data?.quotation);
+                    dispatch(setListItems({ scope: 'budget_edit', data: items! }));
                 } else {
                     console.error('Erro ao buscar orçamento:', result.data);
                 }
             } catch (error) {
                 console.error('Erro ao buscar orçamento:', error);
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         };
 
@@ -37,8 +45,10 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
         open();
     }
 
+    const quotationNumber = String(quotation?.id).padStart(6, "0");
+
     return (
-        <>
+        <Group>
             <Menu shadow="md" withArrow offset={-1}>
                 <Menu.Target>
                     <ActionIcon variant="transparent">
@@ -47,15 +57,6 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                    <Menu.Item leftSection={<IconEye size={14} />} onClick={() => handleSeeData()}>
-                        Ver Orçamento
-                    </Menu.Item>
-                    <Menu.Item
-                        leftSection={<IconPencilMinus size={14} />}
-                        disabled
-                    >
-                        Editar Orçamento
-                    </Menu.Item>
                     <Menu.Item
                         leftSection={<IconCopyPlus size={14} />}
                         disabled
@@ -74,10 +75,10 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
 
             <Modal
                 padding='xl'
-                size='100%'
+                size="100%"
                 opened={opened}
                 onClose={close}
-                title="Informações do orçamento"
+                title={"Informações do Orçamento Nº " + quotationNumber}
                 centered
                 radius='lg'
                 overlayProps={{
@@ -85,9 +86,12 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
                     blur: 3,
                 }}
             >
-                {loading ? <div>Carregando...</div> : <ViewBudget budget={quotation} />}
+                <BudgetForm scope="budget_edit" />
             </Modal>
-        </>
+            <ActionIcon onClick={() => handleSeeData()} variant="transparent">
+                <IconEyeSpark />
+            </ActionIcon>
+        </Group>
     )
 }
 

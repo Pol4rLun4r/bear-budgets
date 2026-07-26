@@ -38,7 +38,10 @@ export const deleteQuotationRepository = (db: Database) =>
 export const getAllQuotationSummaryRepository = (db: Database) =>
     () => {
         return db.prepare(`
-            SELECT * FROM quotations
+            SELECT *
+            FROM quotations
+            ORDER BY created_at DESC, id DESC
+            LIMIT 50
         `).all() as Quotation[];
     };
 

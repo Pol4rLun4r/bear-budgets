@@ -65,10 +65,10 @@ const BudgetButton = ({ scope }: { scope: BudgetFormScope }) => {
             radius="lg"
             size="md"
             w={250}
-            disabled={!hasValues}
+            disabled={!hasValues || scope === 'budget_edit'}
             onClick={() => handleBudget()}
         >
-            Criar Orçamento
+            {scope === 'budget_create' ? 'Criar Orçamento' : 'Salvar alterações'}
         </Button>
     )
 }
