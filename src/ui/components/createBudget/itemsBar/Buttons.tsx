@@ -93,7 +93,7 @@ const Buttons = () => {
                     blur: 3,
                 }}
             >
-                <ItemForm scope="add" close={itemClose} />
+                <ItemForm scope="create_budget_add" close={itemClose} />
             </Modal >
         </>
     )

@@ -12,14 +12,11 @@ export interface ItemDataState {
     reference_links: Partial<ReferenceLink>[];
 }
 
-export type ItemFormScope = "add" | "edit";
-
-export const ITEM_FORM_ADD: ItemFormScope = "add";
-export const ITEM_FORM_EDIT: ItemFormScope = "edit";
+export type ItemFormScope = "create_budget_add" | "create_budget_edit";
 
 export interface ItemFormSliceState {
-    add: ItemDataState;
-    edit: ItemDataState;
+    create_budget_add: ItemDataState;
+    create_budget_edit: ItemDataState;
 }
 
 export const createEmptyItemData = (): ItemDataState => {
@@ -49,8 +46,8 @@ export const createEmptyItemData = (): ItemDataState => {
 };
 
 const initialState: ItemFormSliceState = {
-    add: createEmptyItemData(),
-    edit: createEmptyItemData(),
+    create_budget_add: createEmptyItemData(),
+    create_budget_edit: createEmptyItemData(),
 };
 
 const draft = (state: ItemFormSliceState, scope: ItemFormScope): ItemDataState => {
@@ -171,11 +168,11 @@ const itemFormSlice = createSlice({
         ...itemReferenceReducers,
         ...itemVersionReducers,
         ...referenceLinksReducers,
-        setItemDataEdit: (
+        setItemDataCreateBudgetEdit: (
             state,
             action: PayloadAction<ItemDataState>,
         ) => {
-            state.edit = action.payload;
+            state.create_budget_edit = action.payload;
         },
         resetItemData: (state, action: PayloadAction<ItemFormScope>) => {
             const empty = createEmptyItemData();
@@ -196,7 +193,7 @@ export const {
     resetItemValues,
     addLink,
     removeLink,
-    setItemDataEdit,
+    setItemDataCreateBudgetEdit,
     switchStMode
 } = itemFormSlice.actions;
 

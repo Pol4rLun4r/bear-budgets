@@ -24,8 +24,6 @@ const CreateBudgetButton = () => {
     };
 
     const handleCreateBudget = async () => {
-        console.log(budgetData.items);
-
         try {
             const res = await services.quotation.create(budgetData);
 

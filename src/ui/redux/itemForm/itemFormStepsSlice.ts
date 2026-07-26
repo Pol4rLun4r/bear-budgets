@@ -9,8 +9,8 @@ export interface stepsType {
 }
 
 export interface ItemFormStepsSliceState {
-    add: stepsType;
-    edit: stepsType;
+    create_budget_add: stepsType;
+    create_budget_edit: stepsType;
 }
 
 export const createEmptySteps = (): stepsType => {
@@ -20,8 +20,8 @@ export const createEmptySteps = (): stepsType => {
 };
 
 const initialState: ItemFormStepsSliceState = {
-    add: createEmptySteps(),
-    edit: createEmptySteps(),
+    create_budget_add: createEmptySteps(),
+    create_budget_edit: createEmptySteps(),
 }
 
 const itemFormStepsSlice = createSlice({

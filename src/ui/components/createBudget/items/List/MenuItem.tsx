@@ -9,7 +9,7 @@ import { IconCopy, IconCopyPlus, IconMenu3, IconPencilMinus, IconTrash } from "@
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../redux/store";
 import { addItem, deleteItem } from "../../../../redux/createBudget/items/listItemsSlice";
-import { ItemDataState, setItemDataEdit } from "../../../../redux/itemForm/itemFormSlice";
+import { ItemDataState, setItemDataCreateBudgetEdit } from "../../../../redux/itemForm/itemFormSlice";
 
 // component
 import ItemForm from "../../../itemForm/@ItemForm";
@@ -46,7 +46,7 @@ const MenuItem = ({ item }: MenuItemType) => {
   }
 
   const handleEdit = () => {
-    dispatch(setItemDataEdit(item))
+    dispatch(setItemDataCreateBudgetEdit(item))
     editOpen()
   }
 
@@ -131,7 +131,7 @@ const MenuItem = ({ item }: MenuItemType) => {
           blur: 3,
         }}
       >
-        <ItemForm scope="edit" close={editClose} />
+        <ItemForm scope="create_budget_edit" close={editClose} />
       </Modal>
     </>
   )

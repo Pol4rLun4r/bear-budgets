@@ -87,10 +87,10 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
         <Button
           radius='lg'
           variant="gradient"
-          onClick={() => scope === "add" ? handleAddItem() : handleEditItem()}
+          onClick={() => scope === "create_budget_add" ? handleAddItem() : scope === "create_budget_edit" ? handleEditItem() : 'função de editar um item fora do orçamento'}
           disabled={!hasValues}
         >
-          {scope === "add" ? "Adicionar item" : "Salvar alterações"}
+          {scope === "create_budget_add" ? "Adicionar item" : "Salvar alterações"}
         </Button>
       </Group>
     </>
