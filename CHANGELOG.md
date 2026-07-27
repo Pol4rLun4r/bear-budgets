@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/Pol4rLun4r/bear-budgets/compare/v2.0.0...v2.0.1) (2026-07-27)
+
+
+### Bug Fixes
+
+* **ui:** restore budget item version table after budget form refactor ([f453bf9](https://github.com/Pol4rLun4r/bear-budgets/commit/f453bf95ed53c3f4c45a261ee975155a1b40a0d1))
+
 # [2.0.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v1.0.0...v2.0.0) (2026-07-27)
 
 
