@@ -10,7 +10,7 @@ const VersionInfoModal = () => {
     const menu = useSelector((state: RootState) => state.items.menu);
     const versions = menu.item_versions;
     
-    const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode);
+    const switchMode = useSelector((state: RootState) => state.budgetForm.listItemsSwitchMode.mode);
 
     return (
         <Table.ScrollContainer minWidth={switchMode ? 800 : 2000} w={'100%'} h={'100%'}>

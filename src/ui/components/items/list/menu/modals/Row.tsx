@@ -26,7 +26,7 @@ const tableTdProps: TableTdProps = {
 }
 
 const Row = ({ item_values }: { item_values: ItemValues }) => {
-  const switchMode = useSelector((state: RootState) => state.createBudget.listItemsSwitchMode.mode);
+  const switchMode = useSelector((state: RootState) => state.budgetForm.listItemsSwitchMode.mode);
 
   const values = item_values;
 
