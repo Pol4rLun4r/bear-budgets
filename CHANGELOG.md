@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/Pol4rLun4r/bear-budgets/compare/v2.0.1...v2.0.2) (2026-07-28)
+
+
+### Bug Fixes
+
+* **item-form:** preservar escopo do orçamento ao editar itens ([a141b90](https://github.com/Pol4rLun4r/bear-budgets/commit/a141b90d2e7c25440e5fd16a0d50535974592312))
+
 ## [2.0.1](https://github.com/Pol4rLun4r/bear-budgets/compare/v2.0.0...v2.0.1) (2026-07-27)
 
 
