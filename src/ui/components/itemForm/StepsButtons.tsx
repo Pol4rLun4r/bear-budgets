@@ -8,11 +8,12 @@ import { incrementStep, decrementStep } from "../../redux/itemForm/itemFormSteps
 import { addItem, editItem } from "../../redux/budgetForm/items/listItemsSlice";
 import { ItemDataState, ItemFormScope } from "../../redux/itemForm/itemFormSlice";
 import resetItem from "../../redux/itemForm/resetItem.thunk";
+import { BudgetFormScope } from "../../redux/budgetForm/@rootReducer";
 
 // util
 import useCalcAddItem from "../../utils/calcAddItem";
 
-const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScope }) => {
+const StepsButtons = ({ close, scope, budgetScope }: { close: () => void, scope: ItemFormScope, budgetScope?: BudgetFormScope }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const step = useSelector((state: RootState) => state.itemForm.steps[scope].step);
@@ -55,9 +56,15 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
   };
 
   const handleEditItem = () => {
-    dispatch(editItem({scope: 'budget_edit', data: convertedData}));
+    dispatch(editItem({scope: budgetScope === 'budget_create' ? 'budget_create' : 'budget_edit', data: convertedData}));
     close();
     resetItem(dispatch, scope);
+  }
+
+  const handleButton = () => {
+    if(scope === 'create_budget_add') return handleAddItem();
+
+    return handleEditItem();
   }
 
   return (
@@ -87,7 +94,7 @@ const StepsButtons = ({ close, scope }: { close: () => void, scope: ItemFormScop
         <Button
           radius='lg'
           variant="gradient"
-          onClick={() => scope === "create_budget_add" ? handleAddItem() : scope === "create_budget_edit" ? handleEditItem() : 'função de editar um item fora do orçamento'}
+          onClick={() => handleButton()}
           disabled={!hasValues}
         >
           {scope === "create_budget_add" ? "Adicionar item" : "Salvar alterações"}

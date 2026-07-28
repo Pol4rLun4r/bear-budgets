@@ -133,7 +133,7 @@ const MenuItem = ({ item, scope }: MenuItemType) => {
           blur: 3,
         }}
       >
-        <ItemForm scope="create_budget_edit" close={editClose} />
+        <ItemForm budgetScope={scope} scope="create_budget_edit" close={editClose} />
       </Modal>
     </>
   )

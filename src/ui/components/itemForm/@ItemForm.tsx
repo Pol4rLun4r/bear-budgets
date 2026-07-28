@@ -11,11 +11,12 @@ import { Divider, Stack, Stepper } from "@mantine/core";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { ItemFormScope } from "../../redux/itemForm/itemFormSlice";
+import { BudgetFormScope } from "../../redux/budgetForm/@rootReducer";
 
 // components
 import WarningMoreValues from "./WarningMoreValues";
 
-const ItemForm = ({ close, scope }: { close: () => void, scope: ItemFormScope }) => {
+const ItemForm = ({ close, scope, budgetScope }: { close: () => void, scope: ItemFormScope, budgetScope?: BudgetFormScope }) => {
     const step = useSelector((state: RootState) => state.itemForm.steps[scope].step);
 
     return (
@@ -31,7 +32,7 @@ const ItemForm = ({ close, scope }: { close: () => void, scope: ItemFormScope })
                 </Stepper.Step>
             </Stepper>
             <Divider />
-            <StepsButtons close={close} scope={scope} />
+            <StepsButtons budgetScope={budgetScope} close={close} scope={scope} />
         </Stack>
     )
 }
