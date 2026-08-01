@@ -4,8 +4,8 @@ import { ItemDataState } from "../../itemForm/itemFormSlice";
 import { BudgetFormScope } from "../@rootReducer";
 
 export interface ListItemsSliceState {
-    budget_create: ItemDataState[];
-    budget_edit: ItemDataState[];
+    budget_form_create: ItemDataState[];
+    budget_form_edit: ItemDataState[];
 }
 
 type ListItemInput = Omit<ItemDataState, "temp_id" | "toggleStMode">;
@@ -15,8 +15,8 @@ export const createEmptyItemsData = (): ItemDataState[] => {
 };
 
 const initialState: ListItemsSliceState = {
-    budget_create: createEmptyItemsData(),
-    budget_edit: createEmptyItemsData()
+    budget_form_create: createEmptyItemsData(),
+    budget_form_edit: createEmptyItemsData()
 };
 
 const draft = (state: ListItemsSliceState, scope: BudgetFormScope): ItemDataState[] => {

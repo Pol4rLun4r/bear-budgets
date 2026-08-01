@@ -3,8 +3,8 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { BudgetFormScope } from "./@rootReducer";
 
 export interface QuotationInfoSliceState {
-    budget_create: Quotation;
-    budget_edit: Quotation;
+    budget_form_create: Quotation;
+    budget_form_edit: Quotation;
 }
 
 export const createEmptyQuotationData = (): Quotation => {
@@ -17,8 +17,8 @@ export const createEmptyQuotationData = (): Quotation => {
 };
 
 const initialState: QuotationInfoSliceState = {
-    budget_create: createEmptyQuotationData(),
-    budget_edit: createEmptyQuotationData()
+    budget_form_create: createEmptyQuotationData(),
+    budget_form_edit: createEmptyQuotationData()
 }
 
 const draft = (state: QuotationInfoSliceState, scope: BudgetFormScope): Quotation => {

@@ -30,7 +30,7 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
                     const items = result.data?.items
 
                     setQuotation(result.data?.quotation);
-                    dispatch(setListItems({ scope: 'budget_edit', data: items! }));
+                    dispatch(setListItems({ scope: 'budget_form_edit', data: items! }));
                 } else {
                     console.error('Erro ao buscar orçamento:', result.data);
                 }
@@ -86,7 +86,7 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
                     blur: 3,
                 }}
             >
-                <BudgetForm scope="budget_edit" />
+                <BudgetForm scope="budget_form_edit" />
             </Modal>
             <ActionIcon onClick={() => handleSeeData()} variant="transparent">
                 <IconEyeSpark />

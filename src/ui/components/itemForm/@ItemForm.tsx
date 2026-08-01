@@ -16,7 +16,7 @@ import { BudgetFormScope } from "../../redux/budgetForm/@rootReducer";
 // components
 import WarningMoreValues from "./WarningMoreValues";
 
-const ItemForm = ({ close, scope, budgetScope }: { close: () => void, scope: ItemFormScope, budgetScope?: BudgetFormScope }) => {
+const ItemForm = ({ close, scope, budgetScope }: { close: () => void, scope: ItemFormScope, budgetScope: BudgetFormScope }) => {
     const step = useSelector((state: RootState) => state.itemForm.steps[scope].step);
 
     return (

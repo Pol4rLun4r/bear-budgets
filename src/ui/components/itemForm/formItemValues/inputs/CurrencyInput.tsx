@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
 
 // utils
-import { ItemFormScope, setVersionField } from "../../../../redux/itemForm/itemFormSlice";
+import { ItemFormScope, setValuesField } from "../../../../redux/itemForm/itemFormSlice";
 import {
     normalizeBrazilianCurrency,
     convertToNumber,
@@ -46,7 +46,7 @@ const CurrencyInput = ({ scope, itemValuesInput, label, placeholder, widthInput,
         value: CurrencyInputs[K]
     ) => {
         dispatch(
-            setVersionField({ scope, key, value })
+            setValuesField({ scope, key, value })
         );
     }
 

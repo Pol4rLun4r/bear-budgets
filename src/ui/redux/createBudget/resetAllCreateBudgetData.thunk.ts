@@ -9,14 +9,14 @@ import { resetList } from "../budgetForm/items/listItemsSlice.ts";
 import { resetQuotation } from "../budgetForm/quotationInfoSlice.ts";
 
 const resetAllCreateBudgetData = (dispatch: AppDispatch) => {
-    dispatch(resetItemData('create_budget_add'));
-    dispatch(resetItemData('create_budget_edit'));
-    dispatch(resetStep('create_budget_add'));
-    dispatch(resetStep('create_budget_edit'));
-    dispatch(resetReferenceLink('create_budget_add'));
-    dispatch(resetReferenceLink('create_budget_edit'));
-    dispatch(resetList("budget_create"));
-    dispatch(resetQuotation('budget_create'));
+    dispatch(resetItemData('item_form_add'));
+    dispatch(resetItemData('item_form_edit'));
+    dispatch(resetStep('item_form_add'));
+    dispatch(resetStep('item_form_edit'));
+    dispatch(resetReferenceLink('item_form_add'));
+    dispatch(resetReferenceLink('item_form_edit'));
+    dispatch(resetList('budget_form_create'));
+    dispatch(resetQuotation('budget_form_create'));
 };
 
 export default resetAllCreateBudgetData;

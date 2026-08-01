@@ -4,7 +4,7 @@ import { NumberInput } from "@mantine/core"
 // redux
 import { RootState, AppDispatch } from "../../../../redux/store"
 import { useSelector, useDispatch } from "react-redux"
-import { ItemFormScope, setVersionField } from "../../../../redux/itemForm/itemFormSlice";
+import { ItemFormScope, setValuesField } from "../../../../redux/itemForm/itemFormSlice";
 
 const Quantity = ({ scope }: { scope: ItemFormScope }) => {
     const itemValues = useSelector((state: RootState) => state.itemForm.form[scope].item_values);
@@ -30,7 +30,7 @@ const Quantity = ({ scope }: { scope: ItemFormScope }) => {
             // configurações do valor do input
             value={itemValues.quantity || ''}
             onChange={(value) =>
-                dispatch(setVersionField({ scope, key: 'quantity', value }))
+                dispatch(setValuesField({ scope, key: 'quantity', value }))
             }
         />
     )

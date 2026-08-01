@@ -3,7 +3,7 @@ import BudgetForm from '../../components/budgetForm/@BudgetForm';
 
 const CreateBudget = () => {
     return (
-        <BudgetForm scope='budget_create' />
+        <BudgetForm scope='budget_form_create' />
     )
 };
 

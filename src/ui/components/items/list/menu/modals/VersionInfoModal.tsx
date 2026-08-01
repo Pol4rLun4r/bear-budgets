@@ -12,6 +12,10 @@ const VersionInfoModal = () => {
     
     const switchMode = useSelector((state: RootState) => state.budgetForm.listItemsSwitchMode.mode);
 
+    const rows = versions.map((version) => (
+        <Row key={version.id} item_values={version} />
+    ));
+
     return (
         <Table.ScrollContainer minWidth={switchMode ? 800 : 2000} w={'100%'} h={'100%'}>
             <Table layout="fixed" highlightOnHover stickyHeader>
@@ -38,11 +42,7 @@ const VersionInfoModal = () => {
                         }
                     </Table.Tr>
                 </Table.Thead>
-                <Table.Tbody>
-                    {versions.map((version) => (
-                        <Row key={version.id} item_values={version} />
-                    ))}
-                </Table.Tbody>
+                <Table.Tbody>{rows}</Table.Tbody>
             </Table>
         </Table.ScrollContainer>
     )

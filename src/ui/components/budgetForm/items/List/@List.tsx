@@ -18,6 +18,10 @@ const List = ({ scope }: { scope: BudgetFormScope }) => {
     const listItems = useSelector((state: RootState) => state.budgetForm.listItems[scope]);
     const switchMode = useSelector((state: RootState) => state.budgetForm.listItemsSwitchMode.mode);
 
+    const rows = listItems.map((item, index) => (
+        <SortableRow scope={scope} key={item.temp_id} item={item} index={index} />
+    ));
+
     const handleDragEnd: React.ComponentProps<typeof DragDropProvider>["onDragEnd"] = (event) => {
         if (event.canceled) return console.log('canceled'); // cancela a operação se cancelado
 
@@ -68,11 +72,7 @@ const List = ({ scope }: { scope: BudgetFormScope }) => {
                             }
                         </Table.Tr>
                     </Table.Thead>
-                    <Table.Tbody>
-                        {listItems.map((item, index) => (
-                            <SortableRow scope={scope} key={item.temp_id} item={item} index={index} />
-                        ))}
-                    </Table.Tbody>
+                    <Table.Tbody>{rows}</Table.Tbody>
                 </Table>
             </Table.ScrollContainer>
         </DragDropProvider>

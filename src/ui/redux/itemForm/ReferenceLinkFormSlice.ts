@@ -5,8 +5,9 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ItemFormScope } from "./itemFormSlice.ts";
 
 export interface ReferenceLinkFormState {
-    create_budget_add: Partial<ReferenceLink>;
-    create_budget_edit: Partial<ReferenceLink>;
+    item_form_add: Partial<ReferenceLink>;
+    item_form_edit: Partial<ReferenceLink>;
+    item_form_add_budget_edit: Partial<ReferenceLink>;
 };
 
 const createEmptyNoteData = (): Partial<ReferenceLink> => {
@@ -16,8 +17,9 @@ const createEmptyNoteData = (): Partial<ReferenceLink> => {
 };
 
 const initialState: ReferenceLinkFormState = {
-    create_budget_add: createEmptyNoteData(),
-    create_budget_edit: createEmptyNoteData(),
+    item_form_add: createEmptyNoteData(),
+    item_form_edit: createEmptyNoteData(),
+    item_form_add_budget_edit: createEmptyNoteData(),
 };
 
 const draft = (state: ReferenceLinkFormState, scope: ItemFormScope): Partial<ReferenceLink> => {

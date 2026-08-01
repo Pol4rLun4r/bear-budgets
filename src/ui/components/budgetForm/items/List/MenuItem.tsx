@@ -9,12 +9,12 @@ import { IconCopy, IconCopyPlus, IconMenu3, IconPencilMinus, IconTrash } from "@
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../redux/store";
 import { addItem, deleteItem } from "../../../../redux/budgetForm/items/listItemsSlice";
-import { ItemDataState, setItemDataCreateBudgetEdit } from "../../../../redux/itemForm/itemFormSlice";
+import { ItemDataState, setItemDataEditScope } from "../../../../redux/itemForm/itemFormSlice";
+import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
 
 // component
 import ItemForm from "../../../itemForm/@ItemForm";
 import { notifications } from "@mantine/notifications";
-import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
 
 interface MenuItemType {
   item: ItemDataState;
@@ -48,7 +48,7 @@ const MenuItem = ({ item, scope }: MenuItemType) => {
   }
 
   const handleEdit = () => {
-    dispatch(setItemDataCreateBudgetEdit(item))
+    dispatch(setItemDataEditScope(item))
     editOpen()
   }
 
@@ -133,7 +133,7 @@ const MenuItem = ({ item, scope }: MenuItemType) => {
           blur: 3,
         }}
       >
-        <ItemForm budgetScope={scope} scope="create_budget_edit" close={editClose} />
+        <ItemForm budgetScope={scope} scope="item_form_edit" close={editClose} />
       </Modal>
     </>
   )

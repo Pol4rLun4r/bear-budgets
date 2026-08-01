@@ -7,7 +7,7 @@ import { IconPercentage } from "@tabler/icons-react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
-import { ItemFormScope, setVersionField } from "../../../../redux/itemForm/itemFormSlice";
+import { ItemFormScope, setValuesField } from "../../../../redux/itemForm/itemFormSlice";
 
 const IPI = ({ scope }: { scope: ItemFormScope }) => {
     const itemData = useSelector((state: RootState) => state.itemForm.form[scope].item_values);
@@ -31,7 +31,7 @@ const IPI = ({ scope }: { scope: ItemFormScope }) => {
             // configurações do valor do input
             value={itemData.ipi || ''}
             onChange={(value) =>
-                dispatch(setVersionField({ scope, key: 'ipi', value: value as number }))
+                dispatch(setValuesField({ scope, key: 'ipi', value: value as number }))
             }
         />
     )

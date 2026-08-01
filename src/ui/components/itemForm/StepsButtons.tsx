@@ -13,7 +13,7 @@ import { BudgetFormScope } from "../../redux/budgetForm/@rootReducer";
 // util
 import useCalcAddItem from "../../utils/calcAddItem";
 
-const StepsButtons = ({ close, scope, budgetScope }: { close: () => void, scope: ItemFormScope, budgetScope?: BudgetFormScope }) => {
+const StepsButtons = ({ close, scope, budgetScope }: { close: () => void, scope: ItemFormScope, budgetScope: BudgetFormScope }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const step = useSelector((state: RootState) => state.itemForm.steps[scope].step);
@@ -50,19 +50,20 @@ const StepsButtons = ({ close, scope, budgetScope }: { close: () => void, scope:
     hasDescription;
 
   const handleAddItem = () => {
-    dispatch(addItem({scope: scope === 'create_budget_add' ? 'budget_create' : 'budget_edit', data: convertedData}));
+    dispatch(addItem({ scope: budgetScope, data: convertedData }));
     close();
     resetItem(dispatch, scope);
   };
 
   const handleEditItem = () => {
-    dispatch(editItem({scope: budgetScope === 'budget_create' ? 'budget_create' : 'budget_edit', data: convertedData}));
+    dispatch(editItem({ scope: budgetScope, data: convertedData }));
     close();
     resetItem(dispatch, scope);
   }
 
   const handleButton = () => {
-    if(scope === 'create_budget_add') return handleAddItem();
+    if (scope === 'item_form_add') return handleAddItem();
+    if (scope === 'item_form_add_budget_edit') return handleAddItem();
 
     return handleEditItem();
   }
@@ -97,7 +98,7 @@ const StepsButtons = ({ close, scope, budgetScope }: { close: () => void, scope:
           onClick={() => handleButton()}
           disabled={!hasValues}
         >
-          {scope === "create_budget_add" ? "Adicionar item" : "Salvar alterações"}
+          {scope === "item_form_edit" ? "Salvar alterações" : "Adicionar item"}
         </Button>
       </Group>
     </>

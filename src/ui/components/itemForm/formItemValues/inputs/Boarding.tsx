@@ -7,7 +7,7 @@ import { IconCalendar } from "@tabler/icons-react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
-import { ItemFormScope, setVersionField } from "../../../../redux/itemForm/itemFormSlice";
+import { ItemFormScope, setValuesField } from "../../../../redux/itemForm/itemFormSlice";
 
 const Boarding = ({ scope }: { scope: ItemFormScope }) => {
     const itemData = useSelector((state: RootState) => state.itemForm.form[scope].item_values);
@@ -24,7 +24,7 @@ const Boarding = ({ scope }: { scope: ItemFormScope }) => {
             // configurações do valor do input
             value={itemData.boarding || ''}
             onChange={(event) =>
-                dispatch(setVersionField({ scope, key: 'boarding', value: event.currentTarget.value }))
+                dispatch(setValuesField({ scope, key: 'boarding', value: event.currentTarget.value }))
             }
         />
     )

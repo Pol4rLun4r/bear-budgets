@@ -25,6 +25,11 @@ const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
         deleteClose()
     }
 
+    const handleAddItemScope = () => {
+        if (scope === 'budget_form_create') return 'item_form_add';
+        return 'item_form_add_budget_edit';
+    } 
+
     return (
         <>
             <Group>
@@ -94,7 +99,7 @@ const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
                     blur: 3,
                 }}
             >
-                <ItemForm scope={scope === 'budget_create' ? 'create_budget_add' : 'create_budget_edit'} close={itemClose} />
+                <ItemForm scope={handleAddItemScope()} budgetScope={scope} close={itemClose} />
             </Modal >
         </>
     )

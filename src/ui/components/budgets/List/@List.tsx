@@ -23,7 +23,7 @@ const List = ({ budgets }: { budgets: Quotation[] }) => {
                             <Table.Th w={'10%'}>Ultima atualização</Table.Th>
                         </Table.Tr>
                     </Table.Thead>
-                    <Table.Tbody><Rows budgets={budgets} /> </Table.Tbody>
+                    <Table.Tbody>{<Rows budgets={budgets} />}</Table.Tbody>
                 </Table>
             </Table.ScrollContainer>
         </Paper >

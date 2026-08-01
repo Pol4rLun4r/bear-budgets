@@ -68,11 +68,7 @@ const FetchReferences = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search])
 
-    return (
-        <Table.Tbody>
-            <Rows references={references} />
-        </Table.Tbody>
-    )
+    return <Table.Tbody>{<Rows references={references} />}</Table.Tbody>
 }
 
 export default FetchReferences;

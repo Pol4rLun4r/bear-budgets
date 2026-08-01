@@ -7,16 +7,18 @@ type ItemValuesDataState = Partial<ItemValues> & { stInPercentage?: number | und
 export interface ItemDataState {
     toggleStMode: boolean;
     temp_id: string;
+    quotation_link_id?: number;
     item_reference: Partial<ItemReference>;
     item_values: ItemValuesDataState
     reference_links: Partial<ReferenceLink>[];
 }
 
-export type ItemFormScope = "create_budget_add" | "create_budget_edit";
+export type ItemFormScope = "item_form_add" | "item_form_edit" | "item_form_add_budget_edit";
 
 export interface ItemFormSliceState {
-    create_budget_add: ItemDataState;
-    create_budget_edit: ItemDataState;
+    item_form_add: ItemDataState;
+    item_form_edit: ItemDataState;
+    item_form_add_budget_edit: ItemDataState;
 }
 
 export const createEmptyItemData = (): ItemDataState => {
@@ -46,8 +48,9 @@ export const createEmptyItemData = (): ItemDataState => {
 };
 
 const initialState: ItemFormSliceState = {
-    create_budget_add: createEmptyItemData(),
-    create_budget_edit: createEmptyItemData(),
+    item_form_add: createEmptyItemData(),
+    item_form_edit: createEmptyItemData(),
+    item_form_add_budget_edit: createEmptyItemData()
 };
 
 const draft = (state: ItemFormSliceState, scope: ItemFormScope): ItemDataState => {
@@ -90,16 +93,16 @@ const itemReferenceReducers = {
     },
 }
 
-type SetVersionFieldPayload<K extends keyof ItemValues> = {
+type SetValuesFieldPayload<K extends keyof ItemValues> = {
     scope: ItemFormScope;
     key: K;
     value: ItemValues[K];
 };
 
-const itemVersionReducers = {
-    setVersionField: (
+const itemValuesReducers = {
+    setValuesField: (
         state: ItemFormSliceState,
-        action: PayloadAction<SetVersionFieldPayload<keyof ItemValues>>
+        action: PayloadAction<SetValuesFieldPayload<keyof ItemValues>>
     ) => {
         const { scope, key, value } = action.payload;
 
@@ -107,7 +110,7 @@ const itemVersionReducers = {
 
         target[key] = value;
     },
-    setVersion: (
+    setValues: (
         state: ItemFormSliceState,
         action: PayloadAction<{ scope: ItemFormScope; values: Partial<ItemValues> }>,
     ) => {
@@ -166,13 +169,13 @@ const itemFormSlice = createSlice({
     initialState,
     reducers: {
         ...itemReferenceReducers,
-        ...itemVersionReducers,
+        ...itemValuesReducers,
         ...referenceLinksReducers,
-        setItemDataCreateBudgetEdit: (
+        setItemDataEditScope: (
             state,
             action: PayloadAction<ItemDataState>,
         ) => {
-            state.create_budget_edit = action.payload;
+            state.item_form_edit = action.payload;
         },
         resetItemData: (state, action: PayloadAction<ItemFormScope>) => {
             const empty = createEmptyItemData();
@@ -185,15 +188,15 @@ export const {
     setReferenceField,
     setItemReference,
     setReferenceLinks,
-    setVersionField,
-    setVersion,
+    setValuesField,
+    setValues,
     resetItemReference,
     resetItemData,
     resetItemDescription,
     resetItemValues,
     addLink,
     removeLink,
-    setItemDataCreateBudgetEdit,
+    setItemDataEditScope,
     switchStMode
 } = itemFormSlice.actions;
 
