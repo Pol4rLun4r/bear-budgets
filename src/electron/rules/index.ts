@@ -8,11 +8,13 @@ import getAllItemValuesByReferenceIdRules from "./item/getAllItemValuesByReferen
 // quotation rules
 import createQuotation from "./quotation/create.js";
 import getQuotationFullRules from "./quotation/getFull.js";
+import updateQuotationLineRules from "./quotation/updateLine.js";
 
 export const createRules = () => ({
     quotation: {
         create: createQuotation,
-        getFull: getQuotationFullRules
+        getFull: getQuotationFullRules,
+        updateLine: updateQuotationLineRules
     },
     item: {
         createAndAdd: createAndAddItem,

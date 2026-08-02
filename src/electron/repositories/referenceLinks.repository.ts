@@ -25,10 +25,30 @@ export const getByReferenceId = (db: Database) =>
         `).all(item_reference_id) as ReferenceLink[];
     };
 
+const replaceForReference = (db: Database) => (itemReferenceId: number, links: string[]) => {
+    db.prepare(`
+      DELETE FROM reference_links
+      WHERE item_reference_id = ?
+    `).run(itemReferenceId);
+
+    for (const content of links) {
+        const normalized = content.trim();
+        if (!normalized) continue;
+
+        db.prepare(`
+        INSERT INTO reference_links (item_reference_id, content)
+        VALUES (?, ?)
+      `).run(itemReferenceId, normalized);
+    }
+
+    return getByReferenceId(db)(itemReferenceId);
+}
+
 const referenceLinksRepository = (db: Database) => {
     return {
         getByReferenceId: getByReferenceId(db),
-        create: create(db)
+        create: create(db),
+        replaceForReference: replaceForReference(db)
     };
 };
 

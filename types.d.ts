@@ -8,6 +8,13 @@ type WithUndefined<T> = {
 /** Dados da cotação aceitos na criação. `status` é definido pelo backend (sempre rascunho). */
 type CreateQuotationData = Pick<Quotation, "notes" | "amount" | "total_value">;
 
+type UpdateQuotationLinePayload = {
+    quotation_link_id: QuotationLink['id'];
+    item_reference: Partial<ItemReference>;
+    item_values: Partial<ItemValues>;
+    reference_links: Partial<ReferenceLink>[];
+}
+
 interface CreateQuotation {
     quotation: CreateQuotationData;
     items: {
@@ -33,6 +40,7 @@ type EventPayloadMapping = {
     "quotation:create": Result<QuotationLink[] | undefined>;
     "quotation:getAllSummary": Result<Quotation[] | undefined>;
     "quotation:getFull": Result<QuotationFull | undefined>;
+    "quotation:updateLine": Result<UpdateQuotationLinePayload | undefined>;
 
     // item
     "item:searchDescription": Result<ItemReference[] | undefined>;
@@ -64,6 +72,7 @@ interface QuotationAPI {
     create(quotation: CreateQuotation): Promise<Result<QuotationLink[] | undefined>>;
     getAllSummary(): Promise<Result<QuotationSummary[] | undefined>>;
     getFull(quotationId: Quotation['id']): Promise<Result<QuotationFull | undefined>>;
+    updateLine(payload: UpdateQuotationLinePayload): Promise<Result<UpdateQuotationLinePayload | undefined>>;
 }
 
 interface ItemAPI {

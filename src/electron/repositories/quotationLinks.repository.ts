@@ -19,10 +19,39 @@ const getById = (db: Database) =>
         `).get(quotation_link_id) as QuotationLink | undefined;
     };
 
+const update = (db: Database) =>
+    (id: QuotationLink['id'], data: Partial<QuotationLink>) => {
+        const fields: string[] = [];
+        const values: unknown[] = [];
+
+        if (data.item_reference_id !== undefined) {
+            fields.push("item_reference_id = ?");
+            values.push(data.item_reference_id);
+        }
+
+        if (data.item_values_id !== undefined) {
+            fields.push("item_values_id = ?");
+            values.push(data.item_values_id);
+        }
+
+        if (!fields.length) return;
+
+        values.push(id);
+
+        db.prepare(`
+            UPDATE quotation_links
+            SET ${fields.join(", ")}, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `).run(...values);
+
+        return getById(db)(id);
+    }
+
 const quotationLinksRepository = (db: Database) => {
     return {
         create: create(db),
-        getById: getById(db)
+        getById: getById(db),
+        update: update(db)
     }
 };
 

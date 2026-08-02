@@ -35,6 +35,15 @@ export const getById = (db: Database) =>
         return { ...ref, reference_links: links };
     };
 
+export const getByIdWithoutLinks = (db: Database) =>
+    (item_reference_id: number): ItemReference | undefined => {
+        const ref = db.prepare(`
+            SELECT * FROM item_references WHERE id = ? LIMIT 1
+        `).get(item_reference_id) as ItemReference | undefined;
+
+        return ref;
+    };
+
 /** pesquisa item_references pela descrição */
 export const searchByDescription = (db: Database) =>
     (rawQuery: Pick<ItemReference, 'description'>['description']): ItemReference[] => {
@@ -81,13 +90,59 @@ export const getAll = (db: Database) =>
         return references as ItemReference[];
     };
 
+const update = (db: Database) =>
+    (id: ItemReference['id'], item_reference: Partial<ItemReference>) => {
+        const fields: string[] = [];
+        const values: unknown[] = [];
+
+        if (item_reference.description !== undefined) {
+            fields.push("description = ?");
+            values.push(item_reference.description);
+        }
+
+        if (item_reference.internal_code !== undefined) {
+            fields.push("internal_code = ?");
+            values.push(item_reference.internal_code ?? null);
+        }
+
+        if (item_reference.manufacturer_code !== undefined) {
+            fields.push("manufacturer_code = ?");
+            values.push(item_reference.manufacturer_code ?? null);
+        }
+
+        if (item_reference.ncm !== undefined) {
+            fields.push("ncm = ?");
+            values.push(item_reference.ncm ?? null);
+        }
+
+        if (item_reference.notes !== undefined) {
+            fields.push("notes = ?");
+            values.push(item_reference.notes ?? null);
+        }
+
+        if (!fields.length) return;
+
+        values.push(id);
+
+        db.prepare(`
+            UPDATE item_references
+            SET ${fields.join(", ")}, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `).run(...values);
+
+        return getByIdWithoutLinks(db)(id!);
+    }
+
+
 const itemReferenceRepository = (db: Database) => {
     return {
         create: create(db),
         getById: getById(db),
+        getByIdWithoutLinks: getByIdWithoutLinks(db),
         deleteAll: deleteAll(db),
         getAll: getAll(db),
-        searchByDescription: searchByDescription(db)
+        searchByDescription: searchByDescription(db),
+        update: update(db)
     };
 };
 

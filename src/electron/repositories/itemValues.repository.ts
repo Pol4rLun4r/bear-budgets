@@ -46,11 +46,74 @@ export const create = (db: Database) =>
         return row.lastInsertRowid as number;
     };
 
+const update = (db: Database) => (id: ItemValues['id'], data: Partial<ItemValues>) => {
+    const fields: string[] = [];
+    const values: unknown[] = [];
+
+    if (data.position !== undefined) {
+        fields.push("position = ?");
+        values.push(data.position);
+    }
+
+    if (data.quantity !== undefined) {
+        fields.push("quantity = ?");
+        values.push(data.quantity);
+    }
+
+    if (data.unit_price !== undefined) {
+        fields.push("unit_price = ?");
+        values.push(data.unit_price);
+    }
+
+    if (data.markup !== undefined) {
+        fields.push("markup = ?");
+        values.push(data.markup);
+    }
+
+    if (data.purchase_shipping !== undefined) {
+        fields.push("purchase_shipping = ?");
+        values.push(data.purchase_shipping);
+    }
+
+    if (data.ipi !== undefined) {
+        fields.push("ipi = ?");
+        values.push(data.ipi);
+    }
+
+    if (data.st !== undefined) {
+        fields.push("st = ?");
+        values.push(data.st);
+    }
+
+    if (data.extra_value !== undefined) {
+        fields.push("extra_value = ?");
+        values.push(data.extra_value);
+    }
+
+    if (data.boarding !== undefined) {
+        fields.push("boarding = ?");
+        values.push(data.boarding);
+    }
+
+    if (!fields.length) return;
+
+    values.push(id);
+
+    db.prepare(`
+      UPDATE item_values
+      SET ${fields.join(", ")}, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).run(...values);
+
+    return getById(db)(id!);
+}
+
 const itemValuesRepository = (db: Database) => {
     return {
         getById: getById(db),
         getAllByReferenceId: getAllIByReferenceId(db),
-        create: create(db)
+        create: create(db),
+        update: update(db)
     };
 };
 

@@ -10,12 +10,14 @@ import searchDescriptionService from "./item/searchDescription.service.js";
 import findItemReferences from "./item/findItemReferences.service.js";
 import getReferenceLinksService from "./item/getReferenceLinks.service.js";
 import getAllItemValuesByReferenceIdService from "./item/getAllItemValuesByReferenceId.service.js";
+import updateQuotationLineService from "./quotation/updateQuotationLine.service.js";
 
 export const createServices = (db: Database) => ({
     quotation: {
         create: createQuotationService(db),
         getAllSummary: getAllQuotationsSummaryService(db),
-        getFull: getQuotationFullService(db)
+        getFull: getQuotationFullService(db),
+        updateLine: updateQuotationLineService(db)
     },
     item: {
         searchDescription: searchDescriptionService(db),
