@@ -15,7 +15,7 @@ const getReferenceLinksService = (db: Database) => {
     const rules = createRules();
 
     return db.transaction((item_reference_id: GetReferenceLinks) => {
-        const itemReferenceExists = repo.item.getReferenceById(item_reference_id) !== undefined ? true : false;
+        const itemReferenceExists = repo.item.reference.getById(item_reference_id) !== undefined ? true : false;
 
         const result = rules.item.getReferenceLinks({ item_reference_id, itemReferenceExists });
 
@@ -23,7 +23,7 @@ const getReferenceLinksService = (db: Database) => {
             return result;
         }
 
-        const reference_links = repo.item.getReferenceLinksByReferenceId(result.data);
+        const reference_links = repo.item.referenceLinks.getByReferenceId(result.data);
         return success(reference_links);
     });
 };

@@ -20,9 +20,9 @@ describe("Pesquisar descrição de itens", () => {
 
     beforeAll(() => {
         // cria referências de itens para os testes
-        repo.item.createReference(fakeItens[0]); // cabo
-        repo.item.createReference(fakeItens[1]); // cabo
-        repo.item.createReference(fakeItens[3]); // porca
+        repo.item.reference.create(fakeItens[0]); // cabo
+        repo.item.reference.create(fakeItens[1]); // cabo
+        repo.item.reference.create(fakeItens[3]); // porca
     });
 
     it("ter sucesso quando pesquisar sobre a descrição de um item e ter um retorno com e sem acento", () => {

@@ -55,7 +55,7 @@ describe("Pegar links de referencias", () => {
     });
 
     it("retorna uma coleção vazia para uma referência existente sem links", () => {
-        const itemReferenceId = repo.item.createReference({ description: "Referência sem links" });
+        const itemReferenceId = repo.item.reference.create({ description: "Referência sem links" });
 
         const response = services.item.getReferenceLinks(itemReferenceId);
 

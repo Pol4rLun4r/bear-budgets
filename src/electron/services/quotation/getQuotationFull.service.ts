@@ -14,7 +14,7 @@ const getQuotationFullService = (db: Database) => {
     const rules = createRules();
 
     return db.transaction((quotation_id: Quotation['id']) => {
-        const quotationExists = repo.quotation.getById(quotation_id) !== undefined ? true : false;
+        const quotationExists = repo.quotation.base.getById(quotation_id) !== undefined ? true : false;
 
         const result = rules.quotation.getFull({ quotationExists, quotation_id });
 
@@ -23,7 +23,7 @@ const getQuotationFullService = (db: Database) => {
             return result;
         }
 
-        const quotation = repo.quotation.getComplete(result.data);
+        const quotation = repo.workFlows.getQuotationFull(result.data);
 
         if (!quotation) {
             return failure("Cotação não encontrada.");

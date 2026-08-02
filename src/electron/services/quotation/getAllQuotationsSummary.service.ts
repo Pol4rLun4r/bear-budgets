@@ -10,7 +10,7 @@ import { createRepositories } from "../../repositories/index.js";
 const getAllQuotationsSummary = (db: Database) => () => {
     const repo = createRepositories(db);
 
-    const quotations = repo.quotation.getAllSummary();
+    const quotations = repo.quotation.base.getAllSummary();
 
     if (quotations === undefined) {
         return failure("Erro interno ao buscar cotações");

@@ -20,19 +20,19 @@ describe("Pegar todas os valores de um item por referência", () => {
 
     beforeAll(() => {
         // Limpa todas as referências existentes
-        repo.item.deleteAllReferences();
+        repo.item.reference.deleteAll();
     });
 
     afterAll(() => {
         // Limpa os dados após os testes
-        repo.item.deleteAllReferences();
+        repo.item.reference.deleteAll();
     });
 
     describe("Casos de sucesso", () => {
         test("retorna todos os valores de um item que existe", () => {
             // 1. Prepara os dados - cria uma referência e valores
             const itemReference = fakeItens[0];
-            const itemReferenceId = repo.item.createReference(itemReference);
+            const itemReferenceId = repo.item.reference.create(itemReference);
 
             // Adiciona múltiplos valores ao item
             const value1 = fakeItemValues(1, { quantity: 2, unit_price: 10.5 });
@@ -73,7 +73,7 @@ describe("Pegar todas os valores de um item por referência", () => {
         test("retorna array vazio quando item existe mas não tem valores", () => {
             // 1. Prepara os dados - cria uma referência sem valores
             const itemReference = fakeItens[1];
-            const itemReferenceId = repo.item.createReference(itemReference);
+            const itemReferenceId = repo.item.reference.create(itemReference);
 
             // 2. Faz a requisição
             const res = services.item.getAllItemValuesByReferenceId(itemReferenceId);
@@ -91,7 +91,7 @@ describe("Pegar todas os valores de um item por referência", () => {
         test("retorna valores em ordem de criação", () => {
             // 1. Prepara os dados
             const itemReference = fakeItens[2];
-            const itemReferenceId = repo.item.createReference(itemReference);
+            const itemReferenceId = repo.item.reference.create(itemReference);
 
             const insert = db.prepare(`
                 INSERT INTO item_values (item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, extra_value, boarding)

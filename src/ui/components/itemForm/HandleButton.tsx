@@ -47,6 +47,7 @@ const HandleButton = ({ scope, budgetScope, close }: { close: () => void, scope:
 
     const handleEditItem = () => {
         console.log('edit item');
+        console.log(convertedData);
         dispatch(editItem({ scope: budgetScope, data: convertedData }));
         close();
         resetItem(dispatch, scope);

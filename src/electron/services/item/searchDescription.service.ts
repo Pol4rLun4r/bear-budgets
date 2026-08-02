@@ -22,7 +22,7 @@ const searchDescriptionService = (db: Database) => {
             return result;
         }
 
-        return success(repo.item.searchDescription(result.data));
+        return success(repo.item.reference.searchByDescription(result.data));
     });
 }
 

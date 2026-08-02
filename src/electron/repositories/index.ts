@@ -1,46 +1,32 @@
 import type { Database } from "better-sqlite3";
 
-import {
-    addToQuotationRepository,
-    deleteAllItemReferencesRepository,
-    getAllItemReferencesRepository,
-    getItemReferenceByIDRepository,
-    getItemValuesByIDRepository,
-    searchItemReferencesByDescriptionRepository,
-    createItemReferenceRepository,
-    getReferenceLinksByReferenceIdRepository,
-    getAllItemValuesByReferenceIdRepository,
-    createReferenceLinkRepository
-} from "./item.repository.js";
+// item
+import itemReferenceRepository from "./itemReference.repository.js";
+import itemValuesRepository from "./itemValues.repository.js";
+import referenceLinksRepository from "./referenceLinks.repository.js";
 
-import {
-    createQuotationRepository,
-    deleteQuotationRepository,
-    getAllQuotationSummaryRepository,
-    getQuotationFullRepository,
-    getQuotationByIdRepository
-} from "./quotation.repository.js"
+// quotation
+import quotationRepository from "./quotation.repository.js";
+import quotationLinksRepository from "./quotationLinks.repository.js";
+
+// workflows
+import addItemToQuotationRepository from "./workFlows/addToQuotation.repository.js";
+import getQuotationFullRepository from "./workFlows/getFullQuotation.repository.js";
 
 export const createRepositories = (db: Database) => ({
     quotation: {
-        create: createQuotationRepository(db),
-        deleteByID: deleteQuotationRepository(db),
-        getAllSummary: getAllQuotationSummaryRepository(db),
-        getComplete: getQuotationFullRepository(db),
-        getById: getQuotationByIdRepository(db)
+        base: quotationRepository(db),
+        links: quotationLinksRepository(db),
     },
     item: {
-        createReference: createItemReferenceRepository(db),
-        addToQuotation: addToQuotationRepository(db),
-        deleteAllReferences: deleteAllItemReferencesRepository(db),
-        getAllReferences: getAllItemReferencesRepository(db),
-        getReferenceById: getItemReferenceByIDRepository(db),
-        getValuesById: getItemValuesByIDRepository(db),
-        searchDescription: searchItemReferencesByDescriptionRepository(db),
-        getReferenceLinksByReferenceId: getReferenceLinksByReferenceIdRepository(db),
-        getAllValuesByReferenceId: getAllItemValuesByReferenceIdRepository(db),
-        createReferenceLink: createReferenceLinkRepository(db)
+        reference: itemReferenceRepository(db),
+        values: itemValuesRepository(db),
+        referenceLinks: referenceLinksRepository(db),
     },
+    workFlows: {
+        addItemToQuotation: addItemToQuotationRepository(db),
+        getQuotationFull: getQuotationFullRepository(db)
+    }
 });
 
 export type Repositories = ReturnType<typeof createRepositories>;

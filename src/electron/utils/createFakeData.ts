@@ -52,9 +52,9 @@ export const createFakeData = (db: Database) => {
 
     // Cria itens falsos
     const itemReferences = fakeItens.map((item) => {
-        const itemReferenceId = repo.item.createReference(item);
+        const itemReferenceId = repo.item.reference.create(item);
         fakeReferenceLinks.forEach((link) => {
-            repo.item.createReferenceLink(itemReferenceId, { ...link, item_reference_id: itemReferenceId });
+            repo.item.referenceLinks.create(itemReferenceId, { ...link, item_reference_id: itemReferenceId });
         });
 
         return { ...item, id: itemReferenceId };

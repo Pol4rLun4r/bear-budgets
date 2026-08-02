@@ -15,7 +15,7 @@ const getAllItemValuesByReferenceIdService = (db: Database) => {
     const rules = createRules();
 
     return db.transaction((item_reference_id: ItemValues['item_reference_id']) => {
-        const referenceIdExists = repo.item.getReferenceById(item_reference_id) !== undefined ? true : false;
+        const referenceIdExists = repo.item.reference.getById(item_reference_id) !== undefined ? true : false;
 
         const result = rules.item.getAllItemValuesByReferenceId({ item_reference_id, referenceIdExists });
 
@@ -24,7 +24,7 @@ const getAllItemValuesByReferenceIdService = (db: Database) => {
             return result;
         }
 
-        const versions = repo.item.getAllValuesByReferenceId(result.data)
+        const versions = repo.item.values.getAllByReferenceId(result.data)
 
         return success(versions);
     });

@@ -19,7 +19,7 @@ describe("Pegar referências de itens", () => {
         // cria referencias fake para fim e testes
         for (let index = 0; index < fakeItens.length; index++) {
             const item = fakeItens[index];
-            repo.item.createReference(item);
+            repo.item.reference.create(item);
         }
     })
 

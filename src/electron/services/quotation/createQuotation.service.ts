@@ -28,7 +28,7 @@ const createQuotation = (db: Database) => (payload: CreateQuotation) => {
     };
 
     // criar casca da cotação no banco de dados
-    const quotation = repo.quotation.create(validateQuotation.data);
+    const quotation = repo.quotation.base.create(validateQuotation.data);
 
     // validar regras para criar items
     const validateItems = rules.item.createAndAdd({
@@ -39,11 +39,11 @@ const createQuotation = (db: Database) => (payload: CreateQuotation) => {
 
     // items errors
     if (!validateItems.success) {
-        repo.quotation.deleteByID({ id: quotation?.id as number }); // caso dê erro na criação dos items, deleta a cotação que foi criada
+        repo.quotation.base.deleteById({ id: quotation?.id as number }); // caso dê erro na criação dos items, deleta a cotação que foi criada
         return validateItems;
     }
 
-    const added = repo.item.addToQuotation(
+    const added = repo.workFlows.addItemToQuotation(
         quotation!.id!,
         validateItems.data.items
     );

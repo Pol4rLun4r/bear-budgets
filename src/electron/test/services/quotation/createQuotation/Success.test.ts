@@ -20,8 +20,8 @@ describe("Sucessos ao criar cotação", () => {
             const quotation_link = quotationLinks[index];
 
             // verifica se os itens foram criados
-            const itemReferenceData = repo.item.getReferenceById(quotation_link.item_reference_id);
-            const itemVersionData = repo.item.getValuesById(quotation_link.item_values_id);
+            const itemReferenceData = repo.item.reference.getById(quotation_link.item_reference_id);
+            const itemVersionData = repo.item.values.getById(quotation_link.item_values_id);
 
             // 3.1 verifica se a descrição do item é o mesmo informado
             expect(itemReferenceData?.description).toBe(payload.items[index].item_reference.description);
@@ -223,7 +223,7 @@ describe("Sucessos ao criar cotação", () => {
     it("ter sucesso ao criar items que já existem no banco de dados", async () => {
         const itemPayload = fakeItens[1];
 
-        const itemId = repo.item.createReference(itemPayload);
+        const itemId = repo.item.reference.create(itemPayload);
 
         // 1. prepara o payload
         const payload: CreateQuotation = {

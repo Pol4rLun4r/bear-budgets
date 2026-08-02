@@ -16,7 +16,7 @@ describe("Pegar cotação completa", () => {
     const repo = createRepositories(db);
 
     beforeAll(() => {
-        const itemId = repo.item.createReference(fakeItens[2]);
+        const itemId = repo.item.reference.create(fakeItens[2]);
 
         db.prepare(`
             INSERT INTO reference_links (item_reference_id, content)
