@@ -33,6 +33,18 @@ type SearchItemDescription = Pick<ItemReference, "description">['description'];
 
 type SearchItemDescriptionIsOptional = SearchItemDescription | undefined;
 
+type AddToQuotationPayload = {
+    quotation: {
+        id: Quotation['id'];
+        amount: Quotation['amount'];
+        total_value: Quotation['total_value'];
+    }
+    items: {
+        item_reference: Partial<ItemReference>;
+        item_values: Partial<ItemValues>;
+        reference_links: Partial<ReferenceLink>[];
+    }[];
+};
 
 // --------------- channels and API ---------------
 type EventPayloadMapping = {
@@ -47,6 +59,7 @@ type EventPayloadMapping = {
     "item:getReferenceLinks": Result<ReferenceLink[] | undefined>;
     "item:findItemReferences": Result<ItemReference[] | undefined>;
     "item:getAllValuesByReferenceId": Result<ItemValues[] | undefined>;
+    "item:addToQuotation": Result<QuotationLink[] | undefined>;
 
     // janela (frame personalizado)
     "window:minimize": void;
@@ -80,6 +93,7 @@ interface ItemAPI {
     findItemReferences(description: SearchItemDescriptionIsOptional): Promise<Result<ItemReference[] | undefined>>;
     getReferenceLinks(itemReferenceId: GetReferenceLinks): Promise<Result<ReferenceLink[] | undefined>>;
     getAllValuesByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemValues[] | undefined>>;
+    addToQuotation(payload: AddToQuotationPayload): Promise<Result<QuotationLink[] | undefined>>;
 }
 
 interface WindowAPI {

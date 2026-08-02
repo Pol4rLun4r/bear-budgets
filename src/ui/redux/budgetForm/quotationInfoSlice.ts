@@ -9,10 +9,13 @@ export interface QuotationInfoSliceState {
 
 export const createEmptyQuotationData = (): Quotation => {
     return {
+        id: undefined,
         notes: undefined,
         status: 0,
         amount: 0,
-        total_value: 0
+        total_value: 0,
+        created_at: undefined,
+        updated_at: undefined
     }
 };
 

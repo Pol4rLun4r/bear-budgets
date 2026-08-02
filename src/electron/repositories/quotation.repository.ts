@@ -53,12 +53,47 @@ const getById = (db: Database) =>
         `).get(quotation_id) as Quotation | undefined;
     };
 
+/** atualiza uma cotação baseada no ID */
+const update = (db: Database) =>
+    ({ id, notes, amount, total_value }: Partial<Quotation> & Pick<Quotation, 'id'>) => {
+        const fields: string[] = [];
+        const values: unknown[] = [];
+
+        if (notes !== undefined) {
+            fields.push("notes = ?");
+            values.push(notes);
+        }
+
+        if (amount !== undefined) {
+            fields.push("amount = ?");
+            values.push(amount);
+        }
+
+        if (total_value !== undefined) {
+            fields.push("total_value = ?");
+            values.push(total_value);
+        }
+
+        if (!fields.length) return;
+
+        values.push(id);
+
+        db.prepare(`
+            UPDATE quotations
+            SET ${fields.join(", ")}, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `).run(...values);
+
+        return getById(db)(id);
+    };
+
 const quotationRepository = (db: Database) => {
     return {
         create: create(db),
         getById: getById(db),
         deleteById: deleteById(db),
-        getAllSummary: getAllSummary(db)
+        getAllSummary: getAllSummary(db),
+        update: update(db)
     };
 };
 export default quotationRepository;

@@ -11,12 +11,13 @@ import BudgetForm from "../../../budgetForm/@BudgetForm";
 
 // redux
 import { setListItems } from "../../../../redux/budgetForm/items/listItemsSlice";
+import { setQuotation } from "../../../../redux/budgetForm/quotationInfoSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../redux/store";
 
 const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
     const [opened, { open, close }] = useDisclosure(false);
-    const [quotation, setQuotation] = useState<Quotation | undefined>(undefined);
+    const [quotation, setQuotationData] = useState<Quotation | undefined>(undefined);
     // const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
@@ -29,8 +30,9 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
                 if (result.success) {
                     const items = result.data?.items
 
-                    setQuotation(result.data?.quotation);
+                    setQuotationData(result.data?.quotation);
                     dispatch(setListItems({ scope: 'budget_form_edit', data: items! }));
+                    dispatch(setQuotation({ scope: 'budget_form_edit', data: result.data!.quotation! }));
                 } else {
                     console.error('Erro ao buscar orçamento:', result.data);
                 }

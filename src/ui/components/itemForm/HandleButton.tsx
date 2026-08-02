@@ -17,8 +17,13 @@ import resetItem from "../../redux/itemForm/resetItem.thunk";
 // services
 import services from "../../services";
 
+// query
+import { useQueryClient } from "@tanstack/react-query";
+
 const HandleButton = ({ scope, budgetScope, close }: { close: () => void, scope: ItemFormScope, budgetScope: BudgetFormScope }) => {
     const dispatch = useDispatch<AppDispatch>();
+
+    const queryClient = useQueryClient();
 
     const itemReference = useSelector((state: RootState) => state.itemForm.form[scope].item_reference);
     const itemValues = useSelector((state: RootState) => state.itemForm.form[scope].item_values);
@@ -32,19 +37,39 @@ const HandleButton = ({ scope, budgetScope, close }: { close: () => void, scope:
 
     // dados do item bruto
     const data = useSelector((state: RootState) => state.itemForm.form[scope]);
-    const { stValue } = useCalcAddItem({ ...data.item_values, switchStMode: data.toggleStMode });
-    const convertedData: ItemDataState = { ...data, item_values: { ...data.item_values, st: stValue }, toggleStMode: false };
+    const { stValue, totalWithAll } = useCalcAddItem({ ...data.item_values, switchStMode: data.toggleStMode });
+    const convertedItemData: ItemDataState = { ...data, item_values: { ...data.item_values, st: stValue }, toggleStMode: false };
+    const quotationData = useSelector((state: RootState) => state.budgetForm.quotationInfo[budgetScope]);
+    const items = useSelector((state: RootState) => state.budgetForm.listItems[budgetScope]).length;
+
+    const handleDispatchAddItem = () => {
+        dispatch(addItem({ scope: budgetScope, data: convertedItemData }));
+        close();
+        resetItem(dispatch, scope);
+    }
 
     const handleService = async () => {
         try {
             let res;
 
             if (scope === 'item_form_edit') {
-                res = await services.quotation.updateLine(convertedData as UpdateQuotationLinePayload);
+                res = await services.quotation.updateLine(convertedItemData as UpdateQuotationLinePayload);
             } else {
-                res = await services.quotation.updateLine(convertedData as UpdateQuotationLinePayload); // temporário
+                res = await services.item.addItemToQuotation({
+                    quotation: {
+                        id: quotationData.id,
+                        amount: quotationData.amount + 1,
+                        total_value: quotationData.total_value + totalWithAll
+                    },
+                    items: [{
+                        ...convertedItemData,
+                        item_values: {
+                            ...convertedItemData.item_values,
+                            position: items + 1
+                        },
+                    }]
+                });
             }
-
 
             if (!res.success) {
                 return notifications.show({
@@ -54,6 +79,16 @@ const HandleButton = ({ scope, budgetScope, close }: { close: () => void, scope:
                     color: 'pink'
                 })
             }
+
+            if (scope === 'item_form_edit') {
+                console.log();
+            } else {
+                handleDispatchAddItem();
+            }
+
+            await queryClient.refetchQueries({
+                queryKey: ["budgetsData"],
+            });
 
             notifications.show({
                 title: scope === 'item_form_edit' ? 'Item atualizado' : 'Item adicionado',
@@ -78,12 +113,10 @@ const HandleButton = ({ scope, budgetScope, close }: { close: () => void, scope:
 
     const handleAddItem = () => {
         if (budgetScope === 'budget_form_edit') {
-            handleService();
+            return handleService();
         }
 
-        dispatch(addItem({ scope: budgetScope, data: convertedData }));
-        close();
-        resetItem(dispatch, scope);
+        handleDispatchAddItem();
     };
 
     const handleEditItem = () => {
@@ -91,7 +124,7 @@ const HandleButton = ({ scope, budgetScope, close }: { close: () => void, scope:
             handleService();
         }
 
-        dispatch(editItem({ scope: budgetScope, data: convertedData }));
+        dispatch(editItem({ scope: budgetScope, data: convertedItemData }));
         close();
         resetItem(dispatch, scope);
     }
