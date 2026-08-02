@@ -37,7 +37,6 @@ const updateQuotationLineService = (db: Database) => (payload: UpdateQuotationLi
         let valuesId = quotationLink.item_values_id;
 
         if (item_reference.id) {
-            refRepo.update(item_reference.id, item_reference);
             referenceId = item_reference.id;
         } else {
             const inserted = refRepo.create(item_reference as ItemReference);

@@ -43,18 +43,21 @@ describe("Atualizar linha de cotação", () => {
         quotation: { amount: 1, total_value: 431.32, notes: "Hello world" }
     }
 
-    it("deve atualizar uma linha de cotação existente", () => {
+    it("deve atualizar uma linha de cotação quando a referência já existe (não edita item_reference)", () => {
         const create = services.quotation.create(payload);
 
         if (!create.success) {
             throw new Error(create.data);
         }
 
-        const quotationLinkId = create.data?.[0].id as number;
+        const quotationLink = create.data?.[0];
+        const quotationLinkId = quotationLink.id;
+        const originalReference = repo.item.reference.getById(quotationLink.item_reference_id);
 
         const payloadEdit: UpdateQuotationLinePayload = {
             quotation_link_id: quotationLinkId,
-            item_reference: { ...fakeItens[1], id: 1 },
+            // informar o id para usar referência existente — tentar alterar descrição, mas o service NÃO deve editar a referência
+            item_reference: { ...originalReference, description: "Mudança tentativa" },
             item_values: fakeItemValues(1, {
                 quantity: 100,
                 unit_price: 10,
@@ -74,10 +77,56 @@ describe("Atualizar linha de cotação", () => {
             throw new Error(update.data);
         }
 
-        expect(update.data.item_reference?.description).toBe(fakeItens[1].description);
+        // A descrição deve permanecer a original — o service não edita item_reference quando id é informado
+        expect(update.data.item_reference?.description).toBe(originalReference?.description);
         expect(update.data.item_values?.unit_price).toBe(10);
         expect(update.data.item_values?.quantity).toBe(100);
         expect(update.data.reference_links).toHaveLength(2);
+    });
+
+    it("deve atualizar uma linha de cotação quando o item_reference é novo (cria nova referência)", () => {
+        const create = services.quotation.create(payload);
+
+        if (!create.success) {
+            throw new Error(create.data);
+        }
+
+        const quotationLinkId = create.data?.[0].id as number;
+
+        const newReference = {
+            description: "Item novo para teste",
+            internal_code: "NEW-REF-001",
+            manufacturer_code: "MFG-NEW-001",
+            ncm: "00000000",
+            notes: "referência criada durante update",
+        };
+
+        const payloadNew: UpdateQuotationLinePayload = {
+            quotation_link_id: quotationLinkId,
+            // sem id -> service deve criar a referência
+            item_reference: { ...newReference } as ItemReference,
+            item_values: fakeItemValues(1, {
+                quantity: 5,
+                unit_price: 7,
+                markup: "10%",
+                extra_value: 0,
+            }),
+            reference_links: [
+                { content: 'link-new' }
+            ]
+        };
+
+        const updateNew = services.quotation.updateLine(payloadNew);
+
+        expect(updateNew.success).toBe(true);
+        if (!updateNew.success) {
+            throw new Error(updateNew.data);
+        }
+
+        // A referência retornada deve ter a descrição informada (foi criada)
+        expect(updateNew.data.item_reference?.description).toBe(newReference.description);
+        expect(updateNew.data.item_values?.unit_price).toBe(7);
+        expect(updateNew.data.reference_links).toHaveLength(1);
     });
 
     it("deve falhar quando a descrição do novo item_reference não foi informada", () => {
