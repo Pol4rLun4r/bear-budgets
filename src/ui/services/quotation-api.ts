@@ -16,4 +16,9 @@ const getFull = async (quotationId: Quotation['id']) => {
     return response;
 };
 
-export default { create, getAllSummary, getFull };
+const updateLine = async (data: UpdateQuotationLinePayload) => {
+    const response = await baseAPI.quotation.updateLine(data);
+    return response;
+}
+
+export default { create, getAllSummary, getFull, updateLine };
