@@ -1,3 +1,17 @@
+# [2.1.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v2.0.2...v2.1.0) (2026-08-02)
+
+
+### Bug Fixes
+
+* **quotation:** preserve existing item references during line updates ([ddf5da1](https://github.com/Pol4rLun4r/bear-budgets/commit/ddf5da1ad5b8f68b54233afbad8ceb51628f7e98))
+
+
+### Features
+
+* **quotation:** add support for updating quotation lines ([2d8c7d9](https://github.com/Pol4rLun4r/bear-budgets/commit/2d8c7d99ae3ae1d0798de446a1624aa56089d4ef))
+* **quotation:** support adding items to existing quotations ([e9ecfb5](https://github.com/Pol4rLun4r/bear-budgets/commit/e9ecfb5738293181c6c0be9c637d5bd8c9195651))
+* **quotation:** sync item form updates with quotation service ([03ad049](https://github.com/Pol4rLun4r/bear-budgets/commit/03ad049e477299728d9deab80b93fcdf17d19b98))
+
 ## [2.0.2](https://github.com/Pol4rLun4r/bear-budgets/compare/v2.0.1...v2.0.2) (2026-07-28)
 
 
