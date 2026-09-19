@@ -54,6 +54,9 @@ const SortableRow = ({ item, index, scope }: SortableRowProps) => {
     const total = calcItem.totalWithAll;
 
     const baseDate = new Date();
+    const boardingValue = item.item_values.boarding ?? 0;
+    const boardingLabel = boardingValue > 0 ? `${boardingValue} dia(s) corrido(s)` : 'Sem embarque';
+    const boardingDate = dayjs(addCalendarDays(baseDate, boardingValue)).format('DD/MM/YYYY');
 
     return (
         <Table.Tr ref={ref}>
@@ -68,8 +71,8 @@ const SortableRow = ({ item, index, scope }: SortableRowProps) => {
             <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(total)} /></Table.Td>
             <Table.Td {...tableTdProps}>
                 <RowContent
-                    label={item.item_values.boarding + " dias corridos"}
-                    value={dayjs(addCalendarDays(baseDate, item.item_values.boarding || 0)).format('DD/MM/YYYY')}
+                    label={boardingLabel}
+                    value={boardingValue > 0 ? boardingDate : ''}
                 />
             </Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={convertMarkupValue(item.item_values.markup) + "%"} /></Table.Td>

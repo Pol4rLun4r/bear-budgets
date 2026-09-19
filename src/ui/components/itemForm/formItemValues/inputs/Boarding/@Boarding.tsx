@@ -16,7 +16,7 @@ const Boarding = ({ scope }: { scope: ItemFormScope }) => {
         <BoardingInput
             baseDate={baseDate}
             onChange={(value) => dispatch(setValuesField({ scope, key: 'boarding', value }))}
-            value={itemData.boarding ?? 7}
+            value={itemData.boarding ?? 0}
         />
     )
 }
