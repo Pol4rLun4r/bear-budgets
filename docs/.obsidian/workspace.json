@@ -59,12 +59,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ServicesAndRules/rules/item/createAndAdd.md",
-                "mode": "preview",
+                "file": "Database/item_values.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "createAndAdd"
+              "title": "item_values"
             }
           }
         ],
@@ -89,7 +89,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": true
+                "autoReveal": true,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -101,7 +103,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "boarding",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -135,7 +137,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "ServicesAndRules/rules/item/createAndAdd.md",
+                "file": "Database/item_values.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -145,7 +147,7 @@
                 "unlinkedCollapsed": false
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for createAndAdd"
+              "title": "Backlinks"
             }
           }
         ]
@@ -238,12 +240,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "93db793922056581",
+  "active": "9cf767d2a2e5b296",
   "lastOpenFiles": [
+    "Decisions/@Decisions.md",
+    "Database/item_values.md",
+    "ServicesAndRules/rules/item/createAndAdd.md",
     "ServicesAndRules/services/quotation/createQuotation.md",
     "ServicesAndRules/@Services.md",
     "@Docs.md",
-    "Database/item_values.md",
     "Database/@Database.md",
     "ServicesAndRules/services/item/getAllItemValuesByReferenceId.md",
     "ServicesAndRules/rules/item/getAllItemValuesByReferenceId.md",
@@ -253,7 +257,6 @@
     "ServicesAndRules/services/item/findItemReferences.md",
     "ServicesAndRules/rules/item/getReferencesLinks.md",
     "ServicesAndRules/rules/item/findItemReferences.md",
-    "ServicesAndRules/rules/item/createAndAdd.md",
     "ServicesAndRules/services/quotation/getQuotationFull.md",
     "Database/quotations.md",
     "ServicesAndRules/rules/quotation/getFull.md",
@@ -272,7 +275,6 @@
     "ServicesAndRules/services/quotation",
     "ServicesAndRules/examples",
     "ServicesAndRules",
-    "Decisions/@Decisions.md",
     "Decisions",
     "Database/clients.md",
     "Services/client"

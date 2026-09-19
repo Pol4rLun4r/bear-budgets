@@ -124,7 +124,7 @@ describe("Sucessos ao criar cotação", () => {
                     reference_links: [],
                     item_values: fakeItemValues(0, {
                         ipi: 1.3,
-                        boarding: "FOB",
+                        boarding: 7,
                     }),
                 },
                 {
@@ -147,7 +147,7 @@ describe("Sucessos ao criar cotação", () => {
                         purchase_shipping: 31,
                         st: 43,
                         extra_value: 88,
-                        boarding: "CIF",
+                        boarding: 15,
                     }),
                 }
             ],
@@ -233,7 +233,7 @@ describe("Sucessos ao criar cotação", () => {
                     reference_links: [],
                     item_values: fakeItemValues(0, {
                         ipi: 1.3,
-                        boarding: "EXW",
+                        boarding: 9,
                     }),
                 },
                 {

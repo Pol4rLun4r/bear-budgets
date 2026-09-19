@@ -11,7 +11,7 @@ import Markup from "./inputs/Markup";
 import PurchaseShipping from "./inputs/PurchaseShipping";
 import ClearValues from "./ClearValues";
 import ExtraValue from "./inputs/ExtraValue";
-import Boarding from "./inputs/Boarding";
+import Boarding from "./inputs/Boarding/@Boarding";
 
 // redux
 import { RootState } from "../../../redux/store";

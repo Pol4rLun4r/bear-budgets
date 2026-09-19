@@ -23,6 +23,8 @@ import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
 
 // style
 import classes from './Row.module.css';
+import dayjs from "dayjs";
+import { addCalendarDays } from "../../../itemForm/formItemValues/inputs/Boarding/boardingUtils";
 
 const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -51,6 +53,8 @@ const SortableRow = ({ item, index, scope }: SortableRowProps) => {
     const unitValue = calcItem.finalUnitValue;
     const total = calcItem.totalWithAll;
 
+    const baseDate = new Date();
+
     return (
         <Table.Tr ref={ref}>
             <Table.Td {...tableTdProps} align="center">
@@ -62,7 +66,12 @@ const SortableRow = ({ item, index, scope }: SortableRowProps) => {
             <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(unitValue)} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={item.item_values.quantity} /></Table.Td>
             <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(total)} /></Table.Td>
-            <Table.Td {...tableTdProps}><RowContent extraText="Embarque:" label={item.item_values.boarding} /></Table.Td>
+            <Table.Td {...tableTdProps}>
+                <RowContent
+                    label={item.item_values.boarding + " dias corridos"}
+                    value={dayjs(addCalendarDays(baseDate, item.item_values.boarding || 0)).format('DD/MM/YYYY')}
+                />
+            </Table.Td>
             <Table.Td {...tableTdProps}><RowContent label={convertMarkupValue(item.item_values.markup) + "%"} /></Table.Td>
             {!switchMode &&
                 <>

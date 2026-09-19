@@ -20,7 +20,7 @@ describe("Pegar cotações resumidas", () => {
                     reference_links: [],
                     item_values: fakeItemValues(0, {
                         ipi: 1.3,
-                        boarding: "3 dias",
+                        boarding: 3,
                     }),
                 },
             ],
@@ -33,7 +33,7 @@ describe("Pegar cotações resumidas", () => {
                     reference_links: [],
                     item_values: fakeItemValues(1, {
                         ipi: 1.3,
-                        boarding: "4 dias",
+                        boarding: 4,
                     }),
                 },
             ],

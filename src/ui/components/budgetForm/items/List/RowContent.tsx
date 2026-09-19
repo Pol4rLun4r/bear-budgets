@@ -11,12 +11,16 @@ import classes from './Row.module.css';
 
 interface RowContentProps {
     label: any;
+    value?: any;
+    /** desabilitar botão de cópia */
     disableCopyButton?: boolean;
+    /** copiar apenas números */
     onlyNumbers?: boolean;
+    /** texto extra ao copiar o valor */
     extraText?: string;
 }
 
-const RowContent = ({ label, disableCopyButton, extraText, onlyNumbers }: RowContentProps) => {
+const RowContent = ({ label, value, disableCopyButton, extraText, onlyNumbers }: RowContentProps) => {
     const { hovered, ref } = useHover();
 
     const rowContentProps = {
@@ -24,7 +28,7 @@ const RowContent = ({ label, disableCopyButton, extraText, onlyNumbers }: RowCon
     }
 
     const iconsSize = 15
-    const normalizedLabel = typeof label === 'string' ? label : String(label)
+    const normalizedLabel = value !== undefined ? String(value) : typeof label === 'string' ? label : String(label)
     const copyValue = extraText
         ? `${extraText} ${onlyNumbers ? normalizedLabel.replace(/[^0-9,.-]/g, '') : normalizedLabel}`
         : onlyNumbers
@@ -32,7 +36,7 @@ const RowContent = ({ label, disableCopyButton, extraText, onlyNumbers }: RowCon
             : normalizedLabel
 
     return (
-        <Tooltip label={label} withArrow multiline maw={'40%'}>
+        <Tooltip label={copyValue} withArrow multiline maw={'40%'}>
             <span ref={ref} {...rowContentProps}>
                 {disableCopyButton ? (
                     label

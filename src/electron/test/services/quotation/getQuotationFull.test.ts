@@ -47,7 +47,7 @@ describe("Pegar cotação completa", () => {
                     quantity: 122,
                     unit_price: 24,
                     markup: "40%",
-                    boarding: "FOB",
+                    boarding: 7,
                 }),
             },
             {
@@ -60,7 +60,7 @@ describe("Pegar cotação completa", () => {
                     unit_price: 2,
                     markup: "40%",
                     extra_value: 88,
-                    boarding: "CIF",
+                    boarding: 12,
                 }),
             },
         ],

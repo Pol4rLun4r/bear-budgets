@@ -1,8 +1,10 @@
 // mantine
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/dates/styles.css';
 import { MantineProvider } from "@mantine/core"
 import { Notifications } from '@mantine/notifications';
+import { DatesProvider } from '@mantine/dates';
 
 // react-query
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -17,6 +19,9 @@ import ManagerPage from './pages/managerPage/@ManagerPage';
 // styles
 import './style/Global.css';
 
+// dayJS
+import 'dayjs/locale/pt-br';
+
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -24,12 +29,14 @@ const App = () => {
         defaultColorScheme='dark'
         theme={{ fontFamily: 'primary_font', primaryColor: 'violet', defaultGradient: { from: 'violet', to: 'grape', deg: 45 } }}
       >
-        <Notifications />
-        <Main>
-          <FrameBar />
-          <Sidebar />
-          <ManagerPage />
-        </Main>
+        <DatesProvider settings={{locale: 'pt-br', firstDayOfWeek: 0}}>
+          <Notifications />
+          <Main>
+            <FrameBar />
+            <Sidebar />
+            <ManagerPage />
+          </Main>
+        </DatesProvider>
       </MantineProvider>
     </QueryClientProvider>
   )

@@ -34,7 +34,7 @@ const INITIAL_UP = `
         purchase_shipping REAL,
         ipi REAL,
         st REAL,
-        boarding TEXT,
+        boarding INTEGER,
         extra_value REAL,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
@@ -197,10 +197,108 @@ const SEARCH_TOKENIZER_FIX_DOWN = `
     END;
 `;
 
+const BOARDING_FORMAT_UP = `
+    PRAGMA foreign_keys = OFF;
+
+    CREATE TABLE item_values_boarding_migration (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_reference_id INTEGER NOT NULL,
+        position INTEGER NOT NULL,
+        quantity INTEGER,
+        unit_price REAL,
+        markup TEXT,
+        purchase_shipping REAL,
+        ipi REAL,
+        st REAL,
+        boarding INTEGER,
+        extra_value REAL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (item_reference_id) REFERENCES item_references(id) ON DELETE CASCADE
+    );
+
+    INSERT INTO item_values_boarding_migration (
+        id, item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, boarding, extra_value, created_at, updated_at
+    )
+    SELECT
+        id,
+        item_reference_id,
+        position,
+        quantity,
+        unit_price,
+        markup,
+        purchase_shipping,
+        ipi,
+        st,
+        CASE
+            WHEN boarding IS NULL THEN NULL
+            WHEN typeof(boarding) IN ('integer', 'real') THEN CAST(boarding AS INTEGER)
+            ELSE NULL
+        END AS boarding,
+        extra_value,
+        created_at,
+        updated_at
+    FROM item_values;
+
+    DROP TABLE item_values;
+    ALTER TABLE item_values_boarding_migration RENAME TO item_values;
+
+    PRAGMA foreign_keys = ON;
+`;
+
+const BOARDING_FORMAT_DOWN = `
+    PRAGMA foreign_keys = OFF;
+
+    CREATE TABLE item_values_boarding_migration (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_reference_id INTEGER NOT NULL,
+        position INTEGER NOT NULL,
+        quantity INTEGER,
+        unit_price REAL,
+        markup TEXT,
+        purchase_shipping REAL,
+        ipi REAL,
+        st REAL,
+        boarding TEXT,
+        extra_value REAL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (item_reference_id) REFERENCES item_references(id) ON DELETE CASCADE
+    );
+
+    INSERT INTO item_values_boarding_migration (
+        id, item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, boarding, extra_value, created_at, updated_at
+    )
+    SELECT
+        id,
+        item_reference_id,
+        position,
+        quantity,
+        unit_price,
+        markup,
+        purchase_shipping,
+        ipi,
+        st,
+        CASE
+            WHEN boarding IS NULL THEN NULL
+            ELSE CAST(boarding AS TEXT)
+        END AS boarding,
+        extra_value,
+        created_at,
+        updated_at
+    FROM item_values;
+
+    DROP TABLE item_values;
+    ALTER TABLE item_values_boarding_migration RENAME TO item_values;
+
+    PRAGMA foreign_keys = ON;
+`;
+
 const MIGRATIONS = [
     { version: 1, up: INITIAL_UP, down: INITIAL_DOWN },
     { version: 2, up: SEARCH_UP, down: SEARCH_DOWN },
     { version: 3, up: SEARCH_TOKENIZER_FIX_UP, down: SEARCH_TOKENIZER_FIX_DOWN },
+    { version: 4, up: BOARDING_FORMAT_UP, down: BOARDING_FORMAT_DOWN },
 ];
 
 export function runMigrations(db: DatabaseType): void {

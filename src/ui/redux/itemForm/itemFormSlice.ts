@@ -42,7 +42,7 @@ export const createEmptyItemData = (): ItemDataState => {
             markup: '40',
             purchase_shipping: undefined,
             extra_value: undefined,
-            boarding: ""
+            boarding: 7
         },
     };
 };

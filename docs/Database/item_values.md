@@ -84,7 +84,7 @@ A tabela é responsável por:
 * `boarding`
 
   * Prazo de embarque ou informação relacionada ao embarque.
-  * Tipo: Texto.
+  * Tipo: Inteiro.
   * Opcional.
 
 * `extra_value`
@@ -142,7 +142,7 @@ Seu preenchimento é opcional e pode variar conforme cada orçamento.
 
 ### boarding
 
-Armazena o prazo de embarque ou outra informação relacionada ao fornecimento do item.
+Armazena o prazo de embarque em dias corridos, independente da forma que foi informado (dias corridos/dias úteis ou uma data completa).
 
 Seu preenchimento é opcional e depende das informações disponíveis para cada orçamento.
 
