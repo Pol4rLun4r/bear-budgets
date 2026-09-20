@@ -2,28 +2,36 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 
-type ItemFormSwitchModeState = {
-    mode: boolean;
+type ItemFormSwitchState = {
+    item_reference: { mode: boolean };
+    item_values: { mode: boolean };
 }
 
-const initialState: ItemFormSwitchModeState = {
-    mode: false,
+const initialState: ItemFormSwitchState = {
+    item_reference: { mode: false },
+    item_values: { mode: false },
 }
 
-const itemFormSwitchModeSlice = createSlice({
-    name: "item-form-switch-mode",
+export type SwitchModeProps = "item_reference" | "item_values"
+
+const itemFormSwitchSlice = createSlice({
+    name: "item-form-switch",
     initialState,
     reducers: {
-        setModeOn: (state) => { state.mode = true },
-        setModeOff: (state) => { state.mode = false },
-        resetMode: () => initialState
+        setSwitchOnItemReference: (state) => { state.item_reference.mode = true },
+        setSwitchOffItemReference: (state) => { state.item_reference.mode = false },
+        setSwitchOnItemValues: (state) => { state.item_values.mode = true },
+        setSwitchOffItemValues: (state) => { state.item_values.mode = false },
+        resetSwitch: () => initialState
     }
 })
 
 export const {
-    resetMode,
-    setModeOff,
-    setModeOn,
-} = itemFormSwitchModeSlice.actions;
+    resetSwitch,
+    setSwitchOffItemReference,
+    setSwitchOnItemReference,
+    setSwitchOffItemValues,
+    setSwitchOnItemValues,
+} = itemFormSwitchSlice.actions;
 
-export default itemFormSwitchModeSlice.reducer;
+export default itemFormSwitchSlice.reducer;

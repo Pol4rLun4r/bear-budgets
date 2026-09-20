@@ -21,11 +21,11 @@ const ItemForm = ({ close, scope, budgetScope }: { close: () => void, scope: Ite
 
     return (
         <Stack gap="xl">
-            <SwitchMode />
+            <SwitchMode mode={step === 0 ? "item_reference" : "item_values"} />
             <WarningMoreValues scope={scope} />
             <Stepper active={step} size="sm" radius="xl">
                 <Stepper.Step label="Dados básicos" description="Informações iniciais do item" >
-                    <FormItemReference scope={scope} />
+                    <FormItemReference scope={scope}/>
                 </Stepper.Step>
                 <Stepper.Step label="Valores" description="Defina os valores do item">
                     <FormItemValues scope={scope} />

@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 import { ItemFormScope } from "../../../redux/itemForm/itemFormSlice";
 
 const FormItemValues = ({ scope }: { scope: ItemFormScope }) => {
-    const switchMode = useSelector((state: RootState) => state.itemForm.switchMode.mode);
+    const switchMode = useSelector((state: RootState) => state.itemForm.switch['item_values'].mode);
 
     return (
         <Stack gap="md">
@@ -31,24 +31,22 @@ const FormItemValues = ({ scope }: { scope: ItemFormScope }) => {
                 <Quantity scope={scope} />
                 <Markup scope={scope} />
             </Group>
-            {!switchMode ?
-                <Stack gap="md">
-                    <Group grow justify="center" align="flex-end">
-                        <IPI scope={scope} />
-                        <ST scope={scope} />
-                        <PurchaseShipping scope={scope} />
-                    </Group>
-                    <Group grow justify="center" align="flex-end">
-                        <Boarding scope={scope} />
-                        <ExtraValue scope={scope} />
-                    </Group>
-                </Stack>
-                :
+            <Stack gap="md">
+                <Group
+                    grow
+                    justify="center"
+                    align="flex-end"
+                    style={{ display: switchMode ? "none" : undefined }}
+                >
+                    <IPI scope={scope} />
+                    <ST scope={scope} />
+                    <ExtraValue scope={scope} />
+                </Group>
                 <Group grow justify="center" align="flex-end">
                     <Boarding scope={scope} />
                     <PurchaseShipping scope={scope} />
                 </Group>
-            }
+            </Stack>
             <Divider />
             <Calc scope={scope} />
         </Stack>

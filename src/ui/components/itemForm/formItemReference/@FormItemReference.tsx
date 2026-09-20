@@ -17,21 +17,28 @@ import Links from "./links/@Links.tsx";
 import Notes from "./notes/@Notes.tsx";
 
 const FormItemReference = ({ scope }: { scope: ItemFormScope }) => {
-    const switchMode = useSelector((state: RootState) => state.itemForm.switchMode.mode);
+    const switchMode = useSelector((state: RootState) => state.itemForm.switch['item_reference'].mode);
 
     return (
         <Stack gap="md">
             <Stack gap="md">
                 <Description scope={scope} />
-                {!switchMode &&
-                    <Group grow justify="center" align="flex-end">
-                        <InternalCode scope={scope} />
-                        <ManufacturerCode scope={scope} />
-                        <NCM scope={scope} />
-                    </Group>
-                }
+                <Group
+                    grow
+                    justify="center"
+                    align="flex-end"
+                >
+                    <InternalCode scope={scope} />
+                    {!switchMode && <ManufacturerCode scope={scope} />}
+                    {!switchMode && <NCM scope={scope} />}
+                </Group>
             </Stack>
-            <Group grow gap={0} pt="sm">
+            <Group
+                grow
+                gap={0}
+                pt="sm"
+                style={{ display: switchMode ? "none" : undefined }}
+            >
                 <Links scope={scope} />
                 <Notes scope={scope} />
             </Group>

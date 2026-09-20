@@ -9,7 +9,7 @@ const ExtraValue = ({ scope }: { scope: ItemFormScope }) => {
         <CurrencyInput
             itemValuesInput="extra_value"
             label="Valor extra"
-            placeholder="00"
+            placeholder="(opcional)"
             scope={scope}
         />
     )

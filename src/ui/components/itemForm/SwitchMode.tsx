@@ -4,17 +4,28 @@ import { Switch, Tooltip } from "@mantine/core"
 // redux
 import type { AppDispatch, RootState } from "../../redux/store"
 import { useDispatch, useSelector } from "react-redux"
-import { setModeOff, setModeOn } from "../../redux/itemForm/itemFormSwitchModeSlice"
+import { setSwitchOffItemReference, setSwitchOffItemValues, setSwitchOnItemReference, setSwitchOnItemValues, SwitchModeProps } from "../../redux/itemForm/itemFormSwitchModeSlice"
 
-const SwitchMode = () => {
+interface InterfaceSwitchModeProps {
+    mode: SwitchModeProps
+}
+
+const SwitchMode = ({ mode }: InterfaceSwitchModeProps) => {
     const dispatch = useDispatch<AppDispatch>();
-    const switchMode = useSelector((state: RootState) => state.itemForm.switchMode.mode);
+    const switchModeValue = useSelector((state: RootState) => state.itemForm.switch[mode].mode);
 
-    const handleSwitch = (mode: boolean) => {
-        if (!mode) {
-            return dispatch(setModeOff())
+    const handleSwitch = (switchValue: boolean) => {
+        if (mode === "item_values") {
+            if (!switchValue) {
+                return dispatch(setSwitchOffItemValues())
+            }
+            return dispatch(setSwitchOnItemValues())
         }
-        return dispatch(setModeOn())
+
+        if (!switchValue) {
+            return dispatch(setSwitchOffItemReference())
+        }
+        return dispatch(setSwitchOnItemReference())
     }
 
     return (
@@ -25,7 +36,7 @@ const SwitchMode = () => {
                 offLabel="Off"
                 radius="lg"
 
-                checked={switchMode}
+                checked={switchModeValue}
                 onChange={(event) => handleSwitch(event.currentTarget.checked)}
 
                 pos={"absolute"}
