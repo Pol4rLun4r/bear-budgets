@@ -4,7 +4,7 @@ import Database from "better-sqlite3";
 import { runMigrations } from "../../db/migrate.js";
 
 describe("runMigrations", () => {
-    it("limpa valores antigos de boarding em texto e usa o tipo inteiro", () => {
+    it("preserva o banco legado e não mexe em boarding", () => {
         const db = new Database(":memory:");
         db.pragma("foreign_keys = ON");
 
@@ -48,13 +48,13 @@ describe("runMigrations", () => {
         runMigrations(db);
 
         const boardingColumn = db.prepare("PRAGMA table_info(item_values)").all() as Array<{ name: string; type: string }>;
-        const rows = db.prepare("SELECT id, boarding FROM item_values ORDER BY id").all() as Array<{ id: number; boarding: number | null }>;
+        const rows = db.prepare("SELECT id, boarding FROM item_values ORDER BY id").all() as Array<{ id: number; boarding: string | number | null }>;
 
-        expect(boardingColumn.find((column) => column.name === "boarding")?.type).toBe("INTEGER");
+        expect(boardingColumn.find((column) => column.name === "boarding")?.type).toBe("TEXT");
         expect(rows).toEqual([
-            { id: 1, boarding: null },
-            { id: 2, boarding: null },
-            { id: 3, boarding: null },
+            { id: 1, boarding: "3 dias úteis" },
+            { id: 2, boarding: "7" },
+            { id: 3, boarding: "12" },
         ]);
 
         db.close();
