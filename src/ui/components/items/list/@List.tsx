@@ -1,13 +1,13 @@
 // mantine
 import { Paper, Table, VisuallyHidden } from "@mantine/core";
 
+// components
+import Rows from "./Rows";
+
 // style
 import classes from "./Items.module.css"
 
-// components
-import FetchReferences from './FetchReferences.tsx';
-
-const List = () => {
+const List = ({ items }: { items: ItemReference[] }) => {
     return (
         <Paper withBorder radius="lg" w={'100%'} h={'100%'} className={classes.items}>
             <Table.ScrollContainer minWidth={900} w={'100%'} h={'100%'}>
@@ -23,7 +23,7 @@ const List = () => {
                             <Table.Th w={'10%'}>Atualizado em</Table.Th>
                         </Table.Tr>
                     </Table.Thead>
-                    <FetchReferences />
+                    <Table.Tbody>{<Rows references={items} />}</Table.Tbody>
                 </Table>
             </Table.ScrollContainer>
         </Paper >

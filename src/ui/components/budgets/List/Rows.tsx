@@ -1,13 +1,18 @@
+import { memo } from "react";
+
 // mantine
 import { Table } from "@mantine/core";
 
 // utils
 import MenuBudget from './Menu/@MenuBudget.tsx';
 
-// components
-import RowContent from "../../budgetForm/items/List/RowContent.tsx";
-
-const Rows = ({ budgets }: { budgets: Quotation[] }) => {
+const Rows = ({
+  budgets,
+  open
+}: {
+  budgets: Quotation[],
+  open: () => void
+}) => {
 
   const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -18,17 +23,11 @@ const Rows = ({ budgets }: { budgets: Quotation[] }) => {
     budgets.map((budget) => (
       <Table.Tr key={budget.id}>
         <Table.Td align="center">
-          <MenuBudget quotationId={budget.id} />
+          <MenuBudget open={open} quotationId={budget.id} />
         </Table.Td>
-        <Table.Td>
-          <RowContent disableCopyButton label={String(budget.id).padStart(6, "0")} />
-        </Table.Td>
-        <Table.Td>
-          <RowContent disableCopyButton label={budget.notes} />
-        </Table.Td>
-        <Table.Td>
-          <RowContent disableCopyButton label={brl.format(budget.total_value)} />
-        </Table.Td>
+        <Table.Td>{String(budget.id).padStart(6, "0")}</Table.Td>
+        <Table.Td>{budget.notes}</Table.Td>
+        <Table.Td>{brl.format(budget.total_value)}</Table.Td>
         <Table.Td>{budget.amount}</Table.Td>
         <Table.Td>{budget.created_at}</Table.Td>
         <Table.Td>{budget.updated_at}</Table.Td>
@@ -37,4 +36,4 @@ const Rows = ({ budgets }: { budgets: Quotation[] }) => {
   );
 };
 
-export default Rows;
+export default memo(Rows);

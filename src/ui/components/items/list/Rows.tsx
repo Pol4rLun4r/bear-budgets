@@ -6,7 +6,8 @@ import classes from "./Items.module.css"
 import RowContent from "../../budgetForm/items/List/RowContent.tsx";
 import MenuItem from "./menu/@MenuItem.tsx";
 
-export const Rows = ({ references }: { references: ItemReference[] }) => {
+const Rows = ({ references }: { references: ItemReference[] }) => {
+  
   const tableTdProps: TableTdProps = {
     className: classes.rowContainer,
     height: 40,
@@ -26,3 +27,5 @@ export const Rows = ({ references }: { references: ItemReference[] }) => {
     ))
   )
 }
+
+export default Rows;

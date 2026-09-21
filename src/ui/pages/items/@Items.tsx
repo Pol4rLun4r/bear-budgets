@@ -3,13 +3,13 @@ import { Stack } from "@mantine/core";
 
 // components
 import SearchForm from "../../components/items/searchForm/@SearchForm.tsx";
-import List from "../../components/items/list/@List.tsx";
+import ItemsList from "../../components/items/@ItemsList.tsx";
 
 const Items = () => {
     return (
         <Stack w={"100%"} h={"100%"}>
             <SearchForm />
-            <List/>
+            <ItemsList />
         </Stack>
     )
 }

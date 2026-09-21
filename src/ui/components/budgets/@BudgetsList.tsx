@@ -20,7 +20,7 @@ const BudgetsList = () => {
     return data === undefined ? [] : data;
   }
 
-  const { isPending ,data } = useQuery({
+  const { isPending, data } = useQuery({
     queryKey: ['budgetsData'],
     queryFn: () => fetchData().then((res) => res)
   })

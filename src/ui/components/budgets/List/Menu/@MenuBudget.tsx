@@ -1,13 +1,11 @@
 import { useState } from "react";
 
 // mantine
-import { ActionIcon, Group, Menu, Modal } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { ActionIcon, Group, Loader, Menu } from "@mantine/core";
 
 // icons
 import { IconCopyPlus, IconEyeSpark, IconMenu3, IconTrash } from "@tabler/icons-react";
 import services from '../../../../services/index';
-import BudgetForm from "../../../budgetForm/@BudgetForm";
 
 // redux
 import { setListItems } from "../../../../redux/budgetForm/items/listItemsSlice";
@@ -15,39 +13,41 @@ import { setQuotation } from "../../../../redux/budgetForm/quotationInfoSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../redux/store";
 
-const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
-    const [opened, { open, close }] = useDisclosure(false);
-    const [quotation, setQuotationData] = useState<Quotation | undefined>(undefined);
-    // const [loading, setLoading] = useState(false);
-
+const MenuBudget = ({
+    quotationId,
+    open
+}: {
+    quotationId: Quotation['id'],
+    open: () => void
+}) => {
     const dispatch = useDispatch<AppDispatch>();
+    const [loading, setLoading] = useState(false);
 
-    const handleSeeData = () => {
-        const fetchQuotation = async () => {
-            // setLoading(true);
-            try {
-                const result = await services.quotation.getFull(quotationId);
-                if (result.success) {
-                    const items = result.data?.items
-
-                    setQuotationData(result.data?.quotation);
-                    dispatch(setListItems({ scope: 'budget_form_edit', data: items! }));
-                    dispatch(setQuotation({ scope: 'budget_form_edit', data: result.data!.quotation! }));
-                } else {
-                    console.error('Erro ao buscar orçamento:', result.data);
-                }
-            } catch (error) {
-                console.error('Erro ao buscar orçamento:', error);
-            } finally {
-                // setLoading(false);
-            }
-        };
-
-        fetchQuotation();
+    const handleSeeData = async () => {
         open();
-    }
+        setLoading(true);
 
-    const quotationNumber = String(quotation?.id).padStart(6, "0");
+        try {
+            const result = await services.quotation.getFull(quotationId);
+
+            if (!result.success || !result.data) return;
+
+            dispatch(setListItems({
+                scope: 'budget_form_edit',
+                data: result.data?.items ?? []
+            }));
+
+            dispatch(setQuotation({
+                scope: 'budget_form_edit',
+                data: result.data.quotation
+            }));
+
+        } catch (error) {
+            console.error('Erro ao buscar orçamento:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <Group>
@@ -75,23 +75,8 @@ const MenuBudget = ({ quotationId }: { quotationId: Quotation['id'] }) => {
                 </Menu.Dropdown>
             </Menu>
 
-            <Modal
-                padding='xl'
-                size="100%"
-                opened={opened}
-                onClose={close}
-                title={"Informações do Orçamento Nº " + quotationNumber}
-                centered
-                radius='lg'
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                }}
-            >
-                <BudgetForm scope="budget_form_edit" />
-            </Modal>
             <ActionIcon onClick={() => handleSeeData()} variant="transparent">
-                <IconEyeSpark />
+                {loading ? <Loader size={16} /> : <IconEyeSpark />}
             </ActionIcon>
         </Group>
     )
