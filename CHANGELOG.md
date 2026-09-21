@@ -1,3 +1,22 @@
+# [3.0.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v2.1.0...v3.0.0) (2026-09-20)
+
+
+### Bug Fixes
+
+* **items:** handle boarding values and numeric copy normalization ([f7d7061](https://github.com/Pol4rLun4r/bear-budgets/commit/f7d70616707e12b173096d0614e134524e65b950))
+
+
+### Features
+
+* **boarding:** add synchronized boarding date inputs ([0a251ef](https://github.com/Pol4rLun4r/bear-budgets/commit/0a251ef5d190b7a5fef24c4c27877aa8fb91edf8))
+
+
+### BREAKING CHANGES
+
+* **boarding:** 'Boarding' field has been changed to only support the new formats
+
+Databases prior to the new version will have the 'Boarding' field empty
+
 # [2.1.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v2.0.2...v2.1.0) (2026-08-02)
 
 
