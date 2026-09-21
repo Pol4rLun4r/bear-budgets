@@ -1,5 +1,6 @@
 // styles
 import classes from './FrameBar.module.css';
+import packageJson from '../../../../package.json';
 
 // redux
 import { RootState } from '../../redux/store.ts';
@@ -35,7 +36,7 @@ const FrameBar = () => {
 
     return (
         <div className={classes.frameBar} >
-            <div style={{ justifySelf: 'center' }}>{tabs[tabState]}</div>
+            <div style={{ justifySelf: 'center' }}>{tabs[tabState] + ` - App version ${packageJson.version}`}</div>
             <Group gap={2}>
                 <ActionIcon
                     {...actionIconProps}
