@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.0.0...v3.1.0) (2026-09-21)
+
+
+### Features
+
+* **framebar:** display app version in title ([7ab7dfe](https://github.com/Pol4rLun4r/bear-budgets/commit/7ab7dfe0a0b47170bd640a30a813fa3247402ed1))
+
 # [3.0.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v2.1.0...v3.0.0) (2026-09-20)
 
 
