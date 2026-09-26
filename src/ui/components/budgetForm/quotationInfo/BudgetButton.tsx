@@ -10,6 +10,7 @@ import { BudgetFormScope } from "../../../redux/budgetForm/@rootReducer";
 
 // api
 import services from "../../../services";
+import { useQueryClient } from "@tanstack/react-query";
 
 /** botão para lidar com a criação e edição de um orçamento */
 const BudgetButton = ({ scope }: { scope: BudgetFormScope }) => {
@@ -24,6 +25,8 @@ const BudgetButton = ({ scope }: { scope: BudgetFormScope }) => {
         quotation,
         items
     };
+    
+    const queryClient = useQueryClient()
 
     const handleBudget = async () => {
         try {
@@ -37,6 +40,8 @@ const BudgetButton = ({ scope }: { scope: BudgetFormScope }) => {
                     color: 'pink'
                 })
             }
+
+            queryClient.invalidateQueries({ queryKey: ['itemsData'] })
 
             notifications.show({
                 title: 'Criado',

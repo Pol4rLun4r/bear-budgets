@@ -28,7 +28,9 @@ const ItemsList = () => {
         staleTime: 30_000,
         gcTime: 5 * 60_000,
         placeholderData: keepPreviousData,
-        refetchOnMount: false,
+        refetchOnMount: (query) => query.state.isInvalidated,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     });
 
     if (isPending) return "Carregando...";
