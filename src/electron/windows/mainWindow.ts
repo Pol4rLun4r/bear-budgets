@@ -2,7 +2,7 @@
 import { BrowserWindow } from "electron";
 
 // utils
-import { isDev } from "../utils/env.js";
+import { isDev, isTestDatabase } from "../utils/env.js";
 import { getPreloadPath, getUIPath } from "../utils/pathResolver.js";
 
 // windows
@@ -16,7 +16,7 @@ export const createMainWindow = () => {
             nodeIntegration: false, // desativa a integração do Node.js para segurança
             sandbox: true, // necessário para contextBridge funcionar corretamente
             preload: getPreloadPath(), // caminho para o arquivo preload, que é responsável por expor as APIs do Electron para o renderer process de forma segura
-            devTools: isDev() ? true : false, // habilita o DevTools apenas no modo de desenvolvimento para evitar que usuários finais acessem as ferramentas de desenvolvimento
+            devTools: isDev() || isTestDatabase()
         },
 
         // style da janela
