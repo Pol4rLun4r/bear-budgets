@@ -112,6 +112,7 @@ const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
                 w={'50%'}
                 radius={'lg'}
                 withAlignedLabels
+                allowDeselect={false}
                 value={mode}
                 onChange={(value) => setMode(value as BoardingInputMode)}
                 data={[
