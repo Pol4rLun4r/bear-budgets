@@ -4,13 +4,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface InitialState {
     notes: ItemReference['notes'];
     reference_links: ReferenceLink[];
-    item_versions: ItemValues[];
+    item_values: ItemValues[];
 };
 
 const initialState: InitialState = {
     notes: "",
     reference_links: [],
-    item_versions: [],
+    item_values: [],
 };
 
 const menuSlice = createSlice({
@@ -24,7 +24,7 @@ const menuSlice = createSlice({
             state.notes = action.payload;
         },
         setVersion: (state, action: PayloadAction<ItemValues[]>) => {
-            state.item_versions = action.payload;
+            state.item_values = action.payload;
         }
     }
 });

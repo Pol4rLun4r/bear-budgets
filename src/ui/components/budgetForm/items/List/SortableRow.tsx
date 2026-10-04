@@ -13,6 +13,7 @@ import { useSortable } from "@dnd-kit/react/sortable";
 // utils
 import calcAddItem from '../../../../utils/calcAddItem';
 import { convertMarkupValue } from "../../../../utils/markupList";
+import { addCalendarDays } from "../../../itemForm/formItemValues/inputs/Boarding/boardingUtils";
 
 // components
 import RowContent from "./RowContent";
@@ -24,7 +25,6 @@ import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
 // style
 import classes from './Row.module.css';
 import dayjs from "dayjs";
-import { addCalendarDays } from "../../../itemForm/formItemValues/inputs/Boarding/boardingUtils";
 
 const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -79,7 +79,7 @@ const SortableRow = ({ item, index, scope }: SortableRowProps) => {
             {!switchMode &&
                 <>
                     <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.totalWithoutTaxes)} /></Table.Td>
-                    <Table.Td {...tableTdProps}><RowContent label={brl.format(item.item_values.unit_price as number)} /></Table.Td>
+                    <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(unitValue)}  /></Table.Td>
                     <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.markupUnitValue)} /></Table.Td>
                     <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.markupValue)} /></Table.Td>
                     <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_values.st ? 0 : item.item_values.st)} /></Table.Td>

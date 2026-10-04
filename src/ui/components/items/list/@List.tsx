@@ -4,8 +4,9 @@ import { useDisclosure } from "@mantine/hooks";
 
 // components
 import Rows from "./Rows";
+import ItemForm from "../../itemForm/@ItemForm";
 import MoreInfoModal from "./menu/modals/MoreInfoModal";
-import VersionInfoModal from "./menu/modals/VersionInfoModal";
+import ValuesInfoModal from "./menu/modals/ValuesModal/ValuesInfoModal";
 
 // style
 import classes from "./Items.module.css"
@@ -13,6 +14,7 @@ import classes from "./Items.module.css"
 const List = ({ items }: { items: ItemReference[] }) => {
     const [moreInfoOpened, { open: openMoreInfo, close: closeMoreInfo }] = useDisclosure(false);
     const [versionInfoOpened, { open: openVersionInfo, close: closeVersionInfo }] = useDisclosure(false);
+    const [viewValuesOpened, { open: openViewValues, close: closeViewValues }] = useDisclosure(false);
 
     return (
         <>
@@ -41,6 +43,7 @@ const List = ({ items }: { items: ItemReference[] }) => {
                 </Table.ScrollContainer>
             </Paper>
 
+            {/* modal que da mais informações sobre o item_reference */}
             <Modal
                 padding='xl'
                 size="lg"
@@ -58,6 +61,7 @@ const List = ({ items }: { items: ItemReference[] }) => {
                 <MoreInfoModal />
             </Modal>
 
+            {/* modal que informa os valores do item */}
             <Modal
                 padding='xl'
                 size="100%"
@@ -72,7 +76,24 @@ const List = ({ items }: { items: ItemReference[] }) => {
                 }}
                 transitionProps={{ transition: 'fade', duration: 200 }}
             >
-                <VersionInfoModal />
+                <ValuesInfoModal onOpenValuesModal={openViewValues}/>
+            </Modal>
+
+            {/* modal que da informações detalhadas sobre os valores de um item */}
+            <Modal
+                padding='xl'
+                size='lg'
+                opened={viewValuesOpened}
+                onClose={closeViewValues}
+                title="Editar item"
+                centered
+                radius='lg'
+                overlayProps={{
+                    backgroundOpacity: 0.55,
+                    blur: 3,
+                }}
+            >
+                <ItemForm budgetScope={'budget_form_edit'} scope="item_form_edit" close={closeViewValues} />
             </Modal>
         </>
     )
