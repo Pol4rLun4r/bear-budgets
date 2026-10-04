@@ -1,3 +1,19 @@
+# [3.2.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.1.0...v3.2.0) (2026-10-04)
+
+
+### Bug Fixes
+
+* **boarding:** prevent deselecting boarding mode ([6a43837](https://github.com/Pol4rLun4r/bear-budgets/commit/6a43837fd46b8150d3e7e072cd022ad56a36c96b))
+* **budget:** close edit modal after saving quotation ([9e94112](https://github.com/Pol4rLun4r/bear-budgets/commit/9e941121beb17d5588c858c11ec8cd7a3c78ce48))
+* **build:** correct Electron development scripts ([b826510](https://github.com/Pol4rLun4r/bear-budgets/commit/b8265109de7cecde77e03b0bdd13b3a47d909bd1))
+* **items:** refresh items data after budget changes ([46af9f2](https://github.com/Pol4rLun4r/bear-budgets/commit/46af9f2b2e7aed20441f1028c7e23a3f3517e565))
+
+
+### Features
+
+* **budget:** add quotation editing and local item management ([63dd77b](https://github.com/Pol4rLun4r/bear-budgets/commit/63dd77b24e6cdb636c56cc954c0b136c4cc381fd))
+* **quotation:** add full quotation update workflow ([de88e03](https://github.com/Pol4rLun4r/bear-budgets/commit/de88e0397a2864aeb64ddd9c577e7893d319e5ca))
+
 # [3.1.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.0.0...v3.1.0) (2026-09-21)
 
 
