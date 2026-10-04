@@ -5,8 +5,10 @@ import { notifications } from "@mantine/notifications";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../redux/store";
-import resetAllCreateBudgetData from "../../../redux/createBudget/resetAllCreateBudgetData.thunk";
+import resetAllBudgetData from "../../../redux/budgetForm/resetAllBudgetData.thunk";
 import { BudgetFormScope } from "../../../redux/budgetForm/@rootReducer";
+import { setQuotation } from "../../../redux/budgetForm/quotationInfoSlice";
+import { setListItems } from "../../../redux/budgetForm/items/listItemsSlice";
 
 // api
 import services from "../../../services";
@@ -21,36 +23,56 @@ const BudgetButton = ({ scope }: { scope: BudgetFormScope }) => {
 
     const hasValues = items.length > 0;
 
-    const budgetData: CreateQuotation = {
-        quotation,
-        items
-    };
-    
     const queryClient = useQueryClient()
 
     const handleBudget = async () => {
-        try {
-            const res = await services.quotation.create(budgetData);
+        let res: Result<QuotationLink[] | undefined> | Result<QuotationFull | undefined>
 
+        if (scope === 'budget_form_create') {
+            // dados para criar um orçamento novo
+            const createBudgetData: CreateQuotation = { quotation, items };
+
+            // service para criar um orçamento
+            res = await services.quotation.create(createBudgetData);
+        } else {
+            const editBudgetData: UpdateQuotation = { quotation, items } as UpdateQuotation
+
+            // service para editar um orçamento
+            res = await services.quotation.update(editBudgetData);
+        }
+
+        try {
             if (!res.success) {
                 return notifications.show({
-                    title: 'Error ao criação cotação',
+                    title: scope === 'budget_form_create' ? 'Error ao criação cotação' : 'Erro ao editar cotação',
                     message: res.data,
                     position: 'bottom-right',
                     color: 'pink'
                 })
             }
 
-            queryClient.invalidateQueries({ queryKey: ['itemsData'] })
+            // invalida a lista
+            queryClient.invalidateQueries({ queryKey: ['itemsData'] });
+
+            await queryClient.refetchQueries({
+                queryKey: ["budgetsData"],
+            });
 
             notifications.show({
-                title: 'Criado',
-                message: 'Orçamento criado com sucesso!',
+                title: scope === 'budget_form_create' ? 'Criado' : 'Editado',
+                message: scope === 'budget_form_create' ? 'Orçamento criado com sucesso!' : 'Orçamento editado com sucesso!',
                 position: 'bottom-right',
                 color: 'teal'
             });
 
-            dispatch(resetAllCreateBudgetData);
+            // dispatch
+            if (scope === 'budget_form_edit' && res.data && !Array.isArray(res.data)) {
+                dispatch(setQuotation({ scope: 'budget_form_edit', data: res.data.quotation }))
+                dispatch(setListItems({ scope: 'budget_form_edit', data: res.data.items }))
+            };
+
+            // reseta os dados da cotação para limpeza (atualmente limpa o formulário de criar cotação)
+            resetAllBudgetData(dispatch, scope);
 
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.';
@@ -70,7 +92,7 @@ const BudgetButton = ({ scope }: { scope: BudgetFormScope }) => {
             radius="lg"
             size="md"
             w={250}
-            disabled={!hasValues || scope === 'budget_form_edit'}
+            disabled={!hasValues}
             onClick={() => handleBudget()}
         >
             {scope === 'budget_form_create' ? 'Criar Orçamento' : 'Salvar alterações'}

@@ -45,8 +45,12 @@ const listItemsSlice = createSlice({
             items.push({
                 ...itemData,
                 temp_id: newTemId(),
+                quotation_link_id: undefined,
                 item_values: {
                     ...itemData.item_values,
+                    id: undefined,
+                    item_reference_id: undefined,
+                    created_at: undefined,
                     position: items.length, // define a posição do item como o último índice da lista
                 },
             });

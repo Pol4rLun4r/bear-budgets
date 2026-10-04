@@ -1,14 +1,20 @@
 // redux types
-import type { AppDispatch } from "../store";
+import type { AppDispatch } from "../store.ts";
 
 // redux resets
 import { resetItemData } from "../itemForm/itemFormSlice.ts";
-import { resetStep } from "../itemForm/itemFormStepsSlice";
+import { resetStep } from "../itemForm/itemFormStepsSlice.ts";
 import { resetReferenceLink } from "../itemForm/ReferenceLinkFormSlice.ts";
-import { resetList } from "../budgetForm/items/listItemsSlice.ts";
-import { resetQuotation } from "../budgetForm/quotationInfoSlice.ts";
+import { resetList } from "./items/listItemsSlice.ts";
+import { resetQuotation } from "./quotationInfoSlice.ts";
 
-const resetAllCreateBudgetData = (dispatch: AppDispatch) => {
+// type
+import { BudgetFormScope } from "./@rootReducer.ts";
+
+const resetAllBudgetData = (dispatch: AppDispatch, scope: BudgetFormScope) => {
+
+    console.log(scope);
+
     dispatch(resetItemData('item_form_add'));
     dispatch(resetItemData('item_form_edit'));
     dispatch(resetStep('item_form_add'));
@@ -19,4 +25,4 @@ const resetAllCreateBudgetData = (dispatch: AppDispatch) => {
     dispatch(resetQuotation('budget_form_create'));
 };
 
-export default resetAllCreateBudgetData;
+export default resetAllBudgetData;
