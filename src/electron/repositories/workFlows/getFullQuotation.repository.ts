@@ -12,7 +12,14 @@ const getQuotationFullRepository = (db: Database) =>
 
         // apenas os dados de quotation
         const quotation = db.prepare(`
-            SELECT *
+            SELECT 
+                id,
+                status,
+                notes,
+                total_value,
+                amount,
+                datetime(trim(created_at), 'localtime') AS created_at,
+                datetime(trim(updated_at), 'localtime') AS updated_at
             FROM quotations
             WHERE quotations.id = ?
         `).get(quotation_id) as Quotation | undefined;

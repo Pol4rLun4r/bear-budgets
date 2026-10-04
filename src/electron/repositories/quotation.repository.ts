@@ -38,7 +38,14 @@ const deleteById = (db: Database) =>
 const getAllSummary = (db: Database) =>
     () => {
         return db.prepare(`
-            SELECT *
+            SELECT
+                id,
+                status,
+                notes,
+                total_value,
+                amount,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
             FROM quotations
             ORDER BY created_at DESC, id DESC
             LIMIT 50
@@ -79,7 +86,13 @@ const update = (db: Database) =>
             values.push(status);
         }
 
-        if (!fields.length) return;
+        if (!fields.length) {
+            return db.prepare(`
+                UPDATE quotations
+                SET updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            `).run(id);
+        }
 
         values.push(id);
 

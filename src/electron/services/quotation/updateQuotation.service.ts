@@ -205,6 +205,9 @@ const updateQuotation = (db: Database) => {
             repo.quotation.base.update({ id: currentQuotation!.id, ...quotationChanges });
         }
 
+        // força atualizar a data de update da cotação
+        repo.quotation.base.update({ id: currentQuotation!.id, ...{} });
+
         return success(repo.workFlows.getQuotationFull(payloadQuotation.id));
     });
 };
