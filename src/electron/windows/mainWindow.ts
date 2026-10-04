@@ -1,5 +1,5 @@
 // electron
-import { BrowserWindow } from "electron";
+import { BrowserWindow, Menu, MenuItem } from "electron";
 
 // utils
 import { isDev, isTestDatabase } from "../utils/env.js";
@@ -16,7 +16,8 @@ export const createMainWindow = () => {
             nodeIntegration: false, // desativa a integração do Node.js para segurança
             sandbox: true, // necessário para contextBridge funcionar corretamente
             preload: getPreloadPath(), // caminho para o arquivo preload, que é responsável por expor as APIs do Electron para o renderer process de forma segura
-            devTools: isDev() || isTestDatabase()
+            devTools: isDev() || isTestDatabase(),
+            spellcheck: true
         },
 
         // style da janela
@@ -36,8 +37,38 @@ export const createMainWindow = () => {
         win.loadFile(getUIPath()); // interface no modo produção (build)
     }
 
-    return win;
-};
+    // configura o idioma do corretor ortográfico após abrir a janela
+    win.webContents.on('did-finish-load', () => {
+        win.webContents.session.setSpellCheckerLanguages(['pt-BR', 'en-US']);
+    });
+
+    // configuração para aparecer o menu ao clicar com o botão direito
+    win.webContents.on('context-menu', (_event, params) => {
+        const menu = new Menu();
+
+        // adiciona sugestões de correção ortográfica se a palavra estiver errada
+        if (params.misspelledWord) {
+            for (const suggestion of params.dictionarySuggestions) {
+                menu.append(new MenuItem({
+                    label: suggestion,
+                    click: () => win.webContents.replaceMisspelling(suggestion)
+                }));
+            }
+
+            menu.append(new MenuItem({ type: 'separator' }));
+        }
+
+        // opções padrão (Recortar, Copiar, Colar) em campos editáveis
+        if (params.isEditable) {
+            menu.append(new MenuItem({ label: 'Recortar', role: 'cut' }));
+            menu.append(new MenuItem({ label: 'Copiar', role: 'copy' }));
+            menu.append(new MenuItem({ label: 'Colar', role: 'paste' }));
+            menu.popup();
+        }
+
+        return win;
+    });
+}
 
 /** Função para focar ou criar a janela principal */
 export const focusOrCreateMainWindow = () => {
@@ -53,4 +84,4 @@ export const focusOrCreateMainWindow = () => {
         win.show();
         win.focus();
     }
-};
+}

@@ -23,6 +23,8 @@ const QuotationNotes = ({ scope }: { scope: BudgetFormScope }) => {
             autosize
             maxRows={2}
 
+            spellCheck={true}
+
             value={notes || ""}
             onChange={(e) => dispatch(setNotes({ scope, data: e.currentTarget.value }))}
 
