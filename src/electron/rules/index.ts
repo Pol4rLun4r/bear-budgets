@@ -4,24 +4,44 @@ import searchDescriptionRules from "./item/searchDescription.js";
 import findItemReferencesRules from "./item/findItemReferences.js";
 import getReferenceLinksRules from "./item/getReferenceLinks.js";
 import getAllItemValuesByReferenceIdRules from "./item/getAllItemValuesByReferenceId.js";
+import validateItemReference from "./item/validateItemReference.js";
+import validateItemValues from "./item/validateItemValues.js";
 
 // quotation rules
 import createQuotation from "./quotation/create.js";
 import getQuotationFullRules from "./quotation/getFull.js";
 import updateQuotationLineRules from "./quotation/updateLine.js";
+import updateQuotationBaseRules from "./quotation/updateBase.js";
+
+// quotation links rules
+import validateQuotationLink from "./quotationLink/validateQuotationLink.js";
+import validateAddedQuotationItems from "./quotationLink/validateAddedItems.js";
+import validateRemovedQuotationItems from "./quotationLink/validateRemovedItems.js";
+import compareItemsValues from "./quotationLink/compareItemsValues.js";
+import compareItemsReference from "./quotationLink/compareItemsReference.js";
 
 export const createRules = () => ({
     quotation: {
         create: createQuotation,
         getFull: getQuotationFullRules,
-        updateLine: updateQuotationLineRules
+        updateLine: updateQuotationLineRules,
+        updateBase: updateQuotationBaseRules,
+    },
+    quotation_link: {
+        validateQuotationLink: validateQuotationLink,
+        validateAddedItems: validateAddedQuotationItems,
+        validateRemovedItems: validateRemovedQuotationItems,
+        compareItemsValues: compareItemsValues,
+        compareItemsReference,
     },
     item: {
         createAndAdd: createAndAddItem,
         searchDescription: searchDescriptionRules,
         findItemReferences: findItemReferencesRules,
         getReferenceLinks: getReferenceLinksRules,
-        getAllItemValuesByReferenceId: getAllItemValuesByReferenceIdRules
+        getAllItemValuesByReferenceId: getAllItemValuesByReferenceIdRules,
+        validateReference: validateItemReference,
+        validateValues: validateItemValues,
     }
 });
 

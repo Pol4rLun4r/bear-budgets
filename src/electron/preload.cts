@@ -13,14 +13,13 @@ const api: API = {
         create: (quotation) => ipcInvoke('quotation:create', quotation),
         getAllSummary: () => ipcInvoke('quotation:getAllSummary'),
         getFull: (quotationId: Quotation['id']) => ipcInvoke('quotation:getFull', quotationId),
-        updateLine: (payload) => ipcInvoke('quotation:updateLine', payload)
+        update: (quotation) => ipcInvoke('quotation:update', quotation),
     },
     item: {
         searchDescription: (description) => ipcInvoke('item:searchDescription', description),
         findItemReferences: (description) => ipcInvoke('item:findItemReferences', description),
         getReferenceLinks: (itemReferenceId) => ipcInvoke('item:getReferenceLinks', itemReferenceId),
         getAllValuesByReferenceId: (itemReferenceId) => ipcInvoke('item:getAllValuesByReferenceId', itemReferenceId),
-        addToQuotation: (payload) => ipcInvoke('item:addToQuotation', payload)
      },
     window: {
         minimize: () => ipcInvoke('window:minimize'),

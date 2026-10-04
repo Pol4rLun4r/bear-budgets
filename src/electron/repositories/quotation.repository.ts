@@ -55,7 +55,7 @@ const getById = (db: Database) =>
 
 /** atualiza uma cotação baseada no ID */
 const update = (db: Database) =>
-    ({ id, notes, amount, total_value }: Partial<Quotation> & Pick<Quotation, 'id'>) => {
+    ({ id, notes, amount, total_value, status }: Partial<Quotation> & Pick<Quotation, 'id'>) => {
         const fields: string[] = [];
         const values: unknown[] = [];
 
@@ -72,6 +72,11 @@ const update = (db: Database) =>
         if (total_value !== undefined) {
             fields.push("total_value = ?");
             values.push(total_value);
+        }
+
+        if (status !== undefined) {
+            fields.push("status = ?");
+            values.push(status);
         }
 
         if (!fields.length) return;

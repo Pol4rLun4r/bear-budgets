@@ -1,4 +1,6 @@
+// utils
 import { success, failure } from "../../utils/handleSuccess.js";
+import validateItemReference, { rulesCode as itemReferenceRulesCode } from "./validateItemReference.js";
 
 export interface CreateAndAdd {
     items: ItemData[];
@@ -35,6 +37,19 @@ const createAndAdd = ({ items, quotationExists }: CreateAndAdd) => {
         // separa os dados básicos, valores e links do item para melhor manejo
         const { item_reference, item_values, reference_links: itemReferenceLinks } = item;
 
+        const validateReference = validateItemReference({ itemReference: item_reference });
+        if (!validateReference.success) {
+            if (validateReference.data === itemReferenceRulesCode.DESCRIPTION_NOT_INFORMED) {
+                return failure(rulesCode.DESCRIPTION_NOT_INFORMED);
+            }
+
+            return validateReference;
+        }
+
+        const normalizedItemReference = validateReference.data.type === "new"
+            ? validateReference.data.data
+            : item_reference;
+
         // validar ordem/posição e se os items tem a mesma posição
         const position = item_values.position;
 
@@ -45,17 +60,6 @@ const createAndAdd = ({ items, quotationExists }: CreateAndAdd) => {
             const hasSamePosition = items.filter((item) => item.item_values.position === position).length;
             if (hasSamePosition > 1) return failure(rulesCode.SAME_POSITION);
         }
-
-        // validar descrição
-        const description = (item_reference.description ?? "").trim();
-
-        // checar se descrição não está vazia
-        if (!description) {
-            return failure(rulesCode.DESCRIPTION_NOT_INFORMED);
-        }
-
-        // validar notas do item, caso existam
-        const notes = (item_reference.notes ?? "").trim();
 
         // validar quantidade
         const quantity = item_values.quantity ?? 1;
@@ -68,11 +72,7 @@ const createAndAdd = ({ items, quotationExists }: CreateAndAdd) => {
             .filter((link) => link.content.length > 0) as ReferenceLink[];
 
         validItems.push({
-            item_reference: {
-                ...item_reference,
-                description,
-                notes: notes.length !== 0 ? notes : undefined,
-            },
+            item_reference: normalizedItemReference,
             item_values: { ...item_values, quantity },
             reference_links: reference_links ?? [],
         });

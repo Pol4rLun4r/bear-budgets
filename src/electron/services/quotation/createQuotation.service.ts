@@ -10,6 +10,7 @@ import { success } from "../../utils/handleSuccess.js";
 // repositories
 import { createRepositories } from "../../repositories/index.js";
 
+/** criar cotação (completa) */
 const createQuotation = (db: Database) => (payload: CreateQuotation) => {
     const repo = createRepositories(db);
     const rules = createRules();

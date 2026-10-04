@@ -35,6 +35,7 @@ export const getById = (db: Database) =>
         return { ...ref, reference_links: links };
     };
 
+/** busca item_reference pelo id, trazendo apenas os dados principais sem o reference_link */
 export const getByIdWithoutLinks = (db: Database) =>
     (item_reference_id: number): ItemReference | undefined => {
         const ref = db.prepare(`
@@ -42,6 +43,17 @@ export const getByIdWithoutLinks = (db: Database) =>
         `).get(item_reference_id) as ItemReference | undefined;
 
         return ref;
+    };
+
+/** busca item_references por IDs, trazendo apenas os dados principais sem os links */
+export const getByIds = (db: Database) =>
+    (item_reference_ids: number[]): ItemReference[] => {
+        if (item_reference_ids.length === 0) return [];
+
+        const placeholders = item_reference_ids.map(() => "?").join(", ");
+        return db.prepare(`
+            SELECT * FROM item_references WHERE id IN (${placeholders})
+        `).all(...item_reference_ids) as ItemReference[];
     };
 
 /** pesquisa item_references pela descrição */
@@ -139,6 +151,7 @@ const itemReferenceRepository = (db: Database) => {
         create: create(db),
         getById: getById(db),
         getByIdWithoutLinks: getByIdWithoutLinks(db),
+        getByIds: getByIds(db),
         deleteAll: deleteAll(db),
         getAll: getAll(db),
         searchByDescription: searchByDescription(db),

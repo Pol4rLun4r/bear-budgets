@@ -1,7 +1,7 @@
 import { Database } from "better-sqlite3";
 
 /**  busca item_values pelo id */
-export const getById = (db: Database) =>
+const getById = (db: Database) =>
     (item_values_id: number): ItemValues | undefined => {
         const itemValues = db.prepare(`
             SELECT * FROM item_values WHERE id = ? LIMIT 1
@@ -10,8 +10,28 @@ export const getById = (db: Database) =>
         return itemValues;
     };
 
+/** busca item_values pelos ids e retorna um array de objetos */
+const getByIds = (db: Database) =>
+    (item_values_ids: number[]): ItemValues[] => {
+        if (item_values_ids.length === 0) return [];
+
+        const placeholders = item_values_ids.map(() => "?").join(", ");
+        return db.prepare(`
+            SELECT * FROM item_values WHERE id IN (${placeholders})
+        `).all(...item_values_ids) as ItemValues[];
+    };
+
+/** deleta item_values pelo id */
+const deleteById = (db: Database) =>
+    (item_values_id: number): void => {
+        db.prepare(`
+            DELETE FROM item_values
+            WHERE id = ?
+        `).run(item_values_id);
+    }
+
 /**  busca todos os values do item pelo id */
-export const getAllIByReferenceId = (db: Database) =>
+const getAllByReferenceId = (db: Database) =>
     (item_reference_id: number): ItemValues[] => {
         const values = db.prepare(`
             SELECT *
@@ -26,8 +46,8 @@ export const getAllIByReferenceId = (db: Database) =>
 
 
 /** cria um item_value */
-export const create = (db: Database) =>
-    (item_reference_id: number, data: Omit<ItemValues, "id" | "created_at">): number => {
+const create = (db: Database) =>
+    (item_reference_id: number, data: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at">): number => {
         const row = db.prepare(`
             INSERT INTO item_values (item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, extra_value, boarding)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -49,6 +69,11 @@ export const create = (db: Database) =>
 const update = (db: Database) => (id: ItemValues['id'], data: Partial<ItemValues>) => {
     const fields: string[] = [];
     const values: unknown[] = [];
+
+    if (data.item_reference_id !== undefined) {
+        fields.push("item_reference_id = ?");
+        values.push(data.item_reference_id);
+    }
 
     if (data.position !== undefined) {
         fields.push("position = ?");
@@ -111,9 +136,11 @@ const update = (db: Database) => (id: ItemValues['id'], data: Partial<ItemValues
 const itemValuesRepository = (db: Database) => {
     return {
         getById: getById(db),
-        getAllByReferenceId: getAllIByReferenceId(db),
+        getByIds: getByIds(db),
+        getAllByReferenceId: getAllByReferenceId(db),
         create: create(db),
-        update: update(db)
+        update: update(db),
+        deleteById: deleteById(db)
     };
 };
 

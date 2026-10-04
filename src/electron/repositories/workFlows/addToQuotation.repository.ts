@@ -1,14 +1,14 @@
 import { Database } from "better-sqlite3";
 import { createRepositories } from "../index.js";
 
-const getReferenceLinksFromItem = (item: ItemData): Pick<ReferenceLink, "content">[] => {
+const getReferenceLinksFromItem = (item: QuotationItemToAdd): Pick<ReferenceLink, "content">[] => {
     return (item.reference_links ?? [])
         .map((link) => ({ content: (link.content ?? "").trim() }))
         .filter((link) => link.content.length > 0);
 };
 
 const addItemToQuotationRepository = (db: Database) =>
-    (quotationId: number, items: ItemData[]): QuotationLink[] => {
+    (quotationId: number, items: QuotationItemToAdd[]): QuotationLink[] => {
         const repo = createRepositories(db);
 
         const run = db.transaction(() => {

@@ -22,9 +22,4 @@ const getAllValuesByReferenceId = async (referenceId: GetByReferenceId) => {
     return response;
 };
 
-const addItemToQuotation = async (payload: AddToQuotationPayload) => {
-    const response = await baseAPI.item.addToQuotation(payload);
-    return response;
-};
-
-export default { searchDescription, getReferenceLinks, findItemReferences, getAllValuesByReferenceId, addItemToQuotation };
+export default { searchDescription, getReferenceLinks, findItemReferences, getAllValuesByReferenceId };

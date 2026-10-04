@@ -39,7 +39,6 @@ type ItemValues = {
     id?: number;
     item_reference_id: number;
     position: number; // posição do item na cotação (ordem)
-    version: number;
     quantity: number;
     unit_price?: number;
     markup?: string;
@@ -60,6 +59,12 @@ type ItemData = {
     item_reference: ItemReference;
     item_values: ItemValues;
     reference_links: ReferenceLink[];
+};
+
+type QuotationItemToAdd = {
+    item_reference: ItemReference;
+    item_values: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at">;
+    reference_links: Pick<ReferenceLink, "content">[];
 };
 
 type QuotationLink = {

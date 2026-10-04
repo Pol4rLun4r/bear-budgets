@@ -9,6 +9,7 @@ import { createRules } from "../../rules/index.js";
 // repositories
 import { createRepositories } from "../../repositories/index.js";
 
+/** pegar cotação completa */
 const getQuotationFullService = (db: Database) => {
     const repo = createRepositories(db);
     const rules = createRules();

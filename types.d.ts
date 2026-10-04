@@ -8,6 +8,7 @@ type WithUndefined<T> = {
 /** Dados da cotação aceitos na criação. `status` é definido pelo backend (sempre rascunho). */
 type CreateQuotationData = Pick<Quotation, "notes" | "amount" | "total_value">;
 
+// obsoleto?
 type UpdateQuotationLinePayload = {
     quotation_link_id: QuotationLink['id'];
     item_reference: Partial<ItemReference>;
@@ -15,9 +16,24 @@ type UpdateQuotationLinePayload = {
     reference_links: Partial<ReferenceLink>[];
 }
 
+/** dados da cotação aceitos na criação. */
 interface CreateQuotation {
     quotation: CreateQuotationData;
     items: {
+        item_reference: Partial<ItemReference>;
+        item_values: Partial<ItemValues>;
+        reference_links: Partial<ReferenceLink>[];
+    }[];
+};
+
+/** dados da cotação aceitos na atualização. */
+type UpdateQuotationData = Required<Omit<Quotation, "notes" | "created_at" | "updated_at">> & Quotation
+
+/** dados da cotação completa esperados na atualização */
+interface UpdateQuotation {
+    quotation: UpdateQuotationData;
+    items: {
+        quotation_link_id?: QuotationLink['id'];
         item_reference: Partial<ItemReference>;
         item_values: Partial<ItemValues>;
         reference_links: Partial<ReferenceLink>[];
@@ -52,14 +68,13 @@ type EventPayloadMapping = {
     "quotation:create": Result<QuotationLink[] | undefined>;
     "quotation:getAllSummary": Result<Quotation[] | undefined>;
     "quotation:getFull": Result<QuotationFull | undefined>;
-    "quotation:updateLine": Result<UpdateQuotationLinePayload | undefined>;
+    "quotation:update": Result<QuotationFull | undefined>;
 
     // item
     "item:searchDescription": Result<ItemReference[] | undefined>;
     "item:getReferenceLinks": Result<ReferenceLink[] | undefined>;
     "item:findItemReferences": Result<ItemReference[] | undefined>;
     "item:getAllValuesByReferenceId": Result<ItemValues[] | undefined>;
-    "item:addToQuotation": Result<QuotationLink[] | undefined>;
 
     // janela (frame personalizado)
     "window:minimize": void;
@@ -85,7 +100,7 @@ interface QuotationAPI {
     create(quotation: CreateQuotation): Promise<Result<QuotationLink[] | undefined>>;
     getAllSummary(): Promise<Result<QuotationSummary[] | undefined>>;
     getFull(quotationId: Quotation['id']): Promise<Result<QuotationFull | undefined>>;
-    updateLine(payload: UpdateQuotationLinePayload): Promise<Result<UpdateQuotationLinePayload | undefined>>;
+    update(quotation: UpdateQuotation): Promise<Result<QuotationFull | undefined>>;
 }
 
 interface ItemAPI {
@@ -93,7 +108,6 @@ interface ItemAPI {
     findItemReferences(description: SearchItemDescriptionIsOptional): Promise<Result<ItemReference[] | undefined>>;
     getReferenceLinks(itemReferenceId: GetReferenceLinks): Promise<Result<ReferenceLink[] | undefined>>;
     getAllValuesByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemValues[] | undefined>>;
-    addToQuotation(payload: AddToQuotationPayload): Promise<Result<QuotationLink[] | undefined>>;
 }
 
 interface WindowAPI {

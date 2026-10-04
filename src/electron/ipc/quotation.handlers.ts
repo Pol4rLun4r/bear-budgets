@@ -13,7 +13,7 @@ const quotationHandlers = (db: Database) => {
     ipcMainHandle('quotation:create', services.quotation.create);
     ipcMainHandle('quotation:getAllSummary', services.quotation.getAllSummary);
     ipcMainHandle('quotation:getFull', services.quotation.getFull);
-    ipcMainHandle('quotation:updateLine', services.quotation.updateLine);
+    ipcMainHandle('quotation:update', services.quotation.update);
 }
 
 export default quotationHandlers;

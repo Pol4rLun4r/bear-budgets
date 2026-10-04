@@ -1,3 +1,4 @@
+/** função para criar valores fictícios de itens */
 export const fakeItemValues = (
   position: number,
   overrides: Partial<ItemValues> = {},
