@@ -27,7 +27,7 @@ const List = ({ budgets }: { budgets: Quotation[] }) => {
                     blur: 0,
                 }}
             >
-                {opened && <BudgetForm scope="budget_form_edit" />}
+                {opened && <BudgetForm scope="budget_form_edit" close={close} />}
             </Modal>
         </>
     )

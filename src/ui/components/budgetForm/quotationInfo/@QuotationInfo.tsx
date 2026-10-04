@@ -8,7 +8,7 @@ import { BudgetFormScope } from "../../../redux/budgetForm/@rootReducer";
 // mantine
 import { Group } from "@mantine/core";
 
-const QuotationInfo = ({ scope }: { scope: BudgetFormScope }) => {
+const QuotationInfo = ({ scope, close }: { close?: () => void, scope: BudgetFormScope }) => {
     return (
         <Group
             w="100%"
@@ -18,7 +18,7 @@ const QuotationInfo = ({ scope }: { scope: BudgetFormScope }) => {
 
             }} >
             <QuotationNotes scope={scope} />
-            <BudgetButton scope={scope} />
+            <BudgetButton scope={scope} close={close} />
         </Group>
     )
 }

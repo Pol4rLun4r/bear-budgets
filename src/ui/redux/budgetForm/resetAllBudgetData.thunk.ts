@@ -8,13 +8,7 @@ import { resetReferenceLink } from "../itemForm/ReferenceLinkFormSlice.ts";
 import { resetList } from "./items/listItemsSlice.ts";
 import { resetQuotation } from "./quotationInfoSlice.ts";
 
-// type
-import { BudgetFormScope } from "./@rootReducer.ts";
-
-const resetAllBudgetData = (dispatch: AppDispatch, scope: BudgetFormScope) => {
-
-    console.log(scope);
-
+const resetAllBudgetData = (dispatch: AppDispatch) => {
     dispatch(resetItemData('item_form_add'));
     dispatch(resetItemData('item_form_edit'));
     dispatch(resetStep('item_form_add'));

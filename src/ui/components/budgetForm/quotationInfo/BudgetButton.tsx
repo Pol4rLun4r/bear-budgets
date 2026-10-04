@@ -7,15 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../redux/store";
 import resetAllBudgetData from "../../../redux/budgetForm/resetAllBudgetData.thunk";
 import { BudgetFormScope } from "../../../redux/budgetForm/@rootReducer";
-import { setQuotation } from "../../../redux/budgetForm/quotationInfoSlice";
-import { setListItems } from "../../../redux/budgetForm/items/listItemsSlice";
 
 // api
 import services from "../../../services";
 import { useQueryClient } from "@tanstack/react-query";
 
 /** botão para lidar com a criação e edição de um orçamento */
-const BudgetButton = ({ scope }: { scope: BudgetFormScope }) => {
+const BudgetButton = ({ scope , close}: { close?: () => void, scope: BudgetFormScope }) => {
     const items = useSelector((state: RootState) => state.budgetForm.listItems[scope]);
     const quotation = useSelector((state: RootState) => state.budgetForm.quotationInfo[scope]);
 
@@ -65,14 +63,10 @@ const BudgetButton = ({ scope }: { scope: BudgetFormScope }) => {
                 color: 'teal'
             });
 
-            // dispatch
-            if (scope === 'budget_form_edit' && res.data && !Array.isArray(res.data)) {
-                dispatch(setQuotation({ scope: 'budget_form_edit', data: res.data.quotation }))
-                dispatch(setListItems({ scope: 'budget_form_edit', data: res.data.items }))
-            };
-
+            // fecha o modal da cotação
+            if (scope === 'budget_form_edit') close!();
             // reseta os dados da cotação para limpeza (atualmente limpa o formulário de criar cotação)
-            resetAllBudgetData(dispatch, scope);
+            resetAllBudgetData(dispatch);
 
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.';
