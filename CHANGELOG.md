@@ -1,3 +1,15 @@
+# [3.3.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.2.0...v3.3.0) (2026-10-05)
+
+
+### Bug Fixes
+
+* **quotation:** keep update timestamps synchronized ([9a53e98](https://github.com/Pol4rLun4r/bear-budgets/commit/9a53e98e67376abb37b2ddb519937c3cac6fa350))
+
+
+### Features
+
+* **spellcheck:** enable spelling suggestions and text editing actions ([7410c63](https://github.com/Pol4rLun4r/bear-budgets/commit/7410c63976ee52332da91af2207c190f2903f813))
+
 # [3.2.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.1.0...v3.2.0) (2026-10-04)
 
 
