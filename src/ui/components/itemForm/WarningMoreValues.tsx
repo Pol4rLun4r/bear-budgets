@@ -22,7 +22,7 @@ const WarningMoreValues = ({ scope }: WarningMoreValuesProps) => {
     return (
         <Badge
             size="lg"
-            color="red"
+            c="red"
 
             pos={"absolute"}
             top={"calc(var(--mantine-spacing-lg) * 0.3) "}

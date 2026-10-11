@@ -47,7 +47,7 @@ const MenuItem = ({
                     Duplicar referencia
                 </Menu.Item>
                 <Menu.Item
-                    color="red"
+                    c="red"
                     leftSection={<IconTrash size={14} />}
                     disabled
                 >

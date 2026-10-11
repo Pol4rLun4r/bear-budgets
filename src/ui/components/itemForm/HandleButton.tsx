@@ -37,7 +37,7 @@ const HandleButton = ({ scope, budgetScope, close }: { close: () => void, scope:
             title: scope === 'item_form_edit' ? 'Item atualizado' : 'Item adicionado',
             message: scope === 'item_form_edit' ? 'Item da cotação atualizado com sucesso!' : 'Novo item adicionado à cotação com sucesso!',
             position: 'bottom-right',
-            color: 'teal'
+            c: 'teal'
         });
     }
 

@@ -2,7 +2,7 @@
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/dates/styles.css';
-import { MantineProvider } from "@mantine/core"
+import { MantineProvider, v8CssVariablesResolver } from "@mantine/core"
 import { Notifications } from '@mantine/notifications';
 import { DatesProvider } from '@mantine/dates';
 
@@ -26,10 +26,11 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider
+        cssVariablesResolver={v8CssVariablesResolver}
         defaultColorScheme='dark'
         theme={{ fontFamily: 'primary_font', primaryColor: 'violet', defaultGradient: { from: 'violet', to: 'grape', deg: 45 } }}
       >
-        <DatesProvider settings={{locale: 'pt-br', firstDayOfWeek: 0}}>
+        <DatesProvider settings={{ locale: 'pt-br', firstDayOfWeek: 0 }}>
           <Notifications />
           <Main>
             <FrameBar />
