@@ -45,7 +45,7 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
                 title: 'Error ao pesquisar pela descrição',
                 message: response.data,
                 position: 'bottom-right',
-                color: 'pink'
+                c: 'pink'
             })
         }
 
@@ -120,7 +120,7 @@ const Description = ({ scope }: { scope: ItemFormScope }) => {
                 title: 'Error ao buscar notas',
                 message: response.data,
                 position: 'bottom-right',
-                color: 'pink'
+                c: 'pink'
             })
         }
 
