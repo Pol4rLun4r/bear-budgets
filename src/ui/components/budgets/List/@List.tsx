@@ -1,36 +1,42 @@
-// mantine
-import { useDisclosure } from "@mantine/hooks";
+import { memo } from "react";
 
-import BudgetTable from "./BudgetTable.tsx";
-import { Modal } from "@mantine/core";
+// mantine
+import { Paper, Table, VisuallyHidden } from "@mantine/core"
 
 // components
-import BudgetForm from "../../budgetForm/@BudgetForm.tsx";
+import Rows from "./Rows.tsx";
 
-const List = ({ budgets }: { budgets: Quotation[] }) => {
-    const [opened, { open, close }] = useDisclosure(false);
+// style
+import classes from "./Items.module.css"
+
+const List = ({
+    budgets,
+    open
+}: {
+    budgets: Quotation[];
+    open: () => void;
+}) => {
 
     return (
-        <>
-            <BudgetTable budgets={budgets} open={open} />
-
-            <Modal
-                padding='xl'
-                size="100%"
-                opened={opened}
-                onClose={close}
-                title={"Informações do Orçamento"}
-                centered
-                radius='lg'
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 0,
-                }}
-            >
-                {opened && <BudgetForm scope="budget_form_edit" close={close} />}
-            </Modal>
-        </>
+        <Paper withBorder radius="lg" w={'100%'} h={'100%'} className={classes.items}>
+            <Table.ScrollContainer minWidth={700} w={'100%'} h={'100%'}>
+                <Table layout="fixed" highlightOnHover stickyHeader w={'100%'} h={'100%'}>
+                    <Table.Thead>
+                        <Table.Tr>
+                            <Table.Th w={'5%'}><VisuallyHidden /></Table.Th>
+                            <Table.Th w={'10%'}>Nº do Orçamento</Table.Th>
+                            <Table.Th w={'20%'}>Notas</Table.Th>
+                            <Table.Th w={'10%'}>Valor Total</Table.Th>
+                            <Table.Th w={'5%'}>Itens</Table.Th>
+                            <Table.Th w={'10%'}>Data de criação</Table.Th>
+                            <Table.Th w={'10%'}>Ultima atualização</Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>{<Rows open={open} budgets={budgets} />}</Table.Tbody>
+                </Table>
+            </Table.ScrollContainer>
+        </Paper >
     )
 }
 
-export default List;
+export default memo(List);

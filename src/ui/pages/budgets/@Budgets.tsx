@@ -1,5 +1,5 @@
 // components
-import BudgetsList from "../../components/budgets/@BudgetsList.tsx";
+import BudgetsList from "../../components/budgets/@Budgets.tsx";
 
 const Budgets = () => {
   return (
