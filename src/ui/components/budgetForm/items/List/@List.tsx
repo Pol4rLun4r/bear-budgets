@@ -51,7 +51,6 @@ const List = ({ scope }: { scope: BudgetFormScope }) => {
                         w={'100%'}
                         h={'100%'}
                         onContextMenu={handlers.onContextMenu}
-                        onTouchStart={handlers.onTouchStart}
                     >
                         <Table layout="fixed" highlightOnHover stickyHeader>
                             <Table.Thead>

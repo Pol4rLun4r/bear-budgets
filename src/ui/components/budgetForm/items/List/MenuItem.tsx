@@ -20,7 +20,6 @@ import { notifications } from "@mantine/notifications";
 // types para o menu de contexto
 interface ContextMenuTargetHandlers {
   onContextMenu: React.MouseEventHandler<HTMLElement>; // função para lidar com o evento de clique com o botão direito do mouse
-  onTouchStart: React.TouchEventHandler<HTMLElement>; // função para lidar com o evento de toque na tela
 }
 
 interface MenuItemType {
@@ -61,12 +60,6 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
     setActiveItem(item);
   }
 
-  // função para lidar com o evento de toque na tela
-  const handleTouchStart = (event: React.TouchEvent<HTMLElement>) => {
-    const item = getItemFromTarget(event.target);
-    if (item) setActiveItem(item);
-  }
-
   const handleDelete = () => {
     if (!activeItem) return;
     dispatch(deleteItem({ scope, tempItemId: activeItem.temp_id }));
@@ -100,7 +93,7 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
     <>
       <Menu shadow="md" withArrow offset={-1}>
         <Menu.ContextMenu>
-          {children({ onContextMenu: handleContextMenu, onTouchStart: handleTouchStart })}
+          {children({ onContextMenu: handleContextMenu })}
         </Menu.ContextMenu>
 
         <Menu.Dropdown>

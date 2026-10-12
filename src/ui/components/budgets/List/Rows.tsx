@@ -1,17 +1,15 @@
 import { memo } from "react";
+import type { ReactElement } from "react";
 
 // mantine
 import { Table } from "@mantine/core";
 
-// utils
-import MenuBudget from './Menu/@MenuBudget.tsx';
-
 const Rows = ({
   budgets,
-  open
+  seeBudget
 }: {
   budgets: Quotation[],
-  open: () => void
+  seeBudget: (quotationId: Quotation['id']) => ReactElement
 }) => {
 
   const brl = new Intl.NumberFormat("pt-BR", {
@@ -21,10 +19,8 @@ const Rows = ({
 
   return (
     budgets.map((budget) => (
-      <Table.Tr key={budget.id}>
-        <Table.Td align="center">
-          <MenuBudget open={open} quotationId={budget.id} />
-        </Table.Td>
+      <Table.Tr key={budget.id} data-budget-id={budget.id}>
+        <Table.Td align="center">{seeBudget(budget.id)}</Table.Td>
         <Table.Td>{String(budget.id).padStart(6, "0")}</Table.Td>
         <Table.Td>{budget.notes}</Table.Td>
         <Table.Td>{brl.format(budget.total_value)}</Table.Td>
