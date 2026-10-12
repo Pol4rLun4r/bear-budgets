@@ -1,3 +1,10 @@
+# [3.4.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.3.0...v3.4.0) (2026-10-12)
+
+
+### Features
+
+* **budget:** detect changes before saving budget edits ([1e51176](https://github.com/Pol4rLun4r/bear-budgets/commit/1e511765219ea6ac679f5961f1a35fbf42af47f4))
+
 # [3.3.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.2.0...v3.3.0) (2026-10-05)
 
 
