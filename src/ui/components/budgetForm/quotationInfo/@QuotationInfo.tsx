@@ -1,5 +1,5 @@
 // components
-import BudgetButton from "./BudgetButton";
+import ButtonHandleBudget from "./ButtonHandleBudget";
 import QuotationNotes from "./QuotationNotes";
 
 // redux
@@ -18,7 +18,7 @@ const QuotationInfo = ({ scope, close }: { close?: () => void, scope: BudgetForm
 
             }} >
             <QuotationNotes scope={scope} />
-            <BudgetButton scope={scope} close={close} />
+            <ButtonHandleBudget scope={scope} close={close} />
         </Group>
     )
 }

@@ -13,7 +13,7 @@ import services from "../../../services";
 import { useQueryClient } from "@tanstack/react-query";
 
 /** botão para lidar com a criação e edição de um orçamento */
-const BudgetButton = ({ scope , close}: { close?: () => void, scope: BudgetFormScope }) => {
+const ButtonHandleBudget = ({ scope , close}: { close?: () => void, scope: BudgetFormScope }) => {
     const items = useSelector((state: RootState) => state.budgetForm.listItems[scope]);
     const quotation = useSelector((state: RootState) => state.budgetForm.quotationInfo[scope]);
 
@@ -94,4 +94,4 @@ const BudgetButton = ({ scope , close}: { close?: () => void, scope: BudgetFormS
     )
 }
 
-export default BudgetButton;
+export default ButtonHandleBudget;

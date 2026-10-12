@@ -1,0 +1,89 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+// mantine
+import { Table, TableTdProps } from "@mantine/core"
+
+// redux
+import { RootState } from "../../../../redux/store";
+import { useSelector } from "react-redux";
+import { ItemDataState } from "../../../../redux/itemForm/itemFormSlice";
+
+// DragAndDrop
+import { useSortable } from "@dnd-kit/react/sortable";
+
+// utils
+import calcAddItem from '../../../../utils/calcAddItem';
+import { convertMarkupValue } from "../../../../utils/markupList";
+import { addCalendarDays } from "../../../itemForm/formItemValues/inputs/Boarding/boardingUtils";
+
+// components
+import RowContent from "./RowContent";
+
+// style
+import classes from './Row.module.css';
+import dayjs from "dayjs";
+
+const brl = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+})
+
+const tableTdProps: TableTdProps = {
+    className: classes.rowContainer,
+    height: 40,
+}
+
+interface RowProps {
+    item: ItemDataState;
+    index: number;
+}
+
+const Row = ({ item, index }: RowProps) => {
+    const { ref } = useSortable({ id: item.temp_id, index })
+    const switchMode = useSelector((state: RootState) => state.budgetForm.listItemsSwitchMode.mode)
+
+    const values = item.item_values;
+
+    const calcItem = calcAddItem(values);
+
+    const unitValue = calcItem.finalUnitValue;
+    const total = calcItem.totalWithAll;
+
+    const baseDate = new Date();
+    const boardingValue = item.item_values.boarding ?? 0;
+    const boardingLabel = boardingValue > 0 ? `${boardingValue} dia(s) corrido(s)` : 'Sem embarque';
+    const boardingDate = dayjs(addCalendarDays(baseDate, boardingValue)).format('DD/MM/YYYY');
+
+    return (
+        <Table.Tr ref={ref} data-item-id={item.temp_id}>
+                <Table.Td {...tableTdProps}>{item.item_values?.position! + 1}</Table.Td>
+                <Table.Td {...tableTdProps}><RowContent disableCopyButton label={item.item_reference.description} /></Table.Td>
+                <Table.Td {...tableTdProps}><RowContent label={item.item_reference.internal_code} /></Table.Td>
+                <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(unitValue)} /></Table.Td>
+                <Table.Td {...tableTdProps}><RowContent label={item.item_values.quantity} /></Table.Td>
+                <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(total)} /></Table.Td>
+                <Table.Td {...tableTdProps}>
+                    <RowContent
+                        label={boardingLabel}
+                        value={boardingValue > 0 ? boardingDate : ''}
+                    />
+                </Table.Td>
+                <Table.Td {...tableTdProps}><RowContent label={convertMarkupValue(item.item_values.markup) + "%"} /></Table.Td>
+                {!switchMode &&
+                    <>
+                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.totalWithoutTaxes)} /></Table.Td>
+                        <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(unitValue)}  /></Table.Td>
+                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.markupUnitValue)} /></Table.Td>
+                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.markupValue)} /></Table.Td>
+                        <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_values.st ? 0 : item.item_values.st)} /></Table.Td>
+                        <Table.Td {...tableTdProps}><RowContent label={(!item.item_values.ipi ? 0 : item.item_values.ipi) + "%"} /></Table.Td>
+                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.ipiValue)} /></Table.Td>
+                        <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_values.purchase_shipping ? 0 : item.item_values.purchase_shipping)} /></Table.Td>
+                        <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_values.extra_value ? 0 : item.item_values.extra_value)} /></Table.Td>
+                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.totalWithIPIandST)} /></Table.Td>
+                    </>
+                }
+        </Table.Tr>
+    )
+}
+
+export default Row;

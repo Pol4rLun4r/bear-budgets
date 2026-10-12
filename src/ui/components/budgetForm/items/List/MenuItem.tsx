@@ -1,9 +1,10 @@
 // mantine
-import { ActionIcon, Button, Menu, Modal, Text } from "@mantine/core";
+import { Button, Menu, Modal, Text } from "@mantine/core";
 import { useClipboard, useDisclosure } from "@mantine/hooks";
+import { useState } from "react";
 
 // icon
-import { IconCopy, IconCopyPlus, IconMenu3, IconPencilMinus, IconTrash } from "@tabler/icons-react";
+import { IconCopy, IconCopyPlus, IconPencilMinus, IconTrash } from "@tabler/icons-react";
 
 // redux
 import { useDispatch } from "react-redux";
@@ -16,13 +17,23 @@ import { BudgetFormScope } from "../../../../redux/budgetForm/@rootReducer";
 import ItemForm from "../../../itemForm/@ItemForm";
 import { notifications } from "@mantine/notifications";
 
-interface MenuItemType {
-  item: ItemDataState;
-  scope: BudgetFormScope;
+// types para o menu de contexto
+interface ContextMenuTargetHandlers {
+  onContextMenu: React.MouseEventHandler<HTMLElement>; // função para lidar com o evento de clique com o botão direito do mouse
+  onTouchStart: React.TouchEventHandler<HTMLElement>; // função para lidar com o evento de toque na tela
 }
 
-const MenuItem = ({ item, scope }: MenuItemType) => {
+interface MenuItemType {
+  items: ItemDataState[]; // array de itens do tipo ItemDataState
+  scope: BudgetFormScope; // escopo do formulário de orçamento
+  children: (handlers: ContextMenuTargetHandlers) => React.ReactElement; // função que recebe os handlers e retorna um elemento React
+}
+
+const MenuItem = ({ items, scope, children }: MenuItemType) => {
   const dispatch = useDispatch<AppDispatch>();
+
+  // estado para armazenar o item ativo (selecionado) no menu de contexto
+  const [activeItem, setActiveItem] = useState<ItemDataState | null>(null);
 
   const clipboard = useClipboard({ timeout: 200 })
 
@@ -32,12 +43,39 @@ const MenuItem = ({ item, scope }: MenuItemType) => {
   // edit item
   const [editOpened, { open: editOpen, close: editClose }] = useDisclosure(false);
 
+  // função para obter o item a partir do alvo do evento (target)
+  const getItemFromTarget = (target: EventTarget | null) => {
+    const row = target instanceof Element ? target.closest<HTMLElement>("[data-item-id]") : null;
+    const itemId = row?.dataset.itemId;
+    return items.find((listItem) => listItem.temp_id === itemId);
+  }
+
+  // função para lidar com o evento de clique com o botão direito do mouse
+  const handleContextMenu = (event: React.MouseEvent<HTMLElement>) => {
+    const item = getItemFromTarget(event.target);
+    if (!item) {
+      event.preventDefault();
+      return;
+    }
+
+    setActiveItem(item);
+  }
+
+  // função para lidar com o evento de toque na tela
+  const handleTouchStart = (event: React.TouchEvent<HTMLElement>) => {
+    const item = getItemFromTarget(event.target);
+    if (item) setActiveItem(item);
+  }
+
   const handleDelete = () => {
-    dispatch(deleteItem({ scope, tempItemId: item.temp_id }));
+    if (!activeItem) return;
+    dispatch(deleteItem({ scope, tempItemId: activeItem.temp_id }));
+    deleteClose();
   }
 
   const handleCopy = () => {
-    clipboard.copy(item.item_reference.description);
+    if (!activeItem) return;
+    clipboard.copy(activeItem.item_reference.description);
 
     notifications.show({
       title: 'Descrição copiada',
@@ -48,45 +86,49 @@ const MenuItem = ({ item, scope }: MenuItemType) => {
   }
 
   const handleEdit = () => {
-    dispatch(setItemDataEditScope(item))
+    if (!activeItem) return;
+    dispatch(setItemDataEditScope(activeItem))
     editOpen()
   }
 
   const handleDuplicate = () => {
-    dispatch(addItem({ scope, data: item }))
+    if (!activeItem) return;
+    dispatch(addItem({ scope, data: activeItem }))
   }
 
   return (
     <>
       <Menu shadow="md" withArrow offset={-1}>
-        <Menu.Target>
-          <ActionIcon variant="transparent">
-            <IconMenu3 />
-          </ActionIcon>
-        </Menu.Target>
+        <Menu.ContextMenu>
+          {children({ onContextMenu: handleContextMenu, onTouchStart: handleTouchStart })}
+        </Menu.ContextMenu>
 
         <Menu.Dropdown>
           <Menu.Item
             leftSection={<IconPencilMinus size={14} />}
-            onClick={() => handleEdit()}
+            disabled={!activeItem}
+            onClick={handleEdit}
           >
             Editar Item
           </Menu.Item>
           <Menu.Item
             leftSection={<IconCopy size={14} />}
-            onClick={() => handleCopy()}
+            disabled={!activeItem}
+            onClick={handleCopy}
           >
             Copiar Descrição
           </Menu.Item>
           <Menu.Item
             leftSection={<IconCopyPlus size={14} />}
-            onClick={() => handleDuplicate()}
+            disabled={!activeItem}
+            onClick={handleDuplicate}
           >
             Duplicar Item
           </Menu.Item>
           <Menu.Item
             color="red"
             leftSection={<IconTrash size={14} />}
+            disabled={!activeItem}
             onClick={deleteOpen}
           >
             Deletar Item
@@ -96,7 +138,7 @@ const MenuItem = ({ item, scope }: MenuItemType) => {
 
       {/* modal do botão deletar */}
       <Modal
-        opened={deleteOpened}
+        opened={deleteOpened && activeItem !== null}
         onClose={deleteClose}
         centered
         title="Deseja realmente deletar este item?"
@@ -106,7 +148,7 @@ const MenuItem = ({ item, scope }: MenuItemType) => {
           blur: 3,
         }}
       >
-        <Text c="red">{item.item_reference.description}</Text>
+        <Text c="red">{activeItem?.item_reference.description}</Text>
         <Button
           mt="md"
           radius="lg"
@@ -123,7 +165,7 @@ const MenuItem = ({ item, scope }: MenuItemType) => {
       <Modal
         padding='xl'
         size='lg'
-        opened={editOpened}
+        opened={editOpened && activeItem !== null}
         onClose={editClose}
         title="Editar item"
         centered
