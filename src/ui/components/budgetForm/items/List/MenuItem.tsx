@@ -45,9 +45,9 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
 
   // função para obter o item a partir do alvo do evento (target)
   const getItemFromTarget = (target: EventTarget | null) => {
-    const row = target instanceof Element ? target.closest<HTMLElement>("[data-item-id]") : null;
-    const itemId = row?.dataset.itemId;
-    return items.find((listItem) => listItem.temp_id === itemId);
+    const row = target instanceof Element ? target.closest<HTMLElement>("[data-item-id]") : null; // procura o elemento mais próximo com o atributo data-item-id
+    const itemId = row?.dataset.itemId; // obtém o valor do atributo data-item-id
+    return items.find((listItem) => listItem.temp_id === itemId); // procura o item correspondente no array de itens
   }
 
   // função para lidar com o evento de clique com o botão direito do mouse
@@ -148,7 +148,7 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
           blur: 3,
         }}
       >
-        <Text c="red">{activeItem?.item_reference.description}</Text>
+        <Text c="red">Item: {activeItem && activeItem!.item_values.position! + 1} - {activeItem?.item_reference.description}</Text>
         <Button
           mt="md"
           radius="lg"

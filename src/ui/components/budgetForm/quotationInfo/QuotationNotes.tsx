@@ -14,7 +14,7 @@ const QuotationNotes = ({ scope }: { scope: BudgetFormScope }) => {
     return (
         <Textarea
             label="Notas da cotação"
-            placeholder="Espaço para notas sobre a cotação (Opcional)"
+            placeholder="(Opcional)"
 
             radius="lg"
 

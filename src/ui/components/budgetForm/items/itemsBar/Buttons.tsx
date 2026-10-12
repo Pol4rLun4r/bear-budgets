@@ -71,7 +71,6 @@ const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
                 }
             >
                 <Button
-                    mt="md"
                     radius="lg"
                     variant="light"
                     color="red"
