@@ -1,3 +1,10 @@
+# [3.5.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.4.0...v3.5.0) (2026-10-12)
+
+
+### Features
+
+* **budgets:** add unsaved changes confirmation when closing budget editor ([0e02f30](https://github.com/Pol4rLun4r/bear-budgets/commit/0e02f30d7b505d37570dfe4215c974206ccabb3d))
+
 # [3.4.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.3.0...v3.4.0) (2026-10-12)
 
 
