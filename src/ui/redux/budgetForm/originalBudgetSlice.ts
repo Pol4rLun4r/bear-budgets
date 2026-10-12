@@ -9,6 +9,7 @@ const originalBudgetSlice = createSlice({
             _state,
             action: PayloadAction<BudgetComparisonData | null>,
         ) => action.payload,
+        setNull: () => null
     },
 });
 
