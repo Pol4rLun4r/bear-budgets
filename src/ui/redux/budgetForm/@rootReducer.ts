@@ -4,6 +4,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import listItemsSlice from "./items/listItemsSlice";
 import listItemsSwitchModeSlice from "./items/listItemsSwitchModeSlice";
 import quotationInfoSlice from './quotationInfoSlice';
+import originalBudgetSlice from "./originalBudgetSlice";
 
 export type BudgetFormScope = "budget_form_create" | "budget_form_edit";
 
@@ -11,6 +12,7 @@ const BudgetFormReducer = combineReducers({
     quotationInfo: quotationInfoSlice,
     listItems: listItemsSlice,
     listItemsSwitchMode: listItemsSwitchModeSlice,
+    originalBudget: originalBudgetSlice,
 });
 
 export default BudgetFormReducer;
