@@ -10,13 +10,12 @@ import MenuBudget from "./Menu/@MenuBudget.tsx";
 // style
 import classes from "./Items.module.css"
 
-const List = ({
-    budgets,
-    open
-}: {
+interface ListType {
     budgets: Quotation[];
     open: () => void;
-}) => {
+}
+
+const List = ({ budgets, open }: ListType ) => {
 
     return (
         <Paper withBorder radius="lg" w={'100%'} h={'100%'} className={classes.items}>

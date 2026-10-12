@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../redux/store';
 
 // tabs
-import CreateBudget from '../createBudget/@CreateBudget';
-import Budgets from './../budgets/@Budgets';
+import CreateBudgetPage from '../CreateBudgetPage.tsx';
+import BudgetsPage from '../BudgetsPage.tsx';
+import ItemsPage from '../ItemsPage.tsx';
 import ComingSoon from '../comingSoon/@ComingSoon';
-import Items from '../items/@Items.tsx';
 
 // styles
 import classes from './ManagerPage.module.css';
@@ -17,9 +17,9 @@ import classes from './ManagerPage.module.css';
 const ManagerPage = () => {
     const tabState = useSelector((state: RootState) => state.sidebar.tab.activeTab);
     const tabContentById: Record<number, ReactNode> = {
-        0: <CreateBudget />,
-        1: <Budgets />,
-        2: <Items/>
+        0: <CreateBudgetPage />,
+        1: <BudgetsPage />,
+        2: <ItemsPage/>
     };
 
     return (

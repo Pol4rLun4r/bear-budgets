@@ -4,23 +4,23 @@ import dayjs from "dayjs";
 import { ActionIcon, Table, TableTdProps } from "@mantine/core";
 
 // components
-import RowContent from "../../../../../budgetForm/items/List/RowContent.tsx";
+import RowContent from "../../../../budgetForm/items/List/RowContent.tsx";
 
 // style
-import classes from '../../../Items.module.css';
+import classes from '../../../list/Items.module.css';
 
 // utils
-import calcAddItem from "../../../../../../utils/calcAddItem.ts";
-import { convertMarkupValue } from "../../../../../../utils/markupList.ts";
-import { addCalendarDays } from "../../../../../itemForm/formItemValues/inputs/Boarding/boardingUtils.ts";
+import calcAddItem from "../../../../../utils/calcAddItem.ts";
+import { convertMarkupValue } from "../../../../../utils/markupList.ts";
+import { addCalendarDays } from "../../../../itemForm/formItemValues/inputs/Boarding/boardingUtils.ts";
 
 // icons
-import { IconReportMoney } from "@tabler/icons-react";
+import { IconEyeDollar } from "@tabler/icons-react";
 
 // redux
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../../../redux/store.ts";
-import { setItemDataEditScope } from "../../../../../../redux/itemForm/itemFormSlice.ts";
+import { AppDispatch } from "../../../../../redux/store.ts";
+import { setItemDataEditScope } from "../../../../../redux/itemForm/itemFormSlice.ts";
 
 const tableTdProps: TableTdProps = {
   className: classes.rowContainer,
@@ -62,7 +62,7 @@ const Row = ({ item_values, onOpenValuesModal }: { onOpenValuesModal: () => void
     <Table.Tr >
       <Table.Td {...tableTdProps} align="center">
         <ActionIcon variant="transparent" onClick={handleSeeValues}>
-          <IconReportMoney />
+          <IconEyeDollar />
         </ActionIcon>
       </Table.Td>
       <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(unitValue)} /></Table.Td>

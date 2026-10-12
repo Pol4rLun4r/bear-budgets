@@ -1,6 +1,6 @@
 // redux
 import { useSelector } from 'react-redux';
-import { RootState } from "../../../../../../redux/store.ts";
+import { RootState } from "../../../../../redux/store.ts";
 
 // mantine
 import { Table, VisuallyHidden } from '@mantine/core';
@@ -8,7 +8,7 @@ import { Table, VisuallyHidden } from '@mantine/core';
 // components
 import Row from './Row.tsx';
 
-const ValuesInfoModal = ({ onOpenValuesModal }: { onOpenValuesModal: () => void }) => {
+const AllItemValuesModal = ({ onOpenValuesModal }: { onOpenValuesModal: () => void }) => {
     const menu = useSelector((state: RootState) => state.items.menu);
     const values = menu.item_values;
 
@@ -39,4 +39,4 @@ const ValuesInfoModal = ({ onOpenValuesModal }: { onOpenValuesModal: () => void 
     )
 };
 
-export default ValuesInfoModal;
+export default AllItemValuesModal;

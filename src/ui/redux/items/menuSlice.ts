@@ -23,12 +23,12 @@ const menuSlice = createSlice({
         setNotes: (state, action: PayloadAction<ItemReference['notes']>) => {
             state.notes = action.payload;
         },
-        setVersion: (state, action: PayloadAction<ItemValues[]>) => {
+        setAllItemValues: (state, action: PayloadAction<ItemValues[]>) => {
             state.item_values = action.payload;
         }
     }
 });
 
-export const { setLinks, setNotes, setVersion } = menuSlice.actions;
+export const { setLinks, setNotes, setAllItemValues } = menuSlice.actions;
 
 export default menuSlice.reducer;

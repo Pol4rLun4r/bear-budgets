@@ -3,9 +3,9 @@ import { Anchor, Paper, Stack, Table, Textarea } from "@mantine/core";
 
 // redux
 import { useSelector } from 'react-redux';
-import { RootState } from "../../../../../redux/store.ts";
+import { RootState } from "../../../../redux/store.ts";
 
-const MoreInfoModal = () => {
+const ItemReferenceModal = () => {
     const menu = useSelector((state: RootState) => state.items.menu);
     const notes = menu.notes;
     const links = menu.reference_links;
@@ -43,4 +43,4 @@ const MoreInfoModal = () => {
     )
 }
 
-export default MoreInfoModal
+export default ItemReferenceModal

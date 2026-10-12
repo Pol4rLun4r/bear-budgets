@@ -4,14 +4,14 @@ import type { ReactElement } from "react";
 // mantine
 import { Table } from "@mantine/core";
 
-const Rows = ({
-  budgets,
-  seeBudget
-}: {
+interface RowsType {
   budgets: Quotation[],
   seeBudget: (quotationId: Quotation['id']) => ReactElement
-}) => {
+}
 
+const Rows = ({ budgets, seeBudget }: RowsType) => {
+
+  // converte valores numéricos para formatação da moeda brasileira ($ Real)
   const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",

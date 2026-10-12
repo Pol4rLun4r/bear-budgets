@@ -34,12 +34,13 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
   // estado para armazenar o item ativo (selecionado) no menu de contexto
   const [activeItem, setActiveItem] = useState<ItemDataState | null>(null);
 
+  // função para usar o clipboard
   const clipboard = useClipboard({ timeout: 200 })
 
-  // delete button
+  // delete button modal
   const [deleteOpened, { open: deleteOpen, close: deleteClose }] = useDisclosure(false);
 
-  // edit item
+  // edit item modal
   const [editOpened, { open: editOpen, close: editClose }] = useDisclosure(false);
 
   // função para obter o item a partir do alvo do evento (target)
@@ -89,6 +90,40 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
     dispatch(addItem({ scope, data: activeItem }))
   }
 
+  const menuItems = (
+    <>
+      <Menu.Item
+        leftSection={<IconPencilMinus size={14} />}
+        disabled={!activeItem}
+        onClick={handleEdit}
+      >
+        Editar Item
+      </Menu.Item>
+      <Menu.Item
+        leftSection={<IconCopy size={14} />}
+        disabled={!activeItem}
+        onClick={handleCopy}
+      >
+        Copiar Descrição
+      </Menu.Item>
+      <Menu.Item
+        leftSection={<IconCopyPlus size={14} />}
+        disabled={!activeItem}
+        onClick={handleDuplicate}
+      >
+        Duplicar Item
+      </Menu.Item>
+      <Menu.Item
+        color="red"
+        leftSection={<IconTrash size={14} />}
+        disabled={!activeItem}
+        onClick={deleteOpen}
+      >
+        Deletar Item
+      </Menu.Item>
+    </>
+  )
+
   return (
     <>
       <Menu shadow="md" withArrow offset={-1}>
@@ -96,37 +131,7 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
           {children({ onContextMenu: handleContextMenu })}
         </Menu.ContextMenu>
 
-        <Menu.Dropdown>
-          <Menu.Item
-            leftSection={<IconPencilMinus size={14} />}
-            disabled={!activeItem}
-            onClick={handleEdit}
-          >
-            Editar Item
-          </Menu.Item>
-          <Menu.Item
-            leftSection={<IconCopy size={14} />}
-            disabled={!activeItem}
-            onClick={handleCopy}
-          >
-            Copiar Descrição
-          </Menu.Item>
-          <Menu.Item
-            leftSection={<IconCopyPlus size={14} />}
-            disabled={!activeItem}
-            onClick={handleDuplicate}
-          >
-            Duplicar Item
-          </Menu.Item>
-          <Menu.Item
-            color="red"
-            leftSection={<IconTrash size={14} />}
-            disabled={!activeItem}
-            onClick={deleteOpen}
-          >
-            Deletar Item
-          </Menu.Item>
-        </Menu.Dropdown>
+        <Menu.Dropdown>{menuItems}</Menu.Dropdown>
       </Menu>
 
       {/* modal do botão deletar */}

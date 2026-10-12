@@ -5,21 +5,21 @@ import { Menu } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
 
 // types
-import { MenuProps } from "./@MenuItem";
+import { MenuProps } from "./@MenuItem.tsx";
 
 // redux
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../redux/store";
-import { setLinks, setNotes } from "../../../../redux/items/menuSlice";
+import { AppDispatch } from "../../../redux/store.ts";
+import { setLinks, setNotes } from "../../../redux/items/menuSlice.ts";
 
 // api
-import services from "../../../../services/index.ts";
+import services from "../../../services/index.ts";
 
 interface MenuExtends extends MenuProps {
     notes: ItemReference['notes'];
 };
 
-const MoreInfo = ({ open, notes, itemReferenceId }: MenuExtends) => {
+const SeeItemReference = ({ open, notes, itemReferenceId }: MenuExtends) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleOpen = async () => {
@@ -44,4 +44,4 @@ const MoreInfo = ({ open, notes, itemReferenceId }: MenuExtends) => {
     )
 }
 
-export default MoreInfo
+export default SeeItemReference
