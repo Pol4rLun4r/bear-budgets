@@ -4,6 +4,7 @@ import searchDescriptionRules from "./item/searchDescription.js";
 import findItemReferencesRules from "./item/findItemReferences.js";
 import getReferenceLinksRules from "./item/getReferenceLinks.js";
 import getAllItemValuesByReferenceIdRules from "./item/getAllItemValuesByReferenceId.js";
+import getItemValuesByIdRules from "./item/getItemValuesById.js";
 import validateItemReference from "./item/validateItemReference.js";
 import validateItemValues from "./item/validateItemValues.js";
 
@@ -40,6 +41,7 @@ export const createRules = () => ({
         findItemReferences: findItemReferencesRules,
         getReferenceLinks: getReferenceLinksRules,
         getAllItemValuesByReferenceId: getAllItemValuesByReferenceIdRules,
+        getItemValuesById: getItemValuesByIdRules,
         validateReference: validateItemReference,
         validateValues: validateItemValues,
     }
