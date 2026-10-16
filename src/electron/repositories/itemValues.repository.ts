@@ -66,6 +66,7 @@ const create = (db: Database) =>
         return row.lastInsertRowid as number;
     };
 
+/** atualiza um item_value */
 const update = (db: Database) => (id: ItemValues['id'], data: Partial<ItemValues>) => {
     const fields: string[] = [];
     const values: unknown[] = [];

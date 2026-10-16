@@ -40,6 +40,17 @@ const getAllByQuotationId = (db: Database) =>
         `).all(quotation_id) as QuotationLink[];
     };
 
+/** pega o link de cotação pelo item_values_id (cada item_values gera um id novo e único) */
+const getByItemValuesId = (db: Database) =>
+    (item_values_id: QuotationLink['item_values_id']): QuotationLink | undefined => {
+        return db.prepare(`
+            SELECT *
+            FROM quotation_links
+            WHERE item_values_id = ?
+            LIMIT 1
+        `).get(item_values_id) as QuotationLink | undefined;
+    };
+
 /** atualizar link de cotação */
 const update = (db: Database) =>
     (id: QuotationLink['id'], data: Partial<QuotationLink>) => {
@@ -74,6 +85,7 @@ const quotationLinksRepository = (db: Database) => {
         create: create(db),
         getById: getById(db),
         getAllByQuotationId: getAllByQuotationId(db),
+        getByItemValuesId: getByItemValuesId(db),
         update: update(db),
         deleteById: deleteById(db)
     }
