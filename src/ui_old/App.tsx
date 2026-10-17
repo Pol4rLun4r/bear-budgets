@@ -8,13 +8,13 @@ import { DatesProvider } from '@mantine/dates';
 
 // react-query
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./lib/queryClient";
+import { queryClient } from "./lib/queryClient.ts";
 
 // components
-import Main from './components/main/@Main';
-import Sidebar from './components/sidebar/@Sidebar';
+import Main from './components/main/@Main.tsx';
+import Sidebar from './components/sidebar/@Sidebar.tsx';
 import FrameBar from './components/frameBar/@FrameBar.tsx';
-import ManagerPage from './pages/managerPage/@ManagerPage';
+import ManagerPage from './pages/managerPage/@ManagerPage.tsx';
 
 // styles
 import './style/Global.css';

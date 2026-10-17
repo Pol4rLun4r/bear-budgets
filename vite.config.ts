@@ -1,10 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base:"./",
+  resolve: {
+    alias: {
+      // Define que toda vez que ler "@", o Vite vai apontar para o diretório "src"
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  base: "./",
   build: {
     outDir: 'dist-react',
   },

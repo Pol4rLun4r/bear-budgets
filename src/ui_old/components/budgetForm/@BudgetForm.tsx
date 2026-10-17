@@ -1,6 +1,6 @@
 // components
-import Items from "../../components/budgetForm/items/@Items";
-import QuotationInfo from '../../components/budgetForm/quotationInfo/@QuotationInfo';
+import Items from "./items/@Items";
+import QuotationInfo from './quotationInfo/@QuotationInfo';
 
 // redux
 import { BudgetFormScope } from "../../redux/budgetForm/@rootReducer";

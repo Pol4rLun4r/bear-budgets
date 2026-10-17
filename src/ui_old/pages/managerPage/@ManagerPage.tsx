@@ -2,13 +2,13 @@ import type { ReactNode } from 'react';
 
 // redux
 import { useSelector } from 'react-redux';
-import type { RootState } from '../../redux/store';
+import type { RootState } from '../../redux/store.ts';
 
 // tabs
 import CreateBudgetPage from '../CreateBudgetPage.tsx';
 import BudgetsPage from '../BudgetsPage.tsx';
 import ItemsPage from '../ItemsPage.tsx';
-import ComingSoon from '../comingSoon/@ComingSoon';
+import ComingSoon from '../comingSoon/@ComingSoon.tsx';
 
 // styles
 import classes from './ManagerPage.module.css';

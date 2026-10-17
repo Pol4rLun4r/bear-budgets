@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 // domain reducers
-import sidebarReducer from "./sideBar/rootReducer";
+import sidebarReducer from "./sideBar/rootReducer.ts";
 import budgetFormReducer from "./budgetForm/@rootReducer.ts";
 import itemsReducer from "./items/@rootReducer.ts"
 import itemFormReducer from "./itemForm/@rootReducer.ts";
