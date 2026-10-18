@@ -12,6 +12,7 @@ import { IconMaximize, IconMinus, IconX } from '@tabler/icons-react';
 
 // components
 import LeftTitle from "./LeftTitle";
+import CenterTitle from "./CenterTitle";
 
 // interface para definir os props de actionIcon
 interface ActionProps extends HTMLOrSVGElement, ActionIconProps { }
@@ -31,8 +32,8 @@ const FrameBar = () => {
 
   return (
     <div className={classes.frameBar}>
-      <LeftTitle/>
-      <div className={classes.centerTitle}>Página atual</div>
+      <LeftTitle />
+      <CenterTitle />
 
       <Group gap={2}>
         <ActionIcon

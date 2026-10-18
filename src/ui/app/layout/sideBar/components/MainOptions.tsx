@@ -1,5 +1,6 @@
 // react
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import type { RefCallback } from 'react';
 
 // mantine
 import { Stack, FloatingIndicator } from "@mantine/core"
@@ -8,52 +9,46 @@ import { Stack, FloatingIndicator } from "@mantine/core"
 import classes from '../Sidebar.module.css';
 
 // redux
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/app/store';
+import { useAppDispatch, useAppSelector } from '@/app/reduxHooks';
 import { setActivePage } from '../../store/layout.slice';
+import { activePage } from '../../store/layout.selectors';
 
 // components
-import { SidebarPage } from './SidebarPage'; 
-
-// icons
-import { IconClipboardList, IconFiles, IconPencilPlus } from '@tabler/icons-react';
+import { SidebarPage } from './SidebarPage';
+import { pagesData, type PageId } from '../../pages';
 
 const MainOptions = () => {
-    const dispatch = useDispatch<AppDispatch>();
+    const dispatch = useAppDispatch();
 
-    const [active, setActive] = useState(0);
+    const active = useAppSelector(activePage);
     const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
-    const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLButtonElement | null>>({});
+    const [controlsRefs, setControlsRefs] = useState<Partial<Record<PageId, HTMLButtonElement | null>>>({});
 
-    const tabHandle = (index: number) => {
-        setActive(index);
-        dispatch(setActivePage(index));
-    }
+    const controlRefCallbacks = useMemo(() => {
+        const callbacks = {} as Record<PageId, RefCallback<HTMLButtonElement>>;
 
-    const setControlRef = (index: number) => (node: HTMLButtonElement) => {
-        controlsRefs[index] = node;
-        setControlsRefs(controlsRefs);
-    }
+        pagesData.forEach(({ id }) => {
+            callbacks[id] = (node) => {
+                setControlsRefs((refs) => ({ ...refs, [id]: node }));
+            };
+        });
 
-    const pagesData = [
-        { icon: IconPencilPlus, label: 'Create budget' },
-        { icon: IconFiles, label: 'Budgets' },
-        { icon: IconClipboardList, label: 'Items' }
-    ]
+        return callbacks;
+    }, []);
 
-    const tabs = pagesData.map((tab, index) => (
+    const pages = pagesData.map((page) => (
         <SidebarPage
-            {...tab}
-            ref={setControlRef(index)}
-            key={tab.label}
-            active={index === active}
-            onClick={() => tabHandle(index)}
+            {...page}
+            ref={controlRefCallbacks[page.id]}
+            key={page.id}
+            active={page.id === active}
+            onClick={() => dispatch(setActivePage(page.id))}
         />
     ))
 
     return (
         <Stack gap={0} ref={setRootRef} className={classes.mainOptions}>
-            {tabs}
+            {pages}
 
             <FloatingIndicator
                 target={controlsRefs[active]}

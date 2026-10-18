@@ -1,13 +1,17 @@
+// redux
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+// types
+import type { PageId } from "../pages";
 
 interface LayoutState {
     isSidebarCollapsed: boolean;
-    activePage: number;
+    activePage: PageId;
 }
 
 const initialState: LayoutState = {
     isSidebarCollapsed: false,
-    activePage: 0
+    activePage: "create-budget"
 };
 
 const layoutSlice = createSlice({
@@ -17,7 +21,7 @@ const layoutSlice = createSlice({
         toggleSidebar(state) {
             state.isSidebarCollapsed = !state.isSidebarCollapsed;
         },
-        setActivePage: (state, action: PayloadAction<number>) => {
+        setActivePage: (state, action: PayloadAction<PageId>) => {
             state.activePage = action.payload;
         }
     },
