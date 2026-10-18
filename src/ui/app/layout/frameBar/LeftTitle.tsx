@@ -1,0 +1,44 @@
+// mantine
+import { ActionIcon, Group, Tooltip } from "@mantine/core"
+
+// style
+import classes from './FrameBar.module.css';
+
+// icons
+import { IconSnowflake } from "@tabler/icons-react";
+
+// redux
+import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
+import { toggleSidebar } from "../store/layout.slice";
+import { selectIsSidebarCollapsed } from "../store/layout.selectors";
+
+const LeftTitle = () => {
+    const dispatch = useAppDispatch();
+    const isSidebarCollapsed = useAppSelector(selectIsSidebarCollapsed);
+
+    return (
+        <Group gap={1} style={{ justifySelf: 'center' }}>
+            <Tooltip
+                label={isSidebarCollapsed ? "Expandir" : "Recolher"}
+                withinPortal
+                zIndex={10000}
+                withArrow
+                arrowSize={7}
+                openDelay={500}
+            >
+                <ActionIcon
+                    variant="transparent"
+                    className={classes.noDrag}
+                    aria-label={isSidebarCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
+                    onClick={() => dispatch(toggleSidebar())}
+                >
+                    {/* ao mudar a key, o React remonta o ícone e reinicia a animação CSS de rotação */}
+                    <IconSnowflake key={isSidebarCollapsed.toString()} className={classes.snowflake} />
+                </ActionIcon>
+            </Tooltip>
+            <div>Bear Budgets</div>
+        </Group>
+    )
+};
+
+export default LeftTitle

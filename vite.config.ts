@@ -8,7 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // Define que toda vez que ler "@", o Vite vai apontar para o diretório "src"
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './src/ui'),
     },
   },
   base: "./",
