@@ -2,15 +2,19 @@
 import classes from './PageManager.module.css';
 
 // redux
-import { activePageData } from '../store/layout.selectors';
+import { activePage } from '../store/layout.selectors';
 import { useAppSelector } from '@/app/reduxHooks';
 
+// config
+import { pageContentById } from '../pages';
+
 const PageManager = () => {
-  const activePageLabel = useAppSelector(activePageData)?.label;
+  const activePageId = useAppSelector(activePage);
+  const PageContent = pageContentById[activePageId];
 
   return (
     <main className={classes.main}>
-      {activePageLabel}
+      <PageContent />
     </main>
   )
 }
