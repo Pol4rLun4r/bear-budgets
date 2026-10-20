@@ -112,6 +112,13 @@ describe("Sucessos ao criar cotação", () => {
             } else {
                 expect(itemVersionData?.boarding).toBe(null);
             }
+
+            // 3.16 verifica se a entrega é a mesma informada
+            if (payload.items[index].item_values.delivery !== null && payload.items[index].item_values.delivery !== undefined) {
+                expect(itemVersionData?.delivery).toBe(payload.items[index].item_values.delivery);
+            } else {
+                expect(itemVersionData?.delivery).toBe(null);
+            }
         }
     }
 
@@ -125,6 +132,7 @@ describe("Sucessos ao criar cotação", () => {
                     item_values: fakeItemValues(0, {
                         ipi: 1.3,
                         boarding: 7,
+                        delivery: 10,
                     }),
                 },
                 {
@@ -148,6 +156,7 @@ describe("Sucessos ao criar cotação", () => {
                         st: 43,
                         extra_value: 88,
                         boarding: 15,
+                        delivery: 20,
                     }),
                 }
             ],
@@ -234,6 +243,7 @@ describe("Sucessos ao criar cotação", () => {
                     item_values: fakeItemValues(0, {
                         ipi: 1.3,
                         boarding: 9,
+                        delivery: 12,
                     }),
                 },
                 {

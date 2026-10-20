@@ -48,6 +48,7 @@ describe("Pegar cotação completa", () => {
                     unit_price: 24,
                     markup: "40%",
                     boarding: 7,
+                    delivery: 14,
                 }),
             },
             {
@@ -61,6 +62,7 @@ describe("Pegar cotação completa", () => {
                     markup: "40%",
                     extra_value: 88,
                     boarding: 12,
+                    delivery: 18,
                 }),
             },
         ],

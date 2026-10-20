@@ -197,10 +197,19 @@ const SEARCH_TOKENIZER_FIX_DOWN = `
     END;
 `;
 
+const ITEM_VALUES_DELIVERY_UP = `
+    ALTER TABLE item_values ADD COLUMN delivery INTEGER;
+`;
+
+const ITEM_VALUES_DELIVERY_DOWN = `
+    ALTER TABLE item_values DROP COLUMN delivery;
+`;
+
 const MIGRATIONS = [
     { version: 1, up: INITIAL_UP, down: INITIAL_DOWN },
     { version: 2, up: SEARCH_UP, down: SEARCH_DOWN },
     { version: 3, up: SEARCH_TOKENIZER_FIX_UP, down: SEARCH_TOKENIZER_FIX_DOWN },
+    { version: 4, up: ITEM_VALUES_DELIVERY_UP, down: ITEM_VALUES_DELIVERY_DOWN },
 ];
 
 export function runMigrations(db: DatabaseType): void {

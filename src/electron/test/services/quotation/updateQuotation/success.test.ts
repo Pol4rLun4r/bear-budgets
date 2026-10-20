@@ -143,7 +143,7 @@ describe("Sucessos ao atualizar cotação (completa)", () => {
             editItem.quotation_link_id,
             {
                 ...editItem,
-                item_values: fakeItemValues(editItem.item_values.position, { quantity: 30, boarding: 19, unit_price: 1.2 })
+                item_values: fakeItemValues(editItem.item_values.position, { quantity: 30, boarding: 19, delivery: 25, unit_price: 1.2 })
             }
         );
 
@@ -156,6 +156,27 @@ describe("Sucessos ao atualizar cotação (completa)", () => {
 
         expectQuotationItemsToMatch(updated, payload.items);
     })
+
+    it("deve persistir zero como prazo de entrega", () => {
+        const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);
+        const item = fullQuotation.items[0];
+
+        const payload = quotationUpdatePayloadUtils.editQuotationItem(
+            quotation,
+            item.quotation_link_id,
+            { item_values: { delivery: 0 } },
+        );
+
+        const result = context.services.quotation.update(payload);
+
+        expect(result.success).toBe(true);
+        if (!result.success) return;
+
+        const updated = result.data as QuotationFull;
+        const updatedItem = updated.items.find((entry) => entry.quotation_link_id === item.quotation_link_id);
+
+        expect(updatedItem?.item_values.delivery).toBe(0);
+    });
 
     it("deve atualizar as posições item_values, o item 1 ganhar a segunda posição e o item 2 ganhar a primeira posição com sucesso", () => {
         const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);

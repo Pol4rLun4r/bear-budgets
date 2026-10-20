@@ -49,8 +49,8 @@ const getAllByReferenceId = (db: Database) =>
 const create = (db: Database) =>
     (item_reference_id: number, data: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at">): number => {
         const row = db.prepare(`
-            INSERT INTO item_values (item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, extra_value, boarding)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO item_values (item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, extra_value, boarding, delivery)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).run(
             item_reference_id,
             data.position,
@@ -61,7 +61,8 @@ const create = (db: Database) =>
             data.ipi ?? undefined,
             data.st ?? undefined,
             data.extra_value ?? undefined,
-            data.boarding ?? undefined
+            data.boarding ?? undefined,
+            data.delivery ?? undefined
         );
         return row.lastInsertRowid as number;
     };
@@ -119,6 +120,11 @@ const update = (db: Database) => (id: ItemValues['id'], data: Partial<ItemValues
     if (data.boarding !== undefined) {
         fields.push("boarding = ?");
         values.push(data.boarding);
+    }
+
+    if (data.delivery !== undefined) {
+        fields.push("delivery = ?");
+        values.push(data.delivery);
     }
 
     if (!fields.length) return;

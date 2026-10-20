@@ -21,6 +21,7 @@ describe("Pegar cotações resumidas", () => {
                     item_values: fakeItemValues(0, {
                         ipi: 1.3,
                         boarding: 3,
+                        delivery: 5,
                     }),
                 },
             ],
@@ -34,6 +35,7 @@ describe("Pegar cotações resumidas", () => {
                     item_values: fakeItemValues(1, {
                         ipi: 1.3,
                         boarding: 4,
+                        delivery: 6,
                     }),
                 },
             ],

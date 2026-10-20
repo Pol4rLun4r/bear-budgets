@@ -3,7 +3,7 @@ import { failure, success } from "../../utils/handleSuccess.js";
 import validateItemValues from "../item/validateItemValues.js";
 
 type ItemValueChanges = Partial<Pick<ItemValues,
-    "position" | "quantity" | "unit_price" | "markup" | "purchase_shipping" | "ipi" | "st" | "extra_value" | "boarding"
+    "position" | "quantity" | "unit_price" | "markup" | "purchase_shipping" | "ipi" | "st" | "extra_value" | "boarding" | "delivery"
 >>;
 
 type MatchedItem = UpdateQuotation["items"][number] & {
@@ -106,6 +106,7 @@ const compareItemValues = ({
             st: current.st ?? undefined,
             extra_value: current.extra_value ?? undefined,
             boarding: current.boarding ?? undefined,
+            delivery: current.delivery ?? undefined,
         };
         const changes: ItemValueChanges = {};
 
@@ -143,6 +144,10 @@ const compareItemValues = ({
 
         if (currentValues.boarding !== normalizedSubmittedValues.boarding) {
             changes.boarding = normalizedSubmittedValues.boarding;
+        }
+
+        if (currentValues.delivery !== normalizedSubmittedValues.delivery) {
+            changes.delivery = normalizedSubmittedValues.delivery;
         }
 
         decisions.push({

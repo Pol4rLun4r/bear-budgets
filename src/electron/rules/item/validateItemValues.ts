@@ -15,6 +15,7 @@ export const rulesCode = {
     INVALID_NUMBER: (field: string) => `O campo ${field} deve ser um número válido.`,
     INVALID_MARKUP: "O campo markup deve ser um texto válido.",
     INVALID_BOARDING: "O campo boarding deve ser um número inteiro.",
+    INVALID_DELIVERY: "O campo delivery deve ser um número inteiro maior ou igual a zero.",
 };
 
 // função auxiliar para validar se um ID opcional é um número inteiro positivo ou não informado (undefined ou null)
@@ -74,6 +75,12 @@ const validateItemValues = ({ itemValues }: ValidateItemValuesInput) => {
         return failure(rulesCode.INVALID_BOARDING);
     }
 
+    // valida se o campo delivery é um número inteiro caso seja informado
+    if (itemValues.delivery !== undefined && itemValues.delivery !== null
+        && (typeof itemValues.delivery !== "number" || !Number.isSafeInteger(itemValues.delivery) || itemValues.delivery < 0)) {
+        return failure(rulesCode.INVALID_DELIVERY);
+    }
+
     // cria o objeto ValidatedItemValues com os campos validados e normalizados, removendo espaços em branco do markup e convertendo campos vazios para undefined
     const data: ValidatedItemValues = {
         id: itemValues.id ?? undefined,
@@ -87,6 +94,7 @@ const validateItemValues = ({ itemValues }: ValidateItemValuesInput) => {
         st: itemValues.st ?? undefined,
         extra_value: itemValues.extra_value ?? undefined,
         boarding: itemValues.boarding ?? undefined,
+        delivery: itemValues.delivery ?? undefined,
     };
 
     return success({ itemValues: data });

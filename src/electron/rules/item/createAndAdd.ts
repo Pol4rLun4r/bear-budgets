@@ -1,6 +1,7 @@
 // utils
 import { success, failure } from "../../utils/handleSuccess.js";
 import validateItemReference, { rulesCode as itemReferenceRulesCode } from "./validateItemReference.js";
+import validateItemValues from "./validateItemValues.js";
 
 export interface CreateAndAdd {
     items: ItemData[];
@@ -61,8 +62,12 @@ const createAndAdd = ({ items, quotationExists }: CreateAndAdd) => {
             if (hasSamePosition > 1) return failure(rulesCode.SAME_POSITION);
         }
 
-        // validar quantidade
-        const quantity = item_values.quantity ?? 1;
+        const validateValues = validateItemValues({ itemValues: item_values });
+        if (!validateValues.success) {
+            return validateValues;
+        }
+
+        const quantity = validateValues.data.itemValues.quantity;
 
         // valida os links de referência se existirem
         const reference_links = itemReferenceLinks
