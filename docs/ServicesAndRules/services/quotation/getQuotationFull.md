@@ -37,6 +37,7 @@ success(QuotationFull)
 ```
 
 O retorno contém a cotação completa, incluindo todos os itens e seus respectivos dados.
+Cada item inclui seus `item_values`, entre eles o prazo de entrega opcional (`delivery`), em dias.
 
 Em caso de erro:
 
@@ -75,4 +76,3 @@ Quando o serviço retorna sucesso:
 | --------------------------- | ------------------------------------------------------------- |
 | `QUOTATION_ID_NOT_INFORMED` | O identificador da cotação não foi informado.                 |
 | `QUOTATION_NOT_FOUND`       | A cotação informada não existe.                               |
-

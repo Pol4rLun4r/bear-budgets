@@ -10,6 +10,7 @@ import { getDBPath } from "../../../../utils/pathResolver.js";
 import { fakeItens } from "../../../fakeItens.js";
 import { rulesCode as quotationRulesCode } from "../../../../rules/quotation/create.js";
 import { rulesCode as itemRulesCode } from "../../../../rules/item/createAndAdd.js";
+import { rulesCode as itemValuesRulesCode } from "../../../../rules/item/validateItemValues.js";
 
 describe("Falhas ao criar cotação", () => {
     const db = createDatabase(getDBPath());
@@ -167,6 +168,26 @@ describe("Falhas ao criar cotação", () => {
 
             expect(quotation.success).toBe(false);
             expect(quotation.data).toBe(itemRulesCode.DESCRIPTION_NOT_INFORMED);
+        });
+
+        it("falhar se o prazo de entrega for negativo", () => {
+            const payload: CreateQuotation = {
+                items: [{
+                    item_reference: { ...fakeItens[0] },
+                    reference_links: [],
+                    item_values: {
+                        quantity: 1,
+                        position: 0,
+                        delivery: -1,
+                    },
+                }],
+                quotation: { amount: 1, total_value: 0 },
+            };
+
+            const quotation = services.quotation.create(payload);
+
+            expect(quotation.success).toBe(false);
+            expect(quotation.data).toBe(itemValuesRulesCode.INVALID_DELIVERY);
         });
     });
 });

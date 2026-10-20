@@ -115,6 +115,7 @@ const validateAddedItems = ({
                 st: itemValues.st,
                 extra_value: itemValues.extra_value,
                 boarding: itemValues.boarding,
+                delivery: itemValues.delivery,
             },
             reference_links: referenceLinks,
         });

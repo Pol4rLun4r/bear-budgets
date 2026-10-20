@@ -87,6 +87,12 @@ A tabela é responsável por:
   * Tipo: Inteiro.
   * Opcional.
 
+* `delivery`
+
+  * Prazo de entrega do item.
+  * Tipo: Inteiro maior ou igual a zero.
+  * Opcional.
+
 * `extra_value`
 
   * Valor adicional aplicado ao item.
@@ -145,6 +151,12 @@ Seu preenchimento é opcional e pode variar conforme cada orçamento.
 Armazena o prazo de embarque em dias corridos, independente da forma que foi informado (dias corridos/dias úteis ou uma data completa).
 
 Seu preenchimento é opcional e depende das informações disponíveis para cada orçamento.
+
+---
+
+### delivery
+
+Armazena o prazo de entrega do item em dias. Seu preenchimento é opcional e depende das informações disponíveis para cada orçamento.
 
 ---
 

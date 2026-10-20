@@ -51,11 +51,31 @@ describe("runMigrations", () => {
         const rows = db.prepare("SELECT id, boarding FROM item_values ORDER BY id").all() as Array<{ id: number; boarding: string | number | null }>;
 
         expect(boardingColumn.find((column) => column.name === "boarding")?.type).toBe("TEXT");
+        expect(boardingColumn.find((column) => column.name === "delivery")?.type).toBe("INTEGER");
         expect(rows).toEqual([
             { id: 1, boarding: "3 dias úteis" },
             { id: 2, boarding: "7" },
             { id: 3, boarding: "12" },
         ]);
+
+        const deliveryRows = db.prepare("SELECT id, delivery FROM item_values ORDER BY id").all() as Array<{ id: number; delivery: number | null }>;
+        expect(deliveryRows).toEqual([
+            { id: 1, delivery: null },
+            { id: 2, delivery: null },
+            { id: 3, delivery: null },
+        ]);
+
+        db.close();
+    });
+
+    it("cria item_values com delivery em banco novo", () => {
+        const db = new Database(":memory:");
+        db.pragma("foreign_keys = ON");
+
+        runMigrations(db);
+
+        const columns = db.prepare("PRAGMA table_info(item_values)").all() as Array<{ name: string; type: string }>;
+        expect(columns.find((column) => column.name === "delivery")?.type).toBe("INTEGER");
 
         db.close();
     });

@@ -38,6 +38,7 @@ success(ItemValues[])
 ```
 
 O retorno contém todas as configurações de valores associadas ao item de referência.
+Cada configuração pode incluir o prazo de entrega opcional (`delivery`), em dias.
 
 Caso não existam registros cadastrados, o retorno será uma coleção vazia.
 

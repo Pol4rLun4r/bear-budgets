@@ -46,7 +46,8 @@ type ItemValues = {
     ipi?: number;
     st?: number;
     extra_value?: number;
-    boarding?: number;
+    boarding?: number; // tempo para embarcar o item
+    delivery?: number; // tempo para entregar o item
     created_at?: string;
     updated_at?: string;
 };
