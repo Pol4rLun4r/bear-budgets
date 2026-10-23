@@ -6,7 +6,7 @@ import { IconClipboardList, IconFiles, IconPencilPlus } from '@tabler/icons-reac
 
 // pages
 import ComingSoon from '@/features/comingSoon/@ComingSoon';
-import CreateBudget from '@/features/createBudget/@CreateBudget';
+import CreateBudget from '@/features/budgets/@CreateBudget';
 
 export const pagesData = [
     { icon: IconPencilPlus, label: 'Criar orçamento', id: 'create-budget' },

@@ -1,8 +1,13 @@
+// redux
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+
+// reducers
 import layoutReducer from "./layout/store/layout.slice";
+import itemFormReducer from "@/features/budgets/itemForm/store/@rootReducer";
 
 const rootReducer = combineReducers({
     layout: layoutReducer,
+    itemForm: itemFormReducer
 });
 
 

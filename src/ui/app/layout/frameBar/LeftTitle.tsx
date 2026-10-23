@@ -31,6 +31,7 @@ const LeftTitle = () => {
                     className={classes.noDrag}
                     aria-label={isSidebarCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
                     onClick={() => dispatch(toggleSidebar())}
+                    size={"sm"}
                 >
                     {/* ao mudar a key, o React remonta o ícone e reinicia a animação CSS de rotação */}
                     <IconSnowflake key={isSidebarCollapsed.toString()} className={classes.snowflake} />
