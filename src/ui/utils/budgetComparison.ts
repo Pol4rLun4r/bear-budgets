@@ -1,4 +1,4 @@
-import type { ItemFormState } from "@/features/budgets/itemForm/store/itemForm.slice";
+import type { ItemFormState } from "@/features/budget/itemForm/store/itemForm.slice";
 
 export type BudgetComparisonData = {
     quotation: Pick<Quotation, "notes" | "status">;

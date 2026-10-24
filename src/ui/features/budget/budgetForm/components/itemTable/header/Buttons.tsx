@@ -6,7 +6,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { BudgetFormScope } from "../../../store/@rootReducer";
 
 // components
-import ItemForm from "@/features/budgets/itemForm/@ItemForm";
+import ItemForm from "@/features/budget/itemForm/@ItemForm";
 import SwitchMode from "./SwitchMode";
 
 // icons

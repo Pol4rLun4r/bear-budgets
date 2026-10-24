@@ -6,7 +6,8 @@ import { IconClipboardList, IconFiles, IconPencilPlus } from '@tabler/icons-reac
 
 // pages
 import ComingSoon from '@/features/comingSoon/@ComingSoon';
-import CreateBudget from '@/features/budgets/CreateBudgetPage';
+import CreateBudgetPage from '@/features/budget/CreateBudgetPage';
+import BudgetsPage from '@/features/budget/BudgetsPage';
 
 export const pagesData = [
     { icon: IconPencilPlus, label: 'Criar orçamento', id: 'create-budget' },
@@ -17,7 +18,7 @@ export const pagesData = [
 export type PageId = typeof pagesData[number]['id'];
 
 export const pageContentById: Record<PageId, () => JSX.Element> = {
-    'create-budget': CreateBudget,
-    'budgets': ComingSoon,
+    'create-budget': CreateBudgetPage,
+    'budgets': BudgetsPage,
     'items': ComingSoon
 }

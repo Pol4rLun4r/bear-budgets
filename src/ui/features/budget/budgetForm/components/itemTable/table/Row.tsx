@@ -5,8 +5,8 @@ import { Table, TableTdProps } from "@mantine/core"
 // redux
 import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
-import { ItemFormState } from "@/features/budgets/itemForm/store/itemForm.slice";
-import { selectItemDeliveryInfo } from "@/features/budgets/budgetForm/store/budgetForm.selectors";
+import { ItemFormState } from "@/features/budget/itemForm/store/itemForm.slice";
+import { selectItemDeliveryInfo } from "@/features/budget/budgetForm/store/budgetForm.selectors";
 
 // DragAndDrop
 import { useSortable } from "@dnd-kit/react/sortable";

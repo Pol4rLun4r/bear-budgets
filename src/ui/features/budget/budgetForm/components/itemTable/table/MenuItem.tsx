@@ -7,7 +7,7 @@ import { useState } from "react";
 import { IconCopy, IconCopyPlus, IconPencilMinus, IconTrash } from "@tabler/icons-react";
 
 // redux
-import { ItemFormState, setItemForm } from "@/features/budgets/itemForm/store/itemForm.slice";
+import { ItemFormState, setItemForm } from "@/features/budget/itemForm/store/itemForm.slice";
 
 
 // component

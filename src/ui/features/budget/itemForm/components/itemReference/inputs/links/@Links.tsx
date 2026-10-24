@@ -3,7 +3,7 @@ import { Avatar, Button, Center, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 // redux
-import { ItemFormScope } from "@/features/budgets/itemForm/store/itemForm.slice.ts";
+import { ItemFormScope } from "@/features/budget/itemForm/store/itemForm.slice.ts";
 import { useAppSelector } from "@/app/reduxHooks.ts";
 
 // components

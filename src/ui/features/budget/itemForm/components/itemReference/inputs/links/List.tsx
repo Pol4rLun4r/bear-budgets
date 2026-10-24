@@ -6,7 +6,7 @@ import { IconTrash } from "@tabler/icons-react";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
-import { ItemFormScope, removeLink } from "@/features/budgets/itemForm/store/itemForm.slice";
+import { ItemFormScope, removeLink } from "@/features/budget/itemForm/store/itemForm.slice";
 
 interface ListProps {
     links: Partial<ReferenceLink>[];

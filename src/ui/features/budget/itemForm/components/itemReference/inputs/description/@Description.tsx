@@ -13,13 +13,13 @@ import {
     setReferenceField,
     setReferenceLinks,
     type ItemFormScope,
-} from "@/features/budgets/itemForm/store/itemForm.slice";
+} from "@/features/budget/itemForm/store/itemForm.slice";
 
 // api
 import {
     useLazyGetReferenceLinksQuery,
     useLazySearchItemDescriptionQuery,
-} from "@/features/budgets/itemForm/store/item.api";
+} from "@/features/budget/itemForm/store/item.api";
 
 // components
 import Input from "./Input";

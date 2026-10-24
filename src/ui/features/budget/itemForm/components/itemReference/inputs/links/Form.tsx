@@ -3,8 +3,8 @@ import { Button, Group, Stack, TextInput, } from "@mantine/core"
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
-import { addLink, ItemFormScope } from "@/features/budgets/itemForm/store/itemForm.slice";
-import { resetReferenceLink, setReferenceLink } from "@/features/budgets/itemForm/store/linkForm.slice";
+import { addLink, ItemFormScope } from "@/features/budget/itemForm/store/itemForm.slice";
+import { resetReferenceLink, setReferenceLink } from "@/features/budget/itemForm/store/linkForm.slice";
 
 const Form = ({ scope }: { scope: ItemFormScope }) => {
     const dispatch = useAppDispatch()

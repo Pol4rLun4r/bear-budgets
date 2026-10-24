@@ -3,7 +3,7 @@ import BoardingInput from "./BoardingInput";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
-import { ItemFormScope, setValuesField } from "@/features/budgets/itemForm/store/itemForm.slice";
+import { ItemFormScope, setValuesField } from "@/features/budget/itemForm/store/itemForm.slice";
 
 const Boarding = ({ scope }: { scope: ItemFormScope }) => {
     const boarding = useAppSelector((state) => state.itemForm.form[scope].item_values.boarding);

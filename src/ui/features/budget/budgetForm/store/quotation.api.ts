@@ -81,3 +81,5 @@ export const quotationApi = api.injectEndpoints({
         }),
     }),
 });
+
+export const { useGetQuotationSummariesQuery } = quotationApi;

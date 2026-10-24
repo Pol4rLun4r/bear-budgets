@@ -7,8 +7,8 @@ import { Combobox, Tooltip, UnstyledButton, Text, TextInput, type ComboboxStore,
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
-import { getItemFormState } from "@/features/budgets/itemForm/store/itemForm.selectors";
-import { resetItemDescription, resetItemReference, type ItemFormScope } from "@/features/budgets/itemForm/store/itemForm.slice";
+import { getItemFormState } from "@/features/budget/itemForm/store/itemForm.selectors";
+import { resetItemDescription, resetItemReference, type ItemFormScope } from "@/features/budget/itemForm/store/itemForm.slice";
 
 // icons
 import { IconX } from "@tabler/icons-react";

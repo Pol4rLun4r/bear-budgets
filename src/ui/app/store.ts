@@ -6,8 +6,8 @@ import { api } from "./api";
 
 // reducers
 import layoutReducer from "./layout/store/layout.slice";
-import itemFormReducer from "@/features/budgets/itemForm/store/@rootReducer";
-import BudgetFormReducer from "@/features/budgets/budgetForm/store/@rootReducer";
+import itemFormReducer from "@/features/budget/itemForm/store/@rootReducer";
+import BudgetFormReducer from "@/features/budget/budgetForm/store/@rootReducer";
 
 const rootReducer = combineReducers({
   layout: layoutReducer,

@@ -1,7 +1,7 @@
 // redux
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "@/app/store";
-import { ItemFormState } from "@/features/budgets/itemForm/store/itemForm.slice";
+import { ItemFormState } from "@/features/budget/itemForm/store/itemForm.slice";
 import type { BudgetFormScope } from "./@rootReducer";
 
 // utils
@@ -9,7 +9,7 @@ import { hasBudgetChanged } from "@/utils/budgetComparison";
 import {
     differenceInCalendarDays,
     getDeliveryDate,
-} from "@/features/budgets/itemForm/components/ItemValues/inputs/Boarding/boardingUtils";
+} from "@/features/budget/itemForm/components/ItemValues/inputs/Boarding/boardingUtils";
 import dayjs from "dayjs";
 
 export const selectBudgetItems = (
