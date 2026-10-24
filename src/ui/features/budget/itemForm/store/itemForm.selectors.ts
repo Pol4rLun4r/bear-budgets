@@ -1,9 +1,11 @@
 // types
 import type { RootState } from "@/app/store";
 import { ItemFormScope } from "./itemForm.slice";
+import type { BudgetFormScope } from "../../budgetForm/store/@rootReducer";
 
 // utils
 import { isDefinedMarkup, isDefinedNonNegative } from "@/utils/itemFormValidation";
+import { hasItemChanged } from "@/utils/budgetComparison";
 
 // pega todo os dados do itemForm (formulário do item)
 export const getItemFormState = (state: RootState, scope: ItemFormScope) =>
@@ -39,12 +41,22 @@ export const isHasNotes = (state: RootState, scope: ItemFormScope) => {
     return hasNotes
 }
 
-export const isCanSubmitItemForm = (state: RootState, scope: ItemFormScope) => {
-    const { item_reference, item_values } = getItemFormState(state, scope);
-
-    return (
-        Boolean(item_reference.description?.trim()) &&
+export const isCanSubmitItemForm = (
+    state: RootState,
+    scope: ItemFormScope,
+    budgetScope: BudgetFormScope,
+) => {
+    const item = getItemFormState(state, scope);
+    const { item_reference, item_values } = item;
+    const isValid = Boolean(item_reference.description?.trim()) &&
         isDefinedNonNegative(item_values.quantity) &&
-        isDefinedMarkup(item_values.markup)
-    );
+        isDefinedMarkup(item_values.markup);
+
+    if (!isValid) return false;
+    if (scope !== "item_form_edit") return true;
+
+    const originalItem = state.budgetForm.itemTable[budgetScope]
+        .find(({ temp_id }) => temp_id === item.temp_id);
+
+    return originalItem !== undefined && hasItemChanged(originalItem, item);
 };

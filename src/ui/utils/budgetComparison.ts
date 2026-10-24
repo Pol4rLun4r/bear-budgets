@@ -61,6 +61,11 @@ const sameItem = (first: ItemFormState, second: ItemFormState): boolean => {
     );
 };
 
+export const hasItemChanged = (
+    original: ItemFormState,
+    current: ItemFormState,
+): boolean => !sameItem(original, current);
+
 export const hasBudgetChanged = (
     original: BudgetComparisonData,
     current: BudgetComparisonData,

@@ -8,16 +8,18 @@ import { notifications } from "@mantine/notifications";
 import { ItemFormScope } from "../store/itemForm.slice";
 import { useAppSelector } from "@/app/reduxHooks";
 import { isCanSubmitItemForm } from "../store/itemForm.selectors";
+import type { BudgetFormScope } from "../../budgetForm/store/@rootReducer";
 
 interface HandleButtonProps {
     scope: ItemFormScope;
+    budgetScope: BudgetFormScope;
     closeModal: () => void;
     onSubmit: () => Promise<void>;
 }
 
-const HandleButton = ({ scope, closeModal, onSubmit }: HandleButtonProps) => {
+const HandleButton = ({ scope, budgetScope, closeModal, onSubmit }: HandleButtonProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const canSubmit = useAppSelector((state) => isCanSubmitItemForm(state, scope));
+    const canSubmit = useAppSelector((state) => isCanSubmitItemForm(state, scope, budgetScope));
     const isEditing = scope === "item_form_edit";
 
     const handleClick = async () => {

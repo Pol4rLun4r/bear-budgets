@@ -50,6 +50,7 @@ const StepsButtons = ({ scope, closeModal, budgetScope }: StepsButtonsProps) => 
         )}
         <HandleButton
           scope={scope}
+          budgetScope={budgetScope}
           closeModal={closeModal}
           onSubmit={async () => {
             await dispatch(submitItemForm({ scope, budgetScope })).unwrap();
