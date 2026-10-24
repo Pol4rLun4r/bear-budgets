@@ -5,7 +5,7 @@ import CurrencyInput from "@/shared/inputs/CurrencyInput";
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { setValuesField, type ItemFormScope } from "../../../store/itemForm.slice";
 
-const UnitValue = ({ scope }: { scope: ItemFormScope }) => {
+const UnitPrice = ({ scope }: { scope: ItemFormScope }) => {
     const dispatch = useAppDispatch();
     const value = useAppSelector((state) => state.itemForm.form[scope].item_values.unit_price);
 
@@ -15,7 +15,7 @@ const UnitValue = ({ scope }: { scope: ItemFormScope }) => {
             onValueChange={(value) =>
                 dispatch(setValuesField({ scope, key: "unit_price", value }))
             }
-            label="Valor unitário"
+            label="Preço unitário"
             placeholder="00"
             withAsterisk
             width={"30%"}
@@ -23,4 +23,4 @@ const UnitValue = ({ scope }: { scope: ItemFormScope }) => {
     )
 }
 
-export default UnitValue
+export default UnitPrice

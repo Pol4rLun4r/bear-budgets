@@ -40,7 +40,7 @@ export const createEmptyItemData = (): ItemFormState => {
             purchase_shipping: undefined,
             extra_value: undefined,
             boarding: 0,
-            delivery: 0,
+            delivery: 3,
         },
     };
 };

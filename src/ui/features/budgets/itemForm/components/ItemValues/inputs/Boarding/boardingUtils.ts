@@ -34,6 +34,17 @@ export function addBusinessDays(
     return currentDate.toDate();
 }
 
+/** calcula a data de entrega após os dias corridos de embarque e dias úteis de entrega */
+export function getDeliveryDate(
+    baseDate: Date,
+    boardingDays: number,
+    deliveryBusinessDays: number
+): Date {
+    const boardingDate = addCalendarDays(baseDate, boardingDays);
+
+    return addBusinessDays(boardingDate, deliveryBusinessDays);
+}
+
 /** calcula a diferença em dias corridos entre duas datas */
 export function differenceInCalendarDays(
     baseDate: Date,

@@ -5,12 +5,11 @@ import { NumberInput } from "@mantine/core";
 import { IconPercentage } from "@tabler/icons-react";
 
 // redux
-import { getItemFormState } from "../../../store/itemForm.selectors";
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { ItemFormScope, setValuesField } from "../../../store/itemForm.slice";
 
 const IPI = ({ scope }: { scope: ItemFormScope }) => {
-    const { item_values } = useAppSelector((state) => getItemFormState(state, scope));
+    const ipi = useAppSelector((state) => state.itemForm.form[scope].item_values.ipi);
     const dispatch = useAppDispatch();
 
     return (
@@ -29,7 +28,7 @@ const IPI = ({ scope }: { scope: ItemFormScope }) => {
             stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
 
             // configurações do valor do input
-            value={item_values.ipi || ''}
+            value={ipi ?? ''}
             onChange={(value) =>
                 dispatch(setValuesField({ scope, key: 'ipi', value: value as number }))
             }

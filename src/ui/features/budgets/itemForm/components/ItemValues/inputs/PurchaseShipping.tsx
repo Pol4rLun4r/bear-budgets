@@ -11,6 +11,7 @@ const PurchaseShipping = ({ scope }: { scope: ItemFormScope }) => {
 
     return (
         <CurrencyInput
+            width={"25%"}
             value={value}
             onValueChange={(value) =>
                 dispatch(setValuesField({ scope, key: "purchase_shipping", value }))

@@ -32,10 +32,10 @@ const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
     const styleConfig = {
         input: classes['boarding-number-input'],
     }
-    const configInputs = { leftSection: <IconCalendar size={18} />, w: '50%', radius: 'lg', label: 'Embarque', classNames: { ...styleConfig } };
+    const configInputs = { leftSection: <IconCalendar size={18} />, w: '49%', radius: 'lg', label: 'Embarque', classNames: { ...styleConfig } };
 
     return (
-        <Group gap="0" w={'100%'} align="flex-end">
+        <Group gap="0" flex={1} align="flex-end">
             {mode === 'calendarDays' && (
                 <NumberInput
                     {...configInputs}
@@ -109,15 +109,15 @@ const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
                 />
             )}
             <Select
-                w={'50%'}
+                w={'51%'}
                 radius={'lg'}
                 withAlignedLabels
                 allowDeselect={false}
                 value={mode}
                 onChange={(value) => setMode(value as BoardingInputMode)}
                 data={[
-                    { label: 'Dias corridos', value: 'calendarDays' },
-                    { label: 'Dias úteis', value: 'businessDays' },
+                    { label: 'D/ corridos', value: 'calendarDays' },
+                    { label: 'D/ úteis', value: 'businessDays' },
                     { label: 'Calendário', value: 'date' },
                 ]}
 

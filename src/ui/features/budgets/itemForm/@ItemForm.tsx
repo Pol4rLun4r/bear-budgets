@@ -4,21 +4,23 @@ import { Divider, Stack, Stepper } from "@mantine/core";
 // redux
 import type { ItemFormScope } from "./store/itemForm.slice";
 import { useAppSelector } from "@/app/reduxHooks";
+import { getStepState } from "./store/itemForm.selectors";
 
 // components
 import ItemReference from "./components/itemReference/@ItemReference";
 import SwitchMode from "./components/SwitchMode";
 import HiddenValueWarning from "./components/HiddenValueWarning";
 import ItemValues from "./components/ItemValues/@ItemValues";
+import StepsButtons from "./components/StepsButtons";
 
 interface ItemFormProps {
-  // close: () => void,
+  closeModal: () => void,
   scope: ItemFormScope,
   //  budgetScope: BudgetFormScope
 }
 
-const ItemForm = ({ scope }: ItemFormProps) => {
-  const step = useAppSelector((state) => state.itemForm.steps[scope].step);
+const ItemForm = ({ scope, closeModal }: ItemFormProps) => {
+  const step = useAppSelector((state) => getStepState(state, scope));
 
   return (
     <Stack gap={"xl"}>
@@ -33,7 +35,7 @@ const ItemForm = ({ scope }: ItemFormProps) => {
         </Stepper.Step>
       </Stepper>
       <Divider />
-      {/* <StepsButtons budgetScope={budgetScope} close={close} scope={scope} /> */}
+      <StepsButtons scope={scope} closeModal={closeModal} />
     </Stack>
   )
 }

@@ -10,7 +10,7 @@ interface LayoutState {
 }
 
 const initialState: LayoutState = {
-    isSidebarCollapsed: false,
+    isSidebarCollapsed: true,
     activePage: "create-budget"
 };
 
