@@ -8,11 +8,11 @@ import originalBudgetSlice from "./originalBudgetSlice";
 
 export type BudgetFormScope = "budget_form_create" | "budget_form_edit";
 
-const BudgetFormReducer = combineReducers({
+const budgetFormReducer = combineReducers({
     quotationInfo: quotationInfoSlice,
     itemTable: itemTableSlice,
     itemTableSwitch: itemTableSwitchSlice,
     originalBudget: originalBudgetSlice,
 });
 
-export default BudgetFormReducer;
+export default budgetFormReducer;

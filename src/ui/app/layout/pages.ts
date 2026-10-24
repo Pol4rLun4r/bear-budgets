@@ -5,9 +5,9 @@ import { JSX } from 'react';
 import { IconClipboardList, IconFiles, IconPencilPlus } from '@tabler/icons-react';
 
 // pages
-import ComingSoon from '@/features/comingSoon/@ComingSoon';
 import CreateBudgetPage from '@/features/budget/CreateBudgetPage';
 import BudgetsPage from '@/features/budget/BudgetsPage';
+import ItemsPages from '@/features/items/@ItemsPage';
 
 export const pagesData = [
     { icon: IconPencilPlus, label: 'Criar orçamento', id: 'create-budget' },
@@ -20,5 +20,5 @@ export type PageId = typeof pagesData[number]['id'];
 export const pageContentById: Record<PageId, () => JSX.Element> = {
     'create-budget': CreateBudgetPage,
     'budgets': BudgetsPage,
-    'items': ComingSoon
+    'items': ItemsPages
 }

@@ -1,7 +1,6 @@
 // redux
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "@/app/store";
-import { ItemFormState } from "@/features/budget/itemForm/store/itemForm.slice";
 import type { BudgetFormScope } from "./@rootReducer";
 
 // utils
@@ -45,17 +44,17 @@ export const selectCanSubmitBudget = (
 
 const selectBoardingDays = (
     _state: RootState,
-    item: ItemFormState,
-) => item.item_values.boarding ?? 0;
+    item: ItemValues,
+) => item.boarding ?? 0;
 
 const selectDeliveryDays = (
     _state: RootState,
-    item: ItemFormState,
-) => item.item_values.delivery ?? 0;
+    item: ItemValues,
+) => item.delivery ?? 0;
 
 const selectDeliveryBaseDate = (
     _state: RootState,
-    _item: ItemFormState,
+    _item: ItemValues,
     baseDate: Date,
 ) => baseDate;
 

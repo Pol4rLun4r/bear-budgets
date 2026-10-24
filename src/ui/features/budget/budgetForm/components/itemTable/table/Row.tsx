@@ -3,8 +3,6 @@
 import { Table, TableTdProps } from "@mantine/core"
 
 // redux
-import { RootState } from "@/app/store";
-import { useSelector } from "react-redux";
 import { ItemFormState } from "@/features/budget/itemForm/store/itemForm.slice";
 import { selectItemDeliveryInfo } from "@/features/budget/budgetForm/store/budgetForm.selectors";
 
@@ -16,10 +14,11 @@ import calcAddItem from "@/utils/calcAddItem";
 import { convertMarkupValue } from "@/utils/markupList";
 
 // components
-import RowContent from "./RowContent";
+import RowContent from "@/shared/RowContent";
 
 // style
 import classes from './Row.module.css';
+import { useAppSelector } from "@/app/reduxHooks";
 
 const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -38,7 +37,7 @@ interface RowProps {
 
 const Row = ({ item, index }: RowProps) => {
     const { ref } = useSortable({ id: item.temp_id, index })
-    const switchMode = useSelector((state: RootState) => state.budgetForm.itemTableSwitch.mode)
+    const switchMode = useAppSelector((state) => state.budgetForm.itemTableSwitch.mode)
 
     const values = item.item_values;
 
@@ -48,8 +47,8 @@ const Row = ({ item, index }: RowProps) => {
     const total = calcItem.totalWithAll;
 
     const baseDate = new Date();
-    const { deliveryDateLabel, deliveryDate, hasDeliveryDate } = useSelector(
-        (state: RootState) => selectItemDeliveryInfo(state, item, baseDate)
+    const { deliveryDateLabel, deliveryDate, hasDeliveryDate } = useAppSelector(
+        (state) => selectItemDeliveryInfo(state, item.item_values as ItemValues, baseDate)
     );
 
     return (
