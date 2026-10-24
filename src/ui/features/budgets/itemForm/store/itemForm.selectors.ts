@@ -21,3 +21,10 @@ export const isHiddenValueWarning = (state: RootState, scope: ItemFormScope) => 
         && step !== 0
         && switchMode;
 };
+
+export const isHasNotes = (state: RootState, scope: ItemFormScope) => {
+    const notes = state.itemForm.form[scope].item_reference.notes;
+    const hasNotes = notes === null ? false : notes === undefined ? false : notes?.length <= 0 ? false : true;
+
+    return hasNotes
+}

@@ -9,7 +9,7 @@ import {
     setSwitchOnItemReference,
     setSwitchOnItemValues,
     type SwitchProps,
-} from "../store/itemFormSwitch.slice"
+} from "../store/switch.slice"
 
 interface InterfaceSwitchModeProps {
     mode: SwitchProps

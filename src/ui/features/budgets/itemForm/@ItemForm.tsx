@@ -9,6 +9,7 @@ import { useAppSelector } from "@/app/reduxHooks";
 import ItemReference from "./components/itemReference/@ItemReference";
 import SwitchMode from "./components/SwitchMode";
 import HiddenValueWarning from "./components/HiddenValueWarning";
+import ItemValues from "./components/ItemValues/@ItemValues";
 
 interface ItemFormProps {
   // close: () => void,
@@ -28,7 +29,7 @@ const ItemForm = ({ scope }: ItemFormProps) => {
           <ItemReference scope={scope} />
         </Stepper.Step>
         <Stepper.Step label="Valores" description="Defina os valores do item">
-          {/* <FormItemValues scope={scope} /> */}
+          <ItemValues scope={scope} />
         </Stepper.Step>
       </Stepper>
       <Divider />

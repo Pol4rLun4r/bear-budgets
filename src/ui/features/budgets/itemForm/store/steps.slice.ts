@@ -16,7 +16,7 @@ export interface ItemFormStepsSliceState {
 
 export const createEmptySteps = (): stepsType => {
     return {
-        step: 0,
+        step: 1,
     };
 };
 

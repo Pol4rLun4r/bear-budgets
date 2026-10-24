@@ -11,6 +11,8 @@ import Description from "./inputs/description/@Description";
 import InternalCode from "./inputs/InternalCode";
 import ManufacturerCode from "./inputs/ManufacturerCode";
 import NCM from "./inputs/Ncm";
+import Notes from "./inputs/Notes";
+import Links from "./inputs/links/@Links";
 
 const ItemReference = ({ scope }: { scope: ItemFormScope }) => {
   const switchMode = useAppSelector(getSwitchModeReferenceForm);
@@ -36,8 +38,8 @@ const ItemReference = ({ scope }: { scope: ItemFormScope }) => {
           pt="sm"
           style={{ display: switchMode ? "none" : undefined }}
         >
-          {/* <Links scope={scope} /> */}
-          {/* <Notes scope={scope} /> */}
+          <Links scope={scope} />
+          <Notes scope={scope} />
         </Group>
       </Stack>
     </Stack>
