@@ -6,7 +6,6 @@ const searchDescription = async (query: SearchItemDescription) => {
     return response;
 };
 
-
 const getReferenceLinks = async (item_reference_id: GetReferenceLinks) => {
     const response = await baseAPI.item.getReferenceLinks(item_reference_id);
     return response;

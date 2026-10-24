@@ -1,17 +1,17 @@
 // type
+import type { ChangeEvent } from "react";
 import type { JSX } from "react";
-import type { ItemFormScope } from "@/features/budgets/itemForm/store/itemForm.slice";
 
 // mantine
-import { Combobox, Tooltip, UnstyledButton, Text, TextInput, ComboboxStore } from "@mantine/core"
-
-// components
-// import ClearDescription from "../../ClearDescription";
+import { Combobox, Tooltip, UnstyledButton, Text, TextInput, type ComboboxStore, Loader, ActionIcon } from "@mantine/core"
 
 // redux
+import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { getItemFormState } from "@/features/budgets/itemForm/store/itemForm.selectors";
-import { useAppSelector, useAppDispatch } from "@/app/reduxHooks";
-import { setReferenceField } from "@/features/budgets/itemForm/store/itemForm.slice";
+import { resetItemDescription, resetItemReference, type ItemFormScope } from "@/features/budgets/itemForm/store/itemForm.slice";
+
+// icons
+import { IconX } from "@tabler/icons-react";
 
 interface InputType {
     isLoader: boolean;
@@ -19,15 +19,23 @@ interface InputType {
     combobox: ComboboxStore;
     scope: ItemFormScope;
     handleClearData: () => void;
-    // handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({ isLoader, options, combobox, handleClearData, scope }: InputType) => {
+const Input = ({ isLoader, options, combobox, handleClearData, handleChange, scope }: InputType) => {
     const dispatch = useAppDispatch();
 
-    const { item_reference } = useAppSelector((state) => getItemFormState(state, 'item_form_add'));
+    const { item_reference } = useAppSelector((state) => getItemFormState(state, scope));
 
     const description = item_reference.description;
+
+    const handleClear = () => {
+        if (item_reference.id) {
+            return dispatch(resetItemReference(scope));
+        }
+
+        dispatch(resetItemDescription(scope));
+    };
 
     return (
         <>
@@ -49,16 +57,21 @@ const Input = ({ isLoader, options, combobox, handleClearData, scope }: InputTyp
                             description="Busque por itens já cadastrados ou adicione um novo"
                             placeholder="Digite a descrição do item"
 
-                            // rightSection={description?.length !== 0 ? <ClearDescription scope={scope} /> : undefined}
+                            rightSection={description ? (
+                                <ActionIcon
+                                    variant="transparent"
+                                    onClick={handleClear}
+                                    aria-label="Limpar descrição"
+                                >
+                                    <IconX size={15} />
+                                </ActionIcon>
+                            ) : undefined}
                             withAsterisk
 
                             value={description}
-                            onChange={(e) => {
-                                dispatch(setReferenceField({ scope, key: 'description', value: e.currentTarget.value }))
-                                // handleChange(e)
-                            }}
+                            onChange={handleChange}
 
-                            readOnly={item_reference.id ? true : false} // desabilita o input se um item já foi selecionado
+                            readOnly={Boolean(item_reference.id)}
 
                             // configurações do combobox
                             onFocus={() => combobox.openDropdown()}
@@ -75,7 +88,7 @@ const Input = ({ isLoader, options, combobox, handleClearData, scope }: InputTyp
                     {options.length === 0 && !isLoader ? (
                         <Combobox.Empty>Nenhum resultado</Combobox.Empty>
                     ) : isLoader ? (
-                        <Combobox.Empty>Carregando...</Combobox.Empty>
+                        <Combobox.Empty> <Loader /></Combobox.Empty>
                     ) : options}
                 </Combobox.Options>
             </Combobox.Dropdown>

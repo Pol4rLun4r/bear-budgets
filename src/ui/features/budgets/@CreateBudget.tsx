@@ -4,19 +4,20 @@ import { Stack } from "@mantine/core";
 // testes
 import { useState } from "react";
 import CurrencyInput from "@/shared/inputs/CurrencyInput";
-import Description from "./itemForm/components/itemReference/inputs/description/@Description";
+import ItemForm from "./itemForm/@ItemForm";
 
 const CreateBudget = () => {
   const [value, setValue] = useState<number | undefined>(1);
 
   return (
-    <Stack>
+    <Stack gap={"xl"}>
       <CurrencyInput
         value={value}
         onValueChange={setValue}
         label="Valor unitário"
       />
-      <Description/>
+      <ItemForm scope="item_form_add" />
+      <ItemForm scope="item_form_edit" />
     </Stack>
   )
 }
