@@ -19,7 +19,7 @@ import {
 import {
     useLazyGetReferenceLinksQuery,
     useLazySearchItemDescriptionQuery,
-} from "@/features/budgets/itemForm/item.api";
+} from "@/features/budgets/itemForm/store/item.api";
 
 // components
 import Input from "./Input";

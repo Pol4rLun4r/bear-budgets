@@ -12,10 +12,10 @@ import { isCanSubmitItemForm } from "../store/itemForm.selectors";
 interface HandleButtonProps {
     scope: ItemFormScope;
     closeModal: () => void;
-    // onSubmit: () => Promise<void>;
+    onSubmit: () => Promise<void>;
 }
 
-const HandleButton = ({ scope, closeModal }: HandleButtonProps) => {
+const HandleButton = ({ scope, closeModal, onSubmit }: HandleButtonProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const canSubmit = useAppSelector((state) => isCanSubmitItemForm(state, scope));
     const isEditing = scope === "item_form_edit";
@@ -25,7 +25,7 @@ const HandleButton = ({ scope, closeModal }: HandleButtonProps) => {
         setIsSubmitting(true);
 
         try {
-            // await onSubmit();
+            await onSubmit();
             closeModal();
 
             notifications.show({

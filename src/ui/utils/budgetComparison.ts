@@ -1,8 +1,8 @@
-import type { ItemDataState } from "../redux/itemForm/itemFormSlice";
+import type { ItemFormState } from "@/features/budgets/itemForm/store/itemForm.slice";
 
 export type BudgetComparisonData = {
     quotation: Pick<Quotation, "notes" | "status">;
-    items: ItemDataState[];
+    items: ItemFormState[];
 };
 
 // campos que devem ser comparados para determinar se houve alterações no orçamento
@@ -26,9 +26,10 @@ const valueFields: (keyof ItemValuesData)[] = [
     "st",
     "extra_value",
     "boarding",
+    "delivery",
 ];
 
-type ItemValuesData = ItemDataState["item_values"];
+type ItemValuesData = ItemFormState["item_values"];
 
 // verifica se dois objetos possuem os mesmos valores para os campos especificados
 const sameFields = <T extends object>(
@@ -38,7 +39,7 @@ const sameFields = <T extends object>(
 ): boolean => fields.every((field) => first[field] === second[field]);
 
 // verifica se dois itens possuem os mesmos valores para os campos especificados
-const sameItem = (first: ItemDataState, second: ItemDataState): boolean => {
+const sameItem = (first: ItemFormState, second: ItemFormState): boolean => {
     // verifica se os campos de referência e valores são iguais
     if (!sameFields(first.item_reference, second.item_reference, referenceFields)) {
         return false;

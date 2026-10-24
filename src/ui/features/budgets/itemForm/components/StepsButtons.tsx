@@ -6,7 +6,8 @@ import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { ItemFormScope } from "../store/itemForm.slice";
 import { getStepState, isHasDescription } from "../store/itemForm.selectors";
 import { decrementStep, incrementStep } from "../store/steps.slice";
-// import { BudgetFormScope } from "../../redux/budgetForm/@rootReducer";
+import { BudgetFormScope } from "../../budgetForm/store/@rootReducer";
+import { submitItemForm } from "../store/submitItemForm.thunk";
 
 // components
 import HandleButton from "./HandleButton";
@@ -14,14 +15,14 @@ import HandleButton from "./HandleButton";
 interface StepsButtonsProps {
   closeModal: () => void;
   scope: ItemFormScope;
-  // budgetScope: BudgetFormScope;
+  budgetScope: BudgetFormScope;
 }
 
-const StepsButtons = ({ scope, closeModal }: StepsButtonsProps) => {
+const StepsButtons = ({ scope, closeModal, budgetScope }: StepsButtonsProps) => {
   const dispatch = useAppDispatch();
 
   const step = useAppSelector((state) => getStepState(state, scope));
-  const hasDescription = useAppSelector((state) => isHasDescription(state, scope)) 
+  const hasDescription = useAppSelector((state) => isHasDescription(state, scope))
 
   return (
     <>
@@ -47,7 +48,13 @@ const StepsButtons = ({ scope, closeModal }: StepsButtonsProps) => {
             </Button>
           </Group>
         )}
-        <HandleButton scope={scope} closeModal={closeModal} />
+        <HandleButton
+          scope={scope}
+          closeModal={closeModal}
+          onSubmit={async () => {
+            await dispatch(submitItemForm({ scope, budgetScope })).unwrap();
+          }}
+        />
       </Group>
     </>
   )

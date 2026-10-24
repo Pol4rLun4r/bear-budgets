@@ -5,6 +5,7 @@ import { Divider, Stack, Stepper } from "@mantine/core";
 import type { ItemFormScope } from "./store/itemForm.slice";
 import { useAppSelector } from "@/app/reduxHooks";
 import { getStepState } from "./store/itemForm.selectors";
+import { BudgetFormScope } from "../budgetForm/store/@rootReducer";
 
 // components
 import ItemReference from "./components/itemReference/@ItemReference";
@@ -16,10 +17,10 @@ import StepsButtons from "./components/StepsButtons";
 interface ItemFormProps {
   closeModal: () => void,
   scope: ItemFormScope,
-  //  budgetScope: BudgetFormScope
+  budgetScope: BudgetFormScope
 }
 
-const ItemForm = ({ scope, closeModal }: ItemFormProps) => {
+const ItemForm = ({ scope, closeModal, budgetScope }: ItemFormProps) => {
   const step = useAppSelector((state) => getStepState(state, scope));
 
   return (
@@ -35,7 +36,7 @@ const ItemForm = ({ scope, closeModal }: ItemFormProps) => {
         </Stepper.Step>
       </Stepper>
       <Divider />
-      <StepsButtons scope={scope} closeModal={closeModal} />
+      <StepsButtons scope={scope} closeModal={closeModal} budgetScope={budgetScope} />
     </Stack>
   )
 }

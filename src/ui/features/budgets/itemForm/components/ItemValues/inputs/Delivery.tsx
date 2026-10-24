@@ -14,7 +14,7 @@ const Delivery = ({ scope }: { scope: ItemFormScope }) => {
             w={"25%"}
 
             label="Entrega (D/ úteis)"
-            placeholder="Dias para entrega"
+            placeholder="dias úteis"
             radius="lg"
             min={0}
 

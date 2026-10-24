@@ -39,7 +39,7 @@ const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
             {mode === 'calendarDays' && (
                 <NumberInput
                     {...configInputs}
-                    placeholder="Quantidade de dias"
+                    placeholder="corridos"
                     min={0}
                     value={value}
                     onChange={(value) => {
@@ -53,7 +53,7 @@ const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
             {mode === 'businessDays' && (
                 <NumberInput
                     {...configInputs}
-                    placeholder="Quantidade de dias úteis"
+                    placeholder="úteis"
                     min={0}
                     value={calendarDaysToBusinessDays(baseDate, value)}
                     onChange={(businessDays) => {

@@ -17,7 +17,6 @@ const UnitPrice = ({ scope }: { scope: ItemFormScope }) => {
             }
             label="Preço unitário"
             placeholder="00"
-            withAsterisk
             width={"30%"}
         />
     )
