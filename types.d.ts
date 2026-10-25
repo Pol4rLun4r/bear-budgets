@@ -8,14 +8,6 @@ type WithUndefined<T> = {
 /** Dados da cotação aceitos na criação. `status` é definido pelo backend (sempre rascunho). */
 type CreateQuotationData = Pick<Quotation, "notes" | "amount" | "total_value">;
 
-// obsoleto?
-type UpdateQuotationLinePayload = {
-    quotation_link_id: QuotationLink['id'];
-    item_reference: Partial<ItemReference>;
-    item_values: Partial<ItemValues>;
-    reference_links: Partial<ReferenceLink>[];
-}
-
 /** dados da cotação aceitos na criação. */
 interface CreateQuotation {
     quotation: CreateQuotationData;
@@ -75,6 +67,8 @@ type EventPayloadMapping = {
     "item:getReferenceLinks": Result<ReferenceLink[] | undefined>;
     "item:findItemReferences": Result<ItemReference[] | undefined>;
     "item:getAllValuesByReferenceId": Result<ItemValues[] | undefined>;
+    "item:getValuesById": Result<ItemValues>;
+    "item:getDetailsByReferenceId": Result<ItemDetails | undefined>;
 
     // janela (frame personalizado)
     "window:minimize": void;
@@ -108,6 +102,8 @@ interface ItemAPI {
     findItemReferences(description: SearchItemDescriptionIsOptional): Promise<Result<ItemReference[] | undefined>>;
     getReferenceLinks(itemReferenceId: GetReferenceLinks): Promise<Result<ReferenceLink[] | undefined>>;
     getAllValuesByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemValues[] | undefined>>;
+    getValuesById(itemValuesId: ItemValues["id"]): Promise<Result<ItemValues>>;
+    getDetailsByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemDetails | undefined>>;
 }
 
 interface WindowAPI {

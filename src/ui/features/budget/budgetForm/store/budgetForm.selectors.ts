@@ -44,17 +44,17 @@ export const selectCanSubmitBudget = (
 
 const selectBoardingDays = (
     _state: RootState,
-    item: ItemValues,
+    item: Pick<Partial<ItemValues>, "boarding" | "delivery">,
 ) => item.boarding ?? 0;
 
 const selectDeliveryDays = (
     _state: RootState,
-    item: ItemValues,
+    item: Pick<Partial<ItemValues>, "boarding" | "delivery">,
 ) => item.delivery ?? 0;
 
 const selectDeliveryBaseDate = (
     _state: RootState,
-    _item: ItemValues,
+    _item: Pick<Partial<ItemValues>, "boarding" | "delivery">,
     baseDate: Date,
 ) => baseDate;
 

@@ -4,6 +4,7 @@ import searchDescriptionRules from "./item/searchDescription.js";
 import findItemReferencesRules from "./item/findItemReferences.js";
 import getReferenceLinksRules from "./item/getReferenceLinks.js";
 import getAllItemValuesByReferenceIdRules from "./item/getAllItemValuesByReferenceId.js";
+import getItemDetailsByReferenceIdRules from "./item/getItemDetailsByReferenceId.js";
 import getItemValuesByIdRules from "./item/getItemValuesById.js";
 import validateItemReference from "./item/validateItemReference.js";
 import validateItemValues from "./item/validateItemValues.js";
@@ -11,7 +12,6 @@ import validateItemValues from "./item/validateItemValues.js";
 // quotation rules
 import createQuotation from "./quotation/create.js";
 import getQuotationFullRules from "./quotation/getFull.js";
-import updateQuotationLineRules from "./quotation/updateLine.js";
 import updateQuotationBaseRules from "./quotation/updateBase.js";
 
 // quotation links rules
@@ -25,7 +25,6 @@ export const createRules = () => ({
     quotation: {
         create: createQuotation,
         getFull: getQuotationFullRules,
-        updateLine: updateQuotationLineRules,
         updateBase: updateQuotationBaseRules,
     },
     quotation_link: {
@@ -41,6 +40,7 @@ export const createRules = () => ({
         findItemReferences: findItemReferencesRules,
         getReferenceLinks: getReferenceLinksRules,
         getAllItemValuesByReferenceId: getAllItemValuesByReferenceIdRules,
+        getItemDetailsByReferenceId: getItemDetailsByReferenceIdRules,
         getItemValuesById: getItemValuesByIdRules,
         validateReference: validateItemReference,
         validateValues: validateItemValues,

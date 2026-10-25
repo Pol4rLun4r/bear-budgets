@@ -37,11 +37,35 @@ const getAllByReferenceId = (db: Database) =>
             SELECT *
             FROM item_values
             WHERE item_reference_id = ?
-            ORDER BY created_at ASC
-            LIMIT 15
+            ORDER BY created_at DESC, id DESC
+            LIMIT 5
         `).all(item_reference_id) as ItemValues[];
 
         return values;
+    };
+
+/** busca o registro mais recente dos valores de um item */
+const getLatestByReferenceId = (db: Database) =>
+    (item_reference_id: number): ItemValues | undefined => {
+        return db.prepare(`
+            SELECT *
+            FROM item_values
+            WHERE item_reference_id = ?
+            ORDER BY created_at DESC, id DESC
+            LIMIT 1
+        `).get(item_reference_id) as ItemValues | undefined;
+    };
+
+/** conta todos os registros de valores associados ao item */
+const countByReferenceId = (db: Database) =>
+    (item_reference_id: number): number => {
+        const result = db.prepare(`
+            SELECT COUNT(*) AS count
+            FROM item_values
+            WHERE item_reference_id = ?
+        `).get(item_reference_id) as { count: number };
+
+        return result.count;
     };
 
 
@@ -145,6 +169,8 @@ const itemValuesRepository = (db: Database) => {
         getById: getById(db),
         getByIds: getByIds(db),
         getAllByReferenceId: getAllByReferenceId(db),
+        getLatestByReferenceId: getLatestByReferenceId(db),
+        countByReferenceId: countByReferenceId(db),
         create: create(db),
         update: update(db),
         deleteById: deleteById(db)

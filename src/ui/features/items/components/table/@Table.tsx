@@ -4,27 +4,20 @@ import { useDisclosure } from "@mantine/hooks";
 
 // components
 import Rows from "./Rows";
-import ItemForm from "@/features/budget/itemForm/@ItemForm";
-import MenuItem from "../menu/@MenuItem";
-import ItemReferenceModal from "../menu/modals/ItemReferenceModal";
-import AllItemValuesModal from "../menu/modals/allItemValuesModal/@AllItemValuesModal";
+import MenuItem from "../MenuItem";
 
 // style
 import classes from "./Items.module.css"
+import ItemDetails from "../itemDetails/@ItemDetails";
 
 const Table = ({ items }: { items: ItemReference[] }) => {
-    const [itemReferenceOpened, { open: openItemReference, close: closeItemReference }] = useDisclosure(false);
-    const [allItemValuesOpened, { open: openAllItemValues, close: closeAllItemValues }] = useDisclosure(false);
-    const [itemValuesOpened, { open: openItemValues, close: closeItemValues }] = useDisclosure(false);
+    const [itemDetailsOpened, { open: openItemDetails, close: closeItemDetails }] = useDisclosure(false);
 
     return (
         <>
             <Paper withBorder radius="lg" w={'100%'} h={'100%'} className={classes.items}>
-                <MenuItem
-                    openAllItemValues={openAllItemValues}
-                    openItemReference={openItemReference}
-                >
-                    {(handlers, seeAllValues) => (
+                <MenuItem>
+                    {(handlers) => (
                         <MantineTable.ScrollContainer
                             minWidth={900}
                             w={'100%'}
@@ -43,56 +36,22 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                                         <MantineTable.Th w={'10%'}>Atualizado em</MantineTable.Th>
                                     </MantineTable.Tr>
                                 </MantineTable.Thead>
-                                <MantineTable.Tbody><Rows seeAllValues={seeAllValues} references={items} /></MantineTable.Tbody>
+                                <MantineTable.Tbody>
+                                    <Rows references={items} openItemDetails={openItemDetails} />
+                                </MantineTable.Tbody>
                             </MantineTable>
                         </MantineTable.ScrollContainer>
                     )}
                 </MenuItem>
             </Paper>
 
-            {/* modal que da mais informações sobre o item_reference */}
+            {/* modal que da informações detalhadas sobre o item*/}
             <Modal
                 padding='xl'
-                size="lg"
-                opened={itemReferenceOpened}
-                onClose={closeItemReference}
-                title="Mais informações do item"
-                centered
-                radius='lg'
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 1,
-                }}
-                transitionProps={{ transition: 'fade', duration: 200 }}
-            >
-                <ItemReferenceModal />
-            </Modal>
-
-            {/* modal que informa todos os item values, daquele item reference */}
-            <Modal
-                padding='xl'
-                size="100%"
-                opened={allItemValuesOpened}
-                onClose={closeAllItemValues}
-                title="Informações sobre os valores do item"
-                centered
-                radius='lg'
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 1,
-                }}
-                transitionProps={{ transition: 'fade', duration: 200 }}
-            >
-                <AllItemValuesModal onOpenValuesModal={openItemValues} />
-            </Modal>
-
-            {/* modal que da informações detalhadas sobre os valores de um item */}
-            <Modal
-                padding='xl'
-                size='lg'
-                opened={itemValuesOpened}
-                onClose={closeItemValues}
-                title="Editar item"
+                size='100%'
+                opened={itemDetailsOpened}
+                onClose={closeItemDetails}
+                title="Detalhes do item"
                 centered
                 radius='lg'
                 overlayProps={{
@@ -100,7 +59,7 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                     blur: 3,
                 }}
             >
-                <ItemForm budgetScope={'budget_form_edit'} scope="item_form_edit" closeModal={closeItemValues} />
+                <ItemDetails />
             </Modal>
         </>
     )

@@ -1,5 +1,3 @@
-import React from "react";
-
 // mantine
 import { Table, TableTdProps } from "@mantine/core";
 
@@ -8,24 +6,27 @@ import classes from "./Items.module.css"
 
 // component
 import RowContent from "@/shared/RowContent";
+import HandleActionButton from "./HandleActionButton";
 
-interface RowsType {
+interface RowsProps {
   references: ItemReference[];
-  seeAllValues: (itemReferenceId: ItemReference['id']) => React.ReactElement
+  openItemDetails: () => void;
 }
 
-const Rows = ({ references, seeAllValues }: RowsType) => {
+const Rows = ({ references, openItemDetails }: RowsProps) => {
 
   // props padrão de cada linha da tabela
   const tableTdProps: TableTdProps = {
     className: classes.rowContainer,
-    height: 40,
+    height: 55,
   }
 
   return (
     references.map((reference) => (
       <Table.Tr key={reference.id} data-item-reference-id={reference.id}>
-        <Table.Td align="center">{seeAllValues(reference.id)}</Table.Td>
+        <Table.Td align="center">
+          <HandleActionButton openItemDetails={openItemDetails} itemReferenceId={reference.id!} />
+        </Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.description} /></Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.internal_code} /></Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.manufacturer_code} /></Table.Td>

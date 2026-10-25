@@ -60,14 +60,14 @@ describe("Pegar todas os valores de um item por referência", () => {
 
             // Verifica os dados dos valores retornados
             expect(res.data[0].item_reference_id).toBe(itemReferenceId);
-            expect(res.data[0].position).toBe(1);
-            expect(res.data[0].quantity).toBe(2);
-            expect(res.data[0].unit_price).toBe(10.5);
+            expect(res.data[0].position).toBe(2);
+            expect(res.data[0].quantity).toBe(5);
+            expect(res.data[0].unit_price).toBe(20.0);
 
             expect(res.data[1].item_reference_id).toBe(itemReferenceId);
-            expect(res.data[1].position).toBe(2);
-            expect(res.data[1].quantity).toBe(5);
-            expect(res.data[1].unit_price).toBe(20.0);
+            expect(res.data[1].position).toBe(1);
+            expect(res.data[1].quantity).toBe(2);
+            expect(res.data[1].unit_price).toBe(10.5);
         });
 
         test("retorna array vazio quando item existe mas não tem valores", () => {
@@ -88,7 +88,7 @@ describe("Pegar todas os valores de um item por referência", () => {
             expect(res.data).toHaveLength(0);
         });
 
-        test("retorna valores em ordem de criação", () => {
+        test("retorna os valores mais recentes primeiro", () => {
             // 1. Prepara os dados
             const itemReference = fakeItens[2];
             const itemReferenceId = repo.item.reference.create(itemReference);
@@ -114,10 +114,10 @@ describe("Pegar todas os valores de um item por referência", () => {
             
             expect(res.data).toHaveLength(3);
 
-            // Verifica a sequência
+            // Verifica a sequência do mais recente para o mais antigo
             for (let i = 0; i < 3; i++) {
-                expect(res.data[i].position).toBe(i + 1);
-                expect(res.data[i].quantity).toBe(i + 1);
+                expect(res.data[i].position).toBe(3 - i);
+                expect(res.data[i].quantity).toBe(3 - i);
             }
         });
     });

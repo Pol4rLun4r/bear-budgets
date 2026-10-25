@@ -20,6 +20,8 @@ const api: API = {
         findItemReferences: (description) => ipcInvoke('item:findItemReferences', description),
         getReferenceLinks: (itemReferenceId) => ipcInvoke('item:getReferenceLinks', itemReferenceId),
         getAllValuesByReferenceId: (itemReferenceId) => ipcInvoke('item:getAllValuesByReferenceId', itemReferenceId),
+        getValuesById: (itemValuesId) => ipcInvoke('item:getValuesById', itemValuesId),
+        getDetailsByReferenceId: (itemReferenceId) => ipcInvoke('item:getDetailsByReferenceId', itemReferenceId),
      },
     window: {
         minimize: () => ipcInvoke('window:minimize'),

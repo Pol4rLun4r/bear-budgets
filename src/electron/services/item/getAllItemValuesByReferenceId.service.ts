@@ -24,9 +24,9 @@ const getAllItemValuesByReferenceIdService = (db: Database) => {
             return result;
         }
 
-        const versions = repo.item.values.getAllByReferenceId(result.data)
+        const values = repo.item.values.getAllByReferenceId(result.data)
 
-        return success(versions);
+        return success(values);
     });
 };
 

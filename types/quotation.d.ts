@@ -13,6 +13,36 @@ type Quotation = {
 
 // Status por versão: 0 = rascunho, 1 = enviado
 type QuotationStatus = 0 | 1;
+
+type QuotationItemToAdd = {
+    item_reference: ItemReference;
+    item_values: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at">;
+    reference_links: Pick<ReferenceLink, "content">[];
+};
+
+type QuotationLink = {
+    id?: number;
+    quotation_id: number;
+    item_reference_id: number;
+    item_values_id: number;
+    created_at?: string;
+    updated_at?: string;
+};
+
+/** Uma linha da cotação completa */
+type QuotationDetailLine = {
+    quotation_link_id: number;
+    item_reference: ItemReference;
+    item_values: ItemValues;
+    reference_links: ReferenceLink[];
+};
+
+/** Cotação completa */
+type QuotationFull = {
+    quotation: Quotation;
+    items: QuotationDetailLine[];
+};
+
 // --------------- Item ---------------
 
 // referência do item – dados mestres (descrição, código, NCM). Criada uma vez
@@ -62,31 +92,9 @@ type ItemData = {
     reference_links: ReferenceLink[];
 };
 
-type QuotationItemToAdd = {
-    item_reference: ItemReference;
-    item_values: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at">;
-    reference_links: Pick<ReferenceLink, "content">[];
-};
-
-type QuotationLink = {
-    id?: number;
-    quotation_id: number;
-    item_reference_id: number;
-    item_values_id: number;
-    created_at?: string;
-    updated_at?: string;
-};
-
-/** Uma linha da cotação completa */
-type QuotationDetailLine = {
-    quotation_link_id: number;
-    item_reference: ItemReference;
-    item_values: ItemValues;
-    reference_links: ReferenceLink[];
-};
-
-/** Cotação completa */
-type QuotationFull = {
-    quotation: Quotation;
-    items: QuotationDetailLine[];
-};
+// type que presenta os detalhes de um item
+type ItemDetails = {
+    item_with_reference_links: ItemWithReferenceLinks;
+    item_values_records: number | undefined;
+    latest_price: ItemValues | undefined;
+}

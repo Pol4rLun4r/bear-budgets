@@ -13,7 +13,9 @@ const itemHandlers = (db: Database) => {
     ipcMainHandle('item:searchDescription', services.item.searchDescription);
     ipcMainHandle('item:findItemReferences', services.item.findItemReferences);
     ipcMainHandle('item:getAllValuesByReferenceId', services.item.getAllItemValuesByReferenceId);
+    ipcMainHandle('item:getValuesById', services.item.getItemValuesById);
     ipcMainHandle('item:getReferenceLinks', services.item.getReferenceLinks);
+    ipcMainHandle('item:getDetailsByReferenceId', services.item.getItemDetailsByReferenceId);
 };
 
 export default itemHandlers;
