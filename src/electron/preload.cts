@@ -13,6 +13,7 @@ const api: API = {
         create: (quotation) => ipcInvoke('quotation:create', quotation),
         getAllSummary: () => ipcInvoke('quotation:getAllSummary'),
         getFull: (quotationId: Quotation['id']) => ipcInvoke('quotation:getFull', quotationId),
+        getByItemValuesId: (itemValuesId: ItemValues["id"]) => ipcInvoke('quotation:getByItemValuesId', itemValuesId),
         update: (quotation) => ipcInvoke('quotation:update', quotation),
     },
     item: {

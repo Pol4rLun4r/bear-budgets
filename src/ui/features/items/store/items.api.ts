@@ -18,6 +18,7 @@ export const itemsApi = api.injectEndpoints({
 
                 return { data: result.data };
             },
+            providesTags: ["Items"],
         }),
         getItemDetailsByReferenceId: build.query<ItemDetails | undefined, GetByReferenceId>({
             async queryFn(itemReferenceId) {
@@ -35,6 +36,7 @@ export const itemsApi = api.injectEndpoints({
 
                 return { data: result.data };
             },
+            providesTags: ["Items"],
         }),
         getAllItemValuesByReferenceId: build.query<ItemValues[] | undefined, GetByReferenceId>({
             async queryFn(itemReferenceId) {
@@ -52,6 +54,7 @@ export const itemsApi = api.injectEndpoints({
 
                 return { data: result.data };
             },
+            providesTags: ["Items"],
         }),
         getItemValuesById: build.query<ItemValues, ItemValues["id"]>({
             async queryFn(itemValuesId) {
@@ -69,6 +72,7 @@ export const itemsApi = api.injectEndpoints({
 
                 return { data: result.data };
             },
+            providesTags: ["Items"],
         }),
     }),
 });

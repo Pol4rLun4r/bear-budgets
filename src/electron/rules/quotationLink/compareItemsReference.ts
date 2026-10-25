@@ -6,21 +6,24 @@ type MatchedItem = UpdateQuotation["items"][number] & {
     quotation_link_id: number;
 };
 
-type CurrentQuotationLink = Pick<QuotationLink, "id" | "item_reference_id">;
+type CurrentQuotationLink = Pick<QuotationLink, "id" | "item_reference_id" | "item_values_id">;
 
 type ItemReferenceDecision =
     | {
         quotation_link_id: number;
+        item_values_id: number;
         action: "keep-current";
         item_reference_id: number;
     }
     | {
         quotation_link_id: number;
+        item_values_id: number;
         action: "use-existing";
         item_reference_id: number;
     }
     | {
         quotation_link_id: number;
+        item_values_id: number;
         action: "create-new";
         item_reference: Omit<ItemReference, "id" | "created_at" | "updated_at">;
         reference_links: Pick<ReferenceLink, "content">[];
@@ -95,11 +98,13 @@ const compareItemsReference = ({
             decisions.push(validation.data.id === currentReferenceId // se a referência existente enviada é a mesma que a referência atual, mantém a referência atual; caso contrário, usa a referência existente enviada
                 ? {
                     quotation_link_id: quotationLinkId,
+                    item_values_id: currentLink.item_values_id,
                     action: "keep-current",
                     item_reference_id: currentReferenceId,
                 }
                 : {
                     quotation_link_id: quotationLinkId,
+                    item_values_id: currentLink.item_values_id,
                     action: "use-existing",
                     item_reference_id: validation.data.id,
                 });
@@ -113,6 +118,7 @@ const compareItemsReference = ({
 
         decisions.push({
             quotation_link_id: quotationLinkId,
+            item_values_id: currentLink.item_values_id,
             action: "create-new",
             item_reference: validation.data.data,
             reference_links: referenceLinks,

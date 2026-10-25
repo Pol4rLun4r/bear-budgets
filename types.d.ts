@@ -60,6 +60,7 @@ type EventPayloadMapping = {
     "quotation:create": Result<QuotationLink[] | undefined>;
     "quotation:getAllSummary": Result<Quotation[] | undefined>;
     "quotation:getFull": Result<QuotationFull | undefined>;
+    "quotation:getByItemValuesId": Result<QuotationFull>;
     "quotation:update": Result<QuotationFull | undefined>;
 
     // item
@@ -94,6 +95,7 @@ interface QuotationAPI {
     create(quotation: CreateQuotation): Promise<Result<QuotationLink[] | undefined>>;
     getAllSummary(): Promise<Result<QuotationSummary[] | undefined>>;
     getFull(quotationId: Quotation['id']): Promise<Result<QuotationFull | undefined>>;
+    getByItemValuesId(itemValuesId: ItemValues["id"]): Promise<Result<QuotationFull>>;
     update(quotation: UpdateQuotation): Promise<Result<QuotationFull | undefined>>;
 }
 

@@ -254,7 +254,16 @@ describe("Sucessos ao atualizar cotação (completa)", () => {
 
         const updated = result.data as QuotationFull;
         const expectedItems = payload.items.map((item) => item.quotation_link_id === editItem.quotation_link_id
-            ? { ...item, item_reference: { description: "Descrição alterada" } }
+            ? {
+                ...item,
+                item_reference: { description: "Descrição alterada" },
+                item_values: {
+                    ...item.item_values,
+                    item_reference_id: updated.items.find(
+                        (updatedItem) => updatedItem.quotation_link_id === editItem.quotation_link_id,
+                    )?.item_reference.id,
+                },
+            }
             : item);
 
         expectQuotationItemsToMatch(updated, expectedItems);
@@ -262,6 +271,10 @@ describe("Sucessos ao atualizar cotação (completa)", () => {
         const updatedItem = updated.items.find((item) => item.quotation_link_id === editItem.quotation_link_id);
         expect(updatedItem?.item_reference.id).toBeDefined();
         expect(updatedItem?.item_reference.id).not.toBe(editItem.item_reference.id);
+        expect(updatedItem?.item_values.item_reference_id).toBe(updatedItem?.item_reference.id);
+        expect(
+            context.repositories.item.values.getById(editItem.item_values.id!)?.item_reference_id,
+        ).toBe(updatedItem?.item_reference.id);
     });
 
 
@@ -300,6 +313,10 @@ describe("Sucessos ao atualizar cotação (completa)", () => {
         expect(updatedItem?.item_reference.description).toBe(anotherItemReference.description);
         expect(updatedItem?.reference_links).toEqual(anotherItem.reference_links);
         expect(updatedAnotherItem?.item_reference.id).toBe(anotherItemReferenceId);
+        expect(updatedItem?.item_values.item_reference_id).toBe(anotherItemReferenceId);
+        expect(
+            context.repositories.item.values.getById(editItem.item_values.id!)?.item_reference_id,
+        ).toBe(anotherItemReferenceId);
 
     });
 

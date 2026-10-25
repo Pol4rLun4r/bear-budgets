@@ -159,6 +159,10 @@ const updateQuotation = (db: Database) => {
                         itemReference.quotation_link_id,
                         { item_reference_id: itemReference.item_reference_id }
                     )
+                    repo.item.values.update(
+                        itemReference.item_values_id,
+                        { item_reference_id: itemReference.item_reference_id }
+                    )
                 };
 
                 if (itemReference.action === "create-new") {
@@ -175,6 +179,10 @@ const updateQuotation = (db: Database) => {
 
                     repo.quotation.links.update(
                         itemReference.quotation_link_id,
+                        { item_reference_id: newItemReferenceId }
+                    )
+                    repo.item.values.update(
+                        itemReference.item_values_id,
                         { item_reference_id: newItemReferenceId }
                     )
                 }

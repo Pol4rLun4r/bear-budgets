@@ -10,6 +10,6 @@ export type IpcError = {
 export const api = createApi({
     reducerPath: "api",
     baseQuery: fakeBaseQuery<IpcError>(),
-    tagTypes: ["QuotationSummary", "QuotationFull"],
+    tagTypes: ["QuotationSummary", "QuotationFull", "Items"],
     endpoints: () => ({}),
 });

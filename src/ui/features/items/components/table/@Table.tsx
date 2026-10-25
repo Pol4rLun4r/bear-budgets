@@ -1,5 +1,7 @@
+import { useState } from "react";
+
 // mantine
-import { Modal, Paper, Table as MantineTable, VisuallyHidden } from "@mantine/core";
+import { Button, Group, Modal, Paper, Table as MantineTable, VisuallyHidden } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 // components
@@ -10,8 +12,76 @@ import MenuItem from "../MenuItem";
 import classes from "./Items.module.css"
 import ItemDetails from "../itemDetails/@ItemDetails";
 
+// redux
+import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
+import { selectBudgetEditHasChanges } from "@/features/budget/budgetForm/store/budgetForm.selectors";
+import { setOriginalBudget } from "@/features/budget/budgetForm/store/originalBudgetSlice";
+
 const Table = ({ items }: { items: ItemReference[] }) => {
     const [itemDetailsOpened, { open: openItemDetails, close: closeItemDetails }] = useDisclosure(false);
+    const [confirmOpened, { open: openConfirm, close: closeConfirm }] = useDisclosure(false);
+    const [viewingBudget, setViewingBudget] = useState(false);
+    const [pendingExit, setPendingExit] = useState<"details" | "budget" | null>(null);
+    const dispatch = useAppDispatch();
+    const hasBudgetChanges = useAppSelector(selectBudgetEditHasChanges);
+
+    const handleOpenItemDetails = () => {
+        setViewingBudget(false);
+        dispatch(setOriginalBudget(null));
+        openItemDetails();
+    };
+
+    const closeDetails = () => {
+        closeConfirm();
+        setPendingExit(null);
+        setViewingBudget(false);
+        dispatch(setOriginalBudget(null));
+        closeItemDetails();
+    };
+
+    const closeBudgetAfterSave = () => {
+        closeDetails();
+    };
+
+    const requestCloseDetails = () => {
+        if (viewingBudget && hasBudgetChanges) {
+            setPendingExit("details");
+            openConfirm();
+            return;
+        }
+
+        closeDetails();
+    };
+
+    const requestBackToDetails = () => {
+        if (hasBudgetChanges) {
+            setPendingExit("budget");
+            openConfirm();
+            return;
+        }
+
+        setViewingBudget(false);
+        dispatch(setOriginalBudget(null));
+    };
+
+    const continueEditing = () => {
+        closeConfirm();
+        setPendingExit(null);
+    };
+
+    const discardBudgetChanges = () => {
+        closeConfirm();
+        if (pendingExit === "details") {
+            closeDetails();
+            return;
+        }
+
+        if (pendingExit === "budget") {
+            setViewingBudget(false);
+            dispatch(setOriginalBudget(null));
+        }
+        setPendingExit(null);
+    };
 
     return (
         <>
@@ -37,7 +107,7 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                                     </MantineTable.Tr>
                                 </MantineTable.Thead>
                                 <MantineTable.Tbody>
-                                    <Rows references={items} openItemDetails={openItemDetails} />
+                                    <Rows references={items} openItemDetails={handleOpenItemDetails} />
                                 </MantineTable.Tbody>
                             </MantineTable>
                         </MantineTable.ScrollContainer>
@@ -50,7 +120,7 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                 padding='xl'
                 size='100%'
                 opened={itemDetailsOpened}
-                onClose={closeItemDetails}
+                onClose={requestCloseDetails}
                 title="Detalhes do item"
                 centered
                 radius='lg'
@@ -59,7 +129,34 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                     blur: 3,
                 }}
             >
-                <ItemDetails />
+                <>
+                    <Modal
+                        withCloseButton={false}
+                        opened={confirmOpened}
+                        onClose={continueEditing}
+                        title={pendingExit === "budget"
+                            ? "Deseja sair da edição sem salvar?"
+                            : "Deseja fechar o orçamento sem salvar?"}
+                        centered
+                        radius="lg"
+                        overlayProps={{ backgroundOpacity: 0.55, blur: 0 }}
+                    >
+                        <Group>
+                            <Button color="teal" onClick={continueEditing}>
+                                Não, continuar editando
+                            </Button>
+                            <Button color="red" onClick={discardBudgetChanges}>
+                                Sim, sair sem salvar
+                            </Button>
+                        </Group>
+                    </Modal>
+                    <ItemDetails
+                        viewingBudget={viewingBudget}
+                        onViewBudget={() => setViewingBudget(true)}
+                        onRequestBack={requestBackToDetails}
+                        closeBudget={closeBudgetAfterSave}
+                    />
+                </>
             </Modal>
         </>
     )
