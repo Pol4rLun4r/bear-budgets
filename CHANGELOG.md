@@ -1,3 +1,24 @@
+# [4.0.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.5.0...v4.0.0) (2026-10-25)
+
+
+* feat(items)!: migrate item management to Redux Toolkit Query ([32b2c4d](https://github.com/Pol4rLun4r/bear-budgets/commit/32b2c4d9c0f2c63c2d6e09a0a5ae127737bb2e31))
+
+
+### Features
+
+* **budgets:** improve item form workflow and delivery scheduling ([7359ee2](https://github.com/Pol4rLun4r/bear-budgets/commit/7359ee2c3130497f71b6c2c23e87ce651db66eb5))
+* **inputs:** add reusable currency and percentage input ([090bd86](https://github.com/Pol4rLun4r/bear-budgets/commit/090bd86714ac2cfa2aa245cae02716a35bea4369))
+* **item:** add delivery time to item values ([e6f9452](https://github.com/Pol4rLun4r/bear-budgets/commit/e6f94523c6bf9524febf7b223acbdd983a501dfa))
+* **items:** add item details and price history view ([e8bdfc2](https://github.com/Pol4rLun4r/bear-budgets/commit/e8bdfc2799450a3932de8916e7c5ab3cc8455ba8))
+* **items:** enable budget viewing and editing from item details ([30d9e1c](https://github.com/Pol4rLun4r/bear-budgets/commit/30d9e1c653912f755d4d0c453327e6be93b652f9))
+* **quotation:** retrieve full quotation by item values ID ([276b4ea](https://github.com/Pol4rLun4r/bear-budgets/commit/276b4ea8fbccbbeefac3e23b550aefc2e2cc5f52))
+* **repository:** add quotation link lookup by item value ([72edcc1](https://github.com/Pol4rLun4r/bear-budgets/commit/72edcc1bd218f66594c8a9204ca6ea29af0a6bc1))
+
+
+### BREAKING CHANGES
+
+* remove TanStack Query and migrate item data fetching to Redux Toolkit Query
+
 # [3.5.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.4.0...v3.5.0) (2026-10-12)
 
 
