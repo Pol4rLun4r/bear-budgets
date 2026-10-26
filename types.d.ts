@@ -1,4 +1,6 @@
 // --------------- utils ---------------
+declare const __APP_VERSION__: string;
+
 type WithUndefined<T> = {
     [K in keyof T]: T[K] | undefined;
 };
