@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.0.0...v4.1.0) (2026-10-26)
+
+
+### Features
+
+* **layout:** display application version in sidebar header ([c8efb9c](https://github.com/Pol4rLun4r/bear-budgets/commit/c8efb9ce1ad9284a905548e7ac74e20bf29529bf))
+
 # [4.0.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v3.5.0...v4.0.0) (2026-10-25)
 
 
