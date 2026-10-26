@@ -3,9 +3,9 @@ import { Button, Group, Stack } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
 
 // components
-import HistoryPrice from "./historyPrice/@HistoryPrice";
-import ItemValues from "./itemValues/@ItemValues";
+import RightSection from "./rightSection/@RightSection";
 import BudgetForm from "@/features/budget/budgetForm/@BudgetForm";
+import LeftSection from "./leftSection/@LeftSection";
 
 interface ItemDetailsProps {
     viewingBudget: boolean;
@@ -39,8 +39,8 @@ const ItemDetails = ({
 
     return (
         <Group grow align="stretch">
-            <HistoryPrice />
-            <ItemValues onViewBudget={onViewBudget} />
+            <LeftSection />
+            <RightSection onViewBudget={onViewBudget} />
         </Group>
     )
 }

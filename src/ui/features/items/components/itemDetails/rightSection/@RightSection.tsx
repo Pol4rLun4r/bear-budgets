@@ -10,7 +10,7 @@ import FinalPrice from "./cards/FinalPrice";
 import DeliveryTime from "./cards/DeliveryTime";
 import SeeBudget from "./cards/SeeBudget";
 
-const ItemValues = ({ onViewBudget }: { onViewBudget: () => void }) => {
+const rightSection = ({ onViewBudget }: { onViewBudget: () => void }) => {
   return (
     <Card withBorder p={"md"} radius={"lg"} bg="var(--mantine-color-body)" style={{ minWidth: 0 }}>
       <Card.Section p={"md"} withBorder>
@@ -35,4 +35,4 @@ const ItemValues = ({ onViewBudget }: { onViewBudget: () => void }) => {
   )
 }
 
-export default ItemValues
+export default rightSection;

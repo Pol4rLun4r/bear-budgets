@@ -11,6 +11,9 @@ import { setItem } from "../../store/itemDetails.slice";
 // api
 import { useLazyGetItemDetailsByReferenceIdQuery } from "../../store/items.api";
 
+// icons
+import { IconListDetails } from "@tabler/icons-react";
+
 interface HandleActionButtonProps {
     openItemDetails: () => void;
     itemReferenceId: number;
@@ -53,8 +56,9 @@ const HandleActionButton = ({ openItemDetails, itemReferenceId }: HandleActionBu
             onClick={() => void handleClick()}
             disabled={isFetching}
             aria-label="Ver detalhes do item"
+            variant="transparent"
         >
-            {isFetching ? <Loader size={16} /> : 0}
+            {isFetching ? <Loader size={16} /> : <IconListDetails/>}
         </ActionIcon>
     )
 }

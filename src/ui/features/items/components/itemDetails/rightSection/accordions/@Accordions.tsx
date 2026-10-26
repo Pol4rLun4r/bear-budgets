@@ -38,6 +38,7 @@ export const Accordions = () => {
         <Accordion
             variant="separated"
             defaultValue={"PriceComposition"}
+            disableCollapse
             style={{ minWidth: 0, maxWidth: "100%" }}
         >
             {items}

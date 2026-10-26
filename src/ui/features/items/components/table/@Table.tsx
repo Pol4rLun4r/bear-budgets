@@ -121,7 +121,8 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                 size='100%'
                 opened={itemDetailsOpened}
                 onClose={requestCloseDetails}
-                title="Detalhes do item"
+                // title="Detalhes do item"
+                withCloseButton={false}
                 centered
                 radius='lg'
                 overlayProps={{
