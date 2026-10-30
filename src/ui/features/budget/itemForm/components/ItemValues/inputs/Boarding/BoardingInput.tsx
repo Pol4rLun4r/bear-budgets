@@ -32,7 +32,7 @@ const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
     const styleConfig = {
         input: classes['boarding-number-input'],
     }
-    const configInputs = { leftSection: <IconCalendar size={18} />, w: '49%', radius: 'lg', label: 'Embarque', classNames: { ...styleConfig } };
+    const configInputs = { leftSection: <IconCalendar size={18} />, w: '50%', radius: 'lg', label: 'Embarque', classNames: { ...styleConfig } };
 
     return (
         <Group gap="0" flex={1} align="flex-end">
@@ -109,7 +109,7 @@ const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
                 />
             )}
             <Select
-                w={'51%'}
+                w={'50%'}
                 radius={'lg'}
                 withAlignedLabels
                 allowDeselect={false}
