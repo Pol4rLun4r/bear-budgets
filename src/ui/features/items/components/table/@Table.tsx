@@ -6,7 +6,7 @@ import { useDisclosure } from "@mantine/hooks";
 
 // components
 import Rows from "./Rows";
-import MenuItem from "../MenuItem";
+import MenuItem from "../Menu/@MenuItem";
 
 // style
 import classes from "./Items.module.css"
@@ -117,18 +117,11 @@ const Table = ({ items }: { items: ItemReference[] }) => {
 
             {/* modal que da informações detalhadas sobre o item*/}
             <Modal
-                padding='xl'
                 size='100%'
                 opened={itemDetailsOpened}
                 onClose={requestCloseDetails}
                 // title="Detalhes do item"
                 withCloseButton={false}
-                centered
-                radius='lg'
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                }}
             >
                 <>
                     <Modal
@@ -138,9 +131,6 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                         title={pendingExit === "budget"
                             ? "Deseja sair da edição sem salvar?"
                             : "Deseja fechar o orçamento sem salvar?"}
-                        centered
-                        radius="lg"
-                        overlayProps={{ backgroundOpacity: 0.55, blur: 0 }}
                     >
                         <Group>
                             <Button color="teal" onClick={continueEditing}>

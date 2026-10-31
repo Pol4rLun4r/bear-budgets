@@ -138,13 +138,7 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
       <Modal
         opened={deleteOpened && activeItem !== null}
         onClose={deleteClose}
-        centered
         title="Deseja realmente deletar este item?"
-        radius='lg'
-        overlayProps={{
-          backgroundOpacity: 0.55,
-          blur: 3,
-        }}
       >
         <Text c="red">Item: {activeItem && activeItem!.item_values.position! + 1} - {activeItem?.item_reference.description}</Text>
         <Button
@@ -161,17 +155,10 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
 
       {/* modal do botão editar */}
       <Modal
-        padding='xl'
         size='lg'
         opened={editOpened && activeItem !== null}
         onClose={editClose}
         title="Editar item"
-        centered
-        radius='lg'
-        overlayProps={{
-          backgroundOpacity: 0.55,
-          blur: 3,
-        }}
       >
         <ItemForm budgetScope={scope} scope="item_form_edit" closeModal={editClose} />
       </Modal>

@@ -102,8 +102,16 @@ export const getAll = (db: Database) =>
         return references as ItemReference[];
     };
 
+type ItemReferenceUpdateFields = {
+    description?: string;
+    internal_code?: string | null;
+    manufacturer_code?: string | null;
+    ncm?: string | null;
+    notes?: string | null;
+};
+
 const update = (db: Database) =>
-    (id: ItemReference['id'], item_reference: Partial<ItemReference>) => {
+    (id: ItemReference['id'], item_reference: ItemReferenceUpdateFields) => {
         const fields: string[] = [];
         const values: unknown[] = [];
 

@@ -12,6 +12,7 @@ import quotationLinksRepository from "./quotationLinks.repository.js";
 // workflows
 import addItemToQuotationRepository from "./workFlows/addToQuotation.repository.js";
 import getQuotationFullRepository from "./workFlows/getFullQuotation.repository.js";
+import updateItemReferenceRepository from "./workFlows/updateItemReference.repository.js";
 
 export const createRepositories = (db: Database) => ({
     quotation: {
@@ -25,7 +26,8 @@ export const createRepositories = (db: Database) => ({
     },
     workFlows: {
         addItemToQuotation: addItemToQuotationRepository(db),
-        getQuotationFull: getQuotationFullRepository(db)
+        getQuotationFull: getQuotationFullRepository(db),
+        updateItemReference: updateItemReferenceRepository(db),
     }
 });
 

@@ -23,6 +23,7 @@ const api: API = {
         getAllValuesByReferenceId: (itemReferenceId) => ipcInvoke('item:getAllValuesByReferenceId', itemReferenceId),
         getValuesById: (itemValuesId) => ipcInvoke('item:getValuesById', itemValuesId),
         getDetailsByReferenceId: (itemReferenceId) => ipcInvoke('item:getDetailsByReferenceId', itemReferenceId),
+        updateReference: (payload) => ipcInvoke('item:updateReference', payload),
      },
     window: {
         minimize: () => ipcInvoke('window:minimize'),

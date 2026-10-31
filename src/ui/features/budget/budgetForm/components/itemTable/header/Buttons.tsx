@@ -60,14 +60,7 @@ const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
             < Modal
                 opened={deleteOpened}
                 onClose={deleteClose}
-                centered
                 title="Deseja realmente deletar todos os itens da lista?"
-                radius='lg'
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                }
-                }
             >
                 <Button
                     radius="lg"
@@ -82,20 +75,11 @@ const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
 
             {/* modal do botão para adicionar um item */}
             < Modal
-                padding='xl'
                 size='lg'
                 opened={itemOpened}
                 onClose={itemClose}
                 title="Adicionar item"
-                centered
-                radius='lg'
-
                 pos={"relative"}
-
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                }}
             >
                 <ItemForm scope={handleAddItemScope()} budgetScope={scope} closeModal={itemClose} />
             </Modal >

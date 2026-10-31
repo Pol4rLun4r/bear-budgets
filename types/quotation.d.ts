@@ -86,6 +86,21 @@ type ItemWithReferenceLinks = ItemReference & {
     reference_links: ReferenceLink[];
 };
 
+type UpdatableItemReference = Omit<
+    ItemReference,
+    "internal_code" | "manufacturer_code" | "ncm" | "notes"
+> & {
+    internal_code?: string | null;
+    manufacturer_code?: string | null;
+    ncm?: string | null;
+    notes?: string | null;
+};
+
+type UpdateItemReferencePayload = {
+    item_reference: UpdatableItemReference;
+    reference_links: Pick<ReferenceLink, "id" | "content">[];
+};
+
 type ItemData = {
     item_reference: ItemReference;
     item_values: ItemValues;

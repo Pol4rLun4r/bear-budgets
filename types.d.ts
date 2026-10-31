@@ -72,6 +72,7 @@ type EventPayloadMapping = {
     "item:getAllValuesByReferenceId": Result<ItemValues[] | undefined>;
     "item:getValuesById": Result<ItemValues>;
     "item:getDetailsByReferenceId": Result<ItemDetails | undefined>;
+    "item:updateReference": Result<ItemWithReferenceLinks | undefined>;
 
     // janela (frame personalizado)
     "window:minimize": void;
@@ -108,6 +109,7 @@ interface ItemAPI {
     getAllValuesByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemValues[] | undefined>>;
     getValuesById(itemValuesId: ItemValues["id"]): Promise<Result<ItemValues>>;
     getDetailsByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemDetails | undefined>>;
+    updateReference(payload: UpdateItemReferencePayload): Promise<Result<ItemWithReferenceLinks | undefined>>;
 }
 
 interface WindowAPI {

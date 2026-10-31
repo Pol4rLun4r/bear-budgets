@@ -41,14 +41,8 @@ const Links = ({ scope }: { scope: ItemFormScope }) => {
             <Modal
                 opened={opened}
                 onClose={close}
-                centered
                 title="Links"
-                radius='lg'
                 size="lg"
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                }}
                 transitionProps={{ transition: 'fade', duration: 200 }}
             >
                 {hasId ? null :

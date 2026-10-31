@@ -38,6 +38,27 @@ export const itemsApi = api.injectEndpoints({
             },
             providesTags: ["Items"],
         }),
+        updateItemReference: build.mutation<
+            ItemWithReferenceLinks | undefined,
+            UpdateItemReferencePayload
+        >({
+            async queryFn(payload) {
+                const result = await window.api.item.updateReference(payload);
+
+                if (!result.success) {
+                    return {
+                        error: {
+                            status: "CUSTOM_ERROR",
+                            error: result.data,
+                            code: result.code,
+                        },
+                    };
+                }
+
+                return { data: result.data };
+            },
+            invalidatesTags: ["Items"],
+        }),
         getAllItemValuesByReferenceId: build.query<ItemValues[] | undefined, GetByReferenceId>({
             async queryFn(itemReferenceId) {
                 const result = await window.api.item.getAllValuesByReferenceId(itemReferenceId);
@@ -79,7 +100,9 @@ export const itemsApi = api.injectEndpoints({
 
 export const {
     useFindItemReferencesQuery,
+    useGetItemDetailsByReferenceIdQuery,
     useLazyGetItemDetailsByReferenceIdQuery,
+    useUpdateItemReferenceMutation,
     useGetAllItemValuesByReferenceIdQuery,
     useLazyGetItemValuesByIdQuery,
 } = itemsApi;

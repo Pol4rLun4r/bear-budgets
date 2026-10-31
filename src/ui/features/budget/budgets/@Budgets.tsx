@@ -77,31 +77,17 @@ const Budgets = () => {
 
           {/* modal que mostra o formulário do orçamento */}
           <Modal
-            padding='xl'
             size="100%"
             opened={formOpened}
             onClose={requestCloseModal}
             title={"Informações do Orçamento"}
-            centered
-            radius='lg'
-            overlayProps={{
-              backgroundOpacity: 0.55,
-              blur: 0,
-            }}
           >
             <>
               <Modal
                 withCloseButton={false}
-                padding='xl'
                 opened={requestOpened}
                 onClose={requestClose}
                 title={"Deseja fechar o orçamento sem salvar?"}
-                centered
-                radius='lg'
-                overlayProps={{
-                  backgroundOpacity: 0.55,
-                  blur: 0,
-                }}
               >
                 <Group>
                   <Button bg={"teal"} onClick={() => continueEditing()} >

@@ -16,6 +16,7 @@ const itemHandlers = (db: Database) => {
     ipcMainHandle('item:getValuesById', services.item.getItemValuesById);
     ipcMainHandle('item:getReferenceLinks', services.item.getReferenceLinks);
     ipcMainHandle('item:getDetailsByReferenceId', services.item.getItemDetailsByReferenceId);
+    ipcMainHandle('item:updateReference', services.item.updateItemReference);
 };
 
 export default itemHandlers;

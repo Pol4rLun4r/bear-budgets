@@ -6,6 +6,10 @@ import { Menu } from "@mantine/core";
 // icons
 import { IconCopyPlus, IconPencilMinus, IconTrash } from "@tabler/icons-react";
 
+// components
+import useCustomModal from "@/hooks/useCustomModal";
+import EditItemReference from "./EditItemReference";
+
 // obsoleto?
 export interface MenuProps {
     itemReferenceId: ItemReference['id'];
@@ -37,17 +41,29 @@ const MenuItem = ({ children }: MenuItemProps) => {
         const id = getItemReferenceIdFromTarget(event.target)
         if (id === undefined) event.preventDefault();
         setItemReferenceId(id);
-
-
-        console.log(itemReferenceId); // temporário
     }
+
+    // editItemReference
+    const { handlers: handlersEdit, modal: modalEdit } = useCustomModal({
+        children: ({ close }) => (
+            <EditItemReference itemReferenceId={itemReferenceId} onSaved={close} />
+        ),
+        title: "Editar referência do item",
+        size: "xl",
+        centered: true,
+        radius: "lg",
+        padding: "lg",
+        withCloseButton: true,
+        overlayProps: { backgroundOpacity: 0.55, blur: 3 },
+    });
 
     // itens do menu de contexto
     const menuItems = (
         <>
             <Menu.Item
                 leftSection={<IconPencilMinus size={14} />}
-                disabled
+                // disabled
+                onClick={handlersEdit.open}
             >
                 Editar referencia do item
             </Menu.Item>
@@ -68,14 +84,17 @@ const MenuItem = ({ children }: MenuItemProps) => {
     )
 
     return (
-        <Menu shadow="md" withArrow offset={-1}>
-            <Menu.ContextMenu>
-                {/* passa os handlers para os filhos */}
-                {children({ onContextMenu: handleContextMenu })}
-            </Menu.ContextMenu>
+        <>
+            {modalEdit}
+            <Menu shadow="md" withArrow offset={-1}>
+                <Menu.ContextMenu>
+                    {/* passa os handlers para os filhos */}
+                    {children({ onContextMenu: handleContextMenu })}
+                </Menu.ContextMenu>
 
-            <Menu.Dropdown>{menuItems}</Menu.Dropdown>
-        </Menu>
+                <Menu.Dropdown>{menuItems}</Menu.Dropdown>
+            </Menu>
+        </>
     )
 }
 

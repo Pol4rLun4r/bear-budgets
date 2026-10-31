@@ -13,6 +13,7 @@ import getReferenceLinksService from "./item/getReferenceLinks.service.js";
 import getAllItemValuesByReferenceIdService from "./item/getAllItemValuesByReferenceId.service.js";
 import getItemValuesByIdService from "./item/getItemValuesById.service.js";
 import getItemDetailsByReferenceIdService from "./item/getItemDetailsByReferenceId.service.js";
+import updateItemReferenceService from "./item/updateItemReference.service.js";
 import updateQuotation from "./quotation/updateQuotation.service.js";
 
 export const createServices = (db: Database) => ({
@@ -30,6 +31,7 @@ export const createServices = (db: Database) => ({
         getAllItemValuesByReferenceId: getAllItemValuesByReferenceIdService(db),
         getItemValuesById: getItemValuesByIdService(db),
         getItemDetailsByReferenceId: getItemDetailsByReferenceIdService(db),
+        updateItemReference: updateItemReferenceService(db),
     }
 })
 

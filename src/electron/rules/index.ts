@@ -8,6 +8,7 @@ import getItemDetailsByReferenceIdRules from "./item/getItemDetailsByReferenceId
 import getItemValuesByIdRules from "./item/getItemValuesById.js";
 import validateItemReference from "./item/validateItemReference.js";
 import validateItemValues from "./item/validateItemValues.js";
+import updateItemReference from "./item/updateItemReference.js";
 
 // quotation rules
 import createQuotation from "./quotation/create.js";
@@ -44,6 +45,7 @@ export const createRules = () => ({
         getItemValuesById: getItemValuesByIdRules,
         validateReference: validateItemReference,
         validateValues: validateItemValues,
+        updateItemReference,
     }
 });
 
