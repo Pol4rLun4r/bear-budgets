@@ -5,7 +5,7 @@ import { Table, TableTdProps } from "@mantine/core";
 import classes from "./Items.module.css"
 
 // component
-import RowContent from "@/shared/RowContent";
+import RowContent from "@/shared/RowContent/RowContent";
 import HandleActionButton from "./HandleActionButton";
 
 interface RowsProps {

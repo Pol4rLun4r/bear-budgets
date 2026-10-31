@@ -14,7 +14,7 @@ import calcAddItem from "@/utils/calcAddItem";
 import { convertMarkupValue } from "@/utils/markupList";
 
 // components
-import RowContent from "@/shared/RowContent";
+import RowContent from "@/shared/RowContent/RowContent";
 
 // style
 import classes from './Row.module.css';
