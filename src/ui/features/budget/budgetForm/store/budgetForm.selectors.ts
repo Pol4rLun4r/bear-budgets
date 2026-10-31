@@ -5,10 +5,7 @@ import type { BudgetFormScope } from "./@rootReducer";
 
 // utils
 import { hasBudgetChanged } from "@/utils/budgetComparison";
-import {
-    differenceInCalendarDays,
-    getDeliveryDate,
-} from "@/features/budget/itemForm/components/ItemValues/inputs/Boarding/boardingUtils";
+import { getDeliveryTime } from "@/utils/deliveryTime";
 import dayjs from "dayjs";
 
 export const selectBudgetItems = (
@@ -61,8 +58,11 @@ const selectDeliveryBaseDate = (
 export const selectItemDeliveryInfo = createSelector(
     [selectBoardingDays, selectDeliveryDays, selectDeliveryBaseDate],
     (boardingDays, deliveryDays, baseDate) => {
-        const targetDeliveryDate = getDeliveryDate(baseDate, boardingDays, deliveryDays);
-        const totalCalendarDays = differenceInCalendarDays(baseDate, targetDeliveryDate);
+        const { totalCalendarDays, deliveryDate: targetDeliveryDate } = getDeliveryTime(
+            baseDate,
+            boardingDays,
+            deliveryDays,
+        );
 
         return {
             deliveryDateLabel: totalCalendarDays > 0

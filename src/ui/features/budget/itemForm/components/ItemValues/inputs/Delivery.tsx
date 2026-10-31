@@ -13,6 +13,8 @@ const Delivery = ({ scope }: { scope: ItemFormScope }) => {
         <NumberInput
             w={"24%"}
 
+            size="sm"
+
             label="Entrega (D/ úteis)"
             placeholder="dias úteis"
             radius="lg"

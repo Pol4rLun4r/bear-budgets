@@ -19,7 +19,7 @@ const Markup = ({ scope }: { scope: ItemFormScope }) => {
 
     return (
         <Select
-            w={'45%'}
+            w={'40%'}
 
             label="Markup"
             radius='lg'

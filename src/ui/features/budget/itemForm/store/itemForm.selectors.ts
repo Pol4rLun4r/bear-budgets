@@ -41,6 +41,12 @@ export const isHasNotes = (state: RootState, scope: ItemFormScope) => {
     return hasNotes
 }
 
+export const isHasItemReferenceId = (state: RootState, scope: ItemFormScope) => {
+    const itemReferenceId = state.itemForm.form[scope].item_reference.id;
+
+    return itemReferenceId !== undefined && itemReferenceId !== null;
+};
+
 export const isCanSubmitItemForm = (
     state: RootState,
     scope: ItemFormScope,

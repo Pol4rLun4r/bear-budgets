@@ -12,6 +12,7 @@ import PurchaseShipping from "./inputs/PurchaseShipping";
 import ExtraValue from "./inputs/ExtraValue";
 import Boarding from "./inputs/Boarding/@Boarding";
 import Delivery from "./inputs/Delivery";
+import HistoryPrice from "./HistoryPrice/@HistoryPrice";
 
 // redux
 import { ItemFormScope, resetItemValues } from "../../store/itemForm.slice";
@@ -28,10 +29,11 @@ const ItemValues = ({ scope }: { scope: ItemFormScope }) => {
 
     return (
         <Stack gap="md">
-            <Group gap={0} align="flex-start" justify="space-between" style={{ position: "relative" }}>
+            <Group align="flex-end" style={{ position: "relative" }}>
                 <UnstyledButton style={{ position: 'absolute', right: 0, top: 0 }} onClick={() => handleClear()} >
                     <Text c={'violet'}>Limpar dados</Text>
                 </UnstyledButton>
+                <HistoryPrice scope={scope}/>
                 <UnitPrice scope={scope} />
                 <Quantity scope={scope} />
                 <Markup scope={scope} />
@@ -49,7 +51,7 @@ const ItemValues = ({ scope }: { scope: ItemFormScope }) => {
                 </Group>
                 <Group justify="center" align="flex-end">
                     <Boarding scope={scope} />
-                    <Delivery scope={scope}/>
+                    <Delivery scope={scope} />
                     <PurchaseShipping scope={scope} />
                 </Group>
             </Stack>
