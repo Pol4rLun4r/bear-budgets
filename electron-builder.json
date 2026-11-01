@@ -13,6 +13,15 @@
     "executableName": "bear-budgets"
   },
   "win": {
-    "target": ["portable", "msi"]
+    "target": ["nsis"]
+  },
+  "nsis": {
+    "artifactName": "Bear-Budgets-Setup-${version}.${ext}"
+  },
+  "publish": {
+    "provider": "github",
+    "owner": "Pol4rLun4r",
+    "repo": "bear-budgets",
+    "releaseType": "release"
   }
 }
