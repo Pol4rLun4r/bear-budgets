@@ -6,9 +6,11 @@ import { Menu } from "@mantine/core";
 // icons
 import { IconCopyPlus, IconPencilMinus, IconTrash } from "@tabler/icons-react";
 
-// components
+// hooks
 import useCustomModal from "@/hooks/useCustomModal";
-import EditItemReference from "./EditItemReference";
+
+// components
+import EditItemReference from "./EditItemReference/@EditItemReference";
 
 // obsoleto?
 export interface MenuProps {
@@ -46,15 +48,10 @@ const MenuItem = ({ children }: MenuItemProps) => {
     // editItemReference
     const { handlers: handlersEdit, modal: modalEdit } = useCustomModal({
         children: ({ close }) => (
-            <EditItemReference itemReferenceId={itemReferenceId} onSaved={close} />
+            <EditItemReference itemReferenceId={itemReferenceId as number | undefined} onSaved={close} />
         ),
-        title: "Editar referência do item",
-        size: "xl",
-        centered: true,
-        radius: "lg",
-        padding: "lg",
-        withCloseButton: true,
-        overlayProps: { backgroundOpacity: 0.55, blur: 3 },
+        size: "lg",
+        withCloseButton: false,
     });
 
     // itens do menu de contexto
@@ -62,7 +59,6 @@ const MenuItem = ({ children }: MenuItemProps) => {
         <>
             <Menu.Item
                 leftSection={<IconPencilMinus size={14} />}
-                // disabled
                 onClick={handlersEdit.open}
             >
                 Editar referencia do item

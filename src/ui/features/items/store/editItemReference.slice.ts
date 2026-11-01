@@ -6,7 +6,9 @@ export type EditableReferenceField = Pick<
     "description" | "internal_code" | "manufacturer_code" | "ncm" | "notes"
 >;
 
-type EditItemReferenceState = ItemWithReferenceLinks | null;
+type EditItemReferenceState = (ItemWithReferenceLinks & {
+    originalItem: ItemWithReferenceLinks;
+}) | null;
 
 const initialState = null as EditItemReferenceState;
 
@@ -15,7 +17,14 @@ const editItemReferenceSlice = createSlice({
     initialState,
     reducers: {
         setItemReference: (_state, action: PayloadAction<ItemWithReferenceLinks>) => {
-            return action.payload;
+            return {
+                ...action.payload,
+                reference_links: action.payload.reference_links.map((link) => ({ ...link })),
+                originalItem: {
+                    ...action.payload,
+                    reference_links: action.payload.reference_links.map((link) => ({ ...link })),
+                },
+            };
         },
         updateItemReferenceField: (
             state,
