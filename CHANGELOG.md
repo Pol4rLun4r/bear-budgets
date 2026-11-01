@@ -1,3 +1,16 @@
+# [4.2.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.1.0...v4.2.0) (2026-11-01)
+
+
+### Bug Fixes
+
+* **item-reference:** normalize fields when updating references ([a195979](https://github.com/Pol4rLun4r/bear-budgets/commit/a19597919dd80087b8c4d2577da353ab58f650f9))
+
+
+### Features
+
+* **budget:** add item price history ([442f80c](https://github.com/Pol4rLun4r/bear-budgets/commit/442f80c06df5b1a2837c0e2d93a5ec20a7a99317))
+* **items:** add item reference editing functionality ([ce7703b](https://github.com/Pol4rLun4r/bear-budgets/commit/ce7703b4091b87dac566a3c06c4fa1779a8df3f4))
+
 # [4.1.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.0.0...v4.1.0) (2026-10-26)
 
 
