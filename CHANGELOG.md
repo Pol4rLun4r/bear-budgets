@@ -1,3 +1,10 @@
+# [4.3.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.2.0...v4.3.0) (2026-11-01)
+
+
+### Features
+
+* **updater:** add automatic application update system ([0031665](https://github.com/Pol4rLun4r/bear-budgets/commit/0031665588ec0f85a476113e9fed231d3ccb9020))
+
 # [4.2.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.1.0...v4.2.0) (2026-11-01)
 
 
