@@ -52,11 +52,11 @@ const updateItemReferenceRepository = (db: Database) =>
             }
 
             repo.item.reference.update(itemReferenceId, {
-                description: payload.item_reference.description,
-                internal_code: payload.item_reference.internal_code,
-                manufacturer_code: payload.item_reference.manufacturer_code,
-                ncm: payload.item_reference.ncm,
-                notes: payload.item_reference.notes,
+                description: payload.item_reference.description.trim(),
+                internal_code: payload.item_reference.internal_code?.trim() || null,
+                manufacturer_code: payload.item_reference.manufacturer_code?.trim() || null,
+                ncm: payload.item_reference.ncm?.trim() || null,
+                notes: payload.item_reference.notes?.trim() || null,
             });
 
             return repo.item.reference.getById(itemReferenceId);

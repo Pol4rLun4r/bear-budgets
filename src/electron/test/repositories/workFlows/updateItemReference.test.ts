@@ -3,14 +3,19 @@
 import createTestContext from "../../utils/createTestContext.js";
 
 describe("updateItemReference repository workflow", () => {
-    const context = createTestContext();
-    const { repositories, db } = context;
+    let context: ReturnType<typeof createTestContext>;
 
-    afterAll(() => {
+    beforeEach(() => {
+        context = createTestContext();
+    });
+
+    afterEach(() => {
         context.close();
     });
 
     it("updates the reference, preserves and edits existing links, adds new links, and removes omitted links", () => {
+        const { repositories, db } = context;
+
         const itemReferenceId = repositories.item.reference.create({
             description: "Original description",
             internal_code: "OLD",
@@ -57,6 +62,8 @@ describe("updateItemReference repository workflow", () => {
     });
 
     it("rolls back all changes when a supplied link ID does not belong to the reference", () => {
+        const { repositories } = context;
+
         const itemReferenceId = repositories.item.reference.create({
             description: "Reference that must remain unchanged",
         });
