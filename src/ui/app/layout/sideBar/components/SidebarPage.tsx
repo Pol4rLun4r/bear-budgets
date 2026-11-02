@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ReactNode } from 'react';
+
 // mantine
 import { Tooltip, UnstyledButton } from '@mantine/core';
-import type { ReactNode } from 'react';
 
 // styles
 import classes from '../Sidebar.module.css';
 
 // redux
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@/app/reduxHooks';
 import { selectIsSidebarCollapsed } from '../../store/layout.selectors';
 
 // icons
@@ -38,13 +39,13 @@ export const SidebarPage = ({
     success,
     ref
 }: TabsProps) => {
-    const isSidebarCollapsed = useSelector(selectIsSidebarCollapsed);
+    const isSidebarCollapsed = useAppSelector(selectIsSidebarCollapsed);
 
     return (
         <div ref={ref}>
             <Tooltip
                 label={tooltip ?? label}
-                disabled={!tooltip && !isSidebarCollapsed}
+                disabled={!isSidebarCollapsed}
                 position='right'
                 transitionProps={{ duration: 0 }}
             >

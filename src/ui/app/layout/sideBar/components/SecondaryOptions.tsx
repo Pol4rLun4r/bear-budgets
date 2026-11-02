@@ -9,7 +9,7 @@ import { IconSettings2, IconSun, IconMoon } from '@tabler/icons-react'
 
 // components
 import { SidebarPage } from './SidebarPage';
-import UpdateOption from './UpdateOption';
+import UpdateOption from '@/features/update/UpdateOption';
 
 const SecondaryOptions = () => {
     const { setColorScheme } = useMantineColorScheme();

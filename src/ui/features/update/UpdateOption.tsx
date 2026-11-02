@@ -1,11 +1,12 @@
+// mantine
 import { RingProgress, Text } from "@mantine/core";
 import { IconAlertTriangle, IconCheck, IconDownload, IconRefresh } from "@tabler/icons-react";
 
 // components
-import { SidebarPage } from "./SidebarPage";
-import { useAppUpdate } from "./useAppUpdate";
+import { SidebarPage } from "@/app/layout/sideBar/components/SidebarPage";
+import { useAppUpdate } from "@/hooks/useAppUpdate";
 
-/** Exibe o estado e as ações de atualização na sidebar */
+/** exibe o estado e as ações de atualização na sidebar */
 const UpdateOption = () => {
     const update = useAppUpdate();
 
@@ -28,10 +29,10 @@ const UpdateOption = () => {
             : upToDate
                 ? "Atualizado"
                 : unsupported
-                    ? "Atualizações indisponíveis"
-            : failed
-                ? "Falha na atualização"
-                : "Atualização disponível";
+                    ? "Update automático indisponível"
+                    : failed
+                        ? "Falha na atualização"
+                        : "Atualização disponível";
 
     const tooltip = downloading
         ? `Baixando atualização: ${progress}%`
@@ -41,9 +42,9 @@ const UpdateOption = () => {
                 ? "Você está usando a versão mais recente."
                 : unsupported
                     ? "Atualizações disponíveis apenas no Windows."
-            : failed
-                ? update.error ?? "Não foi possível concluir a atualização."
-                : "Há uma atualização disponível. Clique para baixar.";
+                    : failed
+                        ? update.error ?? "Não foi possível concluir a atualização."
+                        : "Há uma atualização disponível. Clique para baixar.";
 
     const handleClick = async () => {
         try {

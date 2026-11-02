@@ -52,6 +52,10 @@
 
     &[data-success] {
         color: light-dark(var(--mantine-color-green-7), var(--mantine-color-green-4));
+
+        &:hover {
+            background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
+        }
     }
 
     &[aria-disabled=true] {
