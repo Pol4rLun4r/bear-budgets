@@ -1,3 +1,10 @@
+# [4.5.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.4.0...v4.5.0) (2026-11-02)
+
+
+### Features
+
+* **budget:** highlight selected items in budget comparison ([8bc0eef](https://github.com/Pol4rLun4r/bear-budgets/commit/8bc0eefb270e3ddfc2f8b9321237c98fcfa2d8a6))
+
 # [4.4.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.3.0...v4.4.0) (2026-11-02)
 
 
