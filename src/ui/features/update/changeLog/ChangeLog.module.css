@@ -1,0 +1,48 @@
+.changeLog {
+    width: 100%;
+    min-height: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: var(--mantine-spacing-lg) 0;
+
+    &[data-collapsed=true] {
+        display: none;
+    }
+}
+
+.content {
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: var(--mantine-radius-xl);
+    }
+
+    &::-webkit-scrollbar-button {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+}
+
+.changeLog:hover .content {
+    scrollbar-color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-3)) transparent;
+
+    &::-webkit-scrollbar-thumb {
+        background-color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-3));
+    }
+}
