@@ -61,6 +61,7 @@ const MenuBudget = ({ open, children }: MenuBudgetType) => {
                 ...item,
                 temp_id: "",
                 toggleStMode: false,
+                is_highlight: false,
             }));
 
             // atualiza o estado do redux com os items

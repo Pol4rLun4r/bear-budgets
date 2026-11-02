@@ -9,3 +9,8 @@
     overflow: hidden;
     vertical-align: middle;
 }
+
+.highlighted {
+    background-color: var(--mantine-color-violet-light);
+    color: var(--mantine-color-violet-light-color);
+}

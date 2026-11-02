@@ -25,11 +25,6 @@ const brl = new Intl.NumberFormat("pt-BR", {
     currency: "BRL",
 })
 
-const tableTdProps: TableTdProps = {
-    className: classes.rowContainer,
-    height: 40,
-}
-
 interface RowProps {
     item: ItemFormState;
     index: number;
@@ -38,6 +33,12 @@ interface RowProps {
 const Row = ({ item, index }: RowProps) => {
     const { ref } = useSortable({ id: item.temp_id, index })
     const switchMode = useAppSelector((state) => state.budgetForm.itemTableSwitch.mode)
+    const tableTdProps: TableTdProps = {
+        className: item.is_highlight
+            ? `${classes.rowContainer} ${classes.highlighted}`
+            : classes.rowContainer,
+        height: 40,
+    }
 
     const values = item.item_values;
 

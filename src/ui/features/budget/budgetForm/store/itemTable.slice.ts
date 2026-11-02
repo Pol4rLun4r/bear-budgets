@@ -8,7 +8,9 @@ export interface ItemTableState {
     budget_form_edit: ItemFormState[];
 }
 
-type ItemTableInput = Omit<ItemFormState, "temp_id" | "toggleStMode">;
+type ItemTableInput = Omit<ItemFormState, "temp_id" | "toggleStMode" | "is_highlight"> & {
+    is_highlight?: boolean;
+};
 
 export const createEmptyItemsData = (): ItemFormState[] => {
     return []
@@ -45,6 +47,7 @@ const itemTableSlice = createSlice({
             items.push({
                 ...itemData,
                 temp_id: newTemId(),
+                is_highlight: false,
                 quotation_link_id: undefined,
                 item_values: {
                     ...itemData.item_values,
@@ -127,6 +130,7 @@ const itemTableSlice = createSlice({
                 ...item,
                 temp_id: newTemId(),
                 toggleStMode: false,
+                is_highlight: item.is_highlight ?? false,
             }));
         }
     },

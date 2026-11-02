@@ -6,6 +6,7 @@ const createBudget = (): BudgetComparisonData => ({
     items: [{
         temp_id: "temporary-id",
         toggleStMode: false,
+        is_highlight: false,
         quotation_link_id: 7,
         item_reference: {
             id: 3,

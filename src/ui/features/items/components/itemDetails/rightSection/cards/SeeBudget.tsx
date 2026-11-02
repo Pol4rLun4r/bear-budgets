@@ -40,6 +40,7 @@ const SeeBudget = ({ onViewBudget }: SeeBudgetProps) => {
                 ...item,
                 temp_id: "",
                 toggleStMode: false,
+                is_highlight: item.item_values.id === itemValuesId,
             }));
 
             dispatch(setItemTable({ scope: "budget_form_edit", data: items }));

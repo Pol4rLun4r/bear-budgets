@@ -5,6 +5,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 export interface ItemFormState {
     toggleStMode: boolean;
     temp_id: string;
+    is_highlight: boolean;
     quotation_link_id?: number;
     item_reference: Partial<ItemReference>;
     item_values: Partial<ItemValues>
@@ -23,6 +24,7 @@ export const createEmptyItemData = (): ItemFormState => {
     return {
         toggleStMode: false,
         temp_id: "",
+        is_highlight: false,
         item_reference: {
             id: undefined,
             description: "",
