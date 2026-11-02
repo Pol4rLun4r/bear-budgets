@@ -1,3 +1,10 @@
+# [4.4.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.3.0...v4.4.0) (2026-11-02)
+
+
+### Features
+
+* **update:** add application changelog to sidebar ([8d7e0eb](https://github.com/Pol4rLun4r/bear-budgets/commit/8d7e0eb65045302b52821649add32cefc3cc002a))
+
 # [4.3.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.2.0...v4.3.0) (2026-11-01)
 
 
