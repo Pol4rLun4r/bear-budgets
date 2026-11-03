@@ -1,3 +1,10 @@
+# [4.6.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.5.0...v4.6.0) (2026-11-03)
+
+
+### Features
+
+* **item-reference:** enable search by internal and manufacturer codes ([702479c](https://github.com/Pol4rLun4r/bear-budgets/commit/702479c98746ec181005c43a4d5f8a54f7a158b6))
+
 # [4.5.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.4.0...v4.5.0) (2026-11-02)
 
 
