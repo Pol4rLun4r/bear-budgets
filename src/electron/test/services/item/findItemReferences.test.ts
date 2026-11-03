@@ -38,6 +38,24 @@ describe("Pegar referências de itens", () => {
         expect(res.data[1].description).toEqual(fakeItens[1].description);
     })
 
+    test("sucesso ao pesquisar pelo código interno", () => {
+        const res = services.item.findItemReferences("INT-EL-001");
+
+        if (!res.success) throw new Error("Falha ao buscar itens: " + res.data);
+
+        expect(res.data).toHaveLength(1);
+        expect(res.data[0].internal_code).toEqual(fakeItens[0].internal_code);
+    })
+
+    test("sucesso ao pesquisar pelo código do fabricante", () => {
+        const res = services.item.findItemReferences("FAB-CAB-250-PT");
+
+        if (!res.success) throw new Error("Falha ao buscar itens: " + res.data);
+
+        expect(res.data).toHaveLength(1);
+        expect(res.data[0].manufacturer_code).toEqual(fakeItens[1].manufacturer_code);
+    })
+
     test("sucesso ao retornar todos quando não há termo de busca", () => {
         // 1. prepara os dados
         const payload: SearchItemDescriptionIsOptional = " ";

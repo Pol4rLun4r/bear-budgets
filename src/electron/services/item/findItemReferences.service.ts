@@ -28,8 +28,8 @@ const findItemReferences = (db: Database) => {
             return success(allItems);
         }
 
-        // se houver buscar, buscar os itens com a descrição informada
-        const itemsSearched = repo.item.reference.searchByDescription(result.data!);
+        // se houver busca, pesquisar descrição ou códigos
+        const itemsSearched = repo.item.reference.searchByDescriptionOrCodes(result.data!);
 
         return success(itemsSearched);
     });
