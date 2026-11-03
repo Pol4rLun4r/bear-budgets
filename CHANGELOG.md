@@ -1,3 +1,10 @@
+# [4.7.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.6.0...v4.7.0) (2026-11-03)
+
+
+### Features
+
+* **item:** support searching references by item codes ([1dbc62c](https://github.com/Pol4rLun4r/bear-budgets/commit/1dbc62c1862dcef3a889a0ab9e0943278a25a84d))
+
 # [4.6.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.5.0...v4.6.0) (2026-11-03)
 
 
