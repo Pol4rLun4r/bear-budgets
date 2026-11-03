@@ -6,6 +6,11 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
+        title: "Busca de itens",
+        description: "Agora você pode buscar itens pela descrição ou pelos códigos interno e do fabricante.",
+        date: "2026-11-03",
+    },
+    {
         title: "Aba de novidades",
         description: "Acompanhe por aqui as principais novidades e melhorias do aplicativo.",
         date: "2026-11-01",

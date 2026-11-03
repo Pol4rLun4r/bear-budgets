@@ -23,6 +23,7 @@ import {
 
 // components
 import Input from "./Input";
+import ItemOption from "./ItemOption";
 
 interface DescriptionProps {
     scope?: ItemFormScope;
@@ -79,11 +80,7 @@ const Description = ({ scope = "item_form_add" }: DescriptionProps) => {
     
     const options = suggestions
         .filter((item): item is ItemReference & { id: number } => item.id != null)
-        .map((item) => (
-            <Combobox.Option key={item.id} value={String(item.id)}>
-                {item.description}
-            </Combobox.Option>
-        ));
+        .map((item) => <ItemOption key={item.id} item={item} />);
 
     useEffect(() => {
         if (!isFetching && options.length > 0) {

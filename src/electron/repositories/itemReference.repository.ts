@@ -56,16 +56,18 @@ export const getByIds = (db: Database) =>
         `).all(...item_reference_ids) as ItemReference[];
     };
 
+const createDescriptionSearchQuery = (rawQuery: string) => {
+    // Preserve tokenizers used by the index for codes like 3LD2164-0TB53-0US2.
+    const terms = rawQuery.match(/[\p{L}\p{N}._,/-]+/gu) ?? [];
+    return terms
+        .map(term => `"${term.replace(/"/g, '""')}"*`)
+        .join(" ");
+};
+
 /** pesquisa item_references pela descrição */
 export const searchByDescription = (db: Database) =>
     (rawQuery: Pick<ItemReference, 'description'>['description']): ItemReference[] => {
-        // Evita erro de sintaxe do FTS5 e preserva tokenizers usados no índice
-        // para permitir buscas por códigos como 3LD2164-0TB53-0US2.
-        const terms = rawQuery.match(/[\p{L}\p{N}._,/-]+/gu) ?? [];
-        const query = terms
-            .map(term => `"${term.replace(/"/g, '""')}"*`)
-            .join(" ");
-
+        const query = createDescriptionSearchQuery(rawQuery);
         if (!query) return [];
 
         const sql = `
@@ -78,6 +80,43 @@ export const searchByDescription = (db: Database) =>
         `;
 
         return db.prepare(sql).all(query) as ItemReference[];
+    };
+
+/** pesquisa item_references pela descrição ou pelos códigos */
+export const searchByDescriptionOrCodes = (db: Database) =>
+    (rawQuery: Pick<ItemReference, 'description'>['description']): ItemReference[] => {
+        const query = createDescriptionSearchQuery(rawQuery);
+        if (!query) return [];
+
+        const sql = `
+            WITH matched_references AS (
+                SELECT s.rowid AS id, 1 AS priority, rank AS relevance
+                FROM item_references_search s
+                WHERE s.description MATCH ?
+
+                UNION ALL
+
+                SELECT ir.id, 0 AS priority, 0 AS relevance
+                FROM item_references ir
+                WHERE ir.internal_code LIKE ? ESCAPE '!'
+                    OR ir.manufacturer_code LIKE ? ESCAPE '!'
+            ),
+            ranked_references AS (
+                SELECT id, MIN(priority) AS priority, MIN(relevance) AS relevance
+                FROM matched_references
+                GROUP BY id
+            )
+            SELECT ir.*
+            FROM ranked_references rr
+            JOIN item_references ir ON ir.id = rr.id
+            ORDER BY rr.priority, rr.relevance
+            LIMIT 8
+        `;
+
+        const escapedQuery = rawQuery.replace(/[!%_]/g, "!$&");
+        const codePattern = `%${escapedQuery}%`;
+
+        return db.prepare(sql).all(query, codePattern, codePattern) as ItemReference[];
     };
 
 /** apaga todos os item_references */
@@ -163,6 +202,7 @@ const itemReferenceRepository = (db: Database) => {
         deleteAll: deleteAll(db),
         getAll: getAll(db),
         searchByDescription: searchByDescription(db),
+        searchByDescriptionOrCodes: searchByDescriptionOrCodes(db),
         update: update(db)
     };
 };

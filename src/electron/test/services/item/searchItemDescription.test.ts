@@ -57,6 +57,32 @@ describe("Pesquisar descrição de itens", () => {
         expect(fakeItens[1].description).toBe(res.data[0].description);
     });
 
+    it("encontrar itens pelo código interno", () => {
+        const res = services.item.searchDescription("INT-EL-001");
+
+        if (!res.success) throw new Error("Falha ao buscar itens: " + res.data);
+
+        expect(res.data).toHaveLength(1);
+        expect(res.data[0].internal_code).toBe(fakeItens[0].internal_code);
+    });
+
+    it("encontrar itens pelo código do fabricante", () => {
+        const res = services.item.searchDescription("FAB-CAB-250-PT");
+
+        if (!res.success) throw new Error("Falha ao buscar itens: " + res.data);
+
+        expect(res.data).toHaveLength(1);
+        expect(res.data[0].manufacturer_code).toBe(fakeItens[1].manufacturer_code);
+    });
+
+    it("ignorar curingas SQL como caracteres literais ao pesquisar códigos", () => {
+        const res = services.item.searchDescription("INT_EL");
+
+        if (!res.success) throw new Error("Falha ao buscar itens: " + res.data);
+
+        expect(res.data).toHaveLength(0);
+    });
+
     // teste para falhar caso nenhum valor seja informado    
     it("falhar caso nenhum valor seja informado", async () => {
         // 1. prepara os dados
@@ -69,4 +95,3 @@ describe("Pesquisar descrição de itens", () => {
         expect(res.data).toBe(rulesCode.DESCRIPTION_NOT_INFORMED);
     });
 });
-
