@@ -15,7 +15,16 @@ const create = (db: Database) =>
 
             // pega os dados da cotação criada
             const quotationData = db.prepare(`
-                SELECT * FROM quotations WHERE id = ?
+                SELECT
+                    id,
+                    status,
+                    notes,
+                    total_value,
+                    amount,
+                    datetime(created_at, 'localtime') AS created_at,
+                    datetime(updated_at, 'localtime') AS updated_at
+                FROM quotations
+                WHERE id = ?
             `).get(quotationId) as Quotation | undefined;
 
             // retorna a cotação
@@ -56,9 +65,19 @@ const getAllSummary = (db: Database) =>
 const getById = (db: Database) =>
     (quotation_id: Quotation['id']) => {
         return db.prepare(`
-            SELECT * FROM quotations WHERE id = ? LIMIT 1
-        `).get(quotation_id) as Quotation | undefined;
-    };
+        SELECT
+            id,
+            status,
+            notes,
+            total_value,
+            amount,
+            datetime(created_at, 'localtime') AS created_at,
+            datetime(updated_at, 'localtime') AS updated_at
+        FROM quotations
+        WHERE id = ?
+        LIMIT 1
+    `).get(quotation_id) as Quotation | undefined;
+};
 
 /** atualiza uma cotação baseada no ID */
 const update = (db: Database) =>

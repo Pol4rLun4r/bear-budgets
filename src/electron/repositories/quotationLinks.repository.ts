@@ -23,7 +23,13 @@ const deleteById = (db: Database) =>
 const getById = (db: Database) =>
     (quotation_link_id: QuotationLink['id']): QuotationLink | undefined => {
         return db.prepare(`
-            SELECT *
+            SELECT
+                id,
+                quotation_id,
+                item_reference_id,
+                item_values_id,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
             FROM quotation_links
             WHERE id = ?
             LIMIT 1
@@ -34,7 +40,13 @@ const getById = (db: Database) =>
 const getAllByQuotationId = (db: Database) =>
     (quotation_id: QuotationLink['quotation_id']): QuotationLink[] => {
         return db.prepare(`
-            SELECT *
+            SELECT
+                id,
+                quotation_id,
+                item_reference_id,
+                item_values_id,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
             FROM quotation_links
             WHERE quotation_id = ?
         `).all(quotation_id) as QuotationLink[];
@@ -44,7 +56,13 @@ const getAllByQuotationId = (db: Database) =>
 const getByItemValuesId = (db: Database) =>
     (item_values_id: QuotationLink['item_values_id']): QuotationLink | undefined => {
         return db.prepare(`
-            SELECT *
+            SELECT
+                id,
+                quotation_id,
+                item_reference_id,
+                item_values_id,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
             FROM quotation_links
             WHERE item_values_id = ?
             LIMIT 1

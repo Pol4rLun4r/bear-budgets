@@ -4,7 +4,24 @@ import { Database } from "better-sqlite3";
 const getById = (db: Database) =>
     (item_values_id: number): ItemValues | undefined => {
         const itemValues = db.prepare(`
-            SELECT * FROM item_values WHERE id = ? LIMIT 1
+            SELECT
+                id,
+                item_reference_id,
+                position,
+                quantity,
+                unit_price,
+                markup,
+                purchase_shipping,
+                ipi,
+                st,
+                extra_value,
+                boarding,
+                delivery,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
+            FROM item_values
+            WHERE id = ?
+            LIMIT 1
         `).get(item_values_id) as ItemValues | undefined;
 
         return itemValues;
@@ -17,7 +34,23 @@ const getByIds = (db: Database) =>
 
         const placeholders = item_values_ids.map(() => "?").join(", ");
         return db.prepare(`
-            SELECT * FROM item_values WHERE id IN (${placeholders})
+            SELECT
+                id,
+                item_reference_id,
+                position,
+                quantity,
+                unit_price,
+                markup,
+                purchase_shipping,
+                ipi,
+                st,
+                extra_value,
+                boarding,
+                delivery,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
+            FROM item_values
+            WHERE id IN (${placeholders})
         `).all(...item_values_ids) as ItemValues[];
     };
 
@@ -34,7 +67,21 @@ const deleteById = (db: Database) =>
 const getAllByReferenceId = (db: Database) =>
     (item_reference_id: number): ItemValues[] => {
         const values = db.prepare(`
-            SELECT *
+            SELECT
+                id,
+                item_reference_id,
+                position,
+                quantity,
+                unit_price,
+                markup,
+                purchase_shipping,
+                ipi,
+                st,
+                extra_value,
+                boarding,
+                delivery,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
             FROM item_values
             WHERE item_reference_id = ?
             ORDER BY created_at DESC, id DESC
@@ -48,7 +95,21 @@ const getAllByReferenceId = (db: Database) =>
 const getLatestByReferenceId = (db: Database) =>
     (item_reference_id: number): ItemValues | undefined => {
         return db.prepare(`
-            SELECT *
+            SELECT
+                id,
+                item_reference_id,
+                position,
+                quantity,
+                unit_price,
+                markup,
+                purchase_shipping,
+                ipi,
+                st,
+                extra_value,
+                boarding,
+                delivery,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
             FROM item_values
             WHERE item_reference_id = ?
             ORDER BY created_at DESC, id DESC

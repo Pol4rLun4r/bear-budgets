@@ -21,13 +21,29 @@ export const create = (db: Database) =>
 export const getById = (db: Database) =>
     (item_reference_id: number): ItemWithReferenceLinks | undefined => {
         const ref = db.prepare(`
-            SELECT * FROM item_references WHERE id = ? LIMIT 1
+            SELECT
+                id,
+                description,
+                internal_code,
+                manufacturer_code,
+                ncm,
+                notes,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
+            FROM item_references
+            WHERE id = ?
+            LIMIT 1
         `).get(item_reference_id) as ItemReference | undefined;
 
         if (!ref) return undefined;
 
         const links = db.prepare(`
-            SELECT * FROM reference_links
+            SELECT
+                id,
+                item_reference_id,
+                content,
+                datetime(created_at, 'localtime') AS created_at
+            FROM reference_links
             WHERE item_reference_id = ?
             ORDER BY id ASC
         `).all(item_reference_id) as ReferenceLink[];
@@ -39,7 +55,18 @@ export const getById = (db: Database) =>
 export const getByIdWithoutLinks = (db: Database) =>
     (item_reference_id: number): ItemReference | undefined => {
         const ref = db.prepare(`
-            SELECT * FROM item_references WHERE id = ? LIMIT 1
+            SELECT
+                id,
+                description,
+                internal_code,
+                manufacturer_code,
+                ncm,
+                notes,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
+            FROM item_references
+            WHERE id = ?
+            LIMIT 1
         `).get(item_reference_id) as ItemReference | undefined;
 
         return ref;
@@ -52,7 +79,17 @@ export const getByIds = (db: Database) =>
 
         const placeholders = item_reference_ids.map(() => "?").join(", ");
         return db.prepare(`
-            SELECT * FROM item_references WHERE id IN (${placeholders})
+            SELECT
+                id,
+                description,
+                internal_code,
+                manufacturer_code,
+                ncm,
+                notes,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
+            FROM item_references
+            WHERE id IN (${placeholders})
         `).all(...item_reference_ids) as ItemReference[];
     };
 
@@ -71,7 +108,15 @@ export const searchByDescription = (db: Database) =>
         if (!query) return [];
 
         const sql = `
-            SELECT ir.*
+            SELECT
+                ir.id,
+                ir.description,
+                ir.internal_code,
+                ir.manufacturer_code,
+                ir.ncm,
+                ir.notes,
+                datetime(ir.created_at, 'localtime') AS created_at,
+                datetime(ir.updated_at, 'localtime') AS updated_at
             FROM item_references_search s
             JOIN item_references ir ON ir.id = s.rowid
             WHERE s.description MATCH ?
@@ -106,7 +151,15 @@ export const searchByDescriptionOrCodes = (db: Database) =>
                 FROM matched_references
                 GROUP BY id
             )
-            SELECT ir.*
+            SELECT
+                ir.id,
+                ir.description,
+                ir.internal_code,
+                ir.manufacturer_code,
+                ir.ncm,
+                ir.notes,
+                datetime(ir.created_at, 'localtime') AS created_at,
+                datetime(ir.updated_at, 'localtime') AS updated_at
             FROM ranked_references rr
             JOIN item_references ir ON ir.id = rr.id
             ORDER BY rr.priority, rr.relevance
@@ -132,7 +185,15 @@ const deleteAll = (db: Database) => () => {
 export const getAll = (db: Database) =>
     (): ItemReference[] => {
         const references = db.prepare(`
-            SELECT *
+            SELECT
+                id,
+                description,
+                internal_code,
+                manufacturer_code,
+                ncm,
+                notes,
+                datetime(created_at, 'localtime') AS created_at,
+                datetime(updated_at, 'localtime') AS updated_at
             FROM item_references
             ORDER BY created_at DESC, id DESC
             LIMIT 50
