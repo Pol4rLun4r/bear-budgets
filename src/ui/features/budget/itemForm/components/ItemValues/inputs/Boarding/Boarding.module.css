@@ -7,3 +7,17 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
+
+.holidayDay.holidayDay:not([data-selected]) {
+    color: light-dark(var(--mantine-color-red-7), var(--mantine-color-red-3));
+    background-color: light-dark(var(--mantine-color-red-1), var(--mantine-color-red-9));
+}
+
+.holidayDay.holidayDay:not([data-selected]):hover:not([data-disabled]) {
+    background-color: light-dark(var(--mantine-color-red-2), var(--mantine-color-red-8));
+}
+
+.holidayDay.holidayDay[data-selected] {
+    color: var(--mantine-color-white);
+    background-color: var(--mantine-primary-color-filled);
+}

@@ -1,4 +1,5 @@
 import { Table as MantineTable } from "@mantine/core";
+import DateTimeDisplay from "@/shared/DateTimeDisplay";
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { setValues, type ItemFormScope } from "../../../../store/itemForm.slice";
 import calcAddItem from "@/utils/calcAddItem";
@@ -57,7 +58,7 @@ const Rows = ({ scope, items, handlers }: RowsProps) => {
             <MantineTable.Td>
               {item.markup === undefined ? "—" : `${convertMarkupValue(item.markup)}%`}
             </MantineTable.Td>
-            <MantineTable.Td>{item.created_at ?? "—"}</MantineTable.Td>
+            <MantineTable.Td><DateTimeDisplay value={item.created_at} /></MantineTable.Td>
           </MantineTable.Tr>
         );
       })}

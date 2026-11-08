@@ -2,6 +2,14 @@ import { useState } from "react";
 
 // mantine
 import { Button, Group, Modal, Paper, Table as MantineTable, VisuallyHidden } from "@mantine/core";
+import {
+    IconBarcode,
+    IconCalendarPlus,
+    IconClockEdit,
+    IconFileText,
+    IconHash,
+    IconPackage,
+} from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
 // components
@@ -98,12 +106,12 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                                 <MantineTable.Thead>
                                     <MantineTable.Tr>
                                         <MantineTable.Th w={'3%'}><VisuallyHidden /></MantineTable.Th>
-                                        <MantineTable.Th w={'30%'}>Descrição</MantineTable.Th>
-                                        <MantineTable.Th w={'10%'}>Código interno</MantineTable.Th>
-                                        <MantineTable.Th w={'10%'}>Código do fabricante</MantineTable.Th>
-                                        <MantineTable.Th w={'8%'}>NCM</MantineTable.Th>
-                                        <MantineTable.Th w={'10%'}>Criado em</MantineTable.Th>
-                                        <MantineTable.Th w={'10%'}>Atualizado em</MantineTable.Th>
+                                        <MantineTable.Th w={'30%'}><Group gap="xs" wrap="nowrap"><IconFileText size={16} />Descrição</Group></MantineTable.Th>
+                                        <MantineTable.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconBarcode size={16} />Código interno</Group></MantineTable.Th>
+                                        <MantineTable.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconHash size={16} />Código do fabricante</Group></MantineTable.Th>
+                                        <MantineTable.Th w={'8%'}><Group gap="xs" wrap="nowrap"><IconPackage size={16} />NCM</Group></MantineTable.Th>
+                                        <MantineTable.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={16} />Criado em</Group></MantineTable.Th>
+                                        <MantineTable.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconClockEdit size={16} />Atualizado em</Group></MantineTable.Th>
                                     </MantineTable.Tr>
                                 </MantineTable.Thead>
                                 <MantineTable.Tbody>

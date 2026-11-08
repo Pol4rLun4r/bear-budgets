@@ -7,11 +7,12 @@ import classes from "./Boarding.module.css";
 import dayjs from "dayjs";
 
 // mantine
-import { NumberInput, Select, Group } from "@mantine/core";
-import { DateInput } from '@mantine/dates';
+import { NumberInput, Select, Group, Popover, TextInput, Tooltip } from "@mantine/core";
+import { DatePicker } from '@mantine/dates';
 
 // utils
 import { addCalendarDays, differenceInCalendarDays, businessDaysToCalendarDays, calendarDaysToBusinessDays, parsePastedDate } from "./boardingUtils";
+import { getBrazilNationalHolidays } from "@/utils/brazilHolidays";
 import { IconCalendar } from "@tabler/icons-react";
 
 type BoardingInputMode =
@@ -28,6 +29,23 @@ interface BoardingInputProps {
 const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
 
     const [mode, setMode] = useState<BoardingInputMode>('calendarDays');
+    const [calendarOpened, setCalendarOpened] = useState(false);
+    const selectedDate = dayjs(addCalendarDays(baseDate, value)).format('YYYY-MM-DD');
+    const [calendarDate, setCalendarDate] = useState(selectedDate);
+    const [dateInputState, setDateInputState] = useState<{
+        selectedDate: string;
+        inputValue: string;
+    } | null>(null);
+    const dateInputValue = dateInputState?.selectedDate === selectedDate
+        ? dateInputState.inputValue
+        : dayjs(selectedDate).format('DD/MM/YYYY');
+
+    const holidays = [
+        ...getBrazilNationalHolidays(Number(calendarDate.slice(0, 4)) - 1),
+        ...getBrazilNationalHolidays(Number(calendarDate.slice(0, 4))),
+        ...getBrazilNationalHolidays(Number(calendarDate.slice(0, 4)) + 1),
+    ];
+    const holidaysByDate = new Map(holidays.map((holiday) => [holiday.date, holiday]));
 
     const styleConfig = {
         input: classes['boarding-number-input'],
@@ -70,43 +88,91 @@ const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
             )}
 
             {mode === 'date' && (
-                <DateInput
-                    {...configInputs}
-                    placeholder="DD/MM/AAAA"
-                    valueFormat="DD/MM/YYYY"
-                    minDate={dayjs(baseDate).startOf('day').toDate()}
-                    value={dayjs(addCalendarDays(baseDate, value)).format('YYYY-MM-DD')}
-                    onChange={(date) => {
-                        if (!date) return;
-
-                        const selectedDate = dayjs(date, 'YYYY-MM-DD').toDate();
-
-                        const calendarDays = differenceInCalendarDays(
-                            baseDate,
-                            selectedDate
-                        );
-
-                        onChange(calendarDays);
+                <Popover
+                    opened={calendarOpened}
+                    onChange={(opened) => {
+                        setCalendarOpened(opened);
+                        if (opened) setCalendarDate(selectedDate);
                     }}
-                    onPaste={(event) => {
-                        const pastedText = event.clipboardData.getData('text');
+                    position="bottom-start"
+                    withinPortal
+                    closeOnClickOutside
+                >
+                    <Popover.Target>
+                        <TextInput
+                            {...configInputs}
+                            placeholder="DD/MM/AAAA"
+                            value={dateInputValue}
+                            onFocus={() => {
+                                setCalendarDate(selectedDate);
+                                setCalendarOpened(true);
+                            }}
+                            onClick={() => setCalendarOpened(true)}
+                            onChange={(event) => {
+                                const inputValue = event.currentTarget.value;
+                                setDateInputState({ selectedDate, inputValue });
 
-                        const selectedDate = parsePastedDate(pastedText);
+                                const parsedDate = parsePastedDate(inputValue);
+                                if (parsedDate) {
+                                    setCalendarDate(dayjs(parsedDate).format('YYYY-MM-DD'));
+                                    onChange(differenceInCalendarDays(baseDate, parsedDate));
+                                }
+                            }}
+                            onBlur={() => {
+                                if (!parsePastedDate(dateInputValue)) {
+                                    setDateInputState(null);
+                                }
+                            }}
+                            onPaste={(event) => {
+                                const pastedText = event.clipboardData.getData('text');
+                                const pastedDate = parsePastedDate(pastedText);
 
-                        if (!selectedDate) {
-                            return;
-                        }
+                                if (!pastedDate) return;
 
-                        event.preventDefault();
+                                event.preventDefault();
+                                const date = dayjs(pastedDate).format('YYYY-MM-DD');
+                                setDateInputState(null);
+                                setCalendarDate(date);
+                                onChange(differenceInCalendarDays(baseDate, pastedDate));
+                            }}
+                        />
+                    </Popover.Target>
+                    <Popover.Dropdown p="sm">
+                        <DatePicker
+                            date={calendarDate}
+                            onDateChange={setCalendarDate}
+                            value={selectedDate}
+                            allowDeselect={false}
+                            minDate={dayjs(baseDate).startOf('day').toDate()}
+                            getDayProps={(date) => {
+                                const holiday = holidaysByDate.get(date);
+                                return holiday ? { className: classes.holidayDay } : {};
+                            }}
+                            renderDay={(date) => {
+                                const holiday = holidaysByDate.get(date);
+                                return (
+                                    <Tooltip
+                                        label={holiday?.name}
+                                        disabled={!holiday}
+                                        withinPortal
+                                        position="top"
+                                    >
+                                        <span>{dayjs(date).date()}</span>
+                                    </Tooltip>
+                                );
+                            }}
+                            onChange={(date) => {
+                                if (!date) return;
 
-                        const calendarDays = differenceInCalendarDays(
-                            baseDate,
-                            selectedDate
-                        );
-
-                        onChange(calendarDays);
-                    }}
-                />
+                                const parsedDate = dayjs(date, 'YYYY-MM-DD').toDate();
+                                setDateInputState(null);
+                                setCalendarDate(date);
+                                onChange(differenceInCalendarDays(baseDate, parsedDate));
+                                setCalendarOpened(false);
+                            }}
+                        />
+                    </Popover.Dropdown>
+                </Popover>
             )}
             <Select
                 w={'50%'}

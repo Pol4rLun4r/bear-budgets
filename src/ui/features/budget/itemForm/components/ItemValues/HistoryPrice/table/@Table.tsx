@@ -1,6 +1,7 @@
 // mantine
 import { ActionIcon, Group, Loader, Table as MantineTable, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { UseDisclosureHandlers } from "@mantine/hooks";
+import { IconCalendarPlus, IconCurrencyReal, IconPercentage } from "@tabler/icons-react";
 
 // components
 import Rows from "./Rows";
@@ -48,10 +49,10 @@ const Table = ({ scope, itemValues, isFetching, errorMessage, handlers }: TableP
             <MantineTable layout="fixed" highlightOnHover stickyHeader w={'100%'} h={'100%'}>
                 <MantineTable.Thead>
                     <MantineTable.Tr>
-                        <MantineTable.Th w={'25%'}>Preço custo</MantineTable.Th>
-                        <MantineTable.Th w={'25%'}>Preço final</MantineTable.Th>
-                        <MantineTable.Th w={'18%'}>Margem</MantineTable.Th>
-                        <MantineTable.Th w={'25%'}>Criado em</MantineTable.Th>
+                        <MantineTable.Th w={'25%'}><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={16} />Preço custo</Group></MantineTable.Th>
+                        <MantineTable.Th w={'25%'}><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={16} />Preço final</Group></MantineTable.Th>
+                        <MantineTable.Th w={'18%'}><Group gap="xs" wrap="nowrap"><IconPercentage size={16} />Margem</Group></MantineTable.Th>
+                        <MantineTable.Th w={'25%'}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={16} />Criado em</Group></MantineTable.Th>
                     </MantineTable.Tr>
                 </MantineTable.Thead>
                 <MantineTable.Tbody>

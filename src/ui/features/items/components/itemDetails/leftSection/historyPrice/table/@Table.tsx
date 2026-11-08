@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { Loader, Paper, Table as MantineTable, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { Group } from "@mantine/core";
+import { IconCalendarPlus, IconCurrencyReal, IconPercentage } from "@tabler/icons-react";
 
 // api
 import {
@@ -88,9 +90,9 @@ const Table = ({ itemReferenceId }: TableProps) => {
             <MantineTable highlightOnHover layout="fixed">
                 <MantineTable.Thead>
                     <MantineTable.Tr>
-                        <MantineTable.Th>Preço final</MantineTable.Th>
-                        <MantineTable.Th>Markup (%)</MantineTable.Th>
-                        <MantineTable.Th>Criado</MantineTable.Th>
+                        <MantineTable.Th><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={16} />Preço final</Group></MantineTable.Th>
+                        <MantineTable.Th><Group gap="xs" wrap="nowrap"><IconPercentage size={16} />Markup (%)</Group></MantineTable.Th>
+                        <MantineTable.Th><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={16} />Criado</Group></MantineTable.Th>
                     </MantineTable.Tr>
                 </MantineTable.Thead>
                 <MantineTable.Tbody>

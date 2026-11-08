@@ -1,6 +1,9 @@
 // mantine
 import { Table } from "@mantine/core"
 
+// components
+import DateTimeDisplay from "@/shared/DateTimeDisplay";
+
 // utils
 import calcAddItem from "@/utils/calcAddItem";
 import { convertMarkupValue } from "@/utils/markupList";
@@ -47,7 +50,7 @@ const Row = ({ item, selected, onSelect }: RowProps) => {
     >
       <Table.Td>{finalPrice}</Table.Td>
       <Table.Td>{convertMarkupValue(item.markup)}%</Table.Td>
-      <Table.Td>{item.created_at ?? "—"}</Table.Td>
+      <Table.Td><DateTimeDisplay value={item.created_at} /></Table.Td>
     </Table.Tr>
   )
 }

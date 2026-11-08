@@ -22,9 +22,11 @@ const Delivery = ({ scope }: { scope: ItemFormScope }) => {
 
             // configurações do valor do input
             value={delivery ?? ''}
-            onChange={(value) =>
-                dispatch(setValuesField({ scope, key: 'delivery', value: value as number }))
-            }
+            onChange={(value) => dispatch(setValuesField({
+                scope,
+                key: 'delivery',
+                value: typeof value === "number" && Number.isFinite(value) ? value : undefined,
+            }))}
         />
     )
 }

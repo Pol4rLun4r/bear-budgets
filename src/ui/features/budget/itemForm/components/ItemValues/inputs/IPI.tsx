@@ -29,9 +29,11 @@ const IPI = ({ scope }: { scope: ItemFormScope }) => {
 
             // configurações do valor do input
             value={ipi ?? ''}
-            onChange={(value) =>
-                dispatch(setValuesField({ scope, key: 'ipi', value: value as number }))
-            }
+            onChange={(value) => dispatch(setValuesField({
+                scope,
+                key: 'ipi',
+                value: typeof value === "number" && Number.isFinite(value) ? value : undefined,
+            }))}
         />
     )
 }

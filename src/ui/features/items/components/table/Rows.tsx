@@ -1,6 +1,9 @@
 // mantine
 import { Table, TableTdProps } from "@mantine/core";
 
+// components
+import DateTimeDisplay from "@/shared/DateTimeDisplay";
+
 // style
 import classes from "./Items.module.css"
 
@@ -31,8 +34,8 @@ const Rows = ({ references, openItemDetails }: RowsProps) => {
         <Table.Td {...tableTdProps} ><RowContent label={reference.internal_code} /></Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.manufacturer_code} /></Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.ncm} /></Table.Td>
-        <Table.Td {...tableTdProps} >{reference.created_at}</Table.Td>
-        <Table.Td {...tableTdProps} >{reference.updated_at}</Table.Td>
+        <Table.Td {...tableTdProps} ><DateTimeDisplay value={reference.created_at} /></Table.Td>
+        <Table.Td {...tableTdProps} ><DateTimeDisplay value={reference.updated_at} /></Table.Td>
       </Table.Tr>
     ))
   )
