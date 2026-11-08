@@ -49,10 +49,10 @@ const Table = ({ scope, itemValues, isFetching, errorMessage, handlers }: TableP
             <MantineTable layout="fixed" highlightOnHover stickyHeader w={'100%'} h={'100%'}>
                 <MantineTable.Thead>
                     <MantineTable.Tr>
-                        <MantineTable.Th w={'25%'}><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={16} />Preço custo</Group></MantineTable.Th>
-                        <MantineTable.Th w={'25%'}><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={16} />Preço final</Group></MantineTable.Th>
-                        <MantineTable.Th w={'18%'}><Group gap="xs" wrap="nowrap"><IconPercentage size={16} />Margem</Group></MantineTable.Th>
-                        <MantineTable.Th w={'25%'}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={16} />Criado em</Group></MantineTable.Th>
+                        <MantineTable.Th w={'24%'}><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={16} />Preço custo</Group></MantineTable.Th>
+                        <MantineTable.Th w={'24%'}><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={16} />Preço final</Group></MantineTable.Th>
+                        <MantineTable.Th w={'16%'}><Group gap="xs" wrap="nowrap"><IconPercentage size={16} />Margem</Group></MantineTable.Th>
+                        <MantineTable.Th w={'29%'}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={16} />Criado em</Group></MantineTable.Th>
                     </MantineTable.Tr>
                 </MantineTable.Thead>
                 <MantineTable.Tbody>

@@ -8,7 +8,7 @@ import {
     IconClockEdit,
     IconFileText,
     IconHash,
-    IconPackage,
+    IconIdBadge,
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -26,6 +26,7 @@ import { selectBudgetEditHasChanges } from "@/features/budget/budgetForm/store/b
 import { setOriginalBudget } from "@/features/budget/budgetForm/store/originalBudgetSlice";
 
 const Table = ({ items }: { items: ItemReference[] }) => {
+    const iconSize = 20;
     const [itemDetailsOpened, { open: openItemDetails, close: closeItemDetails }] = useDisclosure(false);
     const [confirmOpened, { open: openConfirm, close: closeConfirm }] = useDisclosure(false);
     const [viewingBudget, setViewingBudget] = useState(false);
@@ -97,21 +98,21 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                 <MenuItem>
                     {(handlers) => (
                         <MantineTable.ScrollContainer
-                            minWidth={900}
+                            minWidth={1220}
                             w={'100%'}
                             h={'100%'}
                             onContextMenu={handlers.onContextMenu}
                         >
                             <MantineTable layout="fixed" highlightOnHover stickyHeader w={'100%'} h={'100%'}>
-                                <MantineTable.Thead>
+                                <MantineTable.Thead h="3.5rem">
                                     <MantineTable.Tr>
-                                        <MantineTable.Th w={'3%'}><VisuallyHidden /></MantineTable.Th>
-                                        <MantineTable.Th w={'30%'}><Group gap="xs" wrap="nowrap"><IconFileText size={16} />Descrição</Group></MantineTable.Th>
-                                        <MantineTable.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconBarcode size={16} />Código interno</Group></MantineTable.Th>
-                                        <MantineTable.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconHash size={16} />Código do fabricante</Group></MantineTable.Th>
-                                        <MantineTable.Th w={'8%'}><Group gap="xs" wrap="nowrap"><IconPackage size={16} />NCM</Group></MantineTable.Th>
-                                        <MantineTable.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={16} />Criado em</Group></MantineTable.Th>
-                                        <MantineTable.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconClockEdit size={16} />Atualizado em</Group></MantineTable.Th>
+                                        <MantineTable.Th w={48}><VisuallyHidden /></MantineTable.Th>
+                                        <MantineTable.Th w={300}><Group gap="xs" wrap="nowrap"><IconFileText size={iconSize} />Descrição</Group></MantineTable.Th>
+                                        <MantineTable.Th w={150}><Group gap="xs" wrap="nowrap"><IconBarcode size={iconSize} />Código interno</Group></MantineTable.Th>
+                                        <MantineTable.Th w={200}><Group gap="xs" wrap="nowrap"><IconHash size={iconSize} />Código do fabricante</Group></MantineTable.Th>
+                                        <MantineTable.Th w={120}><Group gap="xs" wrap="nowrap"><IconIdBadge size={iconSize} />NCM</Group></MantineTable.Th>
+                                        <MantineTable.Th w={200}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={iconSize} />Criado em</Group></MantineTable.Th>
+                                        <MantineTable.Th w={200}><Group gap="xs" wrap="nowrap"><IconClockEdit size={iconSize} />Atualizado em</Group></MantineTable.Th>
                                     </MantineTable.Tr>
                                 </MantineTable.Thead>
                                 <MantineTable.Tbody>

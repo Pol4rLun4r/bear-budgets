@@ -7,9 +7,9 @@ import {
     IconCalendarPlus,
     IconClockEdit,
     IconCurrencyReal,
-    IconHash,
-    IconListDetails,
+    IconBox,
     IconNotes,
+    IconTag,
 } from "@tabler/icons-react";
 
 // components
@@ -24,6 +24,8 @@ interface ListType {
     open: () => void;
 }
 
+const iconSize = 20
+
 const List = ({ budgets, open }: ListType ) => {
 
     return (
@@ -31,21 +33,21 @@ const List = ({ budgets, open }: ListType ) => {
             <MenuBudget open={open}>
                 {(handlers, seeBudget) => (
                     <Table.ScrollContainer
-                        minWidth={700}
+                        minWidth={1100}
                         w={'100%'}
                         h={'100%'}
                         onContextMenu={handlers.onContextMenu}
                     >
                         <Table layout="fixed" highlightOnHover stickyHeader w={'100%'} h={'100%'}>
-                            <Table.Thead>
+                            <Table.Thead h={"3.5rem"}>
                                 <Table.Tr>
-                                    <Table.Th w={'3%'}><VisuallyHidden /></Table.Th>
-                                    <Table.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconHash size={16} />Nº do Orçamento</Group></Table.Th>
-                                    <Table.Th w={'20%'}><Group gap="xs" wrap="nowrap"><IconNotes size={16} />Notas</Group></Table.Th>
-                                    <Table.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={16} />Valor Total</Group></Table.Th>
-                                    <Table.Th w={'5%'}><Group gap="xs" wrap="nowrap"><IconListDetails size={16} />Itens</Group></Table.Th>
-                                    <Table.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={16} />Data de criação</Group></Table.Th>
-                                    <Table.Th w={'10%'}><Group gap="xs" wrap="nowrap"><IconClockEdit size={16} />Última atualização</Group></Table.Th>
+                                    <Table.Th w={48}><VisuallyHidden /></Table.Th>
+                                    <Table.Th w={160}><Group gap="xs" wrap="nowrap"><IconTag size={iconSize} />Nº do Orçamento</Group></Table.Th>
+                                    <Table.Th w={220}><Group gap="xs" wrap="nowrap"><IconNotes size={iconSize} />Notas</Group></Table.Th>
+                                    <Table.Th w={150}><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={iconSize} />Valor Total</Group></Table.Th>
+                                    <Table.Th w={80}><Group gap="xs" wrap="nowrap"><IconBox size={iconSize} />Itens</Group></Table.Th>
+                                    <Table.Th w={200}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={iconSize} />Data de criação</Group></Table.Th>
+                                    <Table.Th w={200}><Group gap="xs" wrap="nowrap"><IconClockEdit size={iconSize} />Última atualização</Group></Table.Th>
                                 </Table.Tr>
                             </Table.Thead>
                             <Table.Tbody><Rows seeBudget={seeBudget} budgets={budgets} /></Table.Tbody>

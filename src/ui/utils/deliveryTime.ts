@@ -1,7 +1,7 @@
 import {
     differenceInCalendarDays,
     getDeliveryDate,
-} from "../features/budget/itemForm/components/ItemValues/inputs/Boarding/boardingUtils";
+} from "./boardingUtils";
 
 export interface DeliveryTime {
     totalCalendarDays: number;

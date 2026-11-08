@@ -11,7 +11,7 @@ import { NumberInput, Select, Group, Popover, TextInput, Tooltip } from "@mantin
 import { DatePicker } from '@mantine/dates';
 
 // utils
-import { addCalendarDays, differenceInCalendarDays, businessDaysToCalendarDays, calendarDaysToBusinessDays, parsePastedDate } from "./boardingUtils";
+import { addCalendarDays, differenceInCalendarDays, businessDaysToCalendarDays, calendarDaysToBusinessDays, parsePastedDate } from "@/utils/boardingUtils";
 import { getBrazilNationalHolidays } from "@/utils/brazilHolidays";
 import { IconCalendar } from "@tabler/icons-react";
 

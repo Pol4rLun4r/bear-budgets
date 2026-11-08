@@ -21,12 +21,11 @@ const Rows = ({ references, openItemDetails }: RowsProps) => {
   // props padrão de cada linha da tabela
   const tableTdProps: TableTdProps = {
     className: classes.rowContainer,
-    height: 55,
   }
 
   return (
     references.map((reference) => (
-      <Table.Tr key={reference.id} data-item-reference-id={reference.id}>
+      <Table.Tr key={reference.id} data-item-reference-id={reference.id} h="5rem">
         <Table.Td align="center">
           <HandleActionButton openItemDetails={openItemDetails} itemReferenceId={reference.id!} />
         </Table.Td>

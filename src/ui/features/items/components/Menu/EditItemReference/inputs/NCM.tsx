@@ -2,7 +2,7 @@
 import { TextInput } from "@mantine/core";
 
 // icons
-import { IconPackage } from "@tabler/icons-react"
+import { IconIdBadge } from "@tabler/icons-react"
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
@@ -17,7 +17,7 @@ const NCM = () => {
         <TextInput
             label="NCM"
             placeholder="Opcional"
-            leftSection={<IconPackage size={17} />}
+            leftSection={<IconIdBadge size={17} />}
             value={itemReference?.ncm ?? ""}
             onChange={(event) => dispatch(changeItemReferenceField({
                 key: "ncm",

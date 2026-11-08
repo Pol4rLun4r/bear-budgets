@@ -20,6 +20,7 @@ import {
     IconExternalLink,
     IconFileText,
     IconHash,
+    IconIdBadge,
     IconLink,
     IconPackage,
 } from "@tabler/icons-react";
@@ -119,7 +120,7 @@ const ItemReference = () => {
         { label: "Descrição", value: item.description, icon: <IconFileText size={17} /> },
         { label: "Código interno", value: item.internal_code, icon: <IconHash size={17} /> },
         { label: "Código do fabricante", value: item.manufacturer_code, icon: <IconBarcode size={17} /> },
-        { label: "NCM", value: item.ncm, icon: <IconPackage size={17} /> },
+        { label: "NCM", value: item.ncm, icon: <IconIdBadge size={17} /> },
         { label: "Identificador", value: item.id !== undefined ? String(item.id) : undefined, icon: <IconHash size={17} /> },
         { label: "Observações", value: item.notes, icon: <IconFileText size={17} /> },
         { label: "Criado em", value: item.created_at, icon: <IconClock size={17} /> },

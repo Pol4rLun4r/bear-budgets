@@ -1,10 +1,33 @@
 import dayjs from 'dayjs';
+import { getBrazilNationalHolidays } from './brazilHolidays';
+
+const nationalHolidayDatesByYear = new Map<number, Set<string>>();
+
+function isNationalHoliday(date: Date): boolean {
+    const year = date.getFullYear();
+    let holidayDates = nationalHolidayDatesByYear.get(year);
+
+    if (!holidayDates) {
+        holidayDates = new Set(
+            getBrazilNationalHolidays(year).map((holiday) => holiday.date),
+        );
+        nationalHolidayDatesByYear.set(year, holidayDates);
+    }
+
+    const dateString = [
+        String(year).padStart(4, '0'),
+        String(date.getMonth() + 1).padStart(2, '0'),
+        String(date.getDate()).padStart(2, '0'),
+    ].join('-');
+
+    return holidayDates.has(dateString);
+}
 
 /** verifica se uma data é um dia útil */
 function isBusinessDay(date: Date): boolean {
     const day = dayjs(date).day();
 
-    return day !== 0 && day !== 6;
+    return day !== 0 && day !== 6 && !isNationalHoliday(date);
 }
 
 /** adiciona dias corridos a uma data */

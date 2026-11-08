@@ -39,7 +39,7 @@ const HistoryPrice = ({ scope }: HistoryPriceProps) => {
             : error.message ?? "Não foi possível buscar o histórico de valores."
         : undefined;
 
-    const floatingWindowWidth: number = 420; 
+    const floatingWindowWidth = 580;
 
     return (
         <>

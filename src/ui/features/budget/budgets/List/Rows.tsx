@@ -22,7 +22,7 @@ const Rows = ({ budgets, seeBudget }: RowsType) => {
 
   return (
     budgets.map((budget) => (
-      <Table.Tr key={budget.id} data-budget-id={budget.id}>
+      <Table.Tr key={budget.id} data-budget-id={budget.id} h={"5rem"}>
         <Table.Td align="center">{seeBudget(budget.id)}</Table.Td>
         <Table.Td>{String(budget.id).padStart(6, "0")}</Table.Td>
         <Table.Td>{budget.notes}</Table.Td>
