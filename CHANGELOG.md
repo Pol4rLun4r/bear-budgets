@@ -1,3 +1,15 @@
+# [4.8.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.7.0...v4.8.0) (2026-11-08)
+
+
+### Bug Fixes
+
+* **database:** standardize timestamp formatting in repository queries ([6d952d6](https://github.com/Pol4rLun4r/bear-budgets/commit/6d952d6e1e01bc0d95806685a9488484b63d6309))
+
+
+### Features
+
+* **ui:** enhance date selection and table readability ([7a7cfce](https://github.com/Pol4rLun4r/bear-budgets/commit/7a7cfce40d790d6c5b0524e340efcd027bcb264b))
+
 # [4.7.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.6.0...v4.7.0) (2026-11-03)
 
 
