@@ -8,15 +8,13 @@ import SecondaryOptions from './components/SecondaryOptions';
 // redux
 import { useAppSelector } from '@/app/reduxHooks';
 import { selectIsSidebarCollapsed } from '../store/layout.selectors';
-import { ChangeLog } from '@/features/update/changeLog/@ChangeLog';
 
 const Sidebar = () => {
-        const isSidebarCollapsed = useAppSelector(selectIsSidebarCollapsed);
+    const isSidebarCollapsed = useAppSelector(selectIsSidebarCollapsed);
 
     return (
         <nav className={classes.sideBar} data-collapsed={isSidebarCollapsed}>
             <MainOptions />
-            <ChangeLog isCollapsed={isSidebarCollapsed} />
             <SecondaryOptions />
         </nav>
     )

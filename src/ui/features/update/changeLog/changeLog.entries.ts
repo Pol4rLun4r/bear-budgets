@@ -6,6 +6,21 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
+        title: "Datas mais corretas e práticas",
+        description: "Padronizamos a exibição de datas e horários e melhoramos a seleção de datas, incluindo digitação e destaque de feriados nacionais.",
+        date: "2026-11-08",
+    },
+    {
+        title: "Tabelas mais fáceis de ler",
+        description: "Ajustamos larguras de colunas, cabeçalhos e linhas para facilitar a leitura das tabelas de orçamentos, itens e histórico de preços.",
+        date: "2026-11-08",
+    },
+    {
+        title: "Novidades em um só lugar",
+        description: "Agora você pode conferir as novidades do aplicativo em uma janela dedicada, pelo botão Novidades.",
+        date: "2026-11-08",
+    },
+    {
         title: "Busca de itens",
         description: "Agora você pode buscar itens pela descrição ou pelos códigos interno e do fabricante.",
         date: "2026-11-03",

@@ -10,6 +10,7 @@ import { IconSettings2, IconSun, IconMoon } from '@tabler/icons-react'
 // components
 import { SidebarPage } from './SidebarPage';
 import UpdateOption from '@/features/update/UpdateOption';
+import { ChangeLog } from '@/features/update/changeLog/@ChangeLog';
 
 const SecondaryOptions = () => {
     const { setColorScheme } = useMantineColorScheme();
@@ -22,9 +23,10 @@ const SecondaryOptions = () => {
     return (
         <Stack gap={0} className={classes.secondaryOptions}>
             <UpdateOption />
+            <ChangeLog />
             <SidebarPage
                 icon={computedColorScheme === 'light' ? IconMoon : IconSun}
-                label={computedColorScheme === 'light' ? 'Dark mode' : 'Light mode'}
+                label={computedColorScheme === 'light' ? 'Modo escuro' : 'Modo claro'}
                 onClick={colorSchemeHandle}
             />
             <SidebarPage
