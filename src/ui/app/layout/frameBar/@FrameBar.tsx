@@ -13,6 +13,7 @@ import { IconMaximize, IconMinus, IconX } from '@tabler/icons-react';
 // components
 import LeftTitle from "./LeftTitle";
 import CenterTitle from "./CenterTitle";
+import WindowDimensions from "@/features/devTools/WindowDimensions";
 
 // interface para definir os props de actionIcon
 interface ActionProps extends HTMLOrSVGElement, ActionIconProps { }
@@ -36,6 +37,7 @@ const FrameBar = () => {
       <CenterTitle />
 
       <Group gap={2}>
+        {import.meta.env.DEV && <WindowDimensions />}
         <ActionIcon
           {...actionIconProps}
           aria-label="Minimizar"

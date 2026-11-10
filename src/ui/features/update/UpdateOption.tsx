@@ -1,6 +1,8 @@
 // mantine
 import { RingProgress, Text } from "@mantine/core";
-import { IconAlertTriangle, IconCheck, IconDownload, IconRefresh } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import { IconAlertTriangle, IconCheck, IconDownload, IconRefresh, IconSparkles } from "@tabler/icons-react";
+import { useEffect } from "react";
 
 // components
 import { SidebarPage } from "@/app/layout/sideBar/components/SidebarPage";
@@ -9,6 +11,21 @@ import { useAppUpdate } from "@/hooks/useAppUpdate";
 /** exibe o estado e as ações de atualização na sidebar */
 const UpdateOption = () => {
     const update = useAppUpdate();
+
+    useEffect(() => {
+        if (update.status !== "available") return;
+
+        const version = update.version ? ` (${update.version})` : "";
+        notifications.show({
+            id: "app-update-available",
+            title: "Nova atualização encontrada",
+            message: `Uma nova versão${version} está disponível. Clique no botão de atualização destacado na barra lateral à esquerda para baixar.`,
+            icon: <IconSparkles size={18} />,
+            color: "violet",
+            position: "bottom-left",
+            autoClose: false,
+        });
+    }, [update.status, update.version]);
 
     const upToDate = update.status === "not-available";
     const unsupported = update.status === "unsupported";

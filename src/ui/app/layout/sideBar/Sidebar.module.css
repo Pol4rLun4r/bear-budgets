@@ -48,6 +48,20 @@
 
     &[data-highlighted] {
         color: var(--mantine-primary-color-filled);
+        border: 1px solid light-dark(var(--mantine-primary-color-2), rgba(121, 80, 242, 0.45));
+        background: linear-gradient(
+            105deg,
+            light-dark(var(--mantine-primary-color-0), rgba(121, 80, 242, 0.2)),
+            transparent 125%
+        );
+
+        &:hover {
+            background: linear-gradient(
+                105deg,
+                light-dark(var(--mantine-primary-color-1), rgba(121, 80, 242, 0.3)),
+                transparent 125%
+            );
+        }
     }
 
     &[data-success] {
