@@ -6,6 +6,11 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
+        title: "Correção no campo de IPI",
+        description: "Corrigimos a digitação e a colagem de percentuais decimais no campo de IPI. Agora valores com ponto ou vírgula são considerados nos cálculos.",
+        date: "2026-11-10",
+    },
+    {
         title: "Datas mais corretas e práticas",
         description: "Padronizamos a exibição de datas e horários e melhoramos a seleção de datas, incluindo digitação e destaque de feriados nacionais.",
         date: "2026-11-08",
