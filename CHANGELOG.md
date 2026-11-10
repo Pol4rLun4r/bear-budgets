@@ -1,3 +1,10 @@
+## [4.8.1](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.8.0...v4.8.1) (2026-11-10)
+
+
+### Bug Fixes
+
+* **budget:** preserve decimal IPI input ([c3c6da0](https://github.com/Pol4rLun4r/bear-budgets/commit/c3c6da05da5d14311af1522e93295817ffadd830))
+
 # [4.8.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.7.0...v4.8.0) (2026-11-08)
 
 
