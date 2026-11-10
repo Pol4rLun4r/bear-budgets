@@ -1,3 +1,10 @@
+# [4.9.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.8.1...v4.9.0) (2026-11-10)
+
+
+### Features
+
+* **devTools:** add window dimensions inspector and update notifications ([b1702d5](https://github.com/Pol4rLun4r/bear-budgets/commit/b1702d5666a6ce2a7e7e2c7deb509bc935496cec))
+
 ## [4.8.1](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.8.0...v4.8.1) (2026-11-10)
 
 
