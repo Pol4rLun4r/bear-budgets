@@ -8,9 +8,9 @@ import classes from "../ChangeLog.module.css";
 import { ChangeLogMarkdown } from "./ChangeLogMarkdown";
 
 const categoryConfig = {
-    novelty: { label: "Novidade", color: "violet", icon: IconSparkles },
-    improvement: { label: "Melhoria", color: "teal", icon: IconTrendingUp },
-    "bug-fix": { label: "Correção", color: "red", icon: IconBug },
+    novelty: { label: "Novidade", color: "green", icon: IconSparkles },
+    improvement: { label: "Melhoria", color: "blue", icon: IconTrendingUp },
+    "bug-fix": { label: "Correção", color: "yellow", icon: IconBug },
 } satisfies Record<ChangeLogCategory, { label: string; color: string; icon: typeof IconSparkles }>;
 
 interface ChangeLogEntryCardProps {

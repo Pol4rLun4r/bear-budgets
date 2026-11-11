@@ -1,6 +1,6 @@
 // mantine
 import { Button, Menu, Modal, Text } from "@mantine/core";
-import { useClipboard, useDisclosure } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 
 // icon
@@ -16,6 +16,13 @@ import { notifications } from "@mantine/notifications";
 import { BudgetFormScope } from "../../../store/@rootReducer";
 import { useAppDispatch } from "@/app/reduxHooks";
 import { addItem, deleteItem } from "../../../store/itemTable.slice";
+import calcAddItem from "@/utils/calcAddItem";
+import { getDeliveryTime } from "@/utils/deliveryTime";
+
+const brl = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL",
+});
 
 // types para o menu de contexto
 interface ContextMenuTargetHandlers {
@@ -33,9 +40,6 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
 
   // estado para armazenar o item ativo (selecionado) no menu de contexto
   const [activeItem, setActiveItem] = useState<ItemFormState | null>(null);
-
-  // função para usar o clipboard
-  const clipboard = useClipboard({ timeout: 200 })
 
   // delete button modal
   const [deleteOpened, { open: deleteOpen, close: deleteClose }] = useDisclosure(false);
@@ -67,16 +71,76 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
     deleteClose();
   }
 
+  const copyText = async (text: string, successTitle: string, successMessage: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      notifications.show({
+        title: successTitle,
+        message: successMessage,
+        position: "bottom-right",
+        color: "teal",
+      });
+    } catch (error) {
+      notifications.show({
+        title: "Erro ao copiar",
+        message: error instanceof Error
+          ? error.message
+          : "Não foi possível acessar a área de transferência.",
+        position: "bottom-right",
+        color: "red",
+      });
+    }
+  };
+
   const handleCopy = () => {
     if (!activeItem) return;
-    clipboard.copy(activeItem.item_reference.description);
+    void copyText(
+      activeItem.item_reference.description ?? "",
+      "Descrição copiada",
+      "A descrição do item foi copiada para a área de transferência!",
+    );
+  };
 
-    notifications.show({
-      title: 'Descrição copiada',
-      message: 'A descrição do item foi copiada para a área de transferência!',
-      position: 'bottom-right',
-      color: 'teal'
-    })
+  const handleCopyAsText = () => {
+    if (!activeItem) return;
+
+    const { finalUnitValue, totalWithAll } = calcAddItem(activeItem.item_values);
+    const quantity = activeItem.item_values.quantity ?? 0;
+    const { totalCalendarDays } = getDeliveryTime(
+      new Date(),
+      activeItem.item_values.boarding ?? 0,
+      activeItem.item_values.delivery ?? 0,
+    );
+    const unitValue = Number.isFinite(finalUnitValue)
+      ? brl.format(finalUnitValue)
+      : "—";
+    const lines = [
+      `Item: ${activeItem.item_reference.description ?? ""}`,
+      `- Código do item: ${activeItem.item_reference.internal_code || "Não informado"}`,
+      `- Valor unitário: ${unitValue}`,
+    ];
+
+    if (quantity > 1) {
+      lines.push(
+        `- Quantidade: ${quantity}`,
+        `- Valor total: ${Number.isFinite(totalWithAll) ? brl.format(totalWithAll) : "—"}`,
+      );
+    }
+
+    if (totalCalendarDays > 0) {
+      const deliveryTime = totalCalendarDays === 1
+        ? "1 dia corrido"
+        : `${totalCalendarDays} dias corridos`;
+      lines.push(`- Previsão de entrega: ${deliveryTime}`);
+    }
+
+    const text = lines.join("\n");
+
+    void copyText(
+      text,
+      "Valores copiados",
+      "As informações do item foram copiadas para a área de transferência!",
+    );
   }
 
   const handleEdit = () => {
@@ -105,6 +169,13 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
         onClick={handleCopy}
       >
         Copiar Descrição
+      </Menu.Item>
+      <Menu.Item
+        leftSection={<IconCopy size={14} />}
+        disabled={!activeItem}
+        onClick={handleCopyAsText}
+      >
+        Copiar valores para texto
       </Menu.Item>
       <Menu.Item
         leftSection={<IconCopyPlus size={14} />}

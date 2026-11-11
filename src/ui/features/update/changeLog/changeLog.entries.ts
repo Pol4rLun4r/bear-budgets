@@ -1,4 +1,5 @@
 import newsSectionContent from "./content/news-section.md?raw";
+import copyBudgetItemAsTextContent from "./content/copy-budget-item-as-text.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -12,6 +13,13 @@ interface ChangeLogEntry {
 }
 
 export const changeLogEntryData: ChangeLogEntry[] = [
+    {
+        title: "Copie os dados do item para texto",
+        summary: "Reúna em um único texto os principais dados de um item do orçamento: descrição, código, valores finais e, quando houver, previsão de entrega.",
+        date: "2026-11-10",
+        content: copyBudgetItemAsTextContent,
+        category: "novelty",
+    },
     {
         title: "Novidades mais claras e explicativas",
         summary: "Agora as novidades também mostram se são um recurso novo, uma melhoria ou uma correção, com ícones e cores para identificar cada tipo.",
