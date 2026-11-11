@@ -83,7 +83,16 @@ type EventPayloadMapping = {
     "update:getState": AppUpdateState;
     "update:download": void;
     "update:install": void;
+
+    // application news
+    "news:getState": ChangeLogState;
+    "news:markRead": void;
 }
+
+type ChangeLogState = {
+    version: string;
+    unread: boolean;
+};
 
 type AppUpdateStatus =
     | "idle"
@@ -147,11 +156,17 @@ interface AppUpdateAPI {
     install(): Promise<void>;
 }
 
+interface NewsAPI {
+    getState(): Promise<ChangeLogState>;
+    markRead(): Promise<void>;
+}
+
 interface API {
     quotation: QuotationAPI;
     item: ItemAPI;
     window: WindowAPI;
     updates: AppUpdateAPI;
+    news: NewsAPI;
 };
 
 interface Window {

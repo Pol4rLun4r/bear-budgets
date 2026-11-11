@@ -54,13 +54,6 @@
     overflow-wrap: break-word;
 }
 
-.introDescription {
-    max-width: 48ch;
-    margin-top: var(--mantine-spacing-xs);
-    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-3));
-    line-height: 1.6;
-}
-
 .totalBadge {
     margin-top: var(--mantine-spacing-md);
     color: light-dark(var(--mantine-color-violet-7), var(--mantine-color-violet-3));
@@ -98,6 +91,60 @@
 
 .entryDescription {
     color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-3));
+}
+
+.detailsAccordion {
+    margin-top: var(--mantine-spacing-xs);
+}
+
+.detailsItem {
+    border: 0;
+}
+
+.detailsControl {
+    min-height: 36px;
+    padding: var(--mantine-spacing-xs) 0;
+    color: light-dark(var(--mantine-color-violet-7), var(--mantine-color-violet-3));
+
+    &:hover {
+        background: transparent;
+    }
+}
+
+.detailsPanel {
+    /* o painel avança à esquerda para o ícone do blockquote não ser cortado durante a animação */
+    box-sizing: border-box;
+    width: calc(100% + var(--mantine-spacing-md));
+    margin-inline-start: calc(-1 * var(--mantine-spacing-md));
+    padding: var(--mantine-spacing-md) 0 0 var(--mantine-spacing-md);
+}
+
+.detailsContent {
+    padding: 0;
+}
+
+.markdownContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-sm);
+    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-3));
+}
+
+.markdownHeading {
+    margin-top: var(--mantine-spacing-sm);
+    color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-gray-0));
+}
+
+.markdownParagraph {
+    margin: 0;
+}
+
+.markdownList {
+    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-3));
+}
+
+.markdownQuote {
+    margin: 0;
 }
 
 .entryDate {

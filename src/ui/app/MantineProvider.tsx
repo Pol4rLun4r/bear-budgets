@@ -8,6 +8,9 @@ import { createTheme, Modal, MantineProvider as Provider, TextInput, v8CssVariab
 import { Notifications } from '@mantine/notifications';
 import { DatesProvider } from '@mantine/dates'
 
+// styles
+import notificationClasses from './notifications/Notifications.module.css';
+
 // dayJS
 import 'dayjs/locale/pt-br';
 
@@ -40,7 +43,7 @@ const MantineProvider = ({ children }: { children: React.ReactNode }) => {
             theme={theme}
         >
             <DatesProvider settings={{ locale: 'pt-br', firstDayOfWeek: 0 }}>
-                <Notifications />
+                <Notifications classNames={{ root: notificationClasses.notificationsRoot }} />
                 {children}
             </DatesProvider>
         </Provider >

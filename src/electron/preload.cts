@@ -39,6 +39,10 @@ const api: API = {
         },
         download: () => ipcInvoke('update:download'),
         install: () => ipcInvoke('update:install'),
+    },
+    news: {
+        getState: () => ipcInvoke('news:getState'),
+        markRead: () => ipcInvoke('news:markRead'),
     }
 }
 

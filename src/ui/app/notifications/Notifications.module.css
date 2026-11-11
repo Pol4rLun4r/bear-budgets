@@ -1,0 +1,9 @@
+.notificationsRoot[data-position="bottom-left"] {
+    left: calc(80px + var(--mantine-spacing-md));
+    width: calc(100% - 80px - var(--mantine-spacing-md) * 2);
+}
+
+:global(body:has(nav[data-collapsed="false"])) .notificationsRoot[data-position="bottom-left"] {
+    left: calc(320px + var(--mantine-spacing-md));
+    width: calc(100% - 320px - var(--mantine-spacing-md) * 2);
+}

@@ -1,10 +1,24 @@
+import newsSectionContent from "./content/news-section.md?raw";
+
+export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
+
 interface ChangeLogEntry {
     title: string;
-    description: string;
+    description?: string;
+    summary?: string;
     date: string;
+    content?: string;
+    category?: ChangeLogCategory;
 }
 
 export const changeLogEntryData: ChangeLogEntry[] = [
+    {
+        title: "Novidades mais claras e explicativas",
+        summary: "Agora as novidades também mostram se são um recurso novo, uma melhoria ou uma correção, com ícones e cores para identificar cada tipo.",
+        date: "2026-11-10",
+        content: newsSectionContent,
+        category: "improvement",
+    },
     {
         title: "Correção no campo de IPI",
         description: "Corrigimos a digitação e a colagem de percentuais decimais no campo de IPI. Agora valores com ponto ou vírgula são considerados nos cálculos.",

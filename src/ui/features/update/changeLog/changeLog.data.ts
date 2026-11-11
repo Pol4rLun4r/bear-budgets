@@ -1,9 +1,12 @@
-import { changeLogEntryData } from "./changeLog.entries";
+import { changeLogEntryData, type ChangeLogCategory } from "./changeLog.entries";
 
 export interface ChangeLogEntry {
     title: string;
-    description: string;
+    description?: string;
+    summary?: string;
     date: Date;
+    content?: string;
+    category?: ChangeLogCategory;
 }
 
 const parseCalendarDate = (date: string) => {
@@ -32,10 +35,11 @@ const parseCalendarDate = (date: string) => {
 
 export const createChangeLogEntry = (
     title: string,
-    description: string,
+    description: string | undefined,
     date: string,
-): ChangeLogEntry => ({ title, description, date: parseCalendarDate(date) });
+    details: Pick<ChangeLogEntry, "summary" | "content" | "category"> = {},
+): ChangeLogEntry => ({ title, description, ...details, date: parseCalendarDate(date) });
 
-export const changeLogEntries = changeLogEntryData.map(({ title, description, date }) =>
-    createChangeLogEntry(title, description, date),
+export const changeLogEntries = changeLogEntryData.map(({ title, description, summary, date, content, category }) =>
+    createChangeLogEntry(title, description, date, { summary, content, category }),
 );
