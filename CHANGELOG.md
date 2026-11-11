@@ -1,3 +1,10 @@
+# [4.11.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.10.0...v4.11.0) (2026-11-11)
+
+
+### Features
+
+* **budget:** add item values copy as formatted text ([0cefc09](https://github.com/Pol4rLun4r/bear-budgets/commit/0cefc0923ec6d9b6b75d19fb93a23ddd90501440))
+
 # [4.10.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.9.0...v4.10.0) (2026-11-11)
 
 
