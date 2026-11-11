@@ -1,3 +1,10 @@
+# [4.10.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.9.0...v4.10.0) (2026-11-11)
+
+
+### Features
+
+* **changelog:** enhance update history with categories and detailed descriptions ([3e9a7ca](https://github.com/Pol4rLun4r/bear-budgets/commit/3e9a7ca188624f44cc01b1629d971cfa83cfdc05))
+
 # [4.9.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.8.1...v4.9.0) (2026-11-10)
 
 
