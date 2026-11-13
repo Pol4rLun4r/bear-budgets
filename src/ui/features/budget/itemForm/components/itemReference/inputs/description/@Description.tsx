@@ -6,7 +6,7 @@ import { Combobox, useCombobox } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 
 // redux
-import { useAppDispatch } from "@/app/reduxHooks";
+import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import {
     resetItemReference,
     setItemReference,
@@ -14,6 +14,7 @@ import {
     setReferenceLinks,
     type ItemFormScope,
 } from "@/features/budget/itemForm/store/itemForm.slice";
+import { getItemFormState } from "@/features/budget/itemForm/store/itemForm.selectors";
 
 // api
 import {
@@ -31,6 +32,10 @@ interface DescriptionProps {
 
 const Description = ({ scope = "item_form_add" }: DescriptionProps) => {
     const dispatch = useAppDispatch();
+    const { item_reference } = useAppSelector((state) => getItemFormState(state, scope));
+    const description = item_reference.description ?? "";
+    const internalCode = item_reference.internal_code ?? "";
+    const manufacturerCode = item_reference.manufacturer_code ?? "";
 
     const [
         searchItemDescription,
@@ -88,16 +93,39 @@ const Description = ({ scope = "item_form_add" }: DescriptionProps) => {
         }
     }, [isFetching, options.length, combobox]);
 
-    const fetchSuggestions = (search: string) => {
-        const query = search.trim();
+    useEffect(() => {
+        const query: SearchItemReferenceQuery = {
+            description: description.trim(),
+            internal_code: internalCode.trim(),
+            manufacturer_code: manufacturerCode.trim(),
+        };
+        const hasSearchTerm = Object.values(query).some(Boolean);
 
-        if (!query) {
-            resetSearch();
-            return;
-        }
+        resetSearch();
+
+        if (item_reference.id || !hasSearchTerm) return;
 
         void searchItemDescription(query);
-    };
+    }, [
+        description,
+        internalCode,
+        item_reference.id,
+        manufacturerCode,
+        resetSearch,
+        searchItemDescription,
+    ]);
+
+    useEffect(() => {
+        const hasSearchTerm = Boolean(
+            description.trim() || internalCode.trim() || manufacturerCode.trim(),
+        );
+
+        if (item_reference.id || !hasSearchTerm) {
+            combobox.closeDropdown();
+        } else {
+            combobox.openDropdown();
+        }
+    }, [combobox, description, internalCode, item_reference.id, manufacturerCode]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.currentTarget.value;
@@ -105,12 +133,10 @@ const Description = ({ scope = "item_form_add" }: DescriptionProps) => {
         dispatch(setReferenceField({ scope, key: "description", value }));
 
         if (!value.trim()) {
-            resetSearch();
             combobox.closeDropdown();
             return;
         }
 
-        fetchSuggestions(value);
         combobox.updateSelectedOptionIndex();
         combobox.openDropdown();
     };
@@ -140,7 +166,12 @@ const Description = ({ scope = "item_form_add" }: DescriptionProps) => {
     };
 
     return (
-        <Combobox store={combobox} onOptionSubmit={handleOptionSubmit}>
+        <Combobox
+            store={combobox}
+            onOptionSubmit={handleOptionSubmit}
+            position="top-start"
+            floatingHeight="viewport"
+        >
             <Input
                 scope={scope}
                 isLoader={isFetching}

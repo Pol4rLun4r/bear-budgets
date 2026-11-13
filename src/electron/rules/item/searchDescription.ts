@@ -6,21 +6,37 @@ export const rulesCode = {
     DESCRIPTION_NOT_STRING: "A descrição deve ser uma string",
 }
 
-const searchDescriptionRules = (rawQuery: SearchItemDescription) => {
-    // limpar espaços em branco no início e no final da string
-    rawQuery = rawQuery.trim();
+const searchDescriptionRules = (rawQuery: SearchItemReferenceQuery) => {
+    if (typeof rawQuery === "string") {
+        const query = rawQuery.trim();
 
-    // verificar se rawQuery é uma string
-    if (typeof rawQuery !== "string") {
+        if (!query) {
+            return failure(rulesCode.DESCRIPTION_NOT_INFORMED);
+        }
+
+        return success(query);
+    }
+
+    if (!rawQuery || typeof rawQuery !== "object") {
         return failure(rulesCode.DESCRIPTION_NOT_STRING);
     }
 
-    // verificar se rawQuery não é uma string vazia
-    if (rawQuery.trim().length <= 0) {
+    const fields = ["description", "internal_code", "manufacturer_code"] as const;
+    if (fields.some((field) => rawQuery[field] !== undefined && typeof rawQuery[field] !== "string")) {
+        return failure(rulesCode.DESCRIPTION_NOT_STRING);
+    }
+
+    const query: Required<SearchItemReferenceFields> = {
+        description: rawQuery.description?.trim() ?? "",
+        internal_code: rawQuery.internal_code?.trim() ?? "",
+        manufacturer_code: rawQuery.manufacturer_code?.trim() ?? "",
+    };
+
+    if (fields.every((field) => !query[field])) {
         return failure(rulesCode.DESCRIPTION_NOT_INFORMED);
     }
 
-    return success(rawQuery);
+    return success(query);
 };
 
 export default searchDescriptionRules;

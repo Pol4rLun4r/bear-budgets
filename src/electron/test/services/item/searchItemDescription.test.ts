@@ -75,6 +75,68 @@ describe("Pesquisar descrição de itens", () => {
         expect(res.data[0].manufacturer_code).toBe(fakeItens[1].manufacturer_code);
     });
 
+    it("encontrar item pelo código do fabricante mesmo quando a descrição pesquisada diverge", () => {
+        const manufacturerCode = "FAB-DESCRIPTION-MISMATCH-001";
+        const savedItem = {
+            description: manufacturerCode,
+            manufacturer_code: manufacturerCode,
+        };
+        repo.item.reference.create(savedItem);
+
+        const res = services.item.searchDescription({
+            description: "Porta de madeira",
+            manufacturer_code: manufacturerCode,
+        });
+
+        if (!res.success) throw new Error("Falha ao buscar itens: " + res.data);
+
+        expect(res.data).toHaveLength(1);
+        expect(res.data[0].description).toBe(manufacturerCode);
+        expect(res.data[0].manufacturer_code).toBe(manufacturerCode);
+    });
+
+    it("encontrar itens pelo código interno digitado no próprio campo", () => {
+        const internalCode = "INT-DESCRIPTION-MISMATCH-001";
+        repo.item.reference.create({
+            description: "Descrição original",
+            internal_code: internalCode,
+        });
+
+        const res = services.item.searchDescription({
+            description: "Outra descrição",
+            internal_code: internalCode,
+        });
+
+        if (!res.success) throw new Error("Falha ao buscar itens: " + res.data);
+
+        expect(res.data).toHaveLength(1);
+        expect(res.data[0].internal_code).toBe(internalCode);
+    });
+
+    it("priorizar correspondências exatas de código sem duplicar resultados", () => {
+        const exactInternalCode = "INT-PRIORITY-QUERY-001";
+        const partialInternalCode = `PREFIX-${exactInternalCode}-SUFFIX`;
+        repo.item.reference.create({
+            description: "Luminária especial de jardim",
+            internal_code: exactInternalCode,
+        });
+        repo.item.reference.create({
+            description: "Luminária especial externa",
+            internal_code: partialInternalCode,
+        });
+
+        const res = services.item.searchDescription({
+            description: "Luminária especial",
+            internal_code: exactInternalCode,
+        });
+
+        if (!res.success) throw new Error("Falha ao buscar itens: " + res.data);
+
+        expect(res.data).toHaveLength(2);
+        expect(res.data[0].internal_code).toBe(exactInternalCode);
+        expect(res.data[1].internal_code).toBe(partialInternalCode);
+    });
+
     it("ignorar curingas SQL como caracteres literais ao pesquisar códigos", () => {
         const res = services.item.searchDescription("INT_EL");
 

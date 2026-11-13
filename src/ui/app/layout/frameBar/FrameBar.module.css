@@ -1,7 +1,7 @@
 .frameBar {
     /* tamanho do frame */
     width: 100vw;
-    height: 2.5rem;
+    height: var(--frame-bar-height);
 
     /* organização do frame */
     display: flex;

@@ -1,8 +1,8 @@
 # searchDescription
 
-Pesquisa itens de referência pela descrição.
+Pesquisa itens de referência pela descrição e pelos códigos.
 
-Este serviço retorna todos os itens cuja descrição corresponda ao termo informado.
+Este serviço retorna os itens que correspondem a qualquer valor informado. Chamadas antigas podem continuar enviando apenas uma string.
 
 ## Objetivo
 
@@ -22,10 +22,16 @@ O serviço utiliza:
 ### Payload
 
 ```ts
-SearchItemDescription
+type SearchItemReferenceQuery =
+    | SearchItemDescription
+    | {
+        description?: string;
+        internal_code?: string;
+        manufacturer_code?: string;
+    };
 ```
 
-Representa o texto utilizado para realizar a pesquisa.
+Uma string pesquisa pela descrição e, para preservar o comportamento existente, também pelos códigos interno e do fabricante. O objeto permite pesquisar cada valor separadamente; os campos não vazios são combinados e resultados duplicados são removidos.
 
 ## Saída
 
@@ -35,7 +41,7 @@ Em caso de sucesso:
 success(ItemReference[])
 ```
 
-O retorno contém todos os itens cuja descrição corresponda ao termo pesquisado.
+Os códigos correspondentes têm prioridade sobre resultados encontrados pela descrição. Correspondências exatas de código vêm antes das parciais.
 
 Em caso de erro:
 
@@ -54,7 +60,7 @@ failure(message)
     
 2. Aplicar a regra [searchDescription](ServicesAndRules/rules/item/searchDescription).
     
-3. Consultar os itens utilizando a descrição normalizada.
+3. Consultar descrição e códigos não vazios usando o índice de texto completo e a busca de códigos.
     
 4. Retornar os itens encontrados.
     
@@ -65,11 +71,10 @@ Quando o serviço retorna sucesso:
 
 - o termo de pesquisa foi validado;
     
-- o termo de pesquisa foi normalizado;
+- os valores informados foram normalizados;
     
-- a pesquisa foi realizada utilizando a descrição normalizada;
-    
-- todos os itens retornados possuem descrição compatível com o termo informado.
+- a pesquisa considerou cada campo informado;
+- os itens retornados correspondem à descrição ou a um dos códigos pesquisados.
     
 
 ## Erros conhecidos

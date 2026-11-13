@@ -129,27 +129,90 @@ export const searchByDescription = (db: Database) =>
 
 /** pesquisa item_references pela descrição ou pelos códigos */
 export const searchByDescriptionOrCodes = (db: Database) =>
-    (rawQuery: Pick<ItemReference, 'description'>['description']): ItemReference[] => {
-        const query = createDescriptionSearchQuery(rawQuery);
-        if (!query) return [];
+    (rawQuery: SearchItemReferenceQuery): ItemReference[] => {
+        const search = typeof rawQuery === "string"
+            ? { description: rawQuery, internal_code: "", manufacturer_code: "" }
+            : {
+                description: rawQuery.description?.trim() ?? "",
+                internal_code: rawQuery.internal_code?.trim() ?? "",
+                manufacturer_code: rawQuery.manufacturer_code?.trim() ?? "",
+            };
+        const matches: string[] = [];
+        const parameters: string[] = [];
+        const descriptionQuery = createDescriptionSearchQuery(search.description);
 
-        const sql = `
-            WITH matched_references AS (
+        if (descriptionQuery) {
+            matches.push(`
                 SELECT s.rowid AS id, 1 AS priority, rank AS relevance
                 FROM item_references_search s
                 WHERE s.description MATCH ?
+            `);
+            parameters.push(descriptionQuery);
+        }
 
-                UNION ALL
-
-                SELECT ir.id, 0 AS priority, 0 AS relevance
+        if (search.description) {
+            const pattern = `%${search.description.replace(/[!%_]/g, "!$&")}%`;
+            matches.push(`
+                SELECT
+                    ir.id,
+                    0 AS priority,
+                    CASE
+                        WHEN ir.internal_code = ? OR ir.manufacturer_code = ? THEN 0
+                        ELSE 1
+                    END AS relevance
                 FROM item_references ir
                 WHERE ir.internal_code LIKE ? ESCAPE '!'
                     OR ir.manufacturer_code LIKE ? ESCAPE '!'
+            `);
+            parameters.push(search.description, search.description, pattern, pattern);
+        }
+
+        if (search.internal_code) {
+            const pattern = `%${search.internal_code.replace(/[!%_]/g, "!$&")}%`;
+            matches.push(`
+                SELECT
+                    ir.id,
+                    0 AS priority,
+                    CASE WHEN ir.internal_code = ? THEN 0 ELSE 1 END AS relevance
+                FROM item_references ir
+                WHERE ir.internal_code LIKE ? ESCAPE '!'
+            `);
+            parameters.push(search.internal_code, pattern);
+        }
+
+        if (search.manufacturer_code) {
+            const pattern = `%${search.manufacturer_code.replace(/[!%_]/g, "!$&")}%`;
+            matches.push(`
+                SELECT
+                    ir.id,
+                    0 AS priority,
+                    CASE WHEN ir.manufacturer_code = ? THEN 0 ELSE 1 END AS relevance
+                FROM item_references ir
+                WHERE ir.manufacturer_code LIKE ? ESCAPE '!'
+            `);
+            parameters.push(search.manufacturer_code, pattern);
+        }
+
+        if (matches.length === 0) return [];
+
+        const sql = `
+            WITH matched_references AS (
+                ${matches.join("\nUNION ALL\n")}
             ),
             ranked_references AS (
-                SELECT id, MIN(priority) AS priority, MIN(relevance) AS relevance
-                FROM matched_references
-                GROUP BY id
+                SELECT id, priority, relevance
+                FROM (
+                    SELECT
+                        id,
+                        priority,
+                        relevance,
+                        ROW_NUMBER() OVER (
+                            PARTITION BY id
+                            ORDER BY priority, relevance
+                        ) AS match_rank
+                    FROM matched_references
+                )
+                WHERE match_rank = 1
             )
             SELECT
                 ir.id,
@@ -166,10 +229,7 @@ export const searchByDescriptionOrCodes = (db: Database) =>
             LIMIT 8
         `;
 
-        const escapedQuery = rawQuery.replace(/[!%_]/g, "!$&");
-        const codePattern = `%${escapedQuery}%`;
-
-        return db.prepare(sql).all(query, codePattern, codePattern) as ItemReference[];
+        return db.prepare(sql).all(...parameters) as ItemReference[];
     };
 
 /** apaga todos os item_references */

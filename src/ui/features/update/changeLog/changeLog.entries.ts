@@ -1,5 +1,6 @@
 import newsSectionContent from "./content/news-section.md?raw";
 import copyBudgetItemAsTextContent from "./content/copy-budget-item-as-text.md?raw";
+import searchItemsByCodesContent from "./content/search-items-by-codes.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -13,6 +14,13 @@ interface ChangeLogEntry {
 }
 
 export const changeLogEntryData: ChangeLogEntry[] = [
+    {
+        title: "Pesquise itens também pelos códigos",
+        summary: "Encontre itens cadastrados pelo código interno ou do fabricante, mesmo quando a descrição digitada for diferente.",
+        date: "2026-11-12",
+        content: searchItemsByCodesContent,
+        category: "novelty",
+    },
     {
         title: "Copie os dados do item para texto",
         summary: "Reúna em um único texto os principais dados de um item do orçamento: descrição, código, valores finais e, quando houver, previsão de entrega.",

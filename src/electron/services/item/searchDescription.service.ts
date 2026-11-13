@@ -14,7 +14,7 @@ const searchDescriptionService = (db: Database) => {
     const repo = createRepositories(db);
     const rules = createRules();
 
-    return db.transaction((rawQuery: SearchItemDescription) => {
+    return db.transaction((rawQuery: SearchItemReferenceQuery) => {
         const result = rules.item.searchDescription(rawQuery);
 
         // any errors

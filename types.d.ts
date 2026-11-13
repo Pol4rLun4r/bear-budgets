@@ -41,6 +41,14 @@ type GetByReferenceId = ItemValues['item_reference_id'];
 
 type SearchItemDescription = Pick<ItemReference, "description">['description'];
 
+type SearchItemReferenceFields = {
+    description?: string;
+    internal_code?: string;
+    manufacturer_code?: string;
+};
+
+type SearchItemReferenceQuery = SearchItemDescription | SearchItemReferenceFields;
+
 type SearchItemDescriptionIsOptional = SearchItemDescription | undefined;
 
 type AddToQuotationPayload = {
@@ -134,7 +142,7 @@ interface QuotationAPI {
 }
 
 interface ItemAPI {
-    searchDescription(description: SearchItemDescription): Promise<Result<ItemReference[] | undefined>>;
+    searchDescription(query: SearchItemReferenceQuery): Promise<Result<ItemReference[] | undefined>>;
     findItemReferences(description: SearchItemDescriptionIsOptional): Promise<Result<ItemReference[] | undefined>>;
     getReferenceLinks(itemReferenceId: GetReferenceLinks): Promise<Result<ReferenceLink[] | undefined>>;
     getAllValuesByReferenceId(itemReferenceId: GetByReferenceId): Promise<Result<ItemValues[] | undefined>>;

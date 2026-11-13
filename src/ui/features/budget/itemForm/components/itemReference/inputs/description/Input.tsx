@@ -3,7 +3,7 @@ import type { ChangeEvent } from "react";
 import type { JSX } from "react";
 
 // mantine
-import { Combobox, Tooltip, UnstyledButton, Text, TextInput, type ComboboxStore, Loader, ActionIcon } from "@mantine/core"
+import { Combobox, ScrollArea, Tooltip, UnstyledButton, Text, TextInput, type ComboboxStore, Loader, ActionIcon } from "@mantine/core"
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
@@ -84,13 +84,21 @@ const Input = ({ isLoader, options, combobox, handleClearData, handleChange, sco
 
             {/* menu de opções */}
             <Combobox.Dropdown>
-                <Combobox.Options>
-                    {options.length === 0 && !isLoader ? (
-                        <Combobox.Empty>Nenhum resultado</Combobox.Empty>
-                    ) : isLoader ? (
-                        <Combobox.Empty> <Loader /></Combobox.Empty>
-                    ) : options}
-                </Combobox.Options>
+                <ScrollArea.Autosize
+                    mah="min(24rem, max(0px, calc(var(--combobox-floating-options-max-height) - var(--frame-bar-height) - var(--frame-bar-safe-gap))))"
+                    scrollbarSize={6}
+                    scrollbars="y"
+                    type="auto"
+                    offsetScrollbars="y"
+                >
+                    <Combobox.Options>
+                        {options.length === 0 && !isLoader ? (
+                            <Combobox.Empty>Nenhum resultado</Combobox.Empty>
+                        ) : isLoader ? (
+                            <Combobox.Empty> <Loader /></Combobox.Empty>
+                        ) : options}
+                    </Combobox.Options>
+                </ScrollArea.Autosize>
             </Combobox.Dropdown>
         </>
     )

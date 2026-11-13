@@ -1,12 +1,12 @@
 # searchDescription
 
-Valida e normaliza o texto utilizado para pesquisar itens pela descrição.
+Valida e normaliza os valores utilizados para pesquisar itens pela descrição ou pelos códigos.
 
 Esta regra garante que o termo informado seja válido antes da realização da pesquisa.
 
 ## Objetivo
 
-Preparar o texto de pesquisa utilizado para localizar itens por descrição.
+Preparar os valores de pesquisa utilizados para localizar itens por descrição, código interno ou código do fabricante.
 
 A regra não realiza consultas ao banco de dados. Sua responsabilidade é apenas validar e normalizar o termo informado.
 
@@ -17,7 +17,7 @@ As regras da entidade podem ser consultadas em [[item_references]].
 ### Payload
 
 ```ts
-SearchItemDescription
+SearchItemReferenceQuery
 ```
 
 ## Saída
@@ -25,7 +25,7 @@ SearchItemDescription
 Em caso de sucesso:
 
 ```ts
-success(SearchItemDescription)
+success(SearchItemReferenceQuery)
 ```
 
 Em caso de erro:
@@ -38,9 +38,9 @@ failure(ErrorCode)
 
 A regra executa as seguintes validações:
 
-1. O termo informado deve ser uma `string`.
+1. A entrada deve ser uma `string` ou um objeto com valores textuais para descrição e/ou códigos.
     
-2. O termo não pode ser vazio.
+2. Pelo menos um dos valores informados não pode ser vazio.
     
 
 A primeira validação que falhar interrompe a execução da regra.
@@ -49,20 +49,17 @@ A primeira validação que falhar interrompe a execução da regra.
 
 Antes de retornar sucesso, a regra realiza as seguintes normalizações:
 
-### Descrição
+### Campos de pesquisa
 
-- Remove espaços em branco do início e do fim do texto.
+- Remove espaços em branco do início e do fim de cada campo.
     
 
 ## Garantias
 
 Quando a regra retorna sucesso:
 
-- o termo de pesquisa é uma `string`;
-    
-- o termo de pesquisa não é vazio;
-    
-- o texto não possui espaços em branco desnecessários no início ou no fim.
+- pelo menos um valor pesquisável foi informado;
+- os valores não possuem espaços em branco desnecessários no início ou no fim.
     
 
 ## Códigos de erro
