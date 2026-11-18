@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 // mantine
-import { Table, TableTdProps } from "@mantine/core"
+import { ActionIcon, Table, TableTdProps } from "@mantine/core"
+import { useRef } from "react"
 
 // redux
 import { ItemFormState } from "@/features/budget/itemForm/store/itemForm.slice";
@@ -8,6 +9,9 @@ import { selectItemDeliveryInfo } from "@/features/budget/budgetForm/store/budge
 
 // DragAndDrop
 import { useSortable } from "@dnd-kit/react/sortable";
+
+// icons
+import { IconGripVertical } from "@tabler/icons-react";
 
 // utils
 import calcAddItem from "@/utils/calcAddItem";
@@ -31,7 +35,8 @@ interface RowProps {
 }
 
 const Row = ({ item, index }: RowProps) => {
-    const { ref } = useSortable({ id: item.temp_id, index })
+    const dragHandleRef = useRef<HTMLButtonElement>(null)
+    const { ref } = useSortable({ id: item.temp_id, index, handle: dragHandleRef })
     const switchMode = useAppSelector((state) => state.budgetForm.itemTableSwitch.mode)
     const tableTdProps: TableTdProps = {
         className: item.is_highlight
@@ -54,8 +59,23 @@ const Row = ({ item, index }: RowProps) => {
 
     return (
         <Table.Tr ref={ref} data-item-id={item.temp_id}>
-                <Table.Td {...tableTdProps}>{item.item_values?.position! + 1}</Table.Td>
-                <Table.Td {...tableTdProps}><RowContent disableCopyButton label={item.item_reference.description} /></Table.Td>
+                <Table.Td {...tableTdProps}>
+                    <div className={classes.itemPosition}>
+                        <ActionIcon
+                            ref={dragHandleRef}
+                            className={classes.dragHandle}
+                            size="sm"
+                            variant="subtle"
+                            color="gray"
+                            aria-label="Arrastar para reordenar item"
+                            title="Arrastar para reordenar item"
+                        >
+                            <IconGripVertical size={16} />
+                        </ActionIcon>
+                        <span>{item.item_values?.position! + 1}</span>
+                    </div>
+                </Table.Td>
+                <Table.Td {...tableTdProps}><RowContent label={item.item_reference.description} /></Table.Td>
                 <Table.Td {...tableTdProps}><RowContent label={item.item_reference.internal_code} /></Table.Td>
                 <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(unitValue)} /></Table.Td>
                 <Table.Td {...tableTdProps}><RowContent label={item.item_values.quantity} /></Table.Td>

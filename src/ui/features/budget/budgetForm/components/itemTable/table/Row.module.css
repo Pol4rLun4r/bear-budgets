@@ -10,6 +10,23 @@
     vertical-align: middle;
 }
 
+.itemPosition {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.dragHandle {
+    flex: 0 0 auto;
+    cursor: grab;
+    touch-action: none;
+}
+
+.dragHandle:active {
+    cursor: grabbing;
+}
+
 .highlighted {
     background-color: var(--mantine-color-violet-light);
     color: var(--mantine-color-violet-light-color);

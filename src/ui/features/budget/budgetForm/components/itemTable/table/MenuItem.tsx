@@ -92,15 +92,6 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
     }
   };
 
-  const handleCopy = () => {
-    if (!activeItem) return;
-    void copyText(
-      activeItem.item_reference.description ?? "",
-      "Descrição copiada",
-      "A descrição do item foi copiada para a área de transferência!",
-    );
-  };
-
   const handleCopyAsText = () => {
     if (!activeItem) return;
 
@@ -162,13 +153,6 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
         onClick={handleEdit}
       >
         Editar Item
-      </Menu.Item>
-      <Menu.Item
-        leftSection={<IconCopy size={14} />}
-        disabled={!activeItem}
-        onClick={handleCopy}
-      >
-        Copiar Descrição
       </Menu.Item>
       <Menu.Item
         leftSection={<IconCopy size={14} />}
