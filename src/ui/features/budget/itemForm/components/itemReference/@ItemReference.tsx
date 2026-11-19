@@ -1,5 +1,5 @@
 // mantine
-import { Group, Stack } from "@mantine/core"
+import { Divider, SimpleGrid, Stack } from "@mantine/core"
 
 // redux
 import { useAppSelector } from "@/app/reduxHooks"
@@ -18,31 +18,19 @@ const ItemReference = ({ scope }: { scope: ItemFormScope }) => {
   const switchMode = useAppSelector(getSwitchModeReferenceForm);
 
   return (
-    <Stack>
       <Stack gap="md">
-        <Stack gap="md">
-          <Description scope={scope} />
-          <Group
-            grow
-            justify="center"
-            align="flex-end"
-          >
-            <InternalCode scope={scope} />
-            {!switchMode && <ManufacturerCode scope={scope} />}
-            {!switchMode && <NCM scope={scope} />}
-          </Group>
-        </Stack>
-        <Group
-          grow
-          gap={0}
-          pt="sm"
-          style={{ display: switchMode ? "none" : undefined }}
-        >
-          <Links scope={scope} />
+        <Description scope={scope} />
+        <SimpleGrid cols={{ base: 1, sm: switchMode ? 1 : 3 }} spacing="sm">
+          <InternalCode scope={scope} />
+          {!switchMode && <ManufacturerCode scope={scope} />}
+          {!switchMode && <NCM scope={scope} />}
+        </SimpleGrid>
+        <Stack gap="md" style={{ display: switchMode ? "none" : undefined }}>
+          <Divider />
           <Notes scope={scope} />
-        </Group>
+          <Links scope={scope} />
+        </Stack>
       </Stack>
-    </Stack>
   )
 }
 

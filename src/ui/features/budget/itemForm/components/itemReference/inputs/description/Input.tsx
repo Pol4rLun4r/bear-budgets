@@ -11,7 +11,7 @@ import { getItemFormState } from "@/features/budget/itemForm/store/itemForm.sele
 import { resetItemDescription, resetItemReference, type ItemFormScope } from "@/features/budget/itemForm/store/itemForm.slice";
 
 // icons
-import { IconX } from "@tabler/icons-react";
+import { IconFileText, IconX } from "@tabler/icons-react";
 
 interface InputType {
     isLoader: boolean;
@@ -95,6 +95,7 @@ const Input = ({ isLoader, hasSearchTerm, searchKey, options, combobox, handleCl
                             label="Descrição do item"
                             description="Busque por itens já cadastrados ou adicione um novo"
                             placeholder="Digite a descrição do item"
+                            leftSection={<IconFileText size={17} />}
 
                             rightSection={description ? (
                                 <ActionIcon

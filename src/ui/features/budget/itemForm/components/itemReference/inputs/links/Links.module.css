@@ -1,0 +1,28 @@
+.item {
+    position: relative;
+    overflow: visible;
+
+    &[data-active] {
+        z-index: 30;
+    }
+}
+
+.panel {
+    position: absolute;
+    z-index: 20;
+    bottom: calc(100% + 15px);
+    left: -1px;
+    width: calc(100% + 2px);
+}
+
+.content {
+    max-height: min(60vh, 360px);
+    overflow-y: auto;
+    padding: var(--mantine-spacing-sm);
+    border: 1px solid var(--mantine-color-default-border);
+    border-radius: var(--mantine-radius-lg);
+    background: var(--mantine-color-body);
+    box-shadow:
+        0 10px 24px rgb(0 0 0 / 28%),
+        0 3px 8px rgb(0 0 0 / 18%);
+}

@@ -4,7 +4,7 @@ import '@mantine/notifications/styles.css';
 import '@mantine/dates/styles.css';
 
 // mantine components
-import { createTheme, Modal, MantineProvider as Provider, TextInput, v8CssVariablesResolver } from "@mantine/core";
+import { createTheme, Modal, MantineProvider as Provider, ScrollArea, TextInput, v8CssVariablesResolver } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import { DatesProvider } from '@mantine/dates'
 
@@ -31,7 +31,27 @@ const theme = createTheme({
             defaultProps: {
                 radius: "lg"
             }
-        })
+        }),
+        ScrollArea: ScrollArea.extend({
+            defaultProps: {
+                scrollbarSize: 6,
+                classNames: {
+                    scrollbar: "app-scrollbar",
+                    thumb: "app-scrollbar-thumb",
+                    corner: "app-scrollbar-corner",
+                },
+            },
+        }),
+        ScrollAreaAutosize: ScrollArea.Autosize.extend({
+            defaultProps: {
+                scrollbarSize: 6,
+                classNames: {
+                    scrollbar: "app-scrollbar",
+                    thumb: "app-scrollbar-thumb",
+                    corner: "app-scrollbar-corner",
+                },
+            },
+        }),
     }
 })
 

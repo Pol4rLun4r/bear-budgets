@@ -1,10 +1,8 @@
-// mantine
-import { Table, Anchor, UnstyledButton, Tooltip } from "@mantine/core";
-
-// icon
-import { IconTrash } from "@tabler/icons-react";
+import { useEffect, useRef } from "react";
 
 // redux
+import { ActionIcon, Anchor, Group, ScrollArea, Stack, Tooltip } from "@mantine/core";
+import { IconTrash } from "@tabler/icons-react";
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { ItemFormScope, removeLink } from "@/features/budget/itemForm/store/itemForm.slice";
 
@@ -16,36 +14,54 @@ interface ListProps {
 const List = ({ links, scope }: ListProps) => {
     const dispatch = useAppDispatch();
     const hasId = useAppSelector((state) => state.itemForm.form[scope].item_reference.id);
+    const linksViewportRef = useRef<HTMLDivElement>(null);
+    const previousLinkCount = useRef(links.length);
+
+    useEffect(() => {
+        if (links.length > previousLinkCount.current) {
+            const viewport = linksViewportRef.current;
+            viewport?.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" });
+        }
+
+        previousLinkCount.current = links.length;
+    }, [links.length]);
 
     const handleRemove = (index: number) => {
         dispatch(removeLink({ scope, index }));
     };
 
-    const rows = links.map((link: Partial<ReferenceLink>, index) => (
-        <Table.Tr key={link.id ? link.id : index}>
-            <Table.Td width={'90%'}>
-                <Anchor target="_blank" href={link.content} size="sm" lineClamp={1} w={"100%"} style={{ wordBreak: 'break-all' }} >{link.content}</Anchor>
-            </Table.Td>
-            <Table.Td>
-                {hasId === undefined ? (
-                    <Tooltip label='Deletar nota' position="right">
-                        <UnstyledButton onClick={() => handleRemove(index)}>
-                            <IconTrash size={15} color="var(--mantine-color-dimmed)" />
-                        </UnstyledButton>
-                    </Tooltip>
-                ) :
-                    null
-                }
-            </Table.Td>
-        </Table.Tr >
-    ));
-
     return (
-        <Table.ScrollContainer minWidth={0} w="100%" maxHeight={300}>
-            <Table>
-                <Table.Tbody>{rows}</Table.Tbody>
-            </Table>
-        </Table.ScrollContainer>
+        <ScrollArea.Autosize mah={88} type="auto" offsetScrollbars viewportRef={linksViewportRef}>
+            <Stack gap="xs" px="xs" py={4}>
+                {links.map((link, index) => (
+                    <Group key={link.id ?? `new-link-${index}`} wrap="nowrap">
+                        <Anchor
+                            target="_blank"
+                            href={link.content}
+                            size="sm"
+                            lineClamp={1}
+                            style={{ flex: 1, wordBreak: "break-all" }}
+                        >
+                            {link.content}
+                        </Anchor>
+                        {hasId === undefined && (
+                            <Tooltip label="Remover link">
+                                <ActionIcon
+                                    type="button"
+                                    color="red"
+                                    variant="light"
+                                    size="lg"
+                                    aria-label={`Remover link ${index + 1}`}
+                                    onClick={() => handleRemove(index)}
+                                >
+                                    <IconTrash size={18} />
+                                </ActionIcon>
+                            </Tooltip>
+                        )}
+                    </Group>
+                ))}
+            </Stack>
+        </ScrollArea.Autosize>
     )
 }
 

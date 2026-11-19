@@ -1,6 +1,9 @@
 // mantine
 import { TextInput } from "@mantine/core";
 
+// icons
+import { IconHash } from "@tabler/icons-react";
+
 // redux
 import { getItemFormState } from "../../../store/itemForm.selectors";
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
@@ -15,6 +18,7 @@ const ManufacturerCode = ({ scope }: { scope: ItemFormScope }) => {
             label="Código do fabricante"
             placeholder="(opcional)"
             radius='lg'
+            leftSection={<IconHash size={17} />}
             readOnly={!!item_reference.id} // desabilita se já tiver um item selecionado
 
             // configurações do valor do input
