@@ -15,6 +15,18 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
+        title: "Aviso da busca desaparece automaticamente",
+        summary: "Corrigimos a busca de itens de referência no formulário: quando nenhum resultado é encontrado, o aviso desaparece após 1,5 segundo e o espaço do menu é liberado.",
+        date: "2026-11-18",
+        category: "bug-fix",
+    },
+    {
+        title: "Arraste e copie descrições com mais facilidade",
+        summary: "Use o ícone ao lado do número do item para reorganizar itens do orçamento e passe o mouse sobre a descrição para copiá-la. A cópia da descrição agora fica disponível nesse botão, em vez do menu de contexto.",
+        date: "2026-11-18",
+        category: "improvement",
+    },
+    {
         title: "Pesquise itens também pelos códigos",
         summary: "Encontre itens cadastrados pelo código interno ou do fabricante, mesmo quando a descrição digitada for diferente.",
         date: "2026-11-12",

@@ -1,5 +1,5 @@
 // type
-import type { ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import type { JSX } from "react";
 
 // mantine
@@ -15,6 +15,8 @@ import { IconX } from "@tabler/icons-react";
 
 interface InputType {
     isLoader: boolean;
+    hasSearchTerm: boolean;
+    searchKey: string;
     options: JSX.Element[];
     combobox: ComboboxStore;
     scope: ItemFormScope;
@@ -22,7 +24,44 @@ interface InputType {
     handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({ isLoader, options, combobox, handleClearData, handleChange, scope }: InputType) => {
+const SearchDropdown = ({ isLoader, hasSearchTerm, options, combobox }: Pick<InputType, "isLoader" | "hasSearchTerm" | "options" | "combobox">) => {
+    const [showNoResults, setShowNoResults] = useState(true);
+
+    useEffect(() => {
+        if (!hasSearchTerm || isLoader || options.length > 0) return;
+
+        const timeoutId = window.setTimeout(() => {
+            setShowNoResults(false);
+            combobox.closeDropdown();
+        }, 1500);
+
+        return () => window.clearTimeout(timeoutId);
+    }, [combobox, hasSearchTerm, isLoader, options.length]);
+
+    if (hasSearchTerm && !isLoader && options.length === 0 && !showNoResults) return null;
+
+    return (
+        <Combobox.Dropdown>
+            <ScrollArea.Autosize
+                mah="min(24rem, max(0px, calc(var(--combobox-floating-options-max-height) - var(--frame-bar-height) - var(--frame-bar-safe-gap))))"
+                scrollbarSize={6}
+                scrollbars="y"
+                type="auto"
+                offsetScrollbars="y"
+            >
+                <Combobox.Options>
+                    {options.length === 0 && !isLoader ? (
+                        <Combobox.Empty>Nenhum resultado</Combobox.Empty>
+                    ) : isLoader ? (
+                        <Combobox.Empty><Loader /></Combobox.Empty>
+                    ) : options}
+                </Combobox.Options>
+            </ScrollArea.Autosize>
+        </Combobox.Dropdown>
+    );
+};
+
+const Input = ({ isLoader, hasSearchTerm, searchKey, options, combobox, handleClearData, handleChange, scope }: InputType) => {
     const dispatch = useAppDispatch();
 
     const { item_reference } = useAppSelector((state) => getItemFormState(state, scope));
@@ -83,23 +122,13 @@ const Input = ({ isLoader, options, combobox, handleClearData, handleChange, sco
             </Combobox.Target>
 
             {/* menu de opções */}
-            <Combobox.Dropdown>
-                <ScrollArea.Autosize
-                    mah="min(24rem, max(0px, calc(var(--combobox-floating-options-max-height) - var(--frame-bar-height) - var(--frame-bar-safe-gap))))"
-                    scrollbarSize={6}
-                    scrollbars="y"
-                    type="auto"
-                    offsetScrollbars="y"
-                >
-                    <Combobox.Options>
-                        {options.length === 0 && !isLoader ? (
-                            <Combobox.Empty>Nenhum resultado</Combobox.Empty>
-                        ) : isLoader ? (
-                            <Combobox.Empty> <Loader /></Combobox.Empty>
-                        ) : options}
-                    </Combobox.Options>
-                </ScrollArea.Autosize>
-            </Combobox.Dropdown>
+            <SearchDropdown
+                key={searchKey}
+                isLoader={isLoader}
+                hasSearchTerm={hasSearchTerm}
+                options={options}
+                combobox={combobox}
+            />
         </>
     )
 }

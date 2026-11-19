@@ -175,7 +175,9 @@ const Description = ({ scope = "item_form_add" }: DescriptionProps) => {
             <Input
                 scope={scope}
                 isLoader={isFetching}
+                hasSearchTerm={Boolean(description.trim() || internalCode.trim() || manufacturerCode.trim())}
                 options={options}
+                searchKey={JSON.stringify([description, internalCode, manufacturerCode])}
                 combobox={combobox}
                 handleChange={handleChange}
                 handleClearData={handleClearData}
