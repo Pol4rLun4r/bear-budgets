@@ -1,3 +1,16 @@
+# [4.13.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.12.0...v4.13.0) (2026-11-19)
+
+
+### Bug Fixes
+
+* **budget:** improve search dropdown behavior ([14900c6](https://github.com/Pol4rLun4r/bear-budgets/commit/14900c65c9f917d861372db7894dc2e18de7f401))
+
+
+### Features
+
+* **budget:** add drag handles for item reordering ([3c1fe70](https://github.com/Pol4rLun4r/bear-budgets/commit/3c1fe702285a5fcdaddf7008bac0d44e4c775531))
+* **item-reference:** redesign reference form layout and styling ([16be75e](https://github.com/Pol4rLun4r/bear-budgets/commit/16be75e3ed16fcdb4d5db8c72082199da2b8ca0e))
+
 # [4.12.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.11.0...v4.12.0) (2026-11-13)
 
 
