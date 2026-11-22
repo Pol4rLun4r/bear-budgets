@@ -6,18 +6,22 @@ import { useDisclosure } from '@mantine/hooks';
 import { BudgetFormScope } from "../../../store/@rootReducer";
 
 // components
-import ItemForm from "@/features/budget/itemForm/@ItemForm";
+import ItemFormModal from "@/features/budget/itemForm/@ItemFormModal";
 import SwitchMode from "./SwitchMode";
 
 // icons
 import { IconPlus, IconTrash } from "@tabler/icons-react"
-import { useAppDispatch } from "@/app/reduxHooks";
+import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { resetTable } from "../../../store/itemTable.slice";
+import { applyDefaultItemValues } from "@/features/budget/itemForm/store/itemForm.slice";
 
 const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
     const [itemOpened, { open: itemOpen, close: itemClose }] = useDisclosure(false);
     const [deleteOpened, { open: deleteOpen, close: deleteClose }] = useDisclosure(false);
     const dispatch = useAppDispatch();
+    const defaultItemValues = useAppSelector(
+        (state) => state.settings.value?.interface.itemForm.itemValues,
+    );
 
     const handleDelete = () => {
         dispatch(resetTable(scope))
@@ -28,6 +32,18 @@ const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
         if (scope === 'budget_form_create') return 'item_form_add';
         return 'item_form_add_budget_edit';
     } 
+
+    const handleOpenItem = () => {
+        if (defaultItemValues) {
+            dispatch(applyDefaultItemValues({
+                scope: handleAddItemScope(),
+                markup: defaultItemValues.defaultMarkup,
+                boarding: defaultItemValues.defaultBoarding,
+                delivery: defaultItemValues.defaultDelivery,
+            }));
+        }
+        itemOpen();
+    };
 
     return (
         <>
@@ -50,7 +66,7 @@ const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
                         leftSection={<IconPlus size={20} />}
                         radius="lg"
                         variant="light"
-                        onClick={itemOpen}
+                        onClick={handleOpenItem}
                     >
                         Item
                     </Button>
@@ -74,15 +90,13 @@ const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
             </ Modal>
 
             {/* modal do botão para adicionar um item */}
-            < Modal
-                size='lg'
+            <ItemFormModal
                 opened={itemOpened}
                 onClose={itemClose}
                 title="Adicionar item"
-                pos={"relative"}
-            >
-                <ItemForm scope={handleAddItemScope()} budgetScope={scope} closeModal={itemClose} />
-            </Modal >
+                scope={handleAddItemScope()}
+                budgetScope={scope}
+            />
         </>
     )
 }

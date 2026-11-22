@@ -30,13 +30,31 @@ const calcAddItem = ({ ipi = 0, markup = "", purchase_shipping = 0, quantity = 0
     // markup unitário do item
     const markupUnitValue = markupValue / quantity;
 
+    // subtotais depois do markup e do valor extra, antes do frete de compra
+    const totalAfterMarkup = totalWithIPIandST + markupValue;
+    const totalWithExtraValue = totalAfterMarkup + extra_value;
+    const totalExtrasAndShipping = extra_value + purchase_shipping;
+
     // orçamento com todos os impostos e valores extras
-    const totalWithAll = markupValue + totalWithIPIandST + purchase_shipping + extra_value;
+    const totalWithAll = totalAfterMarkup + totalExtrasAndShipping;
 
     // valor unitário com todos os cálculos
     const finalUnitValue = totalWithAll / quantity;
 
-    return { totalWithoutTaxes, ipiValue, stValue, totalWithIPIandST, markupValue, markupUnitValue, totalWithAll, finalUnitValue };
+    return {
+        totalWithoutTaxes,
+        ipiValue,
+        totalWithIPI,
+        stValue,
+        totalWithIPIandST,
+        markupValue,
+        markupUnitValue,
+        totalAfterMarkup,
+        totalWithExtraValue,
+        totalExtrasAndShipping,
+        totalWithAll,
+        finalUnitValue,
+    };
 };
 
 export default calcAddItem;

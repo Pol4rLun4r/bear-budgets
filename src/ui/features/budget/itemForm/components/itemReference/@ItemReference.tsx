@@ -16,20 +16,33 @@ import Links from "./inputs/links/@Links";
 
 const ItemReference = ({ scope }: { scope: ItemFormScope }) => {
   const switchMode = useAppSelector(getSwitchModeReferenceForm);
+  const simpleModeVisibleFields = useAppSelector(
+    (state) => state.settings.value?.interface.itemForm.itemReference.simpleModeVisibleFields ?? [],
+  );
+  const visibleFields = new Set(simpleModeVisibleFields);
+  const isVisible = (field: ItemReferenceSimpleField) =>
+    !switchMode || visibleFields.has(field);
+  const gridFields: ItemReferenceSimpleField[] = ["internalCode", "manufacturerCode", "ncm"];
+  const hasGridFields = gridFields.some(isVisible);
+  const hasAdditionalFields = isVisible("notes") || isVisible("links");
 
   return (
       <Stack gap="md">
         <Description scope={scope} />
-        <SimpleGrid cols={{ base: 1, sm: switchMode ? 1 : 3 }} spacing="sm">
-          <InternalCode scope={scope} />
-          {!switchMode && <ManufacturerCode scope={scope} />}
-          {!switchMode && <NCM scope={scope} />}
-        </SimpleGrid>
-        <Stack gap="md" style={{ display: switchMode ? "none" : undefined }}>
-          <Divider />
-          <Notes scope={scope} />
-          <Links scope={scope} />
-        </Stack>
+        {hasGridFields && (
+          <SimpleGrid cols={{ base: 1, sm: switchMode ? 1 : 3 }} spacing="sm">
+            {isVisible("internalCode") && <InternalCode scope={scope} />}
+            {isVisible("manufacturerCode") && <ManufacturerCode scope={scope} />}
+            {isVisible("ncm") && <NCM scope={scope} />}
+          </SimpleGrid>
+        )}
+        {hasAdditionalFields && (
+          <Stack gap="md">
+            <Divider />
+            {isVisible("notes") && <Notes scope={scope} />}
+            {isVisible("links") && <Links scope={scope} />}
+          </Stack>
+        )}
       </Stack>
   )
 }

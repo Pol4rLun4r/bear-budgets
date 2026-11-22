@@ -56,6 +56,7 @@ const CurrencyInput = ({
     ...mantineProps
 }: CurrencyInputProps) => {
     const [focused, setFocused] = useState(false);
+    const [draftValue, setDraftValue] = useState<string>();
 
     // toNumber("R$ 3.339,50") // 3339.5
     // toNumber("25,90")       // 25.9
@@ -95,7 +96,16 @@ const CurrencyInput = ({
 
         const text = event.clipboardData.getData("text");
         event.preventDefault();
-        onValueChange(toNumber(text));
+        const parsedValue = toNumber(text);
+        onValueChange(parsedValue);
+        setDraftValue(
+            parsedValue === undefined
+                ? ""
+                : parsedValue.toLocaleString("pt-BR", {
+                    useGrouping: false,
+                    maximumFractionDigits: 2,
+                }),
+        );
     };
 
     return (
@@ -117,17 +127,26 @@ const CurrencyInput = ({
             min={0}
             stepHoldDelay={500}
             stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-            value={value ?? ""}
+            value={
+                focused
+                    ? draftValue ?? value?.toString().replace(".", ",") ?? ""
+                    : value ?? ""
+            }
             onFocus={(event) => {
                 setFocused(true);
+                setDraftValue(value?.toString().replace(".", ",") ?? "");
                 onFocus?.(event);
             }}
             onBlur={(event) => {
                 setFocused(false);
+                setDraftValue(undefined);
                 onBlur?.(event);
             }}
             onPaste={handlePaste}
-            onChange={(input) => onValueChange(toNumber(input))}
+            onValueChange={({ floatValue, formattedValue }) => {
+                setDraftValue(formattedValue);
+                onValueChange(floatValue);
+            }}
         />
     )
 }

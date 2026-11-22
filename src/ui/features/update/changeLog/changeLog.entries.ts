@@ -2,6 +2,7 @@ import newsSectionContent from "./content/news-section.md?raw";
 import copyBudgetItemAsTextContent from "./content/copy-budget-item-as-text.md?raw";
 import searchItemsByCodesContent from "./content/search-items-by-codes.md?raw";
 import itemFormFlowContent from "./content/item-form-flow.md?raw";
+import itemValuesImprovementContent from "./content/item-values-improvement.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -16,10 +17,23 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
+        title: "Nova tela de configurações",
+        summary: "Acesse Configurações pela barra lateral para ajustar a interface dos orçamentos e do formulário de item. Escolha como as tabelas começam, quais colunas e campos ficam visíveis e os valores padrão de markup, embarque e entrega. As mudanças ficam como rascunho até você clicar em Salvar alterações da interface; se preferir, restaure os padrões.",
+        date: "2026-11-22",
+        category: "novelty",
+    },
+    {
         title: "Fluxo do formulário de item mais intuitivo",
         summary: "Agora fica mais fácil identificar como avançar, voltar ou concluir a criação e a edição de um item. Os botões estão organizados para destacar a próxima ação em cada etapa.",
         date: "2026-11-22",
         content: itemFormFlowContent,
+        category: "improvement",
+    },
+    {
+        title: "Cálculos do item do orçamento mais claros",
+        summary: "Ao adicionar ou editar um item do orçamento, a etapa de valores agora mostra apenas os campos escolhidos nas configurações. Os campos de preço, quantidade, margem, impostos e prazos ficam mais simples de consultar, e o resultado do cálculo aparece destacado ao lado ou abaixo do formulário.",
+        date: "2026-11-22",
+        content: itemValuesImprovementContent,
         category: "improvement",
     },
     {

@@ -23,6 +23,8 @@ import RowContent from "@/shared/RowContent/RowContent";
 // style
 import classes from './Row.module.css';
 import { useAppSelector } from "@/app/reduxHooks";
+import { budgetTableColumns } from "../budgetTableColumns";
+import type { ReactNode } from "react";
 
 const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -32,12 +34,12 @@ const brl = new Intl.NumberFormat("pt-BR", {
 interface RowProps {
     item: ItemFormState;
     index: number;
+    visibleColumns: ReadonlySet<BudgetTableColumn>;
 }
 
-const Row = ({ item, index }: RowProps) => {
+const Row = ({ item, index, visibleColumns }: RowProps) => {
     const dragHandleRef = useRef<HTMLButtonElement>(null)
     const { ref } = useSortable({ id: item.temp_id, index, handle: dragHandleRef })
-    const switchMode = useAppSelector((state) => state.budgetForm.itemTableSwitch.mode)
     const tableTdProps: TableTdProps = {
         className: item.is_highlight
             ? `${classes.rowContainer} ${classes.highlighted}`
@@ -57,6 +59,31 @@ const Row = ({ item, index }: RowProps) => {
         (state) => selectItemDeliveryInfo(state, item.item_values as ItemValues, baseDate)
     );
 
+    const columnContent: Record<BudgetTableColumn, () => ReactNode> = {
+        description: () => <RowContent label={item.item_reference.description} />,
+        internalCode: () => <RowContent label={item.item_reference.internal_code} />,
+        unitPrice: () => <RowContent onlyNumbers label={brl.format(unitValue)} />,
+        quantity: () => <RowContent label={item.item_values.quantity} />,
+        totalWithAdditions: () => <RowContent onlyNumbers label={brl.format(total)} />,
+        shippingAndDelivery: () => (
+            <RowContent
+                label={deliveryDateLabel}
+                value={hasDeliveryDate ? deliveryDate : ''}
+            />
+        ),
+        markupPercentage: () => <RowContent label={convertMarkupValue(item.item_values.markup) + "%"} />,
+        totalWithoutAdditions: () => <RowContent label={brl.format(calcItem.totalWithoutTaxes)} />,
+        unitPriceWithoutAdditions: () => <RowContent onlyNumbers label={brl.format(unitValue)} />,
+        unitMarkup: () => <RowContent label={brl.format(calcItem.markupUnitValue)} />,
+        totalMarkup: () => <RowContent label={brl.format(calcItem.markupValue)} />,
+        st: () => <RowContent label={brl.format(!item.item_values.st ? 0 : item.item_values.st)} />,
+        ipiPercentage: () => <RowContent label={(!item.item_values.ipi ? 0 : item.item_values.ipi) + "%"} />,
+        ipiValue: () => <RowContent label={brl.format(calcItem.ipiValue)} />,
+        purchaseShipping: () => <RowContent label={brl.format(!item.item_values.purchase_shipping ? 0 : item.item_values.purchase_shipping)} />,
+        extraValue: () => <RowContent label={brl.format(!item.item_values.extra_value ? 0 : item.item_values.extra_value)} />,
+        totalWithIpiAndSt: () => <RowContent label={brl.format(calcItem.totalWithIPIandST)} />,
+    };
+
     return (
         <Table.Tr ref={ref} data-item-id={item.temp_id}>
                 <Table.Td {...tableTdProps}>
@@ -75,32 +102,11 @@ const Row = ({ item, index }: RowProps) => {
                         <span>{item.item_values?.position! + 1}</span>
                     </div>
                 </Table.Td>
-                <Table.Td {...tableTdProps}><RowContent label={item.item_reference.description} /></Table.Td>
-                <Table.Td {...tableTdProps}><RowContent label={item.item_reference.internal_code} /></Table.Td>
-                <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(unitValue)} /></Table.Td>
-                <Table.Td {...tableTdProps}><RowContent label={item.item_values.quantity} /></Table.Td>
-                <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(total)} /></Table.Td>
-                <Table.Td {...tableTdProps}>
-                    <RowContent
-                        label={deliveryDateLabel}
-                        value={hasDeliveryDate ? deliveryDate : ''}
-                    />
-                </Table.Td>
-                <Table.Td {...tableTdProps}><RowContent label={convertMarkupValue(item.item_values.markup) + "%"} /></Table.Td>
-                {!switchMode &&
-                    <>
-                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.totalWithoutTaxes)} /></Table.Td>
-                        <Table.Td {...tableTdProps}><RowContent onlyNumbers label={brl.format(unitValue)}  /></Table.Td>
-                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.markupUnitValue)} /></Table.Td>
-                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.markupValue)} /></Table.Td>
-                        <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_values.st ? 0 : item.item_values.st)} /></Table.Td>
-                        <Table.Td {...tableTdProps}><RowContent label={(!item.item_values.ipi ? 0 : item.item_values.ipi) + "%"} /></Table.Td>
-                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.ipiValue)} /></Table.Td>
-                        <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_values.purchase_shipping ? 0 : item.item_values.purchase_shipping)} /></Table.Td>
-                        <Table.Td {...tableTdProps}><RowContent label={brl.format(!item.item_values.extra_value ? 0 : item.item_values.extra_value)} /></Table.Td>
-                        <Table.Td {...tableTdProps}><RowContent label={brl.format(calcItem.totalWithIPIandST)} /></Table.Td>
-                    </>
-                }
+                {budgetTableColumns
+                    .filter(({ id }) => visibleColumns.has(id))
+                    .map(({ id }) => (
+                        <Table.Td key={id} {...tableTdProps}>{columnContent[id]()}</Table.Td>
+                    ))}
         </Table.Tr>
     )
 }

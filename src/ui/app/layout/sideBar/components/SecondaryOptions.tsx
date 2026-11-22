@@ -3,6 +3,7 @@ import classes from '../Sidebar.module.css'
 
 // mantine
 import { Stack, useMantineColorScheme, useComputedColorScheme } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 
 // icons
 import { IconSettings2, IconSun, IconMoon } from '@tabler/icons-react'
@@ -11,10 +12,12 @@ import { IconSettings2, IconSun, IconMoon } from '@tabler/icons-react'
 import { SidebarPage } from './SidebarPage';
 import UpdateOption from '@/features/update/UpdateOption';
 import { ChangeLog } from '@/features/update/changeLog/@ChangeLog';
+import SettingsModal from '@/features/settings/SettingsModal';
 
 const SecondaryOptions = () => {
     const { setColorScheme } = useMantineColorScheme();
     const computedColorScheme = useComputedColorScheme('dark');
+    const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false);
 
     const colorSchemeHandle = () => {
         setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark');
@@ -31,8 +34,10 @@ const SecondaryOptions = () => {
             />
             <SidebarPage
                 icon={IconSettings2}
-                label='Settings'
+                label='Configurações'
+                onClick={openSettings}
             />
+            <SettingsModal opened={settingsOpened} onClose={closeSettings} />
         </Stack>
     )
 };

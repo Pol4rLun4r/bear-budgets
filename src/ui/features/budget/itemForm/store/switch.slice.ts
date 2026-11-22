@@ -1,6 +1,6 @@
 // redux
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type ItemFormSwitchState = {
     item_reference: { mode: boolean };
@@ -22,8 +22,15 @@ const itemFormSwitchSlice = createSlice({
         setSwitchOffItemReference: (state) => { state.item_reference.mode = false },
         setSwitchOnItemValues: (state) => { state.item_values.mode = true },
         setSwitchOffItemValues: (state) => { state.item_values.mode = false },
+        setSwitchModes: (
+            state,
+            action: PayloadAction<{ item_reference: boolean; item_values: boolean }>,
+        ) => {
+            state.item_reference.mode = action.payload.item_reference;
+            state.item_values.mode = action.payload.item_values;
+        },
         resetSwitch: () => initialState
-    }
+    },
 })
 
 export const {
@@ -32,6 +39,7 @@ export const {
     setSwitchOnItemReference,
     setSwitchOffItemValues,
     setSwitchOnItemValues,
+    setSwitchModes,
 } = itemFormSwitchSlice.actions;
 
 export default itemFormSwitchSlice.reducer;

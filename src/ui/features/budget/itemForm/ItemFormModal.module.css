@@ -1,0 +1,47 @@
+.inner {
+    overflow: visible;
+}
+
+.content {
+    position: relative;
+    overflow: visible;
+    max-height: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.formPane {
+    position: relative;
+    overflow: visible;
+    width: 100%;
+    background: var(--mantine-color-body);
+    border-radius: var(--mantine-radius-lg);
+    box-shadow:
+        0 10px 24px rgb(0 0 0 / 28%),
+        0 3px 8px rgb(0 0 0 / 18%);
+}
+
+.aside {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    width: 15rem;
+    background: var(--mantine-color-body);
+    box-shadow:
+        0 10px 24px rgb(0 0 0 / 28%),
+        0 3px 8px rgb(0 0 0 / 18%);
+}
+
+.asidePrimary {
+    right: calc(100% + var(--mantine-spacing-md));
+}
+
+.asideDetails {
+    left: calc(100% + var(--mantine-spacing-md));
+}
+
+@media (max-width: 79.99em) {
+    .aside {
+        display: none;
+    }
+}

@@ -5,6 +5,7 @@ import { Table as MantineTable } from "@mantine/core"
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { BudgetFormScope } from "../../../store/@rootReducer";
 import { reorderItems } from "../../../store/itemTable.slice";
+import { budgetTableColumns, defaultSimpleModeVisibleColumns } from "../budgetTableColumns";
 
 // components
 import MenuItem from "./MenuItem";
@@ -18,9 +19,16 @@ const List = ({ scope }: { scope: BudgetFormScope }) => {
     const dispatch = useAppDispatch();
     const listItems = useAppSelector((state) => state.budgetForm.itemTable[scope]);
     const switchMode = useAppSelector((state) => state.budgetForm.itemTableSwitch.mode);
+    const simpleModeVisibleColumns = useAppSelector(
+        (state) => state.settings.value?.interface.budgetTable.simpleModeVisibleColumns
+            ?? defaultSimpleModeVisibleColumns,
+    );
+    const visibleColumns = switchMode
+        ? new Set(simpleModeVisibleColumns)
+        : new Set(budgetTableColumns.map((column) => column.id));
 
     const rows = listItems.map((item, index) => (
-        <Row key={item.temp_id} item={item} index={index} />
+        <Row key={item.temp_id} item={item} index={index} visibleColumns={visibleColumns} />
     ));
 
     const handleDragEnd: React.ComponentProps<typeof DragDropProvider>["onDragEnd"] = (event) => {
@@ -56,27 +64,11 @@ const List = ({ scope }: { scope: BudgetFormScope }) => {
                             <MantineTable.Thead>
                                 <MantineTable.Tr>
                                     <MantineTable.Th w={'5%'}>Item</MantineTable.Th>
-                                    <MantineTable.Th w={'20%'}>Descrição</MantineTable.Th>
-                                    <MantineTable.Th w={'10%'}>Código interno</MantineTable.Th>
-                                    <MantineTable.Th w={'10%'}>Valor unitário</MantineTable.Th>
-                                    <MantineTable.Th w={'8%'}>Qtd</MantineTable.Th>
-                                    <MantineTable.Th w={'10%'}>Total c/ somas</MantineTable.Th>
-                                    <MantineTable.Th w={'10%'}>Embarque + Entrega</MantineTable.Th>
-                                    <MantineTable.Th w={'8%'}>Markup (%)</MantineTable.Th>
-                                    {!switchMode &&
-                                        <>
-                                            <MantineTable.Th w={'10%'}>Total s/ somas</MantineTable.Th>
-                                            <MantineTable.Th w={'10%'}>Valor unit s/ somas</MantineTable.Th>
-                                            <MantineTable.Th w={'10%'}>Markup unitário</MantineTable.Th>
-                                            <MantineTable.Th w={'10%'}>Markup total</MantineTable.Th>
-                                            <MantineTable.Th w={'10%'}>ST</MantineTable.Th>
-                                            <MantineTable.Th w={'10%'}>IPI (%)</MantineTable.Th>
-                                            <MantineTable.Th w={'10%'}>Valor IPI</MantineTable.Th>
-                                            <MantineTable.Th w={'10%'}>Frete de compra</MantineTable.Th>
-                                            <MantineTable.Th w={'10%'}>Valor extra</MantineTable.Th>
-                                            <MantineTable.Th w={'10%'}>Valor Total + IPI + ST</MantineTable.Th>
-                                        </>
-                                    }
+                                    {budgetTableColumns
+                                        .filter(({ id }) => visibleColumns.has(id))
+                                        .map(({ id, label, width }) => (
+                                            <MantineTable.Th key={id} w={width}>{label}</MantineTable.Th>
+                                        ))}
                                 </MantineTable.Tr>
                             </MantineTable.Thead>
                             <MantineTable.Tbody>{rows}</MantineTable.Tbody>

@@ -24,10 +24,22 @@ export const isHiddenValueWarning = (state: RootState, scope: ItemFormScope) => 
     const step = state.itemForm.steps[scope].step;
     const itemValues = state.itemForm.form[scope].item_values;
     const switchMode = state.itemForm.switch.item_values.mode;
+    const visibleFields = new Set(
+        state.settings.value?.interface.itemForm.itemValues.simpleModeVisibleFields ?? [],
+    );
+    const defaultDelivery =
+        state.settings.value?.interface.itemForm.itemValues.defaultDelivery ?? 3;
+    const hasHiddenValue =
+        (Boolean(itemValues.ipi) && !visibleFields.has("ipi")) ||
+        (Boolean(itemValues.st) && !visibleFields.has("st")) ||
+        (Boolean(itemValues.extra_value) && !visibleFields.has("extraValue")) ||
+        (Boolean(itemValues.boarding) && !visibleFields.has("boarding")) ||
+        (itemValues.delivery != null &&
+            itemValues.delivery !== defaultDelivery &&
+            !visibleFields.has("delivery")) ||
+        (Boolean(itemValues.purchase_shipping) && !visibleFields.has("purchaseShipping"));
 
-    return Boolean(itemValues.ipi || itemValues.st || itemValues.extra_value)
-        && step !== 0
-        && switchMode;
+    return hasHiddenValue && step !== 0 && switchMode;
 };
 
 export const isHasDescription = (state: RootState, scope: ItemFormScope) => {

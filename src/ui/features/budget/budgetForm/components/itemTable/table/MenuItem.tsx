@@ -11,7 +11,7 @@ import { ItemFormState, setItemForm } from "@/features/budget/itemForm/store/ite
 
 
 // component
-import ItemForm from "../../../../itemForm/@ItemForm";
+import ItemFormModal from "../../../../itemForm/@ItemFormModal";
 import { notifications } from "@mantine/notifications";
 import { BudgetFormScope } from "../../../store/@rootReducer";
 import { useAppDispatch } from "@/app/reduxHooks";
@@ -209,14 +209,13 @@ const MenuItem = ({ items, scope, children }: MenuItemType) => {
       </Modal>
 
       {/* modal do botão editar */}
-      <Modal
-        size='lg'
+      <ItemFormModal
         opened={editOpened && activeItem !== null}
         onClose={editClose}
         title="Editar item"
-      >
-        <ItemForm budgetScope={scope} scope="item_form_edit" closeModal={editClose} />
-      </Modal>
+        budgetScope={scope}
+        scope="item_form_edit"
+      />
     </>
   )
 }

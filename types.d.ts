@@ -95,7 +95,97 @@ type EventPayloadMapping = {
     // application news
     "news:getState": ChangeLogState;
     "news:markRead": void;
+
+    // application settings
+    "settings:get": AppSettings;
+    "settings:update": AppSettings;
 }
+
+type BudgetTableColumn =
+    | "description"
+    | "internalCode"
+    | "unitPrice"
+    | "quantity"
+    | "totalWithAdditions"
+    | "shippingAndDelivery"
+    | "markupPercentage"
+    | "totalWithoutAdditions"
+    | "unitPriceWithoutAdditions"
+    | "unitMarkup"
+    | "totalMarkup"
+    | "st"
+    | "ipiPercentage"
+    | "ipiValue"
+    | "purchaseShipping"
+    | "extraValue"
+    | "totalWithIpiAndSt";
+
+type ItemReferenceSimpleField =
+    | "internalCode"
+    | "manufacturerCode"
+    | "ncm"
+    | "notes"
+    | "links";
+type ItemValuesSimpleField =
+    | "historyPrice"
+    | "ipi"
+    | "st"
+    | "extraValue"
+    | "boarding"
+    | "delivery"
+    | "purchaseShipping"
+    | "totalWithoutTaxes"
+    | "markupValue"
+    | "ipiValue"
+    | "stValue"
+    | "totalWithIPIandST"
+    | "totalWithAll"
+    | "finalUnitValue";
+
+type AppSettings = {
+    version: 3;
+    interface: {
+        budgetTable: {
+            defaultSimpleMode: boolean;
+            simpleModeVisibleColumns: BudgetTableColumn[];
+        };
+        itemForm: {
+            itemReference: {
+                defaultSimpleMode: boolean;
+                simpleModeVisibleFields: ItemReferenceSimpleField[];
+            };
+            itemValues: {
+                defaultSimpleMode: boolean;
+                simpleModeVisibleFields: ItemValuesSimpleField[];
+                defaultMarkup: number;
+                defaultBoarding: number;
+                defaultDelivery: number;
+            };
+        };
+    };
+};
+
+type SettingsUpdate = {
+    interface?: {
+        budgetTable?: {
+            defaultSimpleMode?: boolean;
+            simpleModeVisibleColumns?: BudgetTableColumn[];
+        };
+        itemForm?: {
+            itemReference?: {
+                defaultSimpleMode?: boolean;
+                simpleModeVisibleFields?: ItemReferenceSimpleField[];
+            };
+            itemValues?: {
+                defaultSimpleMode?: boolean;
+                simpleModeVisibleFields?: ItemValuesSimpleField[];
+                defaultMarkup?: number;
+                defaultBoarding?: number;
+                defaultDelivery?: number;
+            };
+        };
+    };
+};
 
 type ChangeLogState = {
     version: string;
@@ -169,12 +259,18 @@ interface NewsAPI {
     markRead(): Promise<void>;
 }
 
+interface SettingsAPI {
+    get(): Promise<AppSettings>;
+    update(settings: SettingsUpdate): Promise<AppSettings>;
+}
+
 interface API {
     quotation: QuotationAPI;
     item: ItemAPI;
     window: WindowAPI;
     updates: AppUpdateAPI;
     news: NewsAPI;
+    settings: SettingsAPI;
 };
 
 interface Window {

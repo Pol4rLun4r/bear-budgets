@@ -2,11 +2,12 @@
 import { app } from "electron";
 
 // utils
-import { getDBPath } from "./utils/pathResolver.js";
+import { getDBPath, getSettingsPath } from "./utils/pathResolver.js";
 import { createFakeData } from "./utils/createFakeData.js";
 
 // database
 import { createDatabase } from "./db/connection.js";
+import { createSettingsStore } from "./app/settings.js";
 
 // electron components
 import ipcHandlers from "./ipc/index.js";
@@ -33,18 +34,25 @@ const main = () => {
     }
 
     // quando o app estiver pronto, cria a janela principal, inicializa o banco de dados e registra os handlers do IPC
-    app.whenReady().then(() => {
-        db = createDatabase(getDBPath()); // cria a conexão com o banco de dados
+    app.whenReady().then(async () => {
+        const dbPath = getDBPath();
+        const settingsStore = createSettingsStore(getSettingsPath(dbPath));
+
+        db = createDatabase(dbPath); // cria a conexão com o banco de dados
+        await settingsStore.initialize();
 
         // função para dev
         createFakeData(db); // cria dados fake em modo de desenvolvimento
 
         // funções principais do app
-        ipcHandlers(db); // registo dos handlers antes de abrir a janela
+        ipcHandlers(db, settingsStore); // registo dos handlers antes de abrir a janela
         windowEvents(focusOrCreateMainWindow); // registo dos eventos da janela
         createMainWindow(); // cria a janela principal do aplicativo
         setupAutoUpdater(); // verifica atualizações, inclusive durante o desenvolvimento
-    })
+    }).catch((error: unknown) => {
+        console.error("Failed to initialize application:", error);
+        app.quit();
+    });
 }
 
 main();

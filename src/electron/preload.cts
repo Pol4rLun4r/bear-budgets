@@ -43,6 +43,10 @@ const api: API = {
     news: {
         getState: () => ipcInvoke('news:getState'),
         markRead: () => ipcInvoke('news:markRead'),
+    },
+    settings: {
+        get: () => ipcInvoke('settings:get'),
+        update: (settings) => ipcInvoke('settings:update', settings),
     }
 }
 

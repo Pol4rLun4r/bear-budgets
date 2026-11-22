@@ -110,6 +110,20 @@ const itemValuesReducers = {
 
         target[key] = value;
     },
+    applyDefaultItemValues: (
+        state: ItemFormSliceState,
+        action: PayloadAction<{
+            scope: ItemFormScope;
+            markup: number;
+            boarding: number;
+            delivery: number;
+        }>,
+    ) => {
+        const values = draft(state, action.payload.scope).item_values;
+        values.markup = String(action.payload.markup);
+        values.boarding = action.payload.boarding;
+        values.delivery = action.payload.delivery;
+    },
     setValues: (
         state: ItemFormSliceState,
         action: PayloadAction<{ scope: ItemFormScope; values: Partial<ItemValues> }>,
@@ -127,12 +141,18 @@ const itemValuesReducers = {
     resetItemValues: (state: ItemFormSliceState, action: PayloadAction<ItemFormScope>) => {
         const empty = createEmptyItemData();
         const stateWithScope = draft(state, action.payload);
+        const { id, item_reference_id, position } = stateWithScope.item_values;
 
         // reseta o botão de stMode
         stateWithScope.toggleStMode = empty.toggleStMode;
 
         // reseta item_values
-        stateWithScope.item_values = empty.item_values
+        stateWithScope.item_values = {
+            ...empty.item_values,
+            id,
+            item_reference_id,
+            position,
+        };
     },
 }
 
@@ -183,6 +203,7 @@ export const {
     setReferenceLinks,
     setValuesField,
     setValues,
+    applyDefaultItemValues,
     resetItemReference,
     resetItemForm,
     resetItemDescription,

@@ -37,3 +37,12 @@ export const getDBPath = () => {
 
     return path.join(app.getPath('documents'), "bear-budgets.db");
 }
+
+/** função para obter o caminho do arquivo de configurações */
+export const getSettingsPath = (dbPath = getDBPath()) => {
+    const directory = dbPath === ":memory:"
+        ? app.getPath("userData")
+        : path.dirname(dbPath);
+
+    return path.join(directory, "bear-budgets-settings.json");
+};

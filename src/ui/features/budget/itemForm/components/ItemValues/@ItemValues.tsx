@@ -18,13 +18,52 @@ import HistoryPrice from "./HistoryPrice/@HistoryPrice";
 import { ItemFormScope, resetItemValues } from "../../store/itemForm.slice";
 import { getSwitchModeValuesForm } from "../../store/itemForm.selectors";
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
+import { applyDefaultItemValues } from "../../store/itemForm.slice";
+import hasVisibleCalculationSummary from "../../utils/hasVisibleCalculationSummary";
 
-const ItemValues = ({ scope }: { scope: ItemFormScope }) => {
+const ItemValues = ({
+    scope,
+    showInlineCalc = true,
+}: {
+    scope: ItemFormScope;
+    showInlineCalc?: boolean;
+}) => {
     const switchMode = useAppSelector(getSwitchModeValuesForm);
+    const simpleModeVisibleFields = useAppSelector(
+        (state) => state.settings.value?.interface.itemForm.itemValues.simpleModeVisibleFields ?? [],
+    );
+    const visibleFields = new Set(simpleModeVisibleFields);
+    const isVisible = (field: ItemValuesSimpleField) =>
+        !switchMode || visibleFields.has(field);
+    const optionalInputFields: ItemValuesSimpleField[] = [
+        "ipi",
+        "st",
+        "extraValue",
+    ];
+    const deliveryFields: ItemValuesSimpleField[] = [
+        "boarding",
+        "delivery",
+        "purchaseShipping",
+    ];
+    const hasVisibleCalculations = hasVisibleCalculationSummary(
+        switchMode,
+        simpleModeVisibleFields,
+    );
     const dispatch = useAppDispatch();
+    const defaultItemValues = useAppSelector(
+        (state) => state.settings.value?.interface.itemForm.itemValues,
+    );
 
     const handleClear = () => {
         dispatch(resetItemValues(scope));
+        if (scope !== "item_form_edit" && defaultItemValues) {
+            dispatch(applyDefaultItemValues({
+                scope,
+                markup: defaultItemValues.defaultMarkup,
+                boarding: defaultItemValues.defaultBoarding,
+                delivery: defaultItemValues.defaultDelivery,
+            }));
+        }
     };
 
     return (
@@ -33,30 +72,33 @@ const ItemValues = ({ scope }: { scope: ItemFormScope }) => {
                 <UnstyledButton style={{ position: 'absolute', right: 0, top: 0 }} onClick={() => handleClear()} >
                     <Text c={'violet'}>Limpar dados</Text>
                 </UnstyledButton>
-                <HistoryPrice scope={scope}/>
+                {isVisible("historyPrice") && <HistoryPrice scope={scope} />}
                 <UnitPrice scope={scope} />
                 <Quantity scope={scope} />
                 <Markup scope={scope} />
             </Group>
             <Stack gap="md">
-                <Group
-                    grow
-                    justify="center"
-                    align="flex-end"
-                    style={{ display: switchMode ? "none" : undefined }}
-                >
-                    <IPI scope={scope} />
-                    <ST scope={scope} />
-                    <ExtraValue scope={scope} />
-                </Group>
-                <Group justify="center" align="flex-end">
-                    <Boarding scope={scope} />
-                    <Delivery scope={scope} />
-                    <PurchaseShipping scope={scope} />
-                </Group>
+                {optionalInputFields.some(isVisible) && (
+                    <Group grow justify="center" align="flex-end">
+                        {isVisible("ipi") && <IPI scope={scope} />}
+                        {isVisible("st") && <ST scope={scope} />}
+                        {isVisible("extraValue") && <ExtraValue scope={scope} />}
+                    </Group>
+                )}
+                {deliveryFields.some(isVisible) && (
+                    <Group justify="center" align="flex-end">
+                        {isVisible("boarding") && <Boarding scope={scope} />}
+                        {isVisible("delivery") && <Delivery scope={scope} />}
+                        {isVisible("purchaseShipping") && <PurchaseShipping scope={scope} />}
+                    </Group>
+                )}
             </Stack>
-            <Divider />
-            <Calc scope={scope} />
+            {showInlineCalc && hasVisibleCalculations && (
+                <>
+                    <Divider />
+                    <Calc scope={scope} />
+                </>
+            )}
         </Stack>
     )
 }

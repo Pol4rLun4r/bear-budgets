@@ -1,0 +1,98 @@
+.tabs {
+    display: flex;
+    height: min(65vh, 42rem);
+    min-height: 24rem;
+}
+
+.navigationContainer {
+    width: 13rem;
+    flex: 0 0 13rem;
+    padding-right: var(--mantine-spacing-md);
+    border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.navigation {
+    align-items: stretch;
+    gap: 2px;
+}
+
+.navigationTab {
+    justify-content: flex-start;
+    border-radius: var(--mantine-radius-md);
+    padding-inline: var(--mantine-spacing-sm);
+}
+
+.panel {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+}
+
+.interfacePanel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+}
+
+.interfaceScrollArea {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.exampleCard {
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
+}
+
+.fieldGroup {
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+}
+
+.subcategoryNavigation {
+    gap: var(--mantine-spacing-xs);
+}
+
+.panelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--mantine-spacing-sm);
+    margin-bottom: var(--mantine-spacing-md);
+    padding-bottom: var(--mantine-spacing-sm);
+    border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.optionDivider {
+    border-top: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.requiredColumn {
+    padding-block: var(--mantine-spacing-sm);
+}
+
+.saveStatus {
+    color: var(--mantine-color-dimmed);
+    white-space: nowrap;
+}
+
+@media (max-width: 48em) {
+    .navigationContainer {
+        width: 10rem;
+        flex-basis: 10rem;
+    }
+
+    .panel {
+        padding: var(--mantine-spacing-sm);
+    }
+
+    .interfacePanel {
+        padding: var(--mantine-spacing-sm);
+    }
+
+}

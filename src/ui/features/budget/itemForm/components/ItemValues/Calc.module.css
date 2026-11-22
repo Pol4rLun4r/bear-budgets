@@ -1,0 +1,11 @@
+.finalValue {
+    border-color: light-dark(var(--mantine-color-violet-2), var(--mantine-color-violet-9));
+    background:
+        radial-gradient(circle at 100% 0%, light-dark(rgb(121 80 242 / 12%), rgb(121 80 242 / 20%)), transparent 42%),
+        var(--mantine-color-body);
+}
+
+.primaryTitle,
+.detailsTitle {
+    color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-white));
+}
