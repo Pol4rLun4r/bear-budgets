@@ -1,3 +1,11 @@
+# [4.14.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.13.0...v4.14.0) (2026-11-22)
+
+
+### Features
+
+* **budget:** improve item form step navigation ([ae1f39e](https://github.com/Pol4rLun4r/bear-budgets/commit/ae1f39e8c9a7c9fdeb2eb07ac681a2ca2dd66ffe))
+* **settings:** add customizable application preferences ([1be2299](https://github.com/Pol4rLun4r/bear-budgets/commit/1be2299020c0298c757574b3556f0f704cdde468))
+
 # [4.13.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.12.0...v4.13.0) (2026-11-19)
 
 
