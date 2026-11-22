@@ -15,9 +15,10 @@ interface HandleButtonProps {
     budgetScope: BudgetFormScope;
     closeModal: () => void;
     onSubmit: () => Promise<void>;
+    isFirstStep?: boolean;
 }
 
-const HandleButton = ({ scope, budgetScope, closeModal, onSubmit }: HandleButtonProps) => {
+const HandleButton = ({ scope, budgetScope, closeModal, onSubmit, isFirstStep = false }: HandleButtonProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const canSubmit = useAppSelector((state) => isCanSubmitItemForm(state, scope, budgetScope));
     const isEditing = scope === "item_form_edit";
@@ -53,7 +54,8 @@ const HandleButton = ({ scope, budgetScope, closeModal, onSubmit }: HandleButton
     return (
         <Button
             radius="lg"
-            variant="gradient"
+            variant={isFirstStep ? "light" : "gradient"}
+            color={isFirstStep ? "violet" : undefined}
             onClick={handleClick}
             disabled={!canSubmit || isSubmitting}
             loading={isSubmitting}

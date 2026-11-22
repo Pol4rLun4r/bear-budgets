@@ -1,6 +1,7 @@
 import newsSectionContent from "./content/news-section.md?raw";
 import copyBudgetItemAsTextContent from "./content/copy-budget-item-as-text.md?raw";
 import searchItemsByCodesContent from "./content/search-items-by-codes.md?raw";
+import itemFormFlowContent from "./content/item-form-flow.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -15,8 +16,21 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
+        title: "Fluxo do formulário de item mais intuitivo",
+        summary: "Agora fica mais fácil identificar como avançar, voltar ou concluir a criação e a edição de um item. Os botões estão organizados para destacar a próxima ação em cada etapa.",
+        date: "2026-11-22",
+        content: itemFormFlowContent,
+        category: "improvement",
+    },
+    {
         title: "Referências de itens mais práticas",
         summary: "A seção de referência do formulário ganhou um visual mais organizado, com notas e links em destaque. O painel de links se sobrepõe ao formulário sem deslocar os botões, tem rolagem própria e aceita links sem exigir um formato específico.",
+        date: "2026-11-18",
+        category: "improvement",
+    },
+    {
+        title: "Arraste e copie descrições com mais facilidade",
+        summary: "Use o ícone ao lado do número do item para reorganizar itens do orçamento e passe o mouse sobre a descrição para copiá-la. A cópia da descrição agora fica disponível nesse botão, em vez do menu de contexto.",
         date: "2026-11-18",
         category: "improvement",
     },
@@ -25,12 +39,6 @@ export const changeLogEntryData: ChangeLogEntry[] = [
         summary: "Corrigimos a busca de itens de referência no formulário: quando nenhum resultado é encontrado, o aviso desaparece após 1,5 segundo e o espaço do menu é liberado.",
         date: "2026-11-18",
         category: "bug-fix",
-    },
-    {
-        title: "Arraste e copie descrições com mais facilidade",
-        summary: "Use o ícone ao lado do número do item para reorganizar itens do orçamento e passe o mouse sobre a descrição para copiá-la. A cópia da descrição agora fica disponível nesse botão, em vez do menu de contexto.",
-        date: "2026-11-18",
-        category: "improvement",
     },
     {
         title: "Pesquise itens também pelos códigos",

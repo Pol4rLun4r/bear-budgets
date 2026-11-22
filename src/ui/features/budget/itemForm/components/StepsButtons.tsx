@@ -24,38 +24,48 @@ const StepsButtons = ({ scope, closeModal, budgetScope }: StepsButtonsProps) => 
   const step = useAppSelector((state) => getStepState(state, scope));
   const hasDescription = useAppSelector((state) => isHasDescription(state, scope))
 
+  const handleButton = (
+    <HandleButton
+      scope={scope}
+      budgetScope={budgetScope}
+      closeModal={closeModal}
+      isFirstStep={step === 0}
+      onSubmit={async () => {
+        await dispatch(submitItemForm({ scope, budgetScope })).unwrap();
+      }}
+    />
+  );
+
   return (
     <>
       <Group grow>
         {step === 0 ? (
-          <Button
-            radius='lg'
-            variant="light"
-            onClick={() => dispatch(incrementStep(scope))}
-            disabled={!hasDescription}
-          >
-            Definir valores do item
-          </Button>
-        ) : (
-          <Group grow>
+          <>
+            {handleButton}
             <Button
               radius='lg'
-              variant="default"
-              c='dimmed'
-              onClick={() => dispatch(decrementStep(scope))}
+              variant="gradient"
+              onClick={() => dispatch(incrementStep(scope))}
+              disabled={!hasDescription}
             >
-              Voltar
+              Definir valores do item
             </Button>
-          </Group>
+          </>
+        ) : (
+          <>
+            <Group grow>
+              <Button
+                radius='lg'
+                variant="light"
+                color="violet"
+                onClick={() => dispatch(decrementStep(scope))}
+              >
+                Voltar
+              </Button>
+            </Group>
+            {handleButton}
+          </>
         )}
-        <HandleButton
-          scope={scope}
-          budgetScope={budgetScope}
-          closeModal={closeModal}
-          onSubmit={async () => {
-            await dispatch(submitItemForm({ scope, budgetScope })).unwrap();
-          }}
-        />
       </Group>
     </>
   )
