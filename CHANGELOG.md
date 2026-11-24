@@ -1,3 +1,12 @@
+# [4.15.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.14.0...v4.15.0) (2026-11-24)
+
+
+### Features
+
+* **budget:** add bulk freight distribution and markup updates ([32cb01d](https://github.com/Pol4rLun4r/bear-budgets/commit/32cb01dd5b4974af6bc1e19927873a0d1dc02f28))
+* **budget:** add item tagging and checkbox controls ([5923f8b](https://github.com/Pol4rLun4r/bear-budgets/commit/5923f8bd13706ffe0f9ef7f4ed46ce5f4989ef66))
+* **budget:** enhance budget summary with detailed financial indicators ([7f63eda](https://github.com/Pol4rLun4r/bear-budgets/commit/7f63edae5d439847d5a0df90189917c9b35586e6))
+
 # [4.14.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.13.0...v4.14.0) (2026-11-22)
 
 
