@@ -4,6 +4,7 @@ import searchItemsByCodesContent from "./content/search-items-by-codes.md?raw";
 import itemFormFlowContent from "./content/item-form-flow.md?raw";
 import itemValuesImprovementContent from "./content/item-values-improvement.md?raw";
 import budgetItemTagsContent from "./content/budget-item-tags.md?raw";
+import bulkBudgetAdjustmentsContent from "./content/bulk-budget-adjustments.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -18,8 +19,15 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
+        title: "Ajuste frete e margem de vários itens de uma vez",
+        summary: "Em Ajustes do orçamento, use Diluir frete nos itens para distribuir um valor de frete proporcionalmente aos itens ou Alterar margem em massa para substituir a margem deles. As duas opções podem ser aplicadas a todos os itens ou filtradas pelas cores das caixas de seleção.",
+        date: "2026-11-23",
+        content: bulkBudgetAdjustmentsContent,
+        category: "novelty",
+    },
+    {
         title: "Destaque os itens com caixas de seleção coloridas",
-        summary: "Na tabela do orçamento, abra **Ajustes do orçamento** e escolha **Ativar caixas de seleção** para exibi-las. Nesse mesmo menu, você pode limpar as cores das caixas de seleção.",
+        summary: "Na tabela do orçamento, abra Ajustes do orçamento e escolha Ativar caixas de seleção para exibi-las. Nesse mesmo menu, você pode limpar as cores das caixas de seleção.",
         date: "2026-11-23",
         content: budgetItemTagsContent,
         category: "novelty",

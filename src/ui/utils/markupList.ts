@@ -3,6 +3,11 @@ type listStructure = {
     value: string;
 }
 
+export const markupOptions = Array.from({ length: 1001 }, (_, value) => ({
+    label: `${value}% Markup`,
+    value: String(value),
+}));
+
 export const markupList: listStructure[] = [
     { label: '(00%) Zero', value: '0' },
     { label: '(05%) Markup', value: '5' },

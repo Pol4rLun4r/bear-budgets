@@ -6,12 +6,8 @@ import { IconPercentage } from "@tabler/icons-react";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
+import { markupOptions } from "@/utils/markupList";
 import { ItemFormScope, setValuesField } from "../../../store/itemForm.slice";
-
-const markupOptions = Array.from({ length: 1001 }, (_, value) => ({
-    label: `${value}% Markup`,
-    value: String(value),
-}));
 
 const Markup = ({ scope }: { scope: ItemFormScope }) => {
     const markup = useAppSelector((state) => state.itemForm.form[scope].item_values.markup);

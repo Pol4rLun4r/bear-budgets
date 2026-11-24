@@ -2,6 +2,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { ItemFormState } from "../../itemForm/store/itemForm.slice";
 import { BudgetFormScope } from "./@rootReducer";
+import calcAddItem from "../../../../utils/calcAddItem";
 
 export interface ItemTableState {
     budget_form_create: ItemFormState[];
@@ -11,6 +12,26 @@ export interface ItemTableState {
 
 type ItemTableInput = Omit<ItemFormState, "temp_id" | "toggleStMode" | "is_highlight"> & {
     is_highlight?: boolean;
+};
+
+export type FreightDistributionTarget = "all" | "neutral" | "green" | "yellow" | "red";
+
+const freightTargetTags: Record<Exclude<FreightDistributionTarget, "all">, ItemValueTag> = {
+    neutral: 0,
+    green: 1,
+    yellow: 2,
+    red: 3,
+};
+
+export const matchesFreightDistributionTarget = (
+    item: ItemFormState,
+    target: FreightDistributionTarget,
+) => target === "all"
+    || (item.item_values.tag ?? 0) === freightTargetTags[target];
+
+export const getItemFreightDistributionBase = (item: ItemFormState) => {
+    const finalTotal = calcAddItem(item.item_values).totalWithAll;
+    return Number.isFinite(finalTotal) ? Math.max(0, finalTotal) : 0;
 };
 
 export const createEmptyItemsData = (): ItemFormState[] => {
@@ -189,7 +210,73 @@ const itemTableSlice = createSlice({
             for (const item of draft(state, scope)) {
                 item.item_values.tag = 0;
             }
-        }
+        },
+        dilutePurchaseShipping: (
+            state: ItemTableState,
+            action: PayloadAction<{
+                scope: BudgetFormScope;
+                amount: number;
+                target: FreightDistributionTarget;
+            }>,
+        ) => {
+            const { scope, amount, target } = action.payload;
+            if (!Number.isFinite(amount) || amount <= 0) return;
+
+            const items = draft(state, scope).filter((item) =>
+                matchesFreightDistributionTarget(item, target),
+            );
+            if (items.length === 0) return;
+
+            const totalCents = Math.round(amount * 100);
+            if (!Number.isSafeInteger(totalCents) || totalCents <= 0) return;
+
+            const itemWeights = items.map(getItemFreightDistributionBase);
+            const totalWeight = itemWeights.reduce((sum, weight) => sum + weight, 0);
+            if (!Number.isFinite(totalWeight) || totalWeight <= 0) return;
+
+            const allocations = itemWeights.map((weight, index) => {
+                const exactCents = totalCents * weight / totalWeight;
+                const cents = Math.floor(exactCents);
+
+                return { index, cents, remainder: exactCents - cents };
+            });
+            const remainingCents = totalCents
+                - allocations.reduce((sum, allocation) => sum + allocation.cents, 0);
+
+            [...allocations]
+                .sort((left, right) => right.remainder - left.remainder)
+                .slice(0, remainingCents)
+                .forEach(({ index }) => {
+                    allocations[index].cents += 1;
+                });
+
+            allocations.forEach(({ index, cents }) => {
+                items[index].item_values.purchase_shipping = cents / 100;
+            });
+        },
+        replaceItemMarkup: (
+            state: ItemTableState,
+            action: PayloadAction<{
+                scope: BudgetFormScope;
+                markup: string;
+                target: FreightDistributionTarget;
+            }>,
+        ) => {
+            const { scope, markup, target } = action.payload;
+            const markupValue = Number(markup);
+            if (
+                markup.trim() === ""
+                || !Number.isInteger(markupValue)
+                || markupValue < 0
+                || markupValue > 1000
+            ) return;
+
+            for (const item of draft(state, scope)) {
+                if (matchesFreightDistributionTarget(item, target)) {
+                    item.item_values.markup = markup;
+                }
+            }
+        },
     },
 });
 
@@ -204,6 +291,8 @@ export const {
     setItemTag,
     cycleAllItemTags,
     resetItemTags,
+    dilutePurchaseShipping,
+    replaceItemMarkup,
 } = itemTableSlice.actions;
 
 export default itemTableSlice.reducer;
