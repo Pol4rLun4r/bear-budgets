@@ -78,7 +78,7 @@ const createAndAdd = ({ items, quotationExists }: CreateAndAdd) => {
 
         validItems.push({
             item_reference: normalizedItemReference,
-            item_values: { ...item_values, quantity },
+            item_values: { ...item_values, quantity, tag: validateValues.data.itemValues.tag },
             reference_links: reference_links ?? [],
         });
     }

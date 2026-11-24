@@ -1,7 +1,7 @@
 import { failure, success } from "../../utils/handleSuccess.js";
 
-export type ValidatedItemValues = Pick<ItemValues, "position" | "quantity">
-    & Partial<Omit<ItemValues, "position" | "quantity" | "created_at" | "updated_at">>;
+export type ValidatedItemValues = Pick<ItemValues, "position" | "quantity" | "tag">
+    & Partial<Omit<ItemValues, "position" | "quantity" | "tag" | "created_at" | "updated_at">>;
 
 export interface ValidateItemValuesInput {
     itemValues: Partial<ItemValues>;
@@ -16,6 +16,7 @@ export const rulesCode = {
     INVALID_MARKUP: "O campo markup deve ser um texto válido.",
     INVALID_BOARDING: "O campo boarding deve ser um número inteiro.",
     INVALID_DELIVERY: "O campo delivery deve ser um número inteiro maior ou igual a zero.",
+    INVALID_TAG: "O campo tag deve ser um dos valores 0, 1, 2 ou 3.",
 };
 
 // função auxiliar para validar se um ID opcional é um número inteiro positivo ou não informado (undefined ou null)
@@ -47,6 +48,11 @@ const validateItemValues = ({ itemValues }: ValidateItemValuesInput) => {
     // valida se a quantidade é um número inteiro
     if (typeof quantity !== "number" || !Number.isSafeInteger(quantity)) {
         return failure(rulesCode.INVALID_QUANTITY);
+    }
+
+    const tag = itemValues.tag === undefined ? 0 : itemValues.tag;
+    if (typeof tag !== "number" || !Number.isSafeInteger(tag) || ![0, 1, 2, 3].includes(tag)) {
+        return failure(rulesCode.INVALID_TAG);
     }
 
     const numericFields = {
@@ -87,6 +93,7 @@ const validateItemValues = ({ itemValues }: ValidateItemValuesInput) => {
         item_reference_id: itemValues.item_reference_id ?? undefined,
         position,
         quantity,
+        tag,
         unit_price: itemValues.unit_price ?? undefined,
         markup: itemValues.markup?.trim() || undefined,
         purchase_shipping: itemValues.purchase_shipping ?? undefined,

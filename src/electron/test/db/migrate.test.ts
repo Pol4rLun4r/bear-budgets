@@ -65,17 +65,36 @@ describe("runMigrations", () => {
             { id: 3, delivery: null },
         ]);
 
+        const tagRows = db.prepare("SELECT id, tag FROM item_values ORDER BY id").all() as Array<{ id: number; tag: number }>;
+        expect(tagRows).toEqual([
+            { id: 1, tag: 0 },
+            { id: 2, tag: 0 },
+            { id: 3, tag: 0 },
+        ]);
+        expect(() => db.prepare("UPDATE item_values SET tag = 4 WHERE id = 1").run()).toThrow();
+        expect(() => db.prepare("UPDATE item_values SET tag = NULL WHERE id = 1").run()).toThrow();
+
         db.close();
     });
 
-    it("cria item_values com delivery em banco novo", () => {
+    it("cria item_values com delivery e tag em banco novo", () => {
         const db = new Database(":memory:");
         db.pragma("foreign_keys = ON");
 
         runMigrations(db);
 
-        const columns = db.prepare("PRAGMA table_info(item_values)").all() as Array<{ name: string; type: string }>;
+        const columns = db.prepare("PRAGMA table_info(item_values)").all() as Array<{
+            name: string;
+            type: string;
+            notnull: number;
+            dflt_value: string | null;
+        }>;
         expect(columns.find((column) => column.name === "delivery")?.type).toBe("INTEGER");
+        expect(columns.find((column) => column.name === "tag")).toMatchObject({
+            type: "INTEGER",
+            notnull: 1,
+            dflt_value: "0",
+        });
 
         db.close();
     });

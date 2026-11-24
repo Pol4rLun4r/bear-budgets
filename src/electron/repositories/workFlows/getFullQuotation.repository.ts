@@ -77,6 +77,7 @@ const getQuotationFullRepository = (db: Database) =>
                 extra_value,
                 boarding,
                 delivery,
+                tag,
                 datetime(created_at, 'localtime') AS created_at
             FROM item_values
             WHERE id = ?

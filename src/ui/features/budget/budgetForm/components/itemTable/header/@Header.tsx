@@ -8,7 +8,13 @@ import Values from "./Values";
 // redux
 import { BudgetFormScope } from "../../../store/@rootReducer";
 
-const Header = ({ scope }: { scope: BudgetFormScope }) => {
+interface HeaderProps {
+    scope: BudgetFormScope;
+    tagEditingEnabled: boolean;
+    onTagEditingChange: (enabled: boolean) => void;
+}
+
+const Header = ({ scope, tagEditingEnabled, onTagEditingChange }: HeaderProps) => {
     return (
         <Group
             justify="space-between"
@@ -17,7 +23,11 @@ const Header = ({ scope }: { scope: BudgetFormScope }) => {
             p="md"
         >
             <Values scope={scope} />
-            <Buttons scope={scope} />
+            <Buttons
+                scope={scope}
+                tagEditingEnabled={tagEditingEnabled}
+                onTagEditingChange={onTagEditingChange}
+            />
         </Group>
     )
 }

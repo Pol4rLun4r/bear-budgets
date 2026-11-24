@@ -25,6 +25,7 @@ import classes from './Row.module.css';
 import { useAppSelector } from "@/app/reduxHooks";
 import { budgetTableColumns } from "../budgetTableColumns";
 import type { ReactNode } from "react";
+import ItemTagControl from "./ItemTagControl";
 
 const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -35,15 +36,33 @@ interface RowProps {
     item: ItemFormState;
     index: number;
     visibleColumns: ReadonlySet<BudgetTableColumn>;
+    tagEditingEnabled: boolean;
+    tag: ItemValueTag;
+    onTagChange: (tag: ItemValueTag) => void;
 }
 
-const Row = ({ item, index, visibleColumns }: RowProps) => {
+const Row = ({
+    item,
+    index,
+    visibleColumns,
+    tagEditingEnabled,
+    tag,
+    onTagChange,
+}: RowProps) => {
     const dragHandleRef = useRef<HTMLButtonElement>(null)
     const { ref } = useSortable({ id: item.temp_id, index, handle: dragHandleRef })
+    const tagColorClass: Record<ItemValueTag, string> = {
+        0: "",
+        1: classes.tagGreen,
+        2: classes.tagYellow,
+        3: classes.tagRed,
+    };
     const tableTdProps: TableTdProps = {
-        className: item.is_highlight
-            ? `${classes.rowContainer} ${classes.highlighted}`
-            : classes.rowContainer,
+        className: [
+            classes.rowContainer,
+            tagEditingEnabled ? tagColorClass[tag] : "",
+            item.is_highlight ? classes.highlighted : "",
+        ].filter(Boolean).join(" "),
         height: 40,
     }
 
@@ -86,6 +105,19 @@ const Row = ({ item, index, visibleColumns }: RowProps) => {
 
     return (
         <Table.Tr ref={ref} data-item-id={item.temp_id}>
+                {tagEditingEnabled && (
+                    <Table.Td {...tableTdProps}>
+                        <div className={classes.tagColumn}>
+                            <ItemTagControl
+                                value={tag}
+                                ariaLabel={`Etiqueta do item ${item.item_values?.position! + 1}`}
+                                onClick={() => onTagChange(
+                                    tag === 3 ? 0 : (tag + 1) as ItemValueTag,
+                                )}
+                            />
+                        </div>
+                    </Table.Td>
+                )}
                 <Table.Td {...tableTdProps}>
                     <div className={classes.itemPosition}>
                         <ActionIcon

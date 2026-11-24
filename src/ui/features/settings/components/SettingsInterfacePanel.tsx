@@ -68,6 +68,7 @@ const SettingsInterfacePanel = ({
     const valuesSettings = itemFormSettings.itemValues;
     const isDefault =
         categorySettings.defaultSimpleMode &&
+        !categorySettings.defaultTagEditingEnabled &&
         hasDefaultColumns &&
         !referenceSettings.defaultSimpleMode &&
         hasDefaultFields(referenceSettings.simpleModeVisibleFields, defaultItemReferenceSimpleFields) &&
@@ -81,6 +82,7 @@ const SettingsInterfacePanel = ({
         interface: {
             budgetTable: {
                 defaultSimpleMode: true,
+                defaultTagEditingEnabled: false,
                 simpleModeVisibleColumns: defaultSimpleModeVisibleColumns,
             },
             itemForm: {
@@ -157,6 +159,14 @@ const SettingsInterfacePanel = ({
                                             checked={categorySettings.defaultSimpleMode}
                                             onChange={(checked) => onChange({
                                                 interface: { budgetTable: { defaultSimpleMode: checked } },
+                                            })}
+                                        />
+                                        <SettingsOption
+                                            label="Iniciar com caixas de seleção habilitadas"
+                                            description="Novos orçamentos e orçamentos abertos começam exibindo a coluna de caixas de seleção."
+                                            checked={categorySettings.defaultTagEditingEnabled}
+                                            onChange={(checked) => onChange({
+                                                interface: { budgetTable: { defaultTagEditingEnabled: checked } },
                                             })}
                                         />
                                     </Stack>

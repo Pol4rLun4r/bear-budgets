@@ -3,6 +3,7 @@ import copyBudgetItemAsTextContent from "./content/copy-budget-item-as-text.md?r
 import searchItemsByCodesContent from "./content/search-items-by-codes.md?raw";
 import itemFormFlowContent from "./content/item-form-flow.md?raw";
 import itemValuesImprovementContent from "./content/item-values-improvement.md?raw";
+import budgetItemTagsContent from "./content/budget-item-tags.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -16,6 +17,13 @@ interface ChangeLogEntry {
 }
 
 export const changeLogEntryData: ChangeLogEntry[] = [
+    {
+        title: "Classifique os itens com caixas de seleção",
+        summary: "Marque os itens do orçamento com cores para destacá-los na tabela. Você também pode escolher nas configurações se a coluna de marcações deve aparecer por padrão.",
+        date: "2026-11-23",
+        content: budgetItemTagsContent,
+        category: "novelty",
+    },
     {
         title: "Nova tela de configurações",
         summary: "Acesse Configurações pela barra lateral para ajustar a interface dos orçamentos e do formulário de item. Escolha como as tabelas começam, quais colunas e campos ficam visíveis e os valores padrão de markup, embarque e entrega. As mudanças ficam como rascunho até você clicar em Salvar alterações da interface; se preferir, restaure os padrões.",

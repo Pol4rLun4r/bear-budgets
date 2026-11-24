@@ -35,9 +35,27 @@ describe("getItemValuesById", () => {
             item_reference_id,
             position: 1,
             quantity: 3,
+            tag: 0,
             unit_price: 25,
             markup: "20",
         });
+    });
+
+    it("retorna o tag informado no registro", () => {
+        const item_reference_id = repositories.item.reference.create({
+            description: "Referência com tag",
+        });
+        const id = repositories.item.values.create(item_reference_id, {
+            position: 2,
+            quantity: 1,
+            tag: 3,
+        });
+
+        const response = service(id);
+
+        expect(response.success).toBe(true);
+        if (!response.success) throw new Error(response.data);
+        expect(response.data.tag).toBe(3);
     });
 
     it("falha quando o identificador não é informado", () => {

@@ -17,6 +17,7 @@ const getById = (db: Database) =>
                 extra_value,
                 boarding,
                 delivery,
+                tag,
                 datetime(created_at, 'localtime') AS created_at,
                 datetime(updated_at, 'localtime') AS updated_at
             FROM item_values
@@ -47,6 +48,7 @@ const getByIds = (db: Database) =>
                 extra_value,
                 boarding,
                 delivery,
+                tag,
                 datetime(created_at, 'localtime') AS created_at,
                 datetime(updated_at, 'localtime') AS updated_at
             FROM item_values
@@ -80,6 +82,7 @@ const getAllByReferenceId = (db: Database) =>
                 extra_value,
                 boarding,
                 delivery,
+                tag,
                 datetime(created_at, 'localtime') AS created_at,
                 datetime(updated_at, 'localtime') AS updated_at
             FROM item_values
@@ -108,6 +111,7 @@ const getLatestByReferenceId = (db: Database) =>
                 extra_value,
                 boarding,
                 delivery,
+                tag,
                 datetime(created_at, 'localtime') AS created_at,
                 datetime(updated_at, 'localtime') AS updated_at
             FROM item_values
@@ -132,10 +136,10 @@ const countByReferenceId = (db: Database) =>
 
 /** cria um item_value */
 const create = (db: Database) =>
-    (item_reference_id: number, data: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at">): number => {
+    (item_reference_id: number, data: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at" | "tag"> & { tag?: ItemValueTag }): number => {
         const row = db.prepare(`
-            INSERT INTO item_values (item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, extra_value, boarding, delivery)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO item_values (item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, extra_value, boarding, delivery, tag)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).run(
             item_reference_id,
             data.position,
@@ -147,7 +151,8 @@ const create = (db: Database) =>
             data.st ?? undefined,
             data.extra_value ?? undefined,
             data.boarding ?? undefined,
-            data.delivery ?? undefined
+            data.delivery ?? undefined,
+            data.tag ?? 0
         );
         return row.lastInsertRowid as number;
     };
@@ -210,6 +215,11 @@ const update = (db: Database) => (id: ItemValues['id'], data: Partial<ItemValues
     if (data.delivery !== undefined) {
         fields.push("delivery = ?");
         values.push(data.delivery);
+    }
+
+    if (data.tag !== undefined) {
+        fields.push("tag = ?");
+        values.push(data.tag);
     }
 
     if (!fields.length) return;

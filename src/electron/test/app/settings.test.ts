@@ -91,7 +91,8 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(3);
+        expect(store.get().version).toBe(4);
+        expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(false);
         expect(store.get().interface.itemForm).toEqual({
             itemReference: {
                 defaultSimpleMode: true,
@@ -141,7 +142,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(3);
+        expect(store.get().version).toBe(4);
         expect(store.get().interface.itemForm.itemValues).toEqual({
             defaultSimpleMode: true,
             simpleModeVisibleFields: ["ipi"],
@@ -150,6 +151,62 @@ describe("settings store", () => {
             defaultDelivery: 3,
         });
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
+    });
+
+    it("migrates version 3 settings with tag editing disabled by default", async () => {
+        const version3Settings = {
+            ...DEFAULT_APP_SETTINGS,
+            version: 3,
+            interface: {
+                ...DEFAULT_APP_SETTINGS.interface,
+                budgetTable: {
+                    defaultSimpleMode: true,
+                    simpleModeVisibleColumns: [...DEFAULT_APP_SETTINGS.interface.budgetTable.simpleModeVisibleColumns],
+                },
+            },
+        };
+        await writeFile(settingsPath, JSON.stringify(version3Settings));
+
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        expect(store.get().version).toBe(4);
+        expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(false);
+        expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
+    });
+
+    it("persists the default tag editing preference", async () => {
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        const settings = await store.update({
+            interface: {
+                budgetTable: { defaultTagEditingEnabled: true },
+            },
+        });
+
+        expect(settings.interface.budgetTable.defaultTagEditingEnabled).toBe(true);
+
+        const restartedStore = createSettingsStore(settingsPath);
+        await restartedStore.initialize();
+        expect(restartedStore.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
+    });
+
+    it("rejects a non-boolean default tag editing preference", async () => {
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+        const initialSettings = store.get();
+
+        await expect(
+            store.update({
+                interface: {
+                    budgetTable: {
+                        defaultTagEditingEnabled: "true" as unknown as boolean,
+                    },
+                },
+            }),
+        ).rejects.toThrow("defaultTagEditingEnabled must be a boolean");
+        expect(store.get()).toEqual(initialSettings);
     });
 
     it("persists partial updates while preserving other preferences", async () => {
@@ -165,6 +222,7 @@ describe("settings store", () => {
 
         expect(settings.interface.budgetTable).toEqual({
             defaultSimpleMode: false,
+            defaultTagEditingEnabled: false,
             simpleModeVisibleColumns: [],
         });
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(settings);
@@ -185,6 +243,7 @@ describe("settings store", () => {
 
         expect(store.get().interface.budgetTable).toEqual({
             defaultSimpleMode: false,
+            defaultTagEditingEnabled: false,
             simpleModeVisibleColumns: [],
         });
     });

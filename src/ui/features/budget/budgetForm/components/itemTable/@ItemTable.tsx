@@ -10,21 +10,48 @@ import NoItems from "./NoItems";
 import classes from './Items.module.css';
 
 // redux
-import { RootState } from '@/app/store';
-import { useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { BudgetFormScope } from "../../store/@rootReducer";
+import {
+    cycleAllItemTags,
+    setItemTag,
+    setTagEditingEnabled,
+} from "../../store/itemTable.slice";
 
 const ItemTable = ({ scope }: { scope: BudgetFormScope }) => {
-    const listItems = useSelector((state: RootState) => state.budgetForm.itemTable[scope]);
-
+    const dispatch = useAppDispatch();
+    const listItems = useAppSelector((state) => state.budgetForm.itemTable[scope]);
+    const tagEditingEnabled = useAppSelector(
+        (state) => state.budgetForm.itemTable.tagEditingEnabled[scope],
+    );
     return (
         <Stack className={classes.container}>
             <Paper withBorder radius="lg" className={classes.items}>
                 <div className={classes.header}>
-                    <Header scope={scope} />
+                    <Header
+                        scope={scope}
+                        tagEditingEnabled={tagEditingEnabled}
+                        onTagEditingChange={(enabled) => dispatch(setTagEditingEnabled({
+                            scope,
+                            enabled,
+                        }))}
+                    />
                 </div>
                 <div className={classes.content}>
-                    {listItems.length === 0 ? <NoItems /> : <Table scope={scope} />}
+                    {listItems.length === 0
+                        ? <NoItems />
+                        : (
+                            <Table
+                                scope={scope}
+                                tagEditingEnabled={tagEditingEnabled}
+                                onTagChange={(itemId, tag) => dispatch(setItemTag({
+                                    scope,
+                                    itemId,
+                                    tag,
+                                }))}
+                                onCycleAllTags={() => dispatch(cycleAllItemTags(scope))}
+                            />
+                        )}
                 </div>
             </Paper>
         </Stack>

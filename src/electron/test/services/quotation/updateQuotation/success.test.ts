@@ -178,6 +178,39 @@ describe("Sucessos ao atualizar cotação (completa)", () => {
         expect(updatedItem?.item_values.delivery).toBe(0);
     });
 
+    it("deve atualizar tag e preservá-la quando não for enviada em uma atualização", () => {
+        const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);
+        const item = fullQuotation.items[0];
+        const payload = quotationUpdatePayloadUtils.editQuotationItem(
+            quotation,
+            item.quotation_link_id,
+            { item_values: { tag: 3 } },
+        );
+
+        const updateResult = context.services.quotation.update(payload);
+        expect(updateResult.success).toBe(true);
+        if (!updateResult.success) return;
+
+        const updatedQuotation = updateResult.data as QuotationFull;
+        const updatedItem = updatedQuotation.items.find((entry) => entry.quotation_link_id === item.quotation_link_id);
+        expect(updatedItem?.item_values.tag).toBe(3);
+
+        const payloadWithoutTag = quotationUpdatePayloadUtils.editQuotationItem(
+            quotationUpdatePayloadUtils.makeQuotationUpdatePayload(updatedQuotation),
+            item.quotation_link_id,
+            { item_values: { tag: undefined } },
+        );
+        const secondUpdateResult = context.services.quotation.update(payloadWithoutTag);
+
+        expect(secondUpdateResult.success).toBe(true);
+        if (!secondUpdateResult.success) return;
+
+        const resultItem = (secondUpdateResult.data as QuotationFull).items.find(
+            (entry) => entry.quotation_link_id === item.quotation_link_id,
+        );
+        expect(resultItem?.item_values.tag).toBe(3);
+    });
+
     it("deve atualizar as posições item_values, o item 1 ganhar a segunda posição e o item 2 ganhar a primeira posição com sucesso", () => {
         const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);
 

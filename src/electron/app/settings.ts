@@ -75,10 +75,11 @@ const defaultItemValueDefaults = {
 };
 
 export const DEFAULT_APP_SETTINGS: AppSettings = {
-    version: 3,
+    version: 4,
     interface: {
         budgetTable: {
             defaultSimpleMode: true,
+            defaultTagEditingEnabled: false,
             simpleModeVisibleColumns: [
                 "description",
                 "internalCode",
@@ -108,6 +109,7 @@ const cloneSettings = (settings: AppSettings): AppSettings => ({
     interface: {
         budgetTable: {
             defaultSimpleMode: settings.interface.budgetTable.defaultSimpleMode,
+            defaultTagEditingEnabled: settings.interface.budgetTable.defaultTagEditingEnabled,
             simpleModeVisibleColumns: [...settings.interface.budgetTable.simpleModeVisibleColumns],
         },
         itemForm: {
@@ -245,12 +247,13 @@ const validateSettings = (value: unknown): AppSettings => {
     if (
         !isRecord(value) ||
         !hasOnlyKeys(value, ["version", "interface"]) ||
-        (value.version !== 1 && value.version !== 2 && value.version !== 3)
+        (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4)
     ) {
         throw new Error("Invalid settings file: unsupported or missing version.");
     }
     const isLegacyVersion = value.version === 1;
-    const hasItemValueDefaults = value.version === 3;
+    const hasItemValueDefaults = value.version >= 3;
+    const hasTagVisibilityDefault = value.version === 4;
 
     const interfaceSettings = value.interface;
     if (
@@ -263,8 +266,15 @@ const validateSettings = (value: unknown): AppSettings => {
     const budgetTable = interfaceSettings.budgetTable;
     if (
         !isRecord(budgetTable) ||
-        !hasOnlyKeys(budgetTable, ["defaultSimpleMode", "simpleModeVisibleColumns"]) ||
-        typeof budgetTable.defaultSimpleMode !== "boolean"
+        !hasOnlyKeys(budgetTable, [
+            "defaultSimpleMode",
+            "defaultTagEditingEnabled",
+            "simpleModeVisibleColumns",
+        ]) ||
+        typeof budgetTable.defaultSimpleMode !== "boolean" ||
+        ("defaultTagEditingEnabled" in budgetTable &&
+            typeof budgetTable.defaultTagEditingEnabled !== "boolean") ||
+        (hasTagVisibilityDefault && typeof budgetTable.defaultTagEditingEnabled !== "boolean")
     ) {
         throw new Error("Invalid settings file: invalid budget table settings.");
     }
@@ -278,10 +288,13 @@ const validateSettings = (value: unknown): AppSettings => {
     }
 
     const validatedSettings: AppSettings = {
-        version: 3,
+        version: 4,
         interface: {
             budgetTable: {
                 defaultSimpleMode: budgetTable.defaultSimpleMode,
+                defaultTagEditingEnabled: typeof budgetTable.defaultTagEditingEnabled === "boolean"
+                    ? budgetTable.defaultTagEditingEnabled
+                    : false,
                 simpleModeVisibleColumns: validateColumns(budgetTable.simpleModeVisibleColumns),
             },
             itemForm: isLegacyVersion && itemForm === undefined
@@ -332,7 +345,7 @@ const validateSettings = (value: unknown): AppSettings => {
     const legacyItemForm = validatedSettings.interface.itemForm;
     return {
             ...validatedSettings,
-            version: 3,
+            version: 4,
             interface: {
                 ...validatedSettings.interface,
                 itemForm: {
@@ -428,7 +441,11 @@ const validateSimpleFormUpdate = <T extends string>(
 };
 
 const validateUpdate = (value: unknown): SettingsUpdate => {
-    const allowedBudgetTableKeys = ["defaultSimpleMode", "simpleModeVisibleColumns"];
+    const allowedBudgetTableKeys = [
+        "defaultSimpleMode",
+        "defaultTagEditingEnabled",
+        "simpleModeVisibleColumns",
+    ];
     if (
         !isRecord(value) ||
         !hasOnlyKeys(value, ["interface"]) ||
@@ -455,6 +472,12 @@ const validateUpdate = (value: unknown): SettingsUpdate => {
                 throw new Error("Invalid settings update: defaultSimpleMode must be a boolean.");
             }
             update.defaultSimpleMode = budgetTable.defaultSimpleMode;
+        }
+        if ("defaultTagEditingEnabled" in budgetTable) {
+            if (typeof budgetTable.defaultTagEditingEnabled !== "boolean") {
+                throw new Error("Invalid settings update: defaultTagEditingEnabled must be a boolean.");
+            }
+            update.defaultTagEditingEnabled = budgetTable.defaultTagEditingEnabled;
         }
         if ("simpleModeVisibleColumns" in budgetTable) {
             update.simpleModeVisibleColumns = validateColumns(budgetTable.simpleModeVisibleColumns);
@@ -552,7 +575,7 @@ export const createSettingsStore = (filePath: string) => {
 
         const parsedSettings: unknown = JSON.parse(contents);
         const settings = validateSettings(parsedSettings);
-        if (isRecord(parsedSettings) && parsedSettings.version !== 3) {
+        if (isRecord(parsedSettings) && parsedSettings.version !== 4) {
             await persistSettings(filePath, settings);
         }
         currentSettings = settings;

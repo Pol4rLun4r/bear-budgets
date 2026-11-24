@@ -17,6 +17,12 @@
     white-space: nowrap;
 }
 
+.tagColumn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .dragHandle {
     flex: 0 0 auto;
     cursor: grab;
@@ -25,6 +31,21 @@
 
 .dragHandle:active {
     cursor: grabbing;
+}
+
+.tagGreen {
+    background-color: var(--mantine-color-green-light);
+    color: var(--mantine-color-green-light-color);
+}
+
+.tagYellow {
+    background-color: var(--mantine-color-yellow-light);
+    color: var(--mantine-color-yellow-light-color);
+}
+
+.tagRed {
+    background-color: var(--mantine-color-red-light);
+    color: var(--mantine-color-red-light-color);
 }
 
 .highlighted {

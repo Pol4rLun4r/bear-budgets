@@ -108,6 +108,7 @@ const validateAddedItems = ({
             item_values: {
                 position: itemValues.position,
                 quantity: itemValues.quantity,
+                tag: itemValues.tag,
                 unit_price: itemValues.unit_price,
                 markup: itemValues.markup,
                 purchase_shipping: itemValues.purchase_shipping,

@@ -93,6 +93,12 @@ A tabela é responsável por:
   * Tipo: Inteiro maior ou igual a zero.
   * Opcional.
 
+* `tag`
+
+  * Identificador numérico da tag associada aos valores do item.
+  * Tipo: Inteiro (`0`, `1`, `2` ou `3`).
+  * Obrigatório; assume `0` por padrão.
+
 * `extra_value`
 
   * Valor adicional aplicado ao item.

@@ -6,6 +6,7 @@ import { BudgetFormScope } from "./@rootReducer";
 export interface ItemTableState {
     budget_form_create: ItemFormState[];
     budget_form_edit: ItemFormState[];
+    tagEditingEnabled: Record<BudgetFormScope, boolean>;
 }
 
 type ItemTableInput = Omit<ItemFormState, "temp_id" | "toggleStMode" | "is_highlight"> & {
@@ -18,7 +19,11 @@ export const createEmptyItemsData = (): ItemFormState[] => {
 
 const initialState: ItemTableState = {
     budget_form_create: createEmptyItemsData(),
-    budget_form_edit: createEmptyItemsData()
+    budget_form_edit: createEmptyItemsData(),
+    tagEditingEnabled: {
+        budget_form_create: false,
+        budget_form_edit: false,
+    },
 };
 
 const draft = (state: ItemTableState, scope: BudgetFormScope): ItemFormState[] => {
@@ -42,11 +47,13 @@ const itemTableSlice = createSlice({
             action: PayloadAction<{ scope: BudgetFormScope, data: ItemFormState }>
         ) => {
             const itemData = action.payload.data;
-            const items = draft(state, action.payload.scope);
+            const { scope } = action.payload;
+            const items = draft(state, scope);
+            const tempId = newTemId();
 
             items.push({
                 ...itemData,
-                temp_id: newTemId(),
+                temp_id: tempId,
                 is_highlight: false,
                 quotation_link_id: undefined,
                 item_values: {
@@ -54,6 +61,7 @@ const itemTableSlice = createSlice({
                     id: undefined,
                     item_reference_id: undefined,
                     created_at: undefined,
+                    tag: 0,
                     position: items.length, // define a posição do item como o último índice da lista
                 },
             });
@@ -113,7 +121,9 @@ const itemTableSlice = createSlice({
             const index = items.findIndex((item) => item.temp_id === updatedItem.temp_id); // encontra o índice do item a ser atualizado
 
             if (index !== -1) {
+                const currentTag = items[index].item_values.tag ?? 0;
                 items[index] = updatedItem; // substitui o item pelo atualizado
+                items[index].item_values.tag ??= currentTag;
             }
         },
         resetTable: (
@@ -121,21 +131,79 @@ const itemTableSlice = createSlice({
             action: PayloadAction<BudgetFormScope>
         ) => {
             state[action.payload] = createEmptyItemsData();
+            state.tagEditingEnabled[action.payload] = false;
         },
         setItemTable: (
             state: ItemTableState,
             action: PayloadAction<{ scope: BudgetFormScope, data: ItemTableInput[] }>
         ) => {
-            state[action.payload.scope] = action.payload.data.map((item) => ({
+            const items = action.payload.data.map((item) => ({
                 ...item,
                 temp_id: newTemId(),
                 toggleStMode: false,
                 is_highlight: item.is_highlight ?? false,
+                item_values: {
+                    ...item.item_values,
+                    tag: item.item_values.tag ?? 0,
+                },
             }));
+            state[action.payload.scope] = items;
+        },
+        setTagEditingEnabled: (
+            state: ItemTableState,
+            action: PayloadAction<{ scope: BudgetFormScope; enabled: boolean }>,
+        ) => {
+            state.tagEditingEnabled[action.payload.scope] = action.payload.enabled;
+        },
+        setItemTag: (
+            state: ItemTableState,
+            action: PayloadAction<{
+                scope: BudgetFormScope;
+                itemId: string;
+                tag: ItemValueTag;
+            }>,
+        ) => {
+            const { scope, itemId, tag } = action.payload;
+            const item = draft(state, scope).find((current) => current.temp_id === itemId);
+            if (item) item.item_values.tag = tag;
+        },
+        cycleAllItemTags: (
+            state: ItemTableState,
+            action: PayloadAction<BudgetFormScope>,
+        ) => {
+            const scope = action.payload;
+
+            for (const item of draft(state, scope)) {
+                const currentTag = item.item_values.tag ?? 0;
+                item.item_values.tag = (
+                    currentTag === 3 ? 0 : (currentTag + 1) as ItemValueTag
+                );
+            }
+        },
+        resetItemTags: (
+            state: ItemTableState,
+            action: PayloadAction<BudgetFormScope>,
+        ) => {
+            const scope = action.payload;
+
+            for (const item of draft(state, scope)) {
+                item.item_values.tag = 0;
+            }
         }
     },
 });
 
-export const { addItem, reorderItems, resetTable, deleteItem, editItem, setItemTable } = itemTableSlice.actions;
+export const {
+    addItem,
+    reorderItems,
+    resetTable,
+    deleteItem,
+    editItem,
+    setItemTable,
+    setTagEditingEnabled,
+    setItemTag,
+    cycleAllItemTags,
+    resetItemTags,
+} = itemTableSlice.actions;
 
 export default itemTableSlice.reducer;

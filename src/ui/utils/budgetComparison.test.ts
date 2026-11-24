@@ -18,6 +18,7 @@ const createBudget = (): BudgetComparisonData => ({
         item_values: {
             position: 0,
             quantity: 2,
+            tag: 0,
             unit_price: 10,
             markup: "40",
             purchase_shipping: 1,
@@ -60,6 +61,9 @@ describe("hasBudgetChanged", () => {
             },
             (budget: BudgetComparisonData) => {
                 budget.items[0].item_values.quantity = 3;
+            },
+            (budget: BudgetComparisonData) => {
+                budget.items[0].item_values.tag = 2;
             },
             (budget: BudgetComparisonData) => {
                 budget.items[0].reference_links[0].content = "https://changed.example";

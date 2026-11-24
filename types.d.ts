@@ -143,10 +143,11 @@ type ItemValuesSimpleField =
     | "finalUnitValue";
 
 type AppSettings = {
-    version: 3;
+    version: 4;
     interface: {
         budgetTable: {
             defaultSimpleMode: boolean;
+            defaultTagEditingEnabled: boolean;
             simpleModeVisibleColumns: BudgetTableColumn[];
         };
         itemForm: {
@@ -169,6 +170,7 @@ type SettingsUpdate = {
     interface?: {
         budgetTable?: {
             defaultSimpleMode?: boolean;
+            defaultTagEditingEnabled?: boolean;
             simpleModeVisibleColumns?: BudgetTableColumn[];
         };
         itemForm?: {

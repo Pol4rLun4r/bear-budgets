@@ -1,5 +1,5 @@
 // mantine
-import { ActionIcon, Button, Group, Tooltip, Modal } from "@mantine/core"
+import { ActionIcon, Button, Group, Menu, Tooltip, Modal } from "@mantine/core"
 import { useDisclosure } from '@mantine/hooks';
 
 // redux
@@ -10,12 +10,18 @@ import ItemFormModal from "@/features/budget/itemForm/@ItemFormModal";
 import SwitchMode from "./SwitchMode";
 
 // icons
-import { IconPlus, IconTrash } from "@tabler/icons-react"
+import { IconChevronDown, IconPlus, IconRotateClockwise, IconSettings, IconTrash } from "@tabler/icons-react"
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
-import { resetTable } from "../../../store/itemTable.slice";
+import { resetItemTags, resetTable } from "../../../store/itemTable.slice";
 import { applyDefaultItemValues } from "@/features/budget/itemForm/store/itemForm.slice";
 
-const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
+interface ButtonsProps {
+    scope: BudgetFormScope;
+    tagEditingEnabled: boolean;
+    onTagEditingChange: (enabled: boolean) => void;
+}
+
+const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps) => {
     const [itemOpened, { open: itemOpen, close: itemClose }] = useDisclosure(false);
     const [deleteOpened, { open: deleteOpen, close: deleteClose }] = useDisclosure(false);
     const dispatch = useAppDispatch();
@@ -48,6 +54,37 @@ const Buttons = ({ scope }: { scope: BudgetFormScope }) => {
     return (
         <>
             <Group>
+                <Menu position="bottom-end" shadow="md" withinPortal>
+                    <Menu.Target>
+                        <Button
+                            variant="light"
+                            color="violet"
+                            radius="lg"
+                            leftSection={<IconSettings size={18} />}
+                            rightSection={<IconChevronDown size={16} />}
+                        >
+                            Caixa de seleção
+                        </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                        <Menu.Label>Caixas de seleção</Menu.Label>
+                        <Menu.CheckboxItem
+                            checked={tagEditingEnabled}
+                            color={tagEditingEnabled ? "teal" : undefined}
+                            onChange={onTagEditingChange}
+                        >
+                            {tagEditingEnabled
+                                ? "Desativar caixas de seleção"
+                                : "Habilitar caixas de seleção"}
+                        </Menu.CheckboxItem>
+                        <Menu.Item
+                            leftSection={<IconRotateClockwise size={16} />}
+                            onClick={() => dispatch(resetItemTags(scope))}
+                        >
+                            Resetar
+                        </Menu.Item>
+                    </Menu.Dropdown>
+                </Menu>
                 <Tooltip label='Limpar lista' >
                     <ActionIcon
                         size="lg"

@@ -16,7 +16,9 @@ type QuotationStatus = 0 | 1;
 
 type QuotationItemToAdd = {
     item_reference: ItemReference;
-    item_values: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at">;
+    item_values: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at" | "tag"> & {
+        tag?: ItemValueTag;
+    };
     reference_links: Pick<ReferenceLink, "content">[];
 };
 
@@ -65,11 +67,14 @@ type ReferenceLink = {
 }
 
 // valores do item – dados mutáveis (preço, quantidade, etc)
+type ItemValueTag = 0 | 1 | 2 | 3;
+
 type ItemValues = {
     id?: number;
     item_reference_id: number;
     position: number; // posição do item na cotação (ordem)
     quantity: number;
+    tag: ItemValueTag; // 0 = sem tag, 1 = tag verde, 2 = tag amarela, 3 = tag vermelha
     unit_price?: number;
     markup?: string;
     purchase_shipping?: number;

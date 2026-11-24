@@ -19,6 +19,7 @@ const referenceFields: (keyof ItemReference)[] = [
 const valueFields: (keyof ItemValuesData)[] = [
     "position",
     "quantity",
+    "tag",
     "unit_price",
     "markup",
     "purchase_shipping",
