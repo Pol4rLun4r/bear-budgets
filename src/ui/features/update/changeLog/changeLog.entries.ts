@@ -18,8 +18,8 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
-        title: "Classifique os itens com caixas de seleção",
-        summary: "Marque os itens do orçamento com cores para destacá-los na tabela. Você também pode escolher nas configurações se a coluna de marcações deve aparecer por padrão.",
+        title: "Destaque os itens com caixas de seleção coloridas",
+        summary: "Na tabela do orçamento, abra **Ajustes do orçamento** e escolha **Ativar caixas de seleção** para exibi-las. Nesse mesmo menu, você pode limpar as cores das caixas de seleção.",
         date: "2026-11-23",
         content: budgetItemTagsContent,
         category: "novelty",

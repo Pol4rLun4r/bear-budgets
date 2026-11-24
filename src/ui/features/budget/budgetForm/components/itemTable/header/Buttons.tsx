@@ -1,5 +1,5 @@
 // mantine
-import { ActionIcon, Button, Group, Menu, Tooltip, Modal } from "@mantine/core"
+import { Button, Group, Menu, Tooltip, Modal } from "@mantine/core"
 import { useDisclosure } from '@mantine/hooks';
 
 // redux
@@ -63,7 +63,7 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                             leftSection={<IconSettings size={18} />}
                             rightSection={<IconChevronDown size={16} />}
                         >
-                            Caixa de seleção
+                            Ajustes do orçamento
                         </Button>
                     </Menu.Target>
                     <Menu.Dropdown>
@@ -75,29 +75,28 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                         >
                             {tagEditingEnabled
                                 ? "Desativar caixas de seleção"
-                                : "Habilitar caixas de seleção"}
+                                : "Ativar caixas de seleção"}
                         </Menu.CheckboxItem>
                         <Menu.Item
                             leftSection={<IconRotateClockwise size={16} />}
                             onClick={() => dispatch(resetItemTags(scope))}
                         >
-                            Resetar
+                            Limpar caixas de seleção
+                        </Menu.Item>
+                        <Menu.Divider />
+                        <Menu.Label>Modo de visualização</Menu.Label>
+                        <SwitchMode />
+                        <Menu.Divider />
+                        <Menu.Label>Itens do orçamento</Menu.Label>
+                        <Menu.Item
+                            color="red"
+                            leftSection={<IconTrash size={16} />}
+                            onClick={deleteOpen}
+                        >
+                            Excluir todos os itens
                         </Menu.Item>
                     </Menu.Dropdown>
                 </Menu>
-                <Tooltip label='Limpar lista' >
-                    <ActionIcon
-                        size="lg"
-                        radius="lg"
-                        variant="light"
-                        color="var(--mantine-color-red-4)"
-
-                        onClick={deleteOpen}
-                    >
-                        <IconTrash size={20} />
-                    </ActionIcon>
-                </Tooltip>
-                <SwitchMode />
                 <Tooltip label='Adicionar Item'>
                     <Button
                         leftSection={<IconPlus size={20} />}
@@ -113,7 +112,7 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
             < Modal
                 opened={deleteOpened}
                 onClose={deleteClose}
-                title="Deseja realmente deletar todos os itens da lista?"
+                title="Deseja realmente excluir todos os itens do orçamento?"
             >
                 <Button
                     radius="lg"
@@ -122,7 +121,7 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                     fullWidth
                     onClick={() => handleDelete()}
                 >
-                    Deletar todos
+                    Excluir todos os itens
                 </Button>
             </ Modal>
 
