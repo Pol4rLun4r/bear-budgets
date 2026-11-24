@@ -1,0 +1,5 @@
+.container {
+    width: min(45%, 640px);
+    min-width: min(100%, 350px);
+    flex: 0 1 640px;
+}
