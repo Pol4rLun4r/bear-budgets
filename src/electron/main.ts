@@ -48,7 +48,7 @@ const main = () => {
         ipcHandlers(db, settingsStore); // registo dos handlers antes de abrir a janela
         windowEvents(focusOrCreateMainWindow); // registo dos eventos da janela
         createMainWindow(); // cria a janela principal do aplicativo
-        setupAutoUpdater(); // verifica atualizações, inclusive durante o desenvolvimento
+        setupAutoUpdater(settingsStore.get().general.automaticUpdates); // verifica atualizações, inclusive durante o desenvolvimento
     }).catch((error: unknown) => {
         console.error("Failed to initialize application:", error);
         app.quit();

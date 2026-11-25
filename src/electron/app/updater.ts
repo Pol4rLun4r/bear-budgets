@@ -27,6 +27,7 @@ export const downloadAppUpdate = async () => {
         status: "downloading",
         version: appUpdateState.version,
         percent: 0,
+        automatic: appUpdateState.automatic,
     });
 
     try {
@@ -37,6 +38,7 @@ export const downloadAppUpdate = async () => {
             status: "error",
             version: appUpdateState.version,
             error: "Não foi possível baixar a atualização.",
+            automatic: appUpdateState.automatic,
         });
         throw error;
     }
@@ -45,11 +47,33 @@ export const downloadAppUpdate = async () => {
 /** Fecha o aplicativo e inicia a instalação da atualização baixada */
 export const installAppUpdate = () => {
     if (appUpdateState.status !== "downloaded") return;
-    autoUpdater.quitAndInstall();
+    autoUpdater.quitAndInstall(false, true);
+};
+
+const wait = (duration: number) => new Promise((resolve) => setTimeout(resolve, duration));
+
+const isUpdateInStatus = (status: AppUpdateStatus) => appUpdateState.status === status;
+
+const installAutomaticUpdate = async (version: string) => {
+    await wait(1200);
+    if (!isUpdateInStatus("downloaded")) return;
+    setAppUpdateState({ status: "preparing", version, automatic: true });
+
+    await wait(1200);
+    if (!isUpdateInStatus("preparing")) return;
+    setAppUpdateState({ status: "installing", version, automatic: true });
+
+    await wait(1200);
+    if (!isUpdateInStatus("installing")) return;
+    setAppUpdateState({ status: "finalizing", version, automatic: true });
+
+    await wait(1200);
+    if (!isUpdateInStatus("finalizing")) return;
+    autoUpdater.quitAndInstall(false, true);
 };
 
 /** Configura a verificação e o download de atualizações do aplicativo */
-export const setupAutoUpdater = () => {
+export const setupAutoUpdater = (automaticUpdates: boolean) => {
     // a primeira versão do fluxo de atualização atende somente ao instalador Windows
     if (process.platform !== "win32") {
         setAppUpdateState({ status: "unsupported" });
@@ -64,13 +88,22 @@ export const setupAutoUpdater = () => {
 
     // registra os eventos antes de iniciar a verificação para não perder atualizações rápidas
     autoUpdater.on("checking-for-update", () => {
-        setAppUpdateState({ status: "checking" });
+        setAppUpdateState({ status: "checking", automatic: automaticUpdates });
         console.info("Checking for application updates...");
     });
 
     autoUpdater.on("update-available", (updateInfo) => {
-        setAppUpdateState({ status: "available", version: updateInfo.version });
+        setAppUpdateState({
+            status: "available",
+            version: updateInfo.version,
+            automatic: automaticUpdates,
+        });
         console.info(`Application update available: ${updateInfo.version}`);
+        if (automaticUpdates) {
+            void downloadAppUpdate().catch((error: unknown) => {
+                console.error("Failed to download application update automatically:", error);
+            });
+        }
     });
 
     autoUpdater.on("update-not-available", (updateInfo) => {
@@ -83,13 +116,21 @@ export const setupAutoUpdater = () => {
             status: "downloading",
             version: appUpdateState.version,
             percent: progress.percent,
+            automatic: appUpdateState.automatic,
         });
         console.info(`Application update download: ${progress.percent.toFixed(1)}%`);
     });
 
     autoUpdater.on("update-downloaded", (updateInfo) => {
-        setAppUpdateState({ status: "downloaded", version: updateInfo.version });
+        setAppUpdateState({
+            status: "downloaded",
+            version: updateInfo.version,
+            automatic: automaticUpdates,
+        });
         console.info(`Application update downloaded: ${updateInfo.version}`);
+        if (automaticUpdates) {
+            void installAutomaticUpdate(updateInfo.version);
+        }
     });
 
     autoUpdater.on("error", (error) => {
@@ -97,19 +138,21 @@ export const setupAutoUpdater = () => {
             status: "error",
             version: appUpdateState.version,
             error: "Ocorreu um erro ao verificar ou baixar a atualização.",
+            automatic: appUpdateState.automatic,
         });
         console.error("Application update error:", error);
     });
 
     const updateSource = app.isPackaged ? "GitHub Releases" : "development GitHub Releases";
     console.info(`Starting update check from ${updateSource}...`);
-    setAppUpdateState({ status: "checking" });
+    setAppUpdateState({ status: "checking", automatic: automaticUpdates });
 
     // a checagem não bloqueia a inicialização do aplicativo
     void autoUpdater.checkForUpdates().catch((error: unknown) => {
         setAppUpdateState({
             status: "error",
             error: "Não foi possível verificar se há atualizações.",
+            automatic: automaticUpdates,
         });
         console.error("Failed to check for application updates:", error);
     });

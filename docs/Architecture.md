@@ -12,4 +12,6 @@ Banco:
 Preferências do aplicativo:
 - `bear-budgets-settings.json`, armazenado na mesma pasta do banco de dados.
 - O arquivo armazena as preferências de interface, incluindo o modo simples padrão e os campos opcionais visíveis nos formulários de referência e de valores dos itens.
-- As preferências de campos obrigatórios permanecem fixas: descrição no formulário de referência; preço unitário, quantidade e markup no formulário de valores. A versão 2 do arquivo migra automaticamente as preferências de campos da versão 1.
+- A versão 5 também armazena as preferências gerais, incluindo a atualização automática, habilitada por padrão.
+- As versões anteriores do arquivo são migradas automaticamente, preservando as preferências existentes.
+- As preferências de campos obrigatórios permanecem fixas: descrição no formulário de referência; preço unitário, quantidade e markup no formulário de valores.

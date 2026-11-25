@@ -18,9 +18,9 @@ export const settingsCategories: SettingsCategory[] = [
     {
         value: 'general',
         label: 'Geral',
-        description: 'Preferências gerais do aplicativo serão adicionadas aqui.',
+        description: 'Preferências gerais do aplicativo.',
         icon: <IconAdjustments size={18} stroke={1.5} />,
-        disabled: true,
+        disabled: false,
     },
     {
         value: 'interface',

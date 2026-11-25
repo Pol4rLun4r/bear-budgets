@@ -20,6 +20,12 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
+        title: "Atualizações instaladas automaticamente",
+        summary: "O Bear Budgets agora pode baixar e instalar novas versões ao iniciar e reabre o aplicativo quando a atualização termina. A opção Atualizar o aplicativo automaticamente fica habilitada por padrão em Configurações > Geral; se preferir, desative-a para continuar baixando e instalando atualizações manualmente.",
+        date: "2026-11-24",
+        category: "novelty",
+    },
+    {
         title: "Anotações e listas mais práticas",
         summary: "Os campos de anotações ficam compactos até você editá-los, o formulário do orçamento ganhou mais espaço e as listas de orçamentos e itens ficaram mais fáceis de consultar. A busca de itens também explica quando não encontra resultados.",
         date: "2026-11-24",

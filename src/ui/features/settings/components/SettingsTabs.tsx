@@ -4,6 +4,7 @@ import { notifications } from '@mantine/notifications';
 import { useAppDispatch, useAppSelector } from '@/app/reduxHooks';
 import SettingsNavigation from './SettingsNavigation';
 import SettingsPanel from './SettingsPanel';
+import SettingsGeneralPanel from './SettingsGeneralPanel';
 import SettingsInterfacePanel from './SettingsInterfacePanel';
 import { settingsCategories } from '../settings.data';
 import { updateSettings } from '../store/settings.slice';
@@ -15,8 +16,14 @@ interface SettingsTabsProps {
 }
 
 const applyUpdate = (settings: AppSettings, update: SettingsUpdate): AppSettings => {
+    const nextSettings = update.general
+        ? {
+            ...settings,
+            general: { ...settings.general, ...update.general },
+        }
+        : settings;
     const interfaceUpdate = update.interface;
-    if (!interfaceUpdate) return settings;
+    if (!interfaceUpdate) return nextSettings;
 
     const nextInterface = { ...settings.interface };
     if (interfaceUpdate.budgetTable) {
@@ -45,7 +52,7 @@ const applyUpdate = (settings: AppSettings, update: SettingsUpdate): AppSettings
     }
 
     return {
-        ...settings,
+        ...nextSettings,
         interface: nextInterface,
     };
 };
@@ -70,7 +77,7 @@ const SettingsTabs = ({ onDirtyChange, onRequestClose }: SettingsTabsProps) => {
 
         try {
             const savedSettings = await dispatch(
-                updateSettings({ interface: draft.interface }),
+                updateSettings({ general: draft.general, interface: draft.interface }),
             ).unwrap();
             setDraft(savedSettings);
         } catch (error) {
@@ -84,14 +91,26 @@ const SettingsTabs = ({ onDirtyChange, onRequestClose }: SettingsTabsProps) => {
 
     return (
         <Tabs
-            defaultValue="interface"
+            defaultValue="general"
             orientation="vertical"
             variant="pills"
             keepMounted={false}
             className={classes.tabs}
         >
             <SettingsNavigation categories={settingsCategories} />
-            {settingsCategories.map((category) => category.value === 'interface'
+            {settingsCategories.map((category) => category.value === 'general'
+                ? (
+                    <SettingsGeneralPanel
+                        key={category.value}
+                        settings={draft?.general}
+                        dirty={dirty}
+                        saving={pendingWrites > 0}
+                        onChange={updateDraft}
+                        onSave={() => void saveDraft()}
+                        onRequestClose={onRequestClose}
+                    />
+                )
+                : category.value === 'interface'
                 ? (
                     <SettingsInterfacePanel
                         key={category.value}

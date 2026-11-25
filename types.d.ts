@@ -143,7 +143,10 @@ type ItemValuesSimpleField =
     | "finalUnitValue";
 
 type AppSettings = {
-    version: 4;
+    version: 5;
+    general: {
+        automaticUpdates: boolean;
+    };
     interface: {
         budgetTable: {
             defaultSimpleMode: boolean;
@@ -167,6 +170,9 @@ type AppSettings = {
 };
 
 type SettingsUpdate = {
+    general?: {
+        automaticUpdates?: boolean;
+    };
     interface?: {
         budgetTable?: {
             defaultSimpleMode?: boolean;
@@ -202,6 +208,9 @@ type AppUpdateStatus =
     | "available"
     | "downloading"
     | "downloaded"
+    | "preparing"
+    | "installing"
+    | "finalizing"
     | "error";
 
 type AppUpdateState = {
@@ -209,6 +218,7 @@ type AppUpdateState = {
     version?: string;
     percent?: number;
     error?: string;
+    automatic?: boolean;
 };
 
 // --------------- API ---------------

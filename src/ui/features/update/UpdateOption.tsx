@@ -13,7 +13,7 @@ const UpdateOption = () => {
     const update = useAppUpdate();
 
     useEffect(() => {
-        if (update.status !== "available") return;
+        if (update.status !== "available" || update.automatic) return;
 
         const version = update.version ? ` (${update.version})` : "";
         notifications.show({
@@ -25,7 +25,7 @@ const UpdateOption = () => {
             position: "bottom-left",
             autoClose: false,
         });
-    }, [update.status, update.version]);
+    }, [update.automatic, update.status, update.version]);
 
     const upToDate = update.status === "not-available";
     const unsupported = update.status === "unsupported";

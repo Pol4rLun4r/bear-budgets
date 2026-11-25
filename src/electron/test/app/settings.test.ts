@@ -24,6 +24,7 @@ describe("settings store", () => {
         const savedSettings = JSON.parse(await readFile(settingsPath, "utf8")) as AppSettings;
         expect(savedSettings).toEqual(DEFAULT_APP_SETTINGS);
         expect(store.get()).toEqual(DEFAULT_APP_SETTINGS);
+        expect(store.get().general.automaticUpdates).toBe(true);
         expect(store.get().interface.itemForm).toEqual({
             itemReference: {
                 defaultSimpleMode: false,
@@ -91,7 +92,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(4);
+        expect(store.get().version).toBe(5);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(store.get().interface.itemForm).toEqual({
             itemReference: {
@@ -124,7 +125,6 @@ describe("settings store", () => {
 
     it("migrates version 2 settings and adds the current item value defaults", async () => {
         const version2Settings = {
-            ...DEFAULT_APP_SETTINGS,
             version: 2,
             interface: {
                 ...DEFAULT_APP_SETTINGS.interface,
@@ -142,7 +142,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(4);
+        expect(store.get().version).toBe(5);
         expect(store.get().interface.itemForm.itemValues).toEqual({
             defaultSimpleMode: true,
             simpleModeVisibleFields: ["ipi"],
@@ -155,7 +155,6 @@ describe("settings store", () => {
 
     it("migrates version 3 settings with tag editing enabled by default", async () => {
         const version3Settings = {
-            ...DEFAULT_APP_SETTINGS,
             version: 3,
             interface: {
                 ...DEFAULT_APP_SETTINGS.interface,
@@ -170,9 +169,51 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(4);
+        expect(store.get().version).toBe(5);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
+    });
+
+    it("migrates version 4 settings and enables automatic updates by default", async () => {
+        await writeFile(settingsPath, JSON.stringify({
+            version: 4,
+            interface: DEFAULT_APP_SETTINGS.interface,
+        }));
+
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        expect(store.get().version).toBe(5);
+        expect(store.get().general.automaticUpdates).toBe(true);
+        expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
+    });
+
+    it("persists the automatic update preference", async () => {
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        const settings = await store.update({
+            general: { automaticUpdates: false },
+        });
+
+        expect(settings.general.automaticUpdates).toBe(false);
+
+        const restartedStore = createSettingsStore(settingsPath);
+        await restartedStore.initialize();
+        expect(restartedStore.get().general.automaticUpdates).toBe(false);
+    });
+
+    it("rejects a non-boolean automatic update preference", async () => {
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+        const initialSettings = store.get();
+
+        await expect(
+            store.update({
+                general: { automaticUpdates: "false" as unknown as boolean },
+            }),
+        ).rejects.toThrow("invalid general settings");
+        expect(store.get()).toEqual(initialSettings);
     });
 
     it("persists the default tag editing preference", async () => {

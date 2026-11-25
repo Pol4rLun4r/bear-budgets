@@ -75,7 +75,10 @@ const defaultItemValueDefaults = {
 };
 
 export const DEFAULT_APP_SETTINGS: AppSettings = {
-    version: 4,
+    version: 5,
+    general: {
+        automaticUpdates: true,
+    },
     interface: {
         budgetTable: {
             defaultSimpleMode: true,
@@ -106,6 +109,9 @@ export const DEFAULT_APP_SETTINGS: AppSettings = {
 
 const cloneSettings = (settings: AppSettings): AppSettings => ({
     version: settings.version,
+    general: {
+        automaticUpdates: settings.general.automaticUpdates,
+    },
     interface: {
         budgetTable: {
             defaultSimpleMode: settings.interface.budgetTable.defaultSimpleMode,
@@ -246,14 +252,25 @@ const validateSimpleFormSettings = <
 const validateSettings = (value: unknown): AppSettings => {
     if (
         !isRecord(value) ||
-        !hasOnlyKeys(value, ["version", "interface"]) ||
-        (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4)
+        !hasOnlyKeys(value, value.version === 5
+            ? ["version", "general", "interface"]
+            : ["version", "interface"]) ||
+        (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4 && value.version !== 5)
     ) {
         throw new Error("Invalid settings file: unsupported or missing version.");
     }
     const isLegacyVersion = value.version === 1;
     const hasItemValueDefaults = value.version >= 3;
-    const hasTagVisibilityDefault = value.version === 4;
+    const hasTagVisibilityDefault = value.version >= 4;
+    const generalSettings = value.version === 5 ? value.general : undefined;
+    if (
+        value.version === 5 &&
+        (!isRecord(generalSettings) ||
+            !hasOnlyKeys(generalSettings, ["automaticUpdates"]) ||
+            typeof generalSettings.automaticUpdates !== "boolean")
+    ) {
+        throw new Error("Invalid settings file: invalid general settings.");
+    }
 
     const interfaceSettings = value.interface;
     if (
@@ -288,7 +305,13 @@ const validateSettings = (value: unknown): AppSettings => {
     }
 
     const validatedSettings: AppSettings = {
-        version: 4,
+        version: 5,
+        general: {
+            automaticUpdates: isRecord(generalSettings) &&
+                typeof generalSettings.automaticUpdates === "boolean"
+                ? generalSettings.automaticUpdates
+                : DEFAULT_APP_SETTINGS.general.automaticUpdates,
+        },
         interface: {
             budgetTable: {
                 defaultSimpleMode: budgetTable.defaultSimpleMode,
@@ -345,7 +368,7 @@ const validateSettings = (value: unknown): AppSettings => {
     const legacyItemForm = validatedSettings.interface.itemForm;
     return {
             ...validatedSettings,
-            version: 4,
+            version: 5,
             interface: {
                 ...validatedSettings.interface,
                 itemForm: {
@@ -448,16 +471,33 @@ const validateUpdate = (value: unknown): SettingsUpdate => {
     ];
     if (
         !isRecord(value) ||
-        !hasOnlyKeys(value, ["interface"]) ||
-        !isRecord(value.interface) ||
-        !hasOnlyKeys(value.interface, ["budgetTable", "itemForm"])
+        !hasOnlyKeys(value, ["general", "interface"])
     ) {
         throw new Error("Invalid settings update.");
     }
 
     const interfaceUpdate: NonNullable<SettingsUpdate["interface"]> = {};
+    let generalUpdate: SettingsUpdate["general"];
 
-    if ("budgetTable" in value.interface) {
+    if ("general" in value) {
+        if (
+            !isRecord(value.general) ||
+            !hasOnlyKeys(value.general, ["automaticUpdates"]) ||
+            typeof value.general.automaticUpdates !== "boolean"
+        ) {
+            throw new Error("Invalid settings update: invalid general settings.");
+        }
+        generalUpdate = { automaticUpdates: value.general.automaticUpdates };
+    }
+
+    if ("interface" in value && (
+        !isRecord(value.interface) ||
+        !hasOnlyKeys(value.interface, ["budgetTable", "itemForm"])
+    )) {
+        throw new Error("Invalid settings update: invalid interface settings.");
+    }
+
+    if (isRecord(value.interface) && "budgetTable" in value.interface) {
         const budgetTable = value.interface.budgetTable;
         if (
             !isRecord(budgetTable) ||
@@ -488,7 +528,7 @@ const validateUpdate = (value: unknown): SettingsUpdate => {
         interfaceUpdate.budgetTable = update;
     }
 
-    if ("itemForm" in value.interface) {
+    if (isRecord(value.interface) && "itemForm" in value.interface) {
         const itemForm = value.interface.itemForm;
         if (
             !isRecord(itemForm) ||
@@ -519,11 +559,14 @@ const validateUpdate = (value: unknown): SettingsUpdate => {
         interfaceUpdate.itemForm = itemFormUpdate;
     }
 
-    if (Object.keys(interfaceUpdate).length === 0) {
+    if (Object.keys(interfaceUpdate).length === 0 && !generalUpdate) {
         throw new Error("Invalid settings update: at least one setting is required.");
     }
 
-    return { interface: interfaceUpdate };
+    return {
+        ...(generalUpdate && { general: generalUpdate }),
+        ...(Object.keys(interfaceUpdate).length > 0 && { interface: interfaceUpdate }),
+    };
 };
 
 const isErrorWithCode = (error: unknown, code: string): boolean =>
@@ -575,7 +618,7 @@ export const createSettingsStore = (filePath: string) => {
 
         const parsedSettings: unknown = JSON.parse(contents);
         const settings = validateSettings(parsedSettings);
-        if (isRecord(parsedSettings) && parsedSettings.version !== 4) {
+        if (isRecord(parsedSettings) && parsedSettings.version !== 5) {
             await persistSettings(filePath, settings);
         }
         currentSettings = settings;
@@ -595,10 +638,17 @@ export const createSettingsStore = (filePath: string) => {
             }
 
             const settingsUpdate = validateUpdate(input);
+            const generalUpdate = settingsUpdate.general;
             const budgetTableUpdate = settingsUpdate.interface?.budgetTable;
             const itemFormUpdate = settingsUpdate.interface?.itemForm;
             const nextSettings = validateSettings({
                 ...currentSettings,
+                ...(generalUpdate && {
+                    general: {
+                        ...currentSettings.general,
+                        ...generalUpdate,
+                    },
+                }),
                 interface: {
                     ...currentSettings.interface,
                     ...(budgetTableUpdate && {
