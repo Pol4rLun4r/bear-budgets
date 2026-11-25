@@ -1,3 +1,10 @@
+# [4.18.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.17.0...v4.18.0) (2026-11-25)
+
+
+### Features
+
+* **settings:** add configurable boarding display mode and improve value copying ([2161507](https://github.com/Pol4rLun4r/bear-budgets/commit/2161507170a7f23feeea5700c783d6498acff238))
+
 # [4.17.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.16.1...v4.17.0) (2026-11-25)
 
 
