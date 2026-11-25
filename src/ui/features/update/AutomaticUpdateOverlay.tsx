@@ -126,10 +126,10 @@ const AutomaticUpdateOverlay = ({
                                         {message.description(update)}
                                     </Text>
                                 </Stack>
-                                {!failed && (
+                                {!failed && update.status !== 'checking' && (
                                     <Stack w="100%" gap="xs">
                                         <Progress
-                                            value={downloading ? progress : update.status === 'checking' ? 0 : 100}
+                                            value={downloading ? progress : 100}
                                             striped={downloading}
                                             animated={downloading}
                                             radius="xl"
