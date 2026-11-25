@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 // mantine
-import { ActionIcon, Group, Paper, SimpleGrid, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import { ActionIcon, CopyButton, Group, Paper, SimpleGrid, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 
 // icons
 import {
@@ -72,56 +72,84 @@ const Values = ({ scope }: { scope: BudgetFormScope }) => {
             className={classes.container}
         >
             {summaries.map(({ label, explanation, value, icon: SummaryIcon, prefix }) => (
-                <Paper key={label} withBorder radius="lg" p="xs">
-                    <Stack gap={2}>
-                        <Group gap={2} wrap="nowrap" align="center">
-                            <ThemeIcon size={18} radius="xl" variant="light" color="gray">
-                                <SummaryIcon size={12} stroke={1.8} />
-                            </ThemeIcon>
-                            <Text
-                                size="xs"
-                                fw={600}
-                                c="dimmed"
-                                style={{
-                                    flex: 1,
-                                    minWidth: 0,
-                                    fontSize: "var(--mantine-font-size-xs)",
-                                }}
-                            >
-                                {label}
-                            </Text>
-                            <Tooltip
-                                label={explanation}
-                                position="top"
-                                withArrow
-                                withinPortal
-                                multiline
-                                maw={280}
-                                events={{ hover: true, focus: true, touch: false }}
-                            >
-                                <ActionIcon
-                                    variant="subtle"
-                                    color="gray"
-                                    size="xs"
-                                    style={{ flexShrink: 0 }}
-                                    aria-label={`Como é calculado: ${label}`}
-                                >
-                                    <IconExclamationCircle size={13} />
-                                </ActionIcon>
-                            </Tooltip>
-                        </Group>
-                        <Text
-                            size="sm"
-                            fw={700}
-                            style={{
-                                overflowWrap: "anywhere",
-                                fontSize: "calc(var(--mantine-font-size-sm) * 1.05)",
-                            }}
+                <CopyButton key={label} value={value.toFixed(2)} timeout={1500}>
+                    {({ copied, copy }) => (
+                        <Tooltip
+                            label={copied ? "Valor copiado" : "Copiar valor"}
+                            position="top"
+                            withArrow
+                            withinPortal
                         >
-                            {prefix ? `${prefix} ${brl.format(value)}` : brl.format(value)}
-                        </Text>
-                    </Stack>
-                </Paper>
+                            <Paper
+                                withBorder
+                                radius="lg"
+                                p="xs"
+                                className={classes.copyableCard}
+                                onClick={copy}
+                                onKeyDown={(event) => {
+                                    if (event.target !== event.currentTarget) return;
+                                    if (event.key === "Enter" || event.key === " ") {
+                                        event.preventDefault();
+                                        copy();
+                                    }
+                                }}
+                                role="button"
+                                tabIndex={0}
+                                aria-label={copied ? `${label}: valor copiado` : `Copiar valor de ${label}`}
+                            >
+                                <Stack gap={2}>
+                                    <Group gap={2} wrap="nowrap" align="center">
+                                        <ThemeIcon size={18} radius="xl" variant="light" color="gray">
+                                            <SummaryIcon size={12} stroke={1.8} />
+                                        </ThemeIcon>
+                                        <Text
+                                            size="xs"
+                                            fw={600}
+                                            c="dimmed"
+                                            style={{
+                                                flex: 1,
+                                                minWidth: 0,
+                                                fontSize: "var(--mantine-font-size-xs)",
+                                            }}
+                                        >
+                                            {label}
+                                        </Text>
+                                        <Tooltip
+                                            label={explanation}
+                                            position="right"
+                                            withArrow
+                                            withinPortal
+                                            multiline
+                                            maw={280}
+                                            events={{ hover: true, focus: true, touch: false }}
+                                        >
+                                            <ActionIcon
+                                                variant="subtle"
+                                                color="gray"
+                                                size="xs"
+                                                style={{ flexShrink: 0 }}
+                                                aria-label={`Como é calculado: ${label}`}
+                                                onClick={(event) => event.stopPropagation()}
+                                            >
+                                                <IconExclamationCircle size={13} />
+                                            </ActionIcon>
+                                        </Tooltip>
+                                    </Group>
+                                    <Text
+                                        size="sm"
+                                        fw={700}
+                                        style={{
+                                            overflowWrap: "anywhere",
+                                            fontSize: "calc(var(--mantine-font-size-sm) * 1.05)",
+                                        }}
+                                    >
+                                        {prefix ? `${prefix} ${brl.format(value)}` : brl.format(value)}
+                                    </Text>
+                                </Stack>
+                            </Paper>
+                        </Tooltip>
+                    )}
+                </CopyButton>
             ))}
         </SimpleGrid>
     );
