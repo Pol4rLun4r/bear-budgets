@@ -1,3 +1,10 @@
+## [4.16.1](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.16.0...v4.16.1) (2026-11-25)
+
+
+### Bug Fixes
+
+* **updater:** style ([4ab64d4](https://github.com/Pol4rLun4r/bear-budgets/commit/4ab64d4d65b1baf0cfd5d8088ee7f3957f91fd8c))
+
 # [4.16.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.15.0...v4.16.0) (2026-11-25)
 
 
