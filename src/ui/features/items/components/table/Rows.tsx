@@ -25,14 +25,13 @@ const Rows = ({ references, openItemDetails }: RowsProps) => {
 
   return (
     references.map((reference) => (
-      <Table.Tr key={reference.id} data-item-reference-id={reference.id} h="5rem">
+      <Table.Tr key={reference.id} data-item-reference-id={reference.id} h="4rem">
         <Table.Td align="center">
           <HandleActionButton openItemDetails={openItemDetails} itemReferenceId={reference.id!} />
         </Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.description} /></Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.internal_code} /></Table.Td>
         <Table.Td {...tableTdProps} ><RowContent label={reference.manufacturer_code} /></Table.Td>
-        <Table.Td {...tableTdProps} ><RowContent label={reference.ncm} /></Table.Td>
         <Table.Td {...tableTdProps} ><DateTimeDisplay value={reference.created_at} /></Table.Td>
         <Table.Td {...tableTdProps} ><DateTimeDisplay value={reference.updated_at} /></Table.Td>
       </Table.Tr>

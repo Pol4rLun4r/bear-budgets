@@ -11,7 +11,7 @@ export const resetAllBudgetData = createAsyncThunk<void, void, { state: RootStat
     "budgets/resetAllBudgetData",
     (_: void, { dispatch, getState }) => {
         const defaultTagEditingEnabled = getState().settings.value
-            ?.interface.budgetTable.defaultTagEditingEnabled ?? false;
+            ?.interface.budgetTable.defaultTagEditingEnabled ?? true;
 
         dispatch(resetItemForm("item_form_add"));
         dispatch(resetItemForm("item_form_edit"));

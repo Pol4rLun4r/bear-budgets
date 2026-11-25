@@ -12,7 +12,7 @@ import { setItem } from "../../store/itemDetails.slice";
 import { useLazyGetItemDetailsByReferenceIdQuery } from "../../store/items.api";
 
 // icons
-import { IconListDetails } from "@tabler/icons-react";
+import { IconEyeSpark } from "@tabler/icons-react";
 
 interface HandleActionButtonProps {
     openItemDetails: () => void;
@@ -58,7 +58,7 @@ const HandleActionButton = ({ openItemDetails, itemReferenceId }: HandleActionBu
             aria-label="Ver detalhes do item"
             variant="transparent"
         >
-            {isFetching ? <Loader size={16} /> : <IconListDetails/>}
+            {isFetching ? <Loader size={16} /> : <IconEyeSpark />}
         </ActionIcon>
     )
 }

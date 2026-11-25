@@ -1,0 +1,47 @@
+.container {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.textarea {
+    width: 100%;
+}
+
+.container[data-expanded="true"] .textarea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 30;
+}
+
+.container[data-expanded="true"] .textarea :global(textarea) {
+    transition: height 180ms cubic-bezier(0.2, 0, 0, 1);
+    box-shadow: 0 8px 20px rgb(0 0 0 / 24%);
+}
+
+.container[data-expanded="false"] .textarea :global(textarea) {
+    overflow: hidden !important;
+}
+
+.overflowIndicator {
+    position: absolute;
+    right: var(--mantine-spacing-sm);
+    bottom: 0.4rem;
+    z-index: 1;
+    padding-left: 1rem;
+    color: var(--mantine-color-dimmed);
+    line-height: 1;
+    pointer-events: none;
+    background-color: var(--mantine-color-white);
+}
+
+:global([data-mantine-color-scheme="dark"]) .overflowIndicator {
+    background-color: var(--mantine-color-dark-6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .container[data-expanded="true"] .textarea :global(textarea) {
+        transition: none;
+    }
+}

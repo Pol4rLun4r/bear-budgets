@@ -68,7 +68,7 @@ const SettingsInterfacePanel = ({
     const valuesSettings = itemFormSettings.itemValues;
     const isDefault =
         categorySettings.defaultSimpleMode &&
-        !categorySettings.defaultTagEditingEnabled &&
+        categorySettings.defaultTagEditingEnabled &&
         hasDefaultColumns &&
         !referenceSettings.defaultSimpleMode &&
         hasDefaultFields(referenceSettings.simpleModeVisibleFields, defaultItemReferenceSimpleFields) &&
@@ -82,7 +82,7 @@ const SettingsInterfacePanel = ({
         interface: {
             budgetTable: {
                 defaultSimpleMode: true,
-                defaultTagEditingEnabled: false,
+                defaultTagEditingEnabled: true,
                 simpleModeVisibleColumns: defaultSimpleModeVisibleColumns,
             },
             itemForm: {

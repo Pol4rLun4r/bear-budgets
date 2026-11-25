@@ -19,7 +19,7 @@ const BudgetForm = ({ scope, close }: { close?: () => void, scope: BudgetFormSco
     (state) => state.settings.value?.interface.budgetTable.defaultSimpleMode ?? true,
   );
   const defaultTagEditingEnabled = useAppSelector(
-    (state) => state.settings.value?.interface.budgetTable.defaultTagEditingEnabled ?? false,
+    (state) => state.settings.value?.interface.budgetTable.defaultTagEditingEnabled ?? true,
   );
   const settingsLoadStatus = useAppSelector((state) => state.settings.loadStatus);
   const initializedTagScope = useRef<BudgetFormScope | null>(null);

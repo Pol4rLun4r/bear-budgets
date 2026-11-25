@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 // mantine
-import { Button, Group, Modal, Paper, Table as MantineTable, VisuallyHidden } from "@mantine/core";
+import { Button, Center, Group, Modal, Paper, Stack, Table as MantineTable, Text, VisuallyHidden } from "@mantine/core";
 import {
     IconBarcode,
     IconCalendarPlus,
     IconClockEdit,
     IconFileText,
     IconHash,
-    IconIdBadge,
+    IconSearch,
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -25,7 +25,10 @@ import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { selectBudgetEditHasChanges } from "@/features/budget/budgetForm/store/budgetForm.selectors";
 import { setOriginalBudget } from "@/features/budget/budgetForm/store/originalBudgetSlice";
 
-const Table = ({ items }: { items: ItemReference[] }) => {
+// styles
+import budgetFormClasses from "@/features/budget/budgetForm/budgetForm.module.css";
+
+const Table = ({ items, searchQuery }: { items: ItemReference[]; searchQuery: string }) => {
     const iconSize = 20;
     const [itemDetailsOpened, { open: openItemDetails, close: closeItemDetails }] = useDisclosure(false);
     const [confirmOpened, { open: openConfirm, close: closeConfirm }] = useDisclosure(false);
@@ -98,7 +101,7 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                 <MenuItem>
                     {(handlers) => (
                         <MantineTable.ScrollContainer
-                            minWidth={1220}
+                            minWidth={1100}
                             w={'100%'}
                             h={'100%'}
                             onContextMenu={handlers.onContextMenu}
@@ -110,13 +113,33 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                                         <MantineTable.Th w={300}><Group gap="xs" wrap="nowrap"><IconFileText size={iconSize} />Descrição</Group></MantineTable.Th>
                                         <MantineTable.Th w={150}><Group gap="xs" wrap="nowrap"><IconBarcode size={iconSize} />Código interno</Group></MantineTable.Th>
                                         <MantineTable.Th w={200}><Group gap="xs" wrap="nowrap"><IconHash size={iconSize} />Código do fabricante</Group></MantineTable.Th>
-                                        <MantineTable.Th w={120}><Group gap="xs" wrap="nowrap"><IconIdBadge size={iconSize} />NCM</Group></MantineTable.Th>
                                         <MantineTable.Th w={200}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={iconSize} />Criado em</Group></MantineTable.Th>
                                         <MantineTable.Th w={200}><Group gap="xs" wrap="nowrap"><IconClockEdit size={iconSize} />Atualizado em</Group></MantineTable.Th>
                                     </MantineTable.Tr>
                                 </MantineTable.Thead>
                                 <MantineTable.Tbody>
-                                    <Rows references={items} openItemDetails={handleOpenItemDetails} />
+                                    {items.length > 0 ? (
+                                        <Rows references={items} openItemDetails={handleOpenItemDetails} />
+                                    ) : (
+                                        <MantineTable.Tr>
+                                            <MantineTable.Td colSpan={6}>
+                                                <Center py="xl">
+                                                    <Stack align="center" gap="xs">
+                                                        <IconSearch
+                                                            size={40}
+                                                            stroke={1.5}
+                                                            color="var(--mantine-color-dimmed)"
+                                                        />
+                                                        <Text c="dimmed" ta="center">
+                                                            {searchQuery
+                                                                ? `Nenhum item encontrado para “${searchQuery}”.`
+                                                                : "Nenhum item cadastrado ainda."}
+                                                        </Text>
+                                                    </Stack>
+                                                </Center>
+                                            </MantineTable.Td>
+                                        </MantineTable.Tr>
+                                    )}
                                 </MantineTable.Tbody>
                             </MantineTable>
                         </MantineTable.ScrollContainer>
@@ -131,6 +154,12 @@ const Table = ({ items }: { items: ItemReference[] }) => {
                 onClose={requestCloseDetails}
                 // title="Detalhes do item"
                 withCloseButton={false}
+                classNames={viewingBudget
+                    ? {
+                        content: budgetFormClasses.modalContent,
+                        body: budgetFormClasses.modalBody,
+                    }
+                    : undefined}
             >
                 <>
                     <Modal

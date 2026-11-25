@@ -5,6 +5,7 @@ import itemFormFlowContent from "./content/item-form-flow.md?raw";
 import itemValuesImprovementContent from "./content/item-values-improvement.md?raw";
 import budgetItemTagsContent from "./content/budget-item-tags.md?raw";
 import bulkBudgetAdjustmentsContent from "./content/bulk-budget-adjustments.md?raw";
+import notesAndListsImprovementsContent from "./content/notes-and-lists-improvements.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -18,6 +19,13 @@ interface ChangeLogEntry {
 }
 
 export const changeLogEntryData: ChangeLogEntry[] = [
+    {
+        title: "Anotações e listas mais práticas",
+        summary: "Os campos de anotações ficam compactos até você editá-los, o formulário do orçamento ganhou mais espaço e as listas de orçamentos e itens ficaram mais fáceis de consultar. A busca de itens também explica quando não encontra resultados.",
+        date: "2026-11-24",
+        content: notesAndListsImprovementsContent,
+        category: "improvement",
+    },
     {
         title: "Ajuste frete e margem de vários itens de uma vez",
         summary: "Em Ajustes do orçamento, use Diluir frete nos itens para distribuir um valor de frete proporcionalmente aos itens ou Alterar margem em massa para substituir a margem deles. As duas opções podem ser aplicadas a todos os itens ou filtradas pelas cores das caixas de seleção.",

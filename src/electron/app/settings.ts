@@ -79,7 +79,7 @@ export const DEFAULT_APP_SETTINGS: AppSettings = {
     interface: {
         budgetTable: {
             defaultSimpleMode: true,
-            defaultTagEditingEnabled: false,
+            defaultTagEditingEnabled: true,
             simpleModeVisibleColumns: [
                 "description",
                 "internalCode",
@@ -294,7 +294,7 @@ const validateSettings = (value: unknown): AppSettings => {
                 defaultSimpleMode: budgetTable.defaultSimpleMode,
                 defaultTagEditingEnabled: typeof budgetTable.defaultTagEditingEnabled === "boolean"
                     ? budgetTable.defaultTagEditingEnabled
-                    : false,
+                    : DEFAULT_APP_SETTINGS.interface.budgetTable.defaultTagEditingEnabled,
                 simpleModeVisibleColumns: validateColumns(budgetTable.simpleModeVisibleColumns),
             },
             itemForm: isLegacyVersion && itemForm === undefined

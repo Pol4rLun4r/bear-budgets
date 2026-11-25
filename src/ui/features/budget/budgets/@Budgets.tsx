@@ -11,6 +11,9 @@ import { useAppSelector } from "@/app/reduxHooks.ts";
 import { useGetQuotationSummariesQuery } from "../budgetForm/store/quotation.api.ts";
 import { selectBudgetEditHasChanges } from "../budgetForm/store/budgetForm.selectors.ts";
 
+// styles
+import budgetFormClasses from "../budgetForm/budgetForm.module.css";
+
 const Budgets = () => {
   const [formOpened, { open: formOpen, close: formClose }] = useDisclosure(false);
   const [requestOpened, { open: requestOpen, close: requestClose }] = useDisclosure(false);
@@ -81,6 +84,10 @@ const Budgets = () => {
             opened={formOpened}
             onClose={requestCloseModal}
             title={"Informações do Orçamento"}
+              classNames={{
+                content: budgetFormClasses.modalContent,
+                body: budgetFormClasses.modalBody,
+              }}
           >
             <>
               <Modal

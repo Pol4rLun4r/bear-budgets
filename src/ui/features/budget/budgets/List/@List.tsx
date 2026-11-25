@@ -43,7 +43,7 @@ const List = ({ budgets, open }: ListType ) => {
                                 <Table.Tr>
                                     <Table.Th w={48}><VisuallyHidden /></Table.Th>
                                     <Table.Th w={160}><Group gap="xs" wrap="nowrap"><IconTag size={iconSize} />Nº do Orçamento</Group></Table.Th>
-                                    <Table.Th w={220}><Group gap="xs" wrap="nowrap"><IconNotes size={iconSize} />Notas</Group></Table.Th>
+                                    <Table.Th w={220}><Group gap="xs" wrap="nowrap"><IconNotes size={iconSize} />Anotações</Group></Table.Th>
                                     <Table.Th w={150}><Group gap="xs" wrap="nowrap"><IconCurrencyReal size={iconSize} />Valor Total</Group></Table.Th>
                                     <Table.Th w={80}><Group gap="xs" wrap="nowrap"><IconBox size={iconSize} />Itens</Group></Table.Th>
                                     <Table.Th w={200}><Group gap="xs" wrap="nowrap"><IconCalendarPlus size={iconSize} />Data de criação</Group></Table.Th>

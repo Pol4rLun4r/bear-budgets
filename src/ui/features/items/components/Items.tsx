@@ -38,11 +38,7 @@ const Items = () => {
         );
     }
 
-    const items = data ?? [];
-
-    return items.length <= 0
-        ? <div>Sem items</div>
-        : <Table items={items} />;
+    return <Table items={data ?? []} searchQuery={debouncedSearch.trim()} />;
 };
 
 export default Items;

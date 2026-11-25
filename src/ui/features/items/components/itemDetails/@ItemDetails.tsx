@@ -22,8 +22,8 @@ const ItemDetails = ({
 }: ItemDetailsProps) => {
     if (viewingBudget) {
         return (
-            <Stack>
-                <Group>
+            <Stack h="100%" style={{ minHeight: 0 }}>
+                <Group flex="0 0 auto">
                     <Button
                         variant="light"
                         leftSection={<IconArrowLeft size={16} />}
@@ -32,7 +32,9 @@ const ItemDetails = ({
                         Voltar aos detalhes
                     </Button>
                 </Group>
-                <BudgetForm scope="budget_form_edit" close={closeBudget} />
+                <div style={{ flex: 1, minHeight: 0 }}>
+                    <BudgetForm scope="budget_form_edit" close={closeBudget} />
+                </div>
             </Stack>
         );
     }

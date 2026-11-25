@@ -1,26 +1,23 @@
-// mantine
-import { Textarea } from "@mantine/core"
-
 // redux
 import { BudgetFormScope } from "../../store/@rootReducer";
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { setNotes } from "../../store/quotationInfo.slice";
+
+// components
+import ExpandableTextarea from "@/shared/inputs/ExpandableTextarea";
 
 const QuotationNotes = ({ scope }: { scope: BudgetFormScope }) => {
     const notes = useAppSelector((state) => state.budgetForm.quotationInfo[scope].notes);
     const dispatch = useAppDispatch();
 
     return (
-        <Textarea
-            label="Notas da cotação"
+        <ExpandableTextarea
+            label="Anotações"
             placeholder="(Opcional)"
 
             radius="lg"
 
             size="md"
-
-            autosize
-            maxRows={2}
 
             spellCheck={true}
 

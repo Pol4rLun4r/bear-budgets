@@ -7,6 +7,9 @@ import { Table } from "@mantine/core";
 // components
 import DateTimeDisplay from "@/shared/DateTimeDisplay";
 
+// styles
+import classes from "./Items.module.css";
+
 interface RowsType {
   budgets: Quotation[],
   seeBudget: (quotationId: Quotation['id']) => ReactElement
@@ -22,10 +25,14 @@ const Rows = ({ budgets, seeBudget }: RowsType) => {
 
   return (
     budgets.map((budget) => (
-      <Table.Tr key={budget.id} data-budget-id={budget.id} h={"5rem"}>
+      <Table.Tr key={budget.id} data-budget-id={budget.id} h={"4rem"}>
         <Table.Td align="center">{seeBudget(budget.id)}</Table.Td>
         <Table.Td>{String(budget.id).padStart(6, "0")}</Table.Td>
-        <Table.Td>{budget.notes}</Table.Td>
+        <Table.Td>
+          <span className={classes.note}>
+            {budget.notes}
+          </span>
+        </Table.Td>
         <Table.Td>{brl.format(budget.total_value)}</Table.Td>
         <Table.Td>{budget.amount}</Table.Td>
         <Table.Td><DateTimeDisplay value={budget.created_at} /></Table.Td>
