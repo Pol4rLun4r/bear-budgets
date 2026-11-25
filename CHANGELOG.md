@@ -1,3 +1,11 @@
+# [4.16.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.15.0...v4.16.0) (2026-11-25)
+
+
+### Features
+
+* **budget:** improve notes fields and list usability ([435c77b](https://github.com/Pol4rLun4r/bear-budgets/commit/435c77bf1da5a2c993ed78b8292d186dd64d2172))
+* **updater:** add automatic application updates ([68c473c](https://github.com/Pol4rLun4r/bear-budgets/commit/68c473c4cb50116ee393823329cab125c312e3b4))
+
 # [4.15.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.14.0...v4.15.0) (2026-11-24)
 
 
