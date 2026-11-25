@@ -1,3 +1,10 @@
+# [4.17.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.16.1...v4.17.0) (2026-11-25)
+
+
+### Features
+
+* **budget:** add copyable summary cards ([9576a6a](https://github.com/Pol4rLun4r/bear-budgets/commit/9576a6a9a1a53170e287c80e8089a7f0d3444074))
+
 ## [4.16.1](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.16.0...v4.16.1) (2026-11-25)
 
 
