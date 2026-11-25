@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { NumberInput, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { NumberInput, Paper, Select, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import classes from '../Settings.module.css';
 
 export interface DefaultItemValues {
     defaultMarkup: number;
     defaultBoarding: number;
+    defaultBoardingMode: BoardingInputMode;
     defaultDelivery: number;
 }
 
@@ -29,7 +30,7 @@ const ItemFormDefaultValues = ({
                     Padrão atual do aplicativo: markup 40%, embarque 0 dias corridos e entrega 3 dias úteis.
                     As alterações só serão aplicadas depois de salvar.
                 </Text>
-                <SimpleGrid cols={{ base: 1, sm: 3 }}>
+                <SimpleGrid cols={{ base: 1, sm: 2 }}>
                     <NumberInput
                         label="Markup padrão (%)"
                         description="De 0 a 1000%."
@@ -57,6 +58,26 @@ const ItemFormDefaultValues = ({
                         step={1}
                         allowDecimal={false}
                         onChange={deliveryInput.onChange}
+                    />
+                    <Select
+                        label="Forma padrão do embarque"
+                        description="Escolhe como o prazo será exibido no formulário."
+                        value={values.defaultBoardingMode}
+                        allowDeselect={false}
+                        data={[
+                            { label: 'Dias corridos', value: 'calendarDays' },
+                            { label: 'Dias úteis', value: 'businessDays' },
+                            { label: 'Calendário', value: 'date' },
+                        ]}
+                        onChange={(value) => {
+                            if (
+                                value === 'calendarDays' ||
+                                value === 'businessDays' ||
+                                value === 'date'
+                            ) {
+                                onChange({ defaultBoardingMode: value });
+                            }
+                        }}
                     />
                 </SimpleGrid>
             </Stack>

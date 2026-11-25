@@ -47,6 +47,7 @@ describe("settings store", () => {
                 ],
                 defaultMarkup: 40,
                 defaultBoarding: 0,
+                defaultBoardingMode: "calendarDays",
                 defaultDelivery: 3,
             },
         });
@@ -92,7 +93,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(5);
+        expect(store.get().version).toBe(6);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(store.get().interface.itemForm).toEqual({
             itemReference: {
@@ -117,6 +118,7 @@ describe("settings store", () => {
                 ],
                 defaultMarkup: 40,
                 defaultBoarding: 0,
+                defaultBoardingMode: "calendarDays",
                 defaultDelivery: 3,
             },
         });
@@ -142,12 +144,13 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(5);
+        expect(store.get().version).toBe(6);
         expect(store.get().interface.itemForm.itemValues).toEqual({
             defaultSimpleMode: true,
             simpleModeVisibleFields: ["ipi"],
             defaultMarkup: 40,
             defaultBoarding: 0,
+            defaultBoardingMode: "calendarDays",
             defaultDelivery: 3,
         });
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
@@ -169,7 +172,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(5);
+        expect(store.get().version).toBe(6);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
@@ -183,8 +186,33 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(5);
+        expect(store.get().version).toBe(6);
         expect(store.get().general.automaticUpdates).toBe(true);
+        expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
+    });
+
+    it("migrates the boarding display mode into existing version 5 settings", async () => {
+        const version5ItemValues = Object.fromEntries(
+            Object.entries(DEFAULT_APP_SETTINGS.interface.itemForm.itemValues)
+                .filter(([key]) => key !== "defaultBoardingMode"),
+        );
+        await writeFile(settingsPath, JSON.stringify({
+            ...DEFAULT_APP_SETTINGS,
+            version: 5,
+            interface: {
+                ...DEFAULT_APP_SETTINGS.interface,
+                itemForm: {
+                    ...DEFAULT_APP_SETTINGS.interface.itemForm,
+                    itemValues: version5ItemValues,
+                },
+            },
+        }));
+
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        expect(store.get().version).toBe(6);
+        expect(store.get().interface.itemForm.itemValues.defaultBoardingMode).toBe("calendarDays");
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
 
@@ -318,6 +346,7 @@ describe("settings store", () => {
                 simpleModeVisibleFields: ["ipi", "extraValue"],
                 defaultMarkup: 40,
                 defaultBoarding: 0,
+                defaultBoardingMode: "calendarDays",
                 defaultDelivery: 3,
             },
         });
@@ -334,6 +363,7 @@ describe("settings store", () => {
                     itemValues: {
                         defaultMarkup: 55,
                         defaultBoarding: 4,
+                        defaultBoardingMode: "businessDays",
                         defaultDelivery: 8,
                     },
                 },
@@ -343,6 +373,7 @@ describe("settings store", () => {
         expect(settings.interface.itemForm.itemValues).toMatchObject({
             defaultMarkup: 55,
             defaultBoarding: 4,
+            defaultBoardingMode: "businessDays",
             defaultDelivery: 8,
         });
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(settings);
@@ -359,6 +390,7 @@ describe("settings store", () => {
             { defaultMarkup: 40.5 },
             { defaultBoarding: -1 },
             { defaultBoarding: 2.5 },
+            { defaultBoardingMode: "unknown" as BoardingInputMode },
             { defaultDelivery: -1 },
             { defaultDelivery: 1.5 },
         ];

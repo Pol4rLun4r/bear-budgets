@@ -21,6 +21,7 @@ import calcAddItem from "@/utils/calcAddItem";
 import { BudgetFormScope } from "../../../store/@rootReducer";
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import { setAmount, setTotalValue } from "../../../store/quotationInfo.slice";
+import formatNumberForClipboard from "@/utils/formatNumberForClipboard";
 
 const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -71,86 +72,96 @@ const Values = ({ scope }: { scope: BudgetFormScope }) => {
             spacing="xs"
             className={classes.container}
         >
-            {summaries.map(({ label, explanation, value, icon: SummaryIcon, prefix }) => (
-                <CopyButton key={label} value={value.toFixed(2)} timeout={1500}>
-                    {({ copied, copy }) => (
-                        <Tooltip
-                            label={copied ? "Valor copiado" : "Copiar valor"}
-                            position="top"
-                            withArrow
-                            withinPortal
-                        >
-                            <Paper
-                                withBorder
-                                radius="lg"
-                                p="xs"
-                                className={classes.copyableCard}
-                                onClick={copy}
-                                onKeyDown={(event) => {
-                                    if (event.target !== event.currentTarget) return;
-                                    if (event.key === "Enter" || event.key === " ") {
-                                        event.preventDefault();
-                                        copy();
-                                    }
-                                }}
-                                role="button"
-                                tabIndex={0}
-                                aria-label={copied ? `${label}: valor copiado` : `Copiar valor de ${label}`}
+            {summaries.map(({ label, explanation, value, icon: SummaryIcon, prefix }) => {
+                const clipboardValue = formatNumberForClipboard(value);
+
+                return (
+                    <CopyButton key={label} value={clipboardValue ?? ""} timeout={1500}>
+                        {({ copied, copy }) => (
+                            <Tooltip
+                                label={clipboardValue ? (copied ? "Valor copiado" : "Copiar valor") : ""}
+                                position="top"
+                                withArrow
+                                withinPortal
                             >
-                                <Stack gap={2}>
-                                    <Group gap={2} wrap="nowrap" align="center">
-                                        <ThemeIcon size={18} radius="xl" variant="light" color="gray">
-                                            <SummaryIcon size={12} stroke={1.8} />
-                                        </ThemeIcon>
+                                <Paper
+                                    withBorder
+                                    radius="lg"
+                                    p="xs"
+                                    className={clipboardValue ? classes.copyableCard : undefined}
+                                    onClick={clipboardValue ? copy : undefined}
+                                    onKeyDown={(event) => {
+                                        if (!clipboardValue || event.target !== event.currentTarget) return;
+                                        if (event.key === "Enter" || event.key === " ") {
+                                            event.preventDefault();
+                                            copy();
+                                        }
+                                    }}
+                                    role={clipboardValue ? "button" : undefined}
+                                    tabIndex={clipboardValue ? 0 : undefined}
+                                    aria-label={
+                                        clipboardValue
+                                            ? copied
+                                                ? `${label}: valor copiado`
+                                                : `Copiar valor de ${label}`
+                                            : undefined
+                                    }
+                                >
+                                    <Stack gap={2}>
+                                        <Group gap={2} wrap="nowrap" align="center">
+                                            <ThemeIcon size={18} radius="xl" variant="light" color="gray">
+                                                <SummaryIcon size={12} stroke={1.8} />
+                                            </ThemeIcon>
+                                            <Text
+                                                size="xs"
+                                                fw={600}
+                                                c="dimmed"
+                                                style={{
+                                                    flex: 1,
+                                                    minWidth: 0,
+                                                    fontSize: "var(--mantine-font-size-xs)",
+                                                }}
+                                            >
+                                                {label}
+                                            </Text>
+                                            <Tooltip
+                                                label={explanation}
+                                                position="right"
+                                                withArrow
+                                                withinPortal
+                                                multiline
+                                                maw={280}
+                                                events={{ hover: true, focus: true, touch: false }}
+                                            >
+                                                <ActionIcon
+                                                    variant="subtle"
+                                                    color="gray"
+                                                    size="xs"
+                                                    style={{ flexShrink: 0 }}
+                                                    aria-label={`Como é calculado: ${label}`}
+                                                    onClick={(event) => event.stopPropagation()}
+                                                >
+                                                    <IconExclamationCircle size={13} />
+                                                </ActionIcon>
+                                            </Tooltip>
+                                        </Group>
                                         <Text
-                                            size="xs"
-                                            fw={600}
-                                            c="dimmed"
+                                            size="sm"
+                                            fw={700}
                                             style={{
-                                                flex: 1,
-                                                minWidth: 0,
-                                                fontSize: "var(--mantine-font-size-xs)",
+                                                overflowWrap: "anywhere",
+                                                fontSize: "calc(var(--mantine-font-size-sm) * 1.05)",
                                             }}
                                         >
-                                            {label}
+                                            {prefix ? `${prefix} ${brl.format(value)}` : brl.format(value)}
                                         </Text>
-                                        <Tooltip
-                                            label={explanation}
-                                            position="right"
-                                            withArrow
-                                            withinPortal
-                                            multiline
-                                            maw={280}
-                                            events={{ hover: true, focus: true, touch: false }}
-                                        >
-                                            <ActionIcon
-                                                variant="subtle"
-                                                color="gray"
-                                                size="xs"
-                                                style={{ flexShrink: 0 }}
-                                                aria-label={`Como é calculado: ${label}`}
-                                                onClick={(event) => event.stopPropagation()}
-                                            >
-                                                <IconExclamationCircle size={13} />
-                                            </ActionIcon>
-                                        </Tooltip>
-                                    </Group>
-                                    <Text
-                                        size="sm"
-                                        fw={700}
-                                        style={{
-                                            overflowWrap: "anywhere",
-                                            fontSize: "calc(var(--mantine-font-size-sm) * 1.05)",
-                                        }}
-                                    >
-                                        {prefix ? `${prefix} ${brl.format(value)}` : brl.format(value)}
-                                    </Text>
-                                </Stack>
-                            </Paper>
-                        </Tooltip>
-                    )}
-                </CopyButton>
-            ))}
+                                    </Stack>
+                                </Paper>
+                            </Tooltip>
+                        )}
+                    </CopyButton>
+                );
+            })}
         </SimpleGrid>
     );
 };

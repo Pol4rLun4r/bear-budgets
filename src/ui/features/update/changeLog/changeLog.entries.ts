@@ -20,6 +20,24 @@ interface ChangeLogEntry {
 
 export const changeLogEntryData: ChangeLogEntry[] = [
     {
+        title: "Correção nos campos de valores",
+        summary: "Removemos as setas que aumentavam ou diminuíam os valores de Preço unitário, ST em valor real, Valor extra e Frete de compra. Agora, esses campos não alteram o valor quando uma seta é mantida pressionada.",
+        date: "2026-11-25",
+        category: "bug-fix",
+    },
+    {
+        title: "Escolha como visualizar o embarque",
+        summary: "Nas configurações do formulário de item, escolha se o campo Embarque começa em dias corridos, dias úteis ou calendário. Essa preferência muda apenas a forma de exibição; o prazo continua sendo salvo como antes.",
+        date: "2026-11-25",
+        category: "novelty",
+    },
+    {
+        title: "Copie valores dos cards com mais facilidade",
+        summary: "Agora você pode clicar nos cards de valores do formulário de item e do orçamento para copiar o número. Os centavos são copiados com vírgula, como 1243,22.",
+        date: "2026-11-25",
+        category: "improvement",
+    },
+    {
         title: "Atualizações instaladas automaticamente",
         summary: "O Bear Budgets agora pode baixar e instalar novas versões ao iniciar e reabre o aplicativo quando a atualização termina. A opção Atualizar o aplicativo automaticamente fica habilitada por padrão em Configurações > Geral; se preferir, desative-a para continuar baixando e instalando atualizações manualmente.",
         date: "2026-11-24",

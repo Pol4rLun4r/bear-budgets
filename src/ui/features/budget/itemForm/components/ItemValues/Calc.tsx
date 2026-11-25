@@ -1,5 +1,5 @@
 // mantine
-import { ActionIcon, Group, Paper, SimpleGrid, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import { ActionIcon, CopyButton, Group, Paper, SimpleGrid, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 
 // icons
 import {
@@ -28,6 +28,7 @@ import { ItemFormScope } from "../../store/itemForm.slice";
 // utils
 import calcAddItem from "@/utils/calcAddItem";
 import { differenceInCalendarDays, getDeliveryDate } from "@/utils/boardingUtils";
+import formatNumberForClipboard from "@/utils/formatNumberForClipboard";
 
 const brl = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -79,6 +80,7 @@ const Calc = ({
             label: "Total sem impostos",
             explanation: "Quantidade multiplicada pelo preço unitário. Este é o valor-base dos cálculos.",
             value: formatCurrency(totalWithoutTaxes),
+            copyValue: totalWithoutTaxes,
             icon: IconReceipt,
             primary: true,
             visible: isVisible("totalWithoutTaxes"),
@@ -89,6 +91,7 @@ const Calc = ({
                 label: "Acréscimo de IPI",
                 explanation: "Percentual de IPI aplicado sobre o valor-base (quantidade × preço unitário).",
                 value: `+ ${formatCurrency(ipiValue)}`,
+                copyValue: ipiValue,
                 icon: IconPercentage,
                 primary: false,
                 visible: isVisible("ipiValue"),
@@ -102,6 +105,7 @@ const Calc = ({
                     ? "Percentual de ST aplicado sobre o subtotal com IPI."
                     : "Valor fixo de ST informado, somado ao subtotal com IPI.",
                 value: `+ ${formatCurrency(stValue)}`,
+                copyValue: stValue,
                 icon: IconReceiptTax,
                 primary: false,
                 visible: isVisible("stValue"),
@@ -112,6 +116,7 @@ const Calc = ({
             label: "Total com impostos",
             explanation: "Total sem impostos somado ao IPI e à ST. Ainda não inclui a margem.",
             value: formatCurrency(totalWithIPIandST),
+            copyValue: totalWithIPIandST,
             icon: IconReceiptTax,
             primary: false,
             visible: isVisible("totalWithIPIandST"),
@@ -121,6 +126,7 @@ const Calc = ({
             label: "Valor da margem",
             explanation: "Valor em reais acrescentado pela margem, calculada sobre o total com impostos.",
             value: `+ ${formatCurrency(markupValue)}`,
+            copyValue: markupValue,
             icon: IconPercentage,
             primary: false,
             visible: isVisible("markupValue"),
@@ -130,6 +136,7 @@ const Calc = ({
             label: "Total com margem",
             explanation: "Total com impostos somado ao valor da margem.",
             value: formatCurrency(totalAfterMarkup),
+            copyValue: totalAfterMarkup,
             icon: IconTrendingUp,
             primary: false,
             visible: isVisible("markupValue"),
@@ -140,6 +147,7 @@ const Calc = ({
                 label: "Valores extras + frete",
                 explanation: "Soma do valor extra e do frete de compra, adicionados após a margem.",
                 value: `+ ${formatCurrency(totalExtrasAndShipping)}`,
+                copyValue: totalExtrasAndShipping,
                 icon: IconTruckDelivery,
                 primary: false,
                 visible: isVisible("extraValue") || isVisible("purchaseShipping"),
@@ -150,6 +158,7 @@ const Calc = ({
             label: "Total completo",
             explanation: "Total com margem somado ao valor extra e ao frete de compra.",
             value: formatCurrency(totalWithAll),
+            copyValue: totalWithAll,
             icon: IconCoins,
             primary: true,
             visible: isVisible("totalWithAll"),
@@ -159,6 +168,7 @@ const Calc = ({
             label: "Valor unitário final",
             explanation: "Total completo dividido pela quantidade do item.",
             value: formatCurrency(finalUnitValue),
+            copyValue: finalUnitValue,
             icon: IconCurrencyReal,
             highlight: true,
             primary: true,
@@ -178,66 +188,102 @@ const Calc = ({
         isVisible("boarding") && isVisible("delivery");
 
     const renderCalculation = (
-        { label, explanation, value, highlight, icon: CalculationIcon }: (typeof visibleCalculations)[number],
+        { label, explanation, value, copyValue, highlight, icon: CalculationIcon }: (typeof visibleCalculations)[number],
         compact = false,
-    ) => (
-        <Paper
-            key={label}
-            className={highlight ? classes.finalValue : undefined}
-            withBorder
-            radius="lg"
-            p={compact ? "xs" : "sm"}
-        >
-            <Stack gap={compact ? 2 : 4}>
-                <Group gap={4} wrap="nowrap" align="center">
-                    <ThemeIcon size={22} radius="xl" variant="light" color={highlight ? "teal" : "gray"}>
-                        <CalculationIcon size={14} stroke={1.8} />
-                    </ThemeIcon>
-                    <Text
-                        size="xs"
-                        fw={600}
-                        c="dimmed"
-                        style={{
-                            flex: 1,
-                            minWidth: 0,
-                            fontSize: "calc(var(--mantine-font-size-xs) * 1.1)",
-                        }}
-                    >
-                        {label}
-                    </Text>
+    ) => {
+        const clipboardValue = formatNumberForClipboard(copyValue);
+
+        return (
+            <CopyButton value={clipboardValue ?? ""} timeout={1500}>
+                {({ copied, copy }) => (
                     <Tooltip
-                        label={explanation}
+                        label={clipboardValue ? (copied ? "Valor copiado" : "Copiar valor") : ""}
                         position="top"
                         withArrow
                         withinPortal
-                        multiline
-                        maw={280}
-                        events={{ hover: true, focus: true, touch: false }}
                     >
-                        <ActionIcon
-                            variant="subtle"
-                            color="gray"
-                            size="xs"
-                            style={{ flexShrink: 0 }}
-                            aria-label={`Como é calculado: ${label}`}
+                        <Paper
+                            key={label}
+                            className={[
+                                clipboardValue ? classes.copyableCard : undefined,
+                                highlight ? classes.finalValue : undefined,
+                            ].filter(Boolean).join(" ")}
+                            withBorder
+                            radius="lg"
+                            p={compact ? "xs" : "sm"}
+                            onClick={clipboardValue ? copy : undefined}
+                            onKeyDown={(event) => {
+                                if (!clipboardValue || event.target !== event.currentTarget) return;
+                                if (event.key === "Enter" || event.key === " ") {
+                                    event.preventDefault();
+                                    copy();
+                                }
+                            }}
+                            role={clipboardValue ? "button" : undefined}
+                            tabIndex={clipboardValue ? 0 : undefined}
+                            aria-label={
+                                clipboardValue
+                                    ? copied
+                                        ? `${label}: valor copiado`
+                                        : `Copiar valor de ${label}`
+                                    : undefined
+                            }
                         >
-                            <IconExclamationCircle size={15} />
-                        </ActionIcon>
+                            <Stack gap={compact ? 2 : 4}>
+                                <Group gap={4} wrap="nowrap" align="center">
+                                    <ThemeIcon size={22} radius="xl" variant="light" color={highlight ? "teal" : "gray"}>
+                                        <CalculationIcon size={14} stroke={1.8} />
+                                    </ThemeIcon>
+                                    <Text
+                                        size="xs"
+                                        fw={600}
+                                        c="dimmed"
+                                        style={{
+                                            flex: 1,
+                                            minWidth: 0,
+                                            fontSize: "calc(var(--mantine-font-size-xs) * 1.1)",
+                                        }}
+                                    >
+                                        {label}
+                                    </Text>
+                                    <Tooltip
+                                        label={explanation}
+                                        position="top"
+                                        withArrow
+                                        withinPortal
+                                        multiline
+                                        maw={280}
+                                        events={{ hover: true, focus: true, touch: false }}
+                                    >
+                                        <ActionIcon
+                                            variant="subtle"
+                                            color="gray"
+                                            size="xs"
+                                            style={{ flexShrink: 0 }}
+                                            aria-label={`Como é calculado: ${label}`}
+                                            onClick={(event) => event.stopPropagation()}
+                                        >
+                                            <IconExclamationCircle size={15} />
+                                        </ActionIcon>
+                                    </Tooltip>
+                                </Group>
+                                <Text
+                                    size={compact ? "sm" : "lg"}
+                                    fw={700}
+                                    style={{
+                                        overflowWrap: "anywhere",
+                                        fontSize: `calc(var(--mantine-font-size-${compact ? "sm" : "lg"}) * 1.1)`,
+                                    }}
+                                >
+                                    {value}
+                                </Text>
+                            </Stack>
+                        </Paper>
                     </Tooltip>
-                </Group>
-                <Text
-                    size={compact ? "sm" : "lg"}
-                    fw={700}
-                    style={{
-                        overflowWrap: "anywhere",
-                        fontSize: `calc(var(--mantine-font-size-${compact ? "sm" : "lg"}) * 1.1)`,
-                    }}
-                >
-                    {value}
-                </Text>
-            </Stack>
-        </Paper>
-    );
+                )}
+            </CopyButton>
+        );
+    };
 
     const renderDeliveryEstimate = (compact = false) => (
         <Paper key="delivery-estimate" withBorder radius="lg" p={compact ? "xs" : "sm"}>

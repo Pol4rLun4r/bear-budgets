@@ -28,11 +28,13 @@ interface ItemFormSettingsCardProps<T extends SimpleFormField> {
     defaultValues?: {
         markup: number;
         boarding: number;
+        boardingMode: BoardingInputMode;
         delivery: number;
     };
     onDefaultValuesChange?: (values: {
         defaultMarkup?: number;
         defaultBoarding?: number;
+        defaultBoardingMode?: BoardingInputMode;
         defaultDelivery?: number;
     }) => void;
 }
@@ -63,6 +65,7 @@ const ItemFormSettingsCard = <T extends SimpleFormField>({
                         values={{
                             defaultMarkup: defaultValues.markup,
                             defaultBoarding: defaultValues.boarding,
+                            defaultBoardingMode: defaultValues.boardingMode,
                             defaultDelivery: defaultValues.delivery,
                         }}
                         onChange={onDefaultValuesChange}

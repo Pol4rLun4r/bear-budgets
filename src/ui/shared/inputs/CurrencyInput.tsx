@@ -111,6 +111,7 @@ const CurrencyInput = ({
     return (
         <NumberInput
             {...mantineProps}
+            hideControls
             label={label}
             placeholder={placeholder}
             withAsterisk={withAsterisk}

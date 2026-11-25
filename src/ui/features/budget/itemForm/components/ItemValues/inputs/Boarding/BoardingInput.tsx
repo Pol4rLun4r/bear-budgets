@@ -23,12 +23,17 @@ type BoardingInputMode =
 interface BoardingInputProps {
     baseDate: Date;
     value: number;
+    defaultMode: BoardingInputMode;
     onChange: (value: number) => void;
 }
 
-const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
+const BoardingInput = ({ baseDate, value, defaultMode, onChange }: BoardingInputProps) => {
 
-    const [mode, setMode] = useState<BoardingInputMode>('calendarDays');
+    const [modeState, setModeState] = useState({
+        defaultMode,
+        mode: defaultMode,
+    });
+    const mode = modeState.defaultMode === defaultMode ? modeState.mode : defaultMode;
     const [calendarOpened, setCalendarOpened] = useState(false);
     const selectedDate = dayjs(addCalendarDays(baseDate, value)).format('YYYY-MM-DD');
     const [calendarDate, setCalendarDate] = useState(selectedDate);
@@ -180,7 +185,11 @@ const BoardingInput = ({ baseDate, value, onChange }: BoardingInputProps) => {
                 withAlignedLabels
                 allowDeselect={false}
                 value={mode}
-                onChange={(value) => setMode(value as BoardingInputMode)}
+                onChange={(value) => {
+                    if (value === 'calendarDays' || value === 'businessDays' || value === 'date') {
+                        setModeState({ defaultMode, mode: value });
+                    }
+                }}
                 data={[
                     { label: 'D/ corridos', value: 'calendarDays' },
                     { label: 'D/ úteis', value: 'businessDays' },

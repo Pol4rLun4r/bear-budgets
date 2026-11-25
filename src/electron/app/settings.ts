@@ -73,9 +73,14 @@ const defaultItemValueDefaults = {
     defaultBoarding: 0,
     defaultDelivery: 3,
 };
+const defaultItemValueModeOptions = {
+    defaultBoardingMode: ["calendarDays", "businessDays", "date"],
+} as const;
+const isBoardingInputMode = (value: unknown): value is BoardingInputMode =>
+    value === "calendarDays" || value === "businessDays" || value === "date";
 
 export const DEFAULT_APP_SETTINGS: AppSettings = {
-    version: 5,
+    version: 6,
     general: {
         automaticUpdates: true,
     },
@@ -102,6 +107,7 @@ export const DEFAULT_APP_SETTINGS: AppSettings = {
                 defaultSimpleMode: false,
                 simpleModeVisibleFields: [...defaultItemValuesSimpleFields],
                 ...defaultItemValueDefaults,
+                defaultBoardingMode: "calendarDays",
             },
         },
     },
@@ -132,6 +138,7 @@ const cloneSettings = (settings: AppSettings): AppSettings => ({
                 ],
                 defaultMarkup: settings.interface.itemForm.itemValues.defaultMarkup,
                 defaultBoarding: settings.interface.itemForm.itemValues.defaultBoarding,
+                defaultBoardingMode: settings.interface.itemForm.itemValues.defaultBoardingMode,
                 defaultDelivery: settings.interface.itemForm.itemValues.defaultDelivery,
             },
         },
@@ -208,6 +215,7 @@ const validateSimpleFormSettings = <
    settingName: string,
    defaults: TDefaults,
    numericDefaults: Record<string, number> = {},
+   enumDefaults: Record<string, readonly string[]> = {},
 ): Omit<TDefaults, "simpleModeVisibleFields"> & {
    defaultSimpleMode: boolean;
    simpleModeVisibleFields: T[];
@@ -222,6 +230,7 @@ const validateSimpleFormSettings = <
             "defaultSimpleMode",
             "simpleModeVisibleFields",
             ...Object.keys(numericDefaults),
+            ...Object.keys(enumDefaults),
         ]) ||
         typeof value.defaultSimpleMode !== "boolean"
     ) {
@@ -245,6 +254,17 @@ const validateSimpleFormSettings = <
         );
         Object.assign(validatedSettings, { [key]: numericValue });
     }
+    for (const [key, allowedValues] of Object.entries(enumDefaults)) {
+        if (!(key in value)) continue;
+        const selectedValue = value[key];
+        if (
+            typeof selectedValue !== "string" ||
+            !allowedValues.some((allowedValue) => allowedValue === selectedValue)
+        ) {
+            throw new Error(`Invalid settings file: ${settingName}.${key} is invalid.`);
+        }
+        Object.assign(validatedSettings, { [key]: selectedValue });
+    }
 
     return validatedSettings;
 };
@@ -252,19 +272,19 @@ const validateSimpleFormSettings = <
 const validateSettings = (value: unknown): AppSettings => {
     if (
         !isRecord(value) ||
-        !hasOnlyKeys(value, value.version === 5
+        !hasOnlyKeys(value, value.version === 5 || value.version === 6
             ? ["version", "general", "interface"]
             : ["version", "interface"]) ||
-        (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4 && value.version !== 5)
+        (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4 && value.version !== 5 && value.version !== 6)
     ) {
         throw new Error("Invalid settings file: unsupported or missing version.");
     }
     const isLegacyVersion = value.version === 1;
     const hasItemValueDefaults = value.version >= 3;
     const hasTagVisibilityDefault = value.version >= 4;
-    const generalSettings = value.version === 5 ? value.general : undefined;
+    const generalSettings = value.version >= 5 ? value.general : undefined;
     if (
-        value.version === 5 &&
+        value.version >= 5 &&
         (!isRecord(generalSettings) ||
             !hasOnlyKeys(generalSettings, ["automaticUpdates"]) ||
             typeof generalSettings.automaticUpdates !== "boolean")
@@ -305,7 +325,7 @@ const validateSettings = (value: unknown): AppSettings => {
     }
 
     const validatedSettings: AppSettings = {
-        version: 5,
+        version: 6,
         general: {
             automaticUpdates: isRecord(generalSettings) &&
                 typeof generalSettings.automaticUpdates === "boolean"
@@ -355,9 +375,11 @@ const validateSettings = (value: unknown): AppSettings => {
                                 defaultSimpleMode: false,
                                 simpleModeVisibleFields: [],
                                 ...defaultItemValueDefaults,
+                                defaultBoardingMode: "calendarDays",
                             }
                             : DEFAULT_APP_SETTINGS.interface.itemForm.itemValues,
                         hasItemValueDefaults ? defaultItemValueDefaults : {},
+                        defaultItemValueModeOptions,
                     ),
                 },
             },
@@ -368,7 +390,7 @@ const validateSettings = (value: unknown): AppSettings => {
     const legacyItemForm = validatedSettings.interface.itemForm;
     return {
             ...validatedSettings,
-            version: 5,
+            version: 6,
             interface: {
                 ...validatedSettings.interface,
                 itemForm: {
@@ -405,12 +427,14 @@ const validateSimpleFormUpdate = <T extends string>(
     simpleModeVisibleFields?: T[];
     defaultMarkup?: number;
     defaultBoarding?: number;
+    defaultBoardingMode?: BoardingInputMode;
     defaultDelivery?: number;
 } => {
     const allowedSimpleFormKeys = [
         "defaultSimpleMode",
         "simpleModeVisibleFields",
         ...(allowItemValueDefaults ? Object.keys(defaultItemValueDefaults) : []),
+        ...(allowItemValueDefaults ? Object.keys(defaultItemValueModeOptions) : []),
     ];
     if (
         !isRecord(value) ||
@@ -424,6 +448,7 @@ const validateSimpleFormUpdate = <T extends string>(
         simpleModeVisibleFields?: T[];
         defaultMarkup?: number;
         defaultBoarding?: number;
+        defaultBoardingMode?: BoardingInputMode;
         defaultDelivery?: number;
     } = {};
     if ("defaultSimpleMode" in value) {
@@ -454,6 +479,14 @@ const validateSimpleFormUpdate = <T extends string>(
             if (key === "defaultMarkup") update.defaultMarkup = numericValue;
             if (key === "defaultBoarding") update.defaultBoarding = numericValue;
             if (key === "defaultDelivery") update.defaultDelivery = numericValue;
+        }
+        if ("defaultBoardingMode" in value) {
+            if (!isBoardingInputMode(value.defaultBoardingMode)) {
+                throw new Error(
+                    `Invalid settings update: ${settingName}.defaultBoardingMode is invalid.`,
+                );
+            }
+            update.defaultBoardingMode = value.defaultBoardingMode;
         }
     }
     if (Object.keys(update).length === 0) {
@@ -618,7 +651,7 @@ export const createSettingsStore = (filePath: string) => {
 
         const parsedSettings: unknown = JSON.parse(contents);
         const settings = validateSettings(parsedSettings);
-        if (isRecord(parsedSettings) && parsedSettings.version !== 5) {
+        if (isRecord(parsedSettings) && parsedSettings.version !== 6) {
             await persistSettings(filePath, settings);
         }
         currentSettings = settings;

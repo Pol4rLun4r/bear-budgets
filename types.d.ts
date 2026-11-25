@@ -142,8 +142,10 @@ type ItemValuesSimpleField =
     | "totalWithAll"
     | "finalUnitValue";
 
+type BoardingInputMode = "calendarDays" | "businessDays" | "date";
+
 type AppSettings = {
-    version: 5;
+    version: 6;
     general: {
         automaticUpdates: boolean;
     };
@@ -163,6 +165,7 @@ type AppSettings = {
                 simpleModeVisibleFields: ItemValuesSimpleField[];
                 defaultMarkup: number;
                 defaultBoarding: number;
+                defaultBoardingMode: BoardingInputMode;
                 defaultDelivery: number;
             };
         };
@@ -189,6 +192,7 @@ type SettingsUpdate = {
                 simpleModeVisibleFields?: ItemValuesSimpleField[];
                 defaultMarkup?: number;
                 defaultBoarding?: number;
+                defaultBoardingMode?: BoardingInputMode;
                 defaultDelivery?: number;
             };
         };

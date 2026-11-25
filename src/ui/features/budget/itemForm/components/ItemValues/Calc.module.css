@@ -1,3 +1,18 @@
+.copyableCard {
+    cursor: pointer;
+    transition: border-color 120ms ease;
+}
+
+.copyableCard:hover,
+.copyableCard:focus-visible {
+    border-color: var(--mantine-primary-color-filled);
+}
+
+.copyableCard:focus-visible {
+    outline: 2px solid var(--mantine-primary-color-filled);
+    outline-offset: 2px;
+}
+
 .finalValue {
     border-color: light-dark(var(--mantine-color-violet-2), var(--mantine-color-violet-9));
     background:

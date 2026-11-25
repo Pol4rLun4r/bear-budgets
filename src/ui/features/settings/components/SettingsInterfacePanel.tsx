@@ -76,6 +76,7 @@ const SettingsInterfacePanel = ({
         hasDefaultFields(valuesSettings.simpleModeVisibleFields, defaultItemValuesSimpleFields) &&
         valuesSettings.defaultMarkup === 40 &&
         valuesSettings.defaultBoarding === 0 &&
+        valuesSettings.defaultBoardingMode === "calendarDays" &&
         valuesSettings.defaultDelivery === 3;
 
     const restoreDefaults = () => onChange({
@@ -95,6 +96,7 @@ const SettingsInterfacePanel = ({
                     simpleModeVisibleFields: defaultItemValuesSimpleFields,
                     defaultMarkup: 40,
                     defaultBoarding: 0,
+                    defaultBoardingMode: "calendarDays",
                     defaultDelivery: 3,
                 },
             },
@@ -308,6 +310,7 @@ const SettingsInterfacePanel = ({
                                     defaultValues={{
                                         markup: valuesSettings.defaultMarkup,
                                         boarding: valuesSettings.defaultBoarding,
+                                        boardingMode: valuesSettings.defaultBoardingMode,
                                         delivery: valuesSettings.defaultDelivery,
                                     }}
                                     onDefaultSimpleModeChange={(enabled) => onChange({
