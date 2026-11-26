@@ -45,7 +45,7 @@ export const withQuotationNotes = (
 /** cria uma cópia do payload com o status da cotação alterado. */
 export const withQuotationStatus = (
     payload: UpdateQuotation,
-    status: 0 | 1,
+    status: QuotationStatus,
 ): UpdateQuotation => ({
     ...payload,
     quotation: { ...payload.quotation, status },

@@ -44,6 +44,7 @@ export const submitBudget = createAsyncThunk<
                 await dispatch(quotationApi.endpoints.createQuotation.initiate({
                     quotation: {
                         notes: quotation.notes,
+                        status: quotation.status ?? 0,
                         amount: quotation.amount,
                         total_value: quotation.total_value,
                     },

@@ -14,6 +14,7 @@ const QuotationNotes = ({ scope }: { scope: BudgetFormScope }) => {
         <ExpandableTextarea
             label="Anotações"
             placeholder="(Opcional)"
+            overflowLabel="Ver mais"
 
             radius="lg"
 

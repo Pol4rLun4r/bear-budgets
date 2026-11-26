@@ -36,6 +36,34 @@
     background-color: var(--mantine-color-white);
 }
 
+.overflowAction {
+    position: absolute;
+    right: var(--mantine-spacing-sm);
+    bottom: 0.3rem;
+    z-index: 1;
+    padding: 0 0 0 0.5rem;
+    border: 0;
+    color: light-dark(var(--mantine-color-violet-7), var(--mantine-color-violet-3));
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+    font: inherit;
+    font-size: var(--mantine-font-size-xs);
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+.overflowAction:hover {
+    color: light-dark(var(--mantine-color-violet-9), var(--mantine-color-violet-1));
+}
+
+.overflowAction:focus-visible {
+    outline: 2px solid light-dark(var(--mantine-color-violet-7), var(--mantine-color-violet-3));
+    outline-offset: 2px;
+    border-radius: var(--mantine-radius-xs);
+}
+
 :global([data-mantine-color-scheme="dark"]) .overflowIndicator {
     background-color: var(--mantine-color-dark-6);
 }

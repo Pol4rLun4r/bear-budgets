@@ -1,6 +1,9 @@
+import { useState } from "react";
+
 // mantine
-import { useDisclosure } from "@mantine/hooks";
-import { Button, Group, Modal } from "@mantine/core";
+import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
+import { Button, Group, Modal, Stack, TextInput } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
 
 // components
 import BudgetForm from "../budgetForm/@BudgetForm.tsx";
@@ -17,6 +20,8 @@ import budgetFormClasses from "../budgetForm/budgetForm.module.css";
 const Budgets = () => {
   const [formOpened, { open: formOpen, close: formClose }] = useDisclosure(false);
   const [requestOpened, { open: requestOpen, close: requestClose }] = useDisclosure(false);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch] = useDebouncedValue(search, 250);
 
   const {
     data: budgets,
@@ -24,7 +29,7 @@ const Budgets = () => {
     isError,
     isLoading,
     refetch,
-  } = useGetQuotationSummariesQuery();
+  } = useGetQuotationSummariesQuery(debouncedSearch.trim() || undefined);
   
   const hasChanges = useAppSelector(selectBudgetEditHasChanges);
 
@@ -73,44 +78,50 @@ const Budgets = () => {
   const budgetList = budgets ?? [];
 
   return (
-    <>
-      {budgetList.length <= 0 ? <div>Sem orçamentos</div> :
-        <>
-          <List budgets={budgetList} open={formOpen} />
+    <Stack w="100%" h="100%" gap="md" style={{ minWidth: 0 }}>
+      <TextInput
+        size="md"
+        radius="lg"
+        placeholder="Buscar por ID ou anotações"
+        aria-label="Buscar orçamentos por ID ou anotações"
+        leftSection={<IconSearch />}
+        value={search}
+        onChange={(event) => setSearch(event.currentTarget.value)}
+      />
 
-          {/* modal que mostra o formulário do orçamento */}
+      <List budgets={budgetList} open={formOpen} searchQuery={debouncedSearch.trim()} />
+
+      {/* modal que mostra o formulário do orçamento */}
+      <Modal
+        size="100%"
+        opened={formOpened}
+        onClose={requestCloseModal}
+        title={"Informações do Orçamento"}
+        classNames={{
+          content: budgetFormClasses.modalContent,
+          body: budgetFormClasses.modalBody,
+        }}
+      >
+        <>
           <Modal
-            size="100%"
-            opened={formOpened}
-            onClose={requestCloseModal}
-            title={"Informações do Orçamento"}
-              classNames={{
-                content: budgetFormClasses.modalContent,
-                body: budgetFormClasses.modalBody,
-              }}
+            withCloseButton={false}
+            opened={requestOpened}
+            onClose={requestClose}
+            title={"Deseja fechar o orçamento sem salvar?"}
           >
-            <>
-              <Modal
-                withCloseButton={false}
-                opened={requestOpened}
-                onClose={requestClose}
-                title={"Deseja fechar o orçamento sem salvar?"}
-              >
-                <Group>
-                  <Button bg={"teal"} onClick={() => continueEditing()} >
-                    não, continuar editando
-                  </Button>
-                  <Button bg={"red"} onClick={() => discardChangesAndClose()}>
-                    sim, sair sem salvar
-                  </Button>
-                </Group>
-              </Modal>
-              {formOpened && <BudgetForm scope="budget_form_edit" close={requestCloseModal} />}
-            </>
+            <Group>
+              <Button bg={"teal"} onClick={() => continueEditing()} >
+                não, continuar editando
+              </Button>
+              <Button bg={"red"} onClick={() => discardChangesAndClose()}>
+                sim, sair sem salvar
+              </Button>
+            </Group>
           </Modal>
+          {formOpened && <BudgetForm scope="budget_form_edit" close={requestCloseModal} />}
         </>
-      }
-    </>
+      </Modal>
+    </Stack>
   )
 }
 

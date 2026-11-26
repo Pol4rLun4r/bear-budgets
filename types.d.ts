@@ -7,8 +7,8 @@ type WithUndefined<T> = {
 
 // --------------- Quotation-API ---------------
 
-/** Dados da cotação aceitos na criação. `status` é definido pelo backend (sempre rascunho). */
-type CreateQuotationData = Pick<Quotation, "notes" | "amount" | "total_value">;
+/** Dados da cotação aceitos na criação. O status é opcional e inicia como rascunho. */
+type CreateQuotationData = Pick<Quotation, "notes" | "amount" | "total_value" | "status">;
 
 /** dados da cotação aceitos na criação. */
 interface CreateQuotation {
@@ -145,7 +145,7 @@ type ItemValuesSimpleField =
 type BoardingInputMode = "calendarDays" | "businessDays" | "date";
 
 type AppSettings = {
-    version: 6;
+    version: 7;
     general: {
         automaticUpdates: boolean;
     };
@@ -153,6 +153,7 @@ type AppSettings = {
         budgetTable: {
             defaultSimpleMode: boolean;
             defaultTagEditingEnabled: boolean;
+            defaultQuotationStatus: QuotationStatus;
             simpleModeVisibleColumns: BudgetTableColumn[];
         };
         itemForm: {
@@ -180,6 +181,7 @@ type SettingsUpdate = {
         budgetTable?: {
             defaultSimpleMode?: boolean;
             defaultTagEditingEnabled?: boolean;
+            defaultQuotationStatus?: QuotationStatus;
             simpleModeVisibleColumns?: BudgetTableColumn[];
         };
         itemForm?: {
@@ -241,7 +243,7 @@ type Result<T> = FailureResponse | SuccessResponse<T>;
 
 interface QuotationAPI {
     create(quotation: CreateQuotation): Promise<Result<QuotationLink[] | undefined>>;
-    getAllSummary(): Promise<Result<QuotationSummary[] | undefined>>;
+    getAllSummary(query?: string): Promise<Result<Quotation[] | undefined>>;
     getFull(quotationId: Quotation['id']): Promise<Result<QuotationFull | undefined>>;
     getByItemValuesId(itemValuesId: ItemValues["id"]): Promise<Result<QuotationFull>>;
     update(quotation: UpdateQuotation): Promise<Result<QuotationFull | undefined>>;

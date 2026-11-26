@@ -6,6 +6,7 @@ import itemValuesImprovementContent from "./content/item-values-improvement.md?r
 import budgetItemTagsContent from "./content/budget-item-tags.md?raw";
 import bulkBudgetAdjustmentsContent from "./content/bulk-budget-adjustments.md?raw";
 import notesAndListsImprovementsContent from "./content/notes-and-lists-improvements.md?raw";
+import searchAndFilterBudgetsContent from "./content/search-and-filter-budgets.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -19,6 +20,19 @@ interface ChangeLogEntry {
 }
 
 export const changeLogEntryData: ChangeLogEntry[] = [
+    {
+        title: "Escolha o status inicial dos orçamentos",
+        summary: "Em Configurações > Interface > Orçamentos, escolha o status aplicado ao criar novos orçamentos. Rascunho continua como padrão inicial, mas você também pode escolher Concluído, Revisar ou Declinado. Orçamentos existentes não são alterados.",
+        date: "2026-11-25",
+        category: "novelty",
+    },
+    {
+        title: "Pesquise e filtre seus orçamentos",
+        summary: "Na tela Orçamentos, encontre registros pelo ID ou pelas anotações e filtre a lista pelo status. Você pode combinar a pesquisa e o filtro para localizar o orçamento que procura.",
+        date: "2026-11-25",
+        content: searchAndFilterBudgetsContent,
+        category: "novelty",
+    },
     {
         title: "Correção nos campos de valores",
         summary: "Removemos as setas que aumentavam ou diminuíam os valores de Preço unitário, ST em valor real, Valor extra e Frete de compra. Agora, esses campos não alteram o valor quando uma seta é mantida pressionada.",

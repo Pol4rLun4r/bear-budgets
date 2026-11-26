@@ -1,5 +1,6 @@
 // utils
 import { success, failure } from "../../utils/handleSuccess.js";
+import isQuotationStatus from "./isQuotationStatus.js";
 
 export interface UpdateQuotationRuleInput extends UpdateQuotationData {
     itemsCount: number;
@@ -12,6 +13,7 @@ export const rulesCode = {
     AMOUNT_MISMATCH: "A quantidade de itens informada não corresponde ao número de itens enviados",
     QUOTATION_ID_NOT_INFORMED: "ID da cotação não informado.",
     QUOTATION_NOT_FOUND: (id: Quotation['id']) => `Cotação com ID ${id} não encontrada.`,
+    INVALID_STATUS: "O status informado para a cotação é inválido",
 }
 
 const updateBase = ({
@@ -47,6 +49,10 @@ const updateBase = ({
     // validar se amount corresponde à quantidade de itens enviados
     if (amount !== itemsCount) {
         return failure(rulesCode.AMOUNT_MISMATCH);
+    }
+
+    if (status !== undefined && !isQuotationStatus(status)) {
+        return failure(rulesCode.INVALID_STATUS);
     }
 
     // validar nota

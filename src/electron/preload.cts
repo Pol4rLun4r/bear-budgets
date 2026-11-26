@@ -11,7 +11,7 @@ export const ipcInvoke = <Key extends keyof EventPayloadMapping>(
 const api: API = {
     quotation: {
         create: (quotation) => ipcInvoke('quotation:create', quotation),
-        getAllSummary: () => ipcInvoke('quotation:getAllSummary'),
+        getAllSummary: (query) => ipcInvoke('quotation:getAllSummary', query),
         getFull: (quotationId: Quotation['id']) => ipcInvoke('quotation:getFull', quotationId),
         getByItemValuesId: (itemValuesId: ItemValues["id"]) => ipcInvoke('quotation:getByItemValuesId', itemValuesId),
         update: (quotation) => ipcInvoke('quotation:update', quotation),

@@ -20,7 +20,7 @@ As regras da entidade podem ser consultadas em [quotation](Database/quotations).
 {
     id: number;
     notes?: string;
-    status: number;
+    status: QuotationStatus;
     amount: number;
     total_value: number;
     itemsCount: number;
@@ -60,6 +60,8 @@ A regra executa as seguintes validações:
 
 5. O `amount` informado deve ser igual ao `itemsCount` (número de itens enviados no payload).
 
+6. O status deve ser um dos valores válidos: `0`, `1`, `2` ou `3`.
+
 A primeira validação que falhar interrompe a execução da regra.
 
 ## Normalizações
@@ -76,9 +78,9 @@ Antes de retornar sucesso, a regra realiza as seguintes normalizações:
 
 ### status
 
-* Caso não seja informado, assume o valor `0`.
+* Caso não seja informado, assume o valor `0` (`Rascunho`).
 
-* O valor informado é mantido quando existente.
+* O valor informado é mantido quando válido.
 
 ## Garantias
 
@@ -93,6 +95,7 @@ Quando a regra retorna sucesso:
 * o valor total foi informado;
 
 * o `amount` corresponde ao número de itens enviados no payload;
+* o campo `status` possui um dos valores válidos (`0` a `3`);
 
 * o campo `notes`, quando existente, não contém espaços em branco desnecessários;
 
@@ -109,3 +112,4 @@ Quando a regra retorna sucesso:
 | `AMOUNT_NOT_INFORMED`       | A quantidade de itens da cotação não foi informada.               |
 | `TOTAL_VALUE_NOT_INFORMED`  | O valor total da cotação não foi informado.                       |
 | `AMOUNT_MISMATCH`           | O `amount` informado não corresponde ao número de itens enviados. |
+| `INVALID_STATUS`            | O status informado não corresponde a uma das opções válidas.      |

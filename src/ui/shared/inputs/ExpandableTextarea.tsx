@@ -4,10 +4,12 @@ import classes from "./ExpandableTextarea.module.css";
 
 type ExpandableTextareaProps = Omit<TextareaProps, "autosize" | "maxRows"> & {
     compactRows?: number;
+    overflowLabel?: string;
 };
 
 const ExpandableTextarea = ({
     compactRows = 1,
+    overflowLabel,
     minRows = 2,
     readOnly,
     value,
@@ -83,11 +85,21 @@ const ExpandableTextarea = ({
                     requestAnimationFrame(updateOverflow);
                 }}
             />
-            {!expanded && hasOverflow && (
+            {!expanded && hasOverflow && (overflowLabel ? (
+                <button
+                    type="button"
+                    className={classes.overflowAction}
+                    aria-label="Clique para ver a anotação completa"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => textareaRef.current?.focus()}
+                >
+                    {overflowLabel}
+                </button>
+            ) : (
                 <span className={classes.overflowIndicator} aria-hidden="true">
                     …
                 </span>
-            )}
+            ))}
         </Box>
     );
 };

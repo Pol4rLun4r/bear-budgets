@@ -10,3 +10,4 @@ Editar uma cotação já existente, não apenas a cotação base, mas seus itens
 
 As regras relacionadas à entidade podem ser encontradas em [Database](@Database) .
 
+O status é alterado exclusivamente pelo formulário do orçamento e aceita `0` (Rascunho), `1` (Concluído), `2` (Revisar) ou `3` (Declinado). Se não for informado, permanece como Rascunho.

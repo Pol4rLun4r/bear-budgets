@@ -43,22 +43,35 @@ describe("Sucessos ao atualizar cotação (completa)", () => {
         );
     });
 
-    it("deve atualizar o status da cotação com sucesso", () => {
-        const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);
+    it("deve atualizar a cotação para cada status válido", () => {
+        for (const status of [1, 2, 3] as const) {
+            const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);
+            const payload = quotationUpdatePayloadUtils.withQuotationStatus(quotation, status);
+            const result = context.services.quotation.update(payload);
 
-        const payload = quotationUpdatePayloadUtils.withQuotationStatus(quotation, 1);
+            if (!result.success) {
+                throw new Error(result.data);
+            }
+
+            expectQuotationBaseToMatch(
+                result.data as QuotationFull,
+                payload.quotation,
+            );
+        }
+    });
+
+    it("deve rejeitar um status inválido", () => {
+        const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);
+        const payload = quotationUpdatePayloadUtils.withQuotationStatus(quotation, 0);
+        Object.assign(payload.quotation, { status: 4 });
 
         const result = context.services.quotation.update(payload);
 
-        if (!result.success) {
-            throw new Error(result.data);
-        }
-
-        expectQuotationBaseToMatch(
-            result.data as QuotationFull,
-            payload.quotation,
-        );
-    })
+        expect(result).toMatchObject({
+            success: false,
+            data: "O status informado para a cotação é inválido",
+        });
+    });
 
     it("deve adicionar uma linha (novo item na cotação) com uma nova referência", () => {
         const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);

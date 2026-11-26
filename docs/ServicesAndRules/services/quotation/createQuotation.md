@@ -6,7 +6,7 @@ Este serviço é responsável por validar os dados recebidos, aplicar as regras 
 
 ## Objetivo
 
-Criar uma cotação em estado de rascunho contendo pelo menos um item válido.
+Criar uma cotação com o status selecionado no formulário e pelo menos um item válido.
 
 As regras relacionadas à entidade podem ser encontradas em [Database/quotations](Database/quotations).
 ## Dependências
@@ -28,7 +28,7 @@ payload: CreateQuotation
 
 O payload deve conter todas as informações necessárias para criação da cotação.
 
-A cotação (`quotation`) aceita apenas `notes`, `amount` e `total_value`. O campo `status` não faz parte da entrada — é sempre definido pelo backend como rascunho.
+A cotação (`quotation`) aceita `notes`, `status`, `amount` e `total_value`. O status é opcional e, quando omitido, começa como rascunho (`0`).
 
 ## Saída
 
@@ -48,7 +48,7 @@ failure(ErrorCode)
 
 Além das regras definidas em [Database/quotations](Database/quotations), este serviço deve garantir que:
 
-- toda cotação seja criada como rascunho;
+- toda cotação tenha um status válido, usando rascunho (`0`) como padrão;
 - exista pelo menos um item válido;
 - cada item possua um `item_reference`;
 - cada item possua um `item_values`;
@@ -64,9 +64,7 @@ Além das regras definidas em [Database/quotations](Database/quotations), este s
 5. Retornar "quotation_links"
 ## Observações
 
-Este serviço nunca deve receber o campo `status` informado pelo usuário.
-
-O estado inicial da cotação é sempre `Rascunho`.
+O formulário pode enviar um status escolhido pelo usuário. O backend valida que o valor esteja entre `0` e `3`; quando omitido, usa `Rascunho` (`0`).
 
 O `total_value` é calculado no frontend e enviado junto ao payload. O backend valida sua presença, mas não recalcula o valor.
 
@@ -77,7 +75,7 @@ O `amount` também é calculado no frontend (quantidade de itens na lista) e env
 Após executar este serviço com sucesso:
 
 - a cotação existe no banco;
-- o status é Rascunho;
+- o status escolhido foi persistido, ou é Rascunho quando não informado;
 - existe ao menos um item associado;
 - o valor total informado foi persistido;
 - a quantidade de itens corresponde aos itens associados.

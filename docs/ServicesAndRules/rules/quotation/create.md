@@ -19,6 +19,7 @@ As regras da entidade podem ser consultadas em [quotation](Database/quotations).
 ```ts
 {
     notes?: string;
+    status?: QuotationStatus;
     amount: number;
     total_value: number;
     itemsCount: number;
@@ -27,7 +28,7 @@ As regras da entidade podem ser consultadas em [quotation](Database/quotations).
 
 O campo `itemsCount` representa a quantidade de itens enviados no payload (`items.length`). O service é responsável por informá-lo à regra.
 
-O campo `status` não faz parte da entrada. A regra sempre define o status como rascunho.
+O campo `status` é opcional. Quando não informado, a regra usa rascunho (`0`).
 
 ## Saída
 
@@ -53,6 +54,8 @@ A regra executa as seguintes validações:
 
 3. O `amount` informado deve ser igual ao `itemsCount` (número de itens enviados no payload).
 
+4. Quando informado, o status deve ser um dos valores válidos: `0`, `1`, `2` ou `3`.
+
 A primeira validação que falhar interrompe a execução da regra.
 
 ## Normalizações
@@ -70,7 +73,8 @@ Antes de retornar sucesso, a regra realiza as seguintes normalizações:
 
 ### status
 
-- Sempre assume o valor `0` (`Rascunho`), independentemente de qualquer valor externo.
+- Assume o valor `0` (`Rascunho`) quando não informado.
+- Preserva o status escolhido quando ele é válido.
 
 ## Garantias
 
@@ -82,7 +86,7 @@ Quando a regra retorna sucesso:
 
 - o `amount` corresponde ao número de itens enviados no payload;
     
-- o campo `status` é sempre `0` (Rascunho);
+- o campo `status` possui um valor válido, assumindo `0` (Rascunho) quando não informado;
     
 - o campo `notes`, quando existente, não contém espaços em branco desnecessários;
     
@@ -96,3 +100,4 @@ Quando a regra retorna sucesso:
 | `AMOUNT_NOT_INFORMED`      | A quantidade de itens da cotação não foi informada.                    |
 | `TOTAL_VALUE_NOT_INFORMED` | O valor total da cotação não foi informado.                            |
 | `AMOUNT_MISMATCH`          | O `amount` informado não corresponde ao número de itens enviados.      |
+| `INVALID_STATUS`           | O status informado não corresponde a uma das opções válidas.           |

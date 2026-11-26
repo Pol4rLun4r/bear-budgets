@@ -18,6 +18,7 @@ const createQuotation = (db: Database) => (payload: CreateQuotation) => {
     // validar regras para criar cotação
     const validateQuotation = rules.quotation.create({
         notes: payload.quotation.notes,
+        status: payload.quotation.status,
         amount: payload.quotation.amount,
         total_value: payload.quotation.total_value,
         itemsCount: payload.items.length,

@@ -80,6 +80,25 @@ describe("Falhas ao criar cotação", () => {
             expect(quotation.success).toBe(false);
             expect(quotation.data).toBe(quotationRulesCode.AMOUNT_MISMATCH);
         });
+
+        it("falhar se o status informado for inválido", () => {
+            const payload: CreateQuotation = {
+                items: [{
+                    item_reference: { ...fakeItens[0] },
+                    reference_links: [],
+                    item_values: { quantity: 1, unit_price: 2, position: 1 },
+                }],
+                quotation: { amount: 1, total_value: 2, status: 0 },
+            };
+            Object.assign(payload.quotation, { status: 4 });
+
+            const result = services.quotation.create(payload);
+
+            expect(result).toMatchObject({
+                success: false,
+                data: quotationRulesCode.INVALID_STATUS,
+            });
+        });
     });
 
     describe("Add Items", () => {

@@ -98,4 +98,76 @@ describe("runMigrations", () => {
 
         db.close();
     });
+
+    it("amplia os status das cotações sem perder vínculos ou a sequência de IDs", () => {
+        const db = new Database(":memory:");
+        db.pragma("foreign_keys = ON");
+
+        db.exec(`
+            CREATE TABLE quotations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                status INTEGER NOT NULL CHECK (status IN (0, 1)) DEFAULT 0,
+                notes TEXT,
+                total_value REAL,
+                amount INTEGER NOT NULL,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE item_references (id INTEGER PRIMARY KEY);
+            CREATE TABLE item_values (
+                id INTEGER PRIMARY KEY,
+                item_reference_id INTEGER NOT NULL REFERENCES item_references(id)
+            );
+            CREATE TABLE quotation_links (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                quotation_id INTEGER NOT NULL REFERENCES quotations(id) ON DELETE CASCADE,
+                item_reference_id INTEGER NOT NULL REFERENCES item_references(id) ON DELETE CASCADE,
+                item_values_id INTEGER NOT NULL REFERENCES item_values(id) ON DELETE CASCADE,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE INDEX idx_quotation_links_quotation_id ON quotation_links(quotation_id);
+
+            INSERT INTO quotations (id, status, notes, total_value, amount)
+            VALUES (17, 0, 'rascunho existente', 25.5, 1), (18, 0, NULL, 0, 1);
+            INSERT INTO item_references (id) VALUES (4);
+            INSERT INTO item_values (id, item_reference_id) VALUES (9, 4);
+            INSERT INTO quotation_links (id, quotation_id, item_reference_id, item_values_id)
+            VALUES (7, 17, 4, 9);
+            DELETE FROM quotations WHERE id = 18;
+            PRAGMA user_version = 5;
+        `);
+
+        runMigrations(db);
+
+        const quotation = db.prepare(`
+            SELECT id, status, notes, total_value, amount
+            FROM quotations
+            WHERE id = 17
+        `).get();
+        expect(quotation).toMatchObject({
+            id: 17,
+            status: 0,
+            notes: "rascunho existente",
+            total_value: 25.5,
+            amount: 1,
+        });
+        expect(db.prepare("SELECT id, quotation_id FROM quotation_links").all()).toEqual([
+            { id: 7, quotation_id: 17 },
+        ]);
+        expect(db.pragma("foreign_key_check")).toEqual([]);
+
+        db.prepare("UPDATE quotations SET status = ? WHERE id = 17").run(2);
+        db.prepare("UPDATE quotations SET status = ? WHERE id = 17").run(3);
+        expect(() => db.prepare("UPDATE quotations SET status = 4 WHERE id = 17").run()).toThrow();
+
+        const nextQuotation = db.prepare(`
+            INSERT INTO quotations (status, total_value, amount)
+            VALUES (0, 0, 1)
+        `).run();
+        expect(nextQuotation.lastInsertRowid).toBe(19);
+
+        db.close();
+    });
 });

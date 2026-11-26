@@ -4,7 +4,7 @@ import { migrate as runMigrationsFromLib } from "@blackglory/better-sqlite3-migr
 const INITIAL_UP = `
     CREATE TABLE IF NOT EXISTS quotations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        status INTEGER NOT NULL CHECK (status IN (0, 1)) DEFAULT 0,
+        status INTEGER NOT NULL CHECK (status IN (0, 1, 2, 3)) DEFAULT 0,
         notes TEXT,
         total_value REAL,
         amount INTEGER NOT NULL,
@@ -214,12 +214,88 @@ const ITEM_VALUES_TAG_DOWN = `
     ALTER TABLE item_values DROP COLUMN tag;
 `;
 
+const rebuildQuotationStatusConstraint = (
+    db: DatabaseType,
+    statusConstraint: "0, 1" | "0, 1, 2, 3",
+    statusExpression: string,
+) => {
+    const previousSequence = db.prepare(
+        "SELECT seq FROM sqlite_sequence WHERE name = 'quotations'",
+    ).get() as { seq: number } | undefined;
+
+    db.exec(`
+        CREATE TABLE quotations_status_new (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            status INTEGER NOT NULL CHECK (status IN (${statusConstraint})) DEFAULT 0,
+            notes TEXT,
+            total_value REAL,
+            amount INTEGER NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );
+
+        INSERT INTO quotations_status_new (
+            id, status, notes, total_value, amount, created_at, updated_at
+        )
+        SELECT
+            id, ${statusExpression}, notes, total_value, amount, created_at, updated_at
+        FROM quotations;
+
+        CREATE TABLE quotation_links_status_new (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            quotation_id INTEGER NOT NULL,
+            item_reference_id INTEGER NOT NULL,
+            item_values_id INTEGER NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (quotation_id) REFERENCES quotations_status_new(id) ON DELETE CASCADE,
+            FOREIGN KEY (item_reference_id) REFERENCES item_references(id) ON DELETE CASCADE,
+            FOREIGN KEY (item_values_id) REFERENCES item_values(id) ON DELETE CASCADE
+        );
+
+        INSERT INTO quotation_links_status_new (
+            id, quotation_id, item_reference_id, item_values_id, created_at, updated_at
+        )
+        SELECT id, quotation_id, item_reference_id, item_values_id, created_at, updated_at
+        FROM quotation_links;
+
+        DROP TABLE quotation_links;
+        DROP TABLE quotations;
+
+        ALTER TABLE quotations_status_new RENAME TO quotations;
+        ALTER TABLE quotation_links_status_new RENAME TO quotation_links;
+
+        CREATE INDEX idx_quotation_links_quotation_id ON quotation_links(quotation_id);
+    `);
+
+    if (previousSequence) {
+        const updateSequence = db.prepare(`
+            UPDATE sqlite_sequence
+            SET seq = MAX(seq, ?)
+            WHERE name = 'quotations'
+        `);
+
+        if (updateSequence.run(previousSequence.seq).changes === 0) {
+            db.prepare("INSERT INTO sqlite_sequence (name, seq) VALUES ('quotations', ?)").run(previousSequence.seq);
+        }
+    }
+};
+
+const QUOTATION_STATUS_UP = (db: DatabaseType) => {
+    rebuildQuotationStatusConstraint(db, "0, 1, 2, 3", "status");
+};
+
+const QUOTATION_STATUS_DOWN = (db: DatabaseType) => {
+    rebuildQuotationStatusConstraint(db, "0, 1", "CASE WHEN status = 0 THEN 0 ELSE 1 END");
+};
+
 const MIGRATIONS = [
     { version: 1, up: INITIAL_UP, down: INITIAL_DOWN },
     { version: 2, up: SEARCH_UP, down: SEARCH_DOWN },
     { version: 3, up: SEARCH_TOKENIZER_FIX_UP, down: SEARCH_TOKENIZER_FIX_DOWN },
     { version: 4, up: ITEM_VALUES_DELIVERY_UP, down: ITEM_VALUES_DELIVERY_DOWN },
     { version: 5, up: ITEM_VALUES_TAG_UP, down: ITEM_VALUES_TAG_DOWN },
+    { version: 6, up: QUOTATION_STATUS_UP, down: QUOTATION_STATUS_DOWN },
 ];
 
 export function runMigrations(db: DatabaseType): void {

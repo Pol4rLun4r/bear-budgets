@@ -97,4 +97,43 @@ describe("Pegar cotações resumidas", () => {
             expect(quotation).not.toHaveProperty("item_values");
         });
     });
+
+    it("deve retornar todos os resultados encontrados por anotação ou ID exibido", () => {
+        const insertQuotation = db.prepare(`
+            INSERT INTO quotations (id, status, notes, total_value, amount)
+            VALUES (?, 0, ?, 0, 1)
+        `);
+
+        for (let id = 1; id <= 60; id += 1) {
+            insertQuotation.run(id, `Anotação sem correspondência ${id}`);
+        }
+
+        insertQuotation.run(900001, "Encontrar este orçamento");
+        insertQuotation.run(900002, "Outra ocorrência: encontrar");
+        insertQuotation.run(900003, "Encontrar a terceira correspondência");
+
+        const notesResults = services.quotation.getAllSummary("ENCONTRAR");
+        if (!notesResults.success) {
+            throw new Error(notesResults.data);
+        }
+
+        expect(notesResults.data.map(({ id }) => id)).toEqual([900003, 900002, 900001]);
+
+        const idResults = services.quotation.getAllSummary("000003");
+        if (!idResults.success) {
+            throw new Error(idResults.data);
+        }
+
+        expect(idResults.data.map(({ id }) => id)).toEqual([3]);
+    });
+
+    it("deve rejeitar parâmetros de pesquisa que não sejam texto", () => {
+        const result = services.quotation.getAllSummary(42);
+
+        expect(result).toEqual({
+            success: false,
+            data: "A pesquisa deve ser um texto válido",
+            code: "INVALID_SEARCH_QUERY",
+        });
+    });
 });

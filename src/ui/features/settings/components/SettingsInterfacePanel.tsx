@@ -1,9 +1,11 @@
 import {
     Badge,
+    Box,
     Button,
     Group,
     ActionIcon,
     Paper,
+    Select,
     Stack,
     Tabs,
     Text,
@@ -31,6 +33,7 @@ import {
     itemValuesSimpleFields,
     itemValuesRequiredFields,
 } from '../itemFormSettings.data';
+import { quotationStatusOptions } from '@/features/budget/quotationStatus';
 import SettingsOption from './SettingsOption';
 import SettingsSaveStatus from './SettingsSaveStatus';
 import ItemFormSettingsCard from './ItemFormSettingsCard';
@@ -59,6 +62,10 @@ const SettingsInterfacePanel = ({
     if (!categorySettings || !itemFormSettings) return null;
 
     const visibleColumns = new Set(categorySettings.simpleModeVisibleColumns);
+    const statusOptions = Object.values(quotationStatusOptions);
+    const selectedQuotationStatus = statusOptions.find(
+        ({ value }) => value === categorySettings.defaultQuotationStatus,
+    );
     const hasDefaultFields = <T extends string,>(fields: T[], defaults: T[]) =>
         fields.length === defaults.length && defaults.every((field) => fields.includes(field));
     const hasDefaultColumns =
@@ -69,6 +76,7 @@ const SettingsInterfacePanel = ({
     const isDefault =
         categorySettings.defaultSimpleMode &&
         categorySettings.defaultTagEditingEnabled &&
+        categorySettings.defaultQuotationStatus === 0 &&
         hasDefaultColumns &&
         !referenceSettings.defaultSimpleMode &&
         hasDefaultFields(referenceSettings.simpleModeVisibleFields, defaultItemReferenceSimpleFields) &&
@@ -84,6 +92,7 @@ const SettingsInterfacePanel = ({
             budgetTable: {
                 defaultSimpleMode: true,
                 defaultTagEditingEnabled: true,
+                defaultQuotationStatus: 0,
                 simpleModeVisibleColumns: defaultSimpleModeVisibleColumns,
             },
             itemForm: {
@@ -171,6 +180,74 @@ const SettingsInterfacePanel = ({
                                                 interface: { budgetTable: { defaultTagEditingEnabled: checked } },
                                             })}
                                         />
+                                        <Group justify="space-between" align="center" gap="md">
+                                            <Stack gap={2}>
+                                                <Text size="sm" fw={500}>
+                                                    Status padrão do orçamento
+                                                </Text>
+                                                <Text size="xs" c="dimmed">
+                                                    Aplicado ao criar novos orçamentos. Você pode alterá-lo no formulário.
+                                                </Text>
+                                            </Stack>
+                                            <Select
+                                                aria-label="Status padrão de novos orçamentos"
+                                                data={statusOptions.map(({ value, label }) => ({
+                                                    value: String(value),
+                                                    label,
+                                                }))}
+                                                value={String(categorySettings.defaultQuotationStatus)}
+                                                onChange={(value) => {
+                                                    const status = statusOptions.find(
+                                                        (option) => String(option.value) === value,
+                                                    );
+                                                    if (!status) return;
+
+                                                    onChange({
+                                                        interface: {
+                                                            budgetTable: {
+                                                                defaultQuotationStatus: status.value,
+                                                            },
+                                                        },
+                                                    });
+                                                }}
+                                                leftSection={selectedQuotationStatus ? (
+                                                    <Box
+                                                        aria-hidden="true"
+                                                        w={10}
+                                                        h={10}
+                                                        style={{
+                                                            backgroundColor: `var(--mantine-color-${selectedQuotationStatus.color}-4)`,
+                                                            borderRadius: "50%",
+                                                        }}
+                                                    />
+                                                ) : undefined}
+                                                renderOption={({ option }) => {
+                                                    const status = statusOptions.find(
+                                                        (item) => String(item.value) === option.value,
+                                                    );
+                                                    if (!status) return option.label;
+
+                                                    return (
+                                                        <Group gap="xs" wrap="nowrap">
+                                                            <Box
+                                                                aria-hidden="true"
+                                                                w={10}
+                                                                h={10}
+                                                                style={{
+                                                                    backgroundColor: `var(--mantine-color-${status.color}-4)`,
+                                                                    borderRadius: "50%",
+                                                                    flexShrink: 0,
+                                                                }}
+                                                            />
+                                                            {status.label}
+                                                        </Group>
+                                                    );
+                                                }}
+                                                size="sm"
+                                                radius="md"
+                                                w={180}
+                                            />
+                                        </Group>
                                     </Stack>
                                 </Paper>
 

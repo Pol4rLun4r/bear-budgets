@@ -6,8 +6,8 @@ const create = async (data: CreateQuotation) => {
     return response;
 }
 
-const getAllSummary = async () => {
-    const response = await baseAPI.quotation.getAllSummary();
+const getAllSummary = async (query?: string) => {
+    const response = await baseAPI.quotation.getAllSummary(query);
     return response;
 }
 

@@ -200,6 +200,28 @@ describe("Sucessos ao criar cotação", () => {
         expectFunction(quotationLinks, payload);
     });
 
+    it("deve criar a cotação com o status escolhido", () => {
+        const payload: CreateQuotation = {
+            items: [
+                {
+                    item_reference: { ...fakeItens[0] },
+                    reference_links: [],
+                    item_values: fakeItemValues(0, { unit_price: 20 }),
+                },
+            ],
+            quotation: { amount: 1, total_value: 20, status: 2 },
+        };
+
+        const result = services.quotation.create(payload);
+
+        if (!result.success) {
+            throw new Error(result.data);
+        }
+
+        const quotationId = result.data[0].quotation_id;
+        expect(repo.quotation.base.getById(quotationId)?.status).toBe(2);
+    });
+
     it("ter sucesso ao criar itens sem campos opcionais e com links vazios", async () => {
         const payload: CreateQuotation = {
             items: [

@@ -4,6 +4,12 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { createSettingsStore, DEFAULT_APP_SETTINGS } from "../../app/settings.js";
 
+const legacyBudgetTableSettings = () => ({
+    defaultSimpleMode: DEFAULT_APP_SETTINGS.interface.budgetTable.defaultSimpleMode,
+    defaultTagEditingEnabled: DEFAULT_APP_SETTINGS.interface.budgetTable.defaultTagEditingEnabled,
+    simpleModeVisibleColumns: [...DEFAULT_APP_SETTINGS.interface.budgetTable.simpleModeVisibleColumns],
+});
+
 describe("settings store", () => {
     let directory: string;
     let settingsPath: string;
@@ -57,7 +63,7 @@ describe("settings store", () => {
         await writeFile(settingsPath, JSON.stringify({
             version: 1,
             interface: {
-                budgetTable: DEFAULT_APP_SETTINGS.interface.budgetTable,
+                budgetTable: legacyBudgetTableSettings(),
             },
         }));
 
@@ -76,7 +82,7 @@ describe("settings store", () => {
         await writeFile(settingsPath, JSON.stringify({
             version: 1,
             interface: {
-                budgetTable: DEFAULT_APP_SETTINGS.interface.budgetTable,
+                budgetTable: legacyBudgetTableSettings(),
                 itemForm: {
                     itemReference: {
                         defaultSimpleMode: true,
@@ -93,7 +99,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(6);
+        expect(store.get().version).toBe(7);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(store.get().interface.itemForm).toEqual({
             itemReference: {
@@ -130,6 +136,7 @@ describe("settings store", () => {
             version: 2,
             interface: {
                 ...DEFAULT_APP_SETTINGS.interface,
+                budgetTable: legacyBudgetTableSettings(),
                 itemForm: {
                     itemReference: DEFAULT_APP_SETTINGS.interface.itemForm.itemReference,
                     itemValues: {
@@ -144,7 +151,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(6);
+        expect(store.get().version).toBe(7);
         expect(store.get().interface.itemForm.itemValues).toEqual({
             defaultSimpleMode: true,
             simpleModeVisibleFields: ["ipi"],
@@ -172,7 +179,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(6);
+        expect(store.get().version).toBe(7);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
@@ -180,13 +187,16 @@ describe("settings store", () => {
     it("migrates version 4 settings and enables automatic updates by default", async () => {
         await writeFile(settingsPath, JSON.stringify({
             version: 4,
-            interface: DEFAULT_APP_SETTINGS.interface,
+            interface: {
+                ...DEFAULT_APP_SETTINGS.interface,
+                budgetTable: legacyBudgetTableSettings(),
+            },
         }));
 
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(6);
+        expect(store.get().version).toBe(7);
         expect(store.get().general.automaticUpdates).toBe(true);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
@@ -201,6 +211,7 @@ describe("settings store", () => {
             version: 5,
             interface: {
                 ...DEFAULT_APP_SETTINGS.interface,
+                budgetTable: legacyBudgetTableSettings(),
                 itemForm: {
                     ...DEFAULT_APP_SETTINGS.interface.itemForm,
                     itemValues: version5ItemValues,
@@ -211,8 +222,26 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(6);
+        expect(store.get().version).toBe(7);
         expect(store.get().interface.itemForm.itemValues.defaultBoardingMode).toBe("calendarDays");
+        expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
+    });
+
+    it("adds the draft status default when migrating version 6 settings", async () => {
+        await writeFile(settingsPath, JSON.stringify({
+            ...DEFAULT_APP_SETTINGS,
+            version: 6,
+            interface: {
+                ...DEFAULT_APP_SETTINGS.interface,
+                budgetTable: legacyBudgetTableSettings(),
+            },
+        }));
+
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        expect(store.get().version).toBe(7);
+        expect(store.get().interface.budgetTable.defaultQuotationStatus).toBe(0);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
 
@@ -278,6 +307,40 @@ describe("settings store", () => {
         expect(store.get()).toEqual(initialSettings);
     });
 
+    it("persists the default quotation status", async () => {
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        const settings = await store.update({
+            interface: {
+                budgetTable: { defaultQuotationStatus: 2 },
+            },
+        });
+
+        expect(settings.interface.budgetTable.defaultQuotationStatus).toBe(2);
+
+        const restartedStore = createSettingsStore(settingsPath);
+        await restartedStore.initialize();
+        expect(restartedStore.get().interface.budgetTable.defaultQuotationStatus).toBe(2);
+    });
+
+    it("rejects unsupported default quotation statuses", async () => {
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+        const initialSettings = store.get();
+
+        await expect(
+            store.update({
+                interface: {
+                    budgetTable: {
+                        defaultQuotationStatus: 4 as QuotationStatus,
+                    },
+                },
+            }),
+        ).rejects.toThrow("defaultQuotationStatus is invalid");
+        expect(store.get()).toEqual(initialSettings);
+    });
+
     it("persists partial updates while preserving other preferences", async () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
@@ -292,6 +355,7 @@ describe("settings store", () => {
         expect(settings.interface.budgetTable).toEqual({
             defaultSimpleMode: false,
             defaultTagEditingEnabled: true,
+            defaultQuotationStatus: 0,
             simpleModeVisibleColumns: [],
         });
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(settings);
@@ -313,6 +377,7 @@ describe("settings store", () => {
         expect(store.get().interface.budgetTable).toEqual({
             defaultSimpleMode: false,
             defaultTagEditingEnabled: true,
+            defaultQuotationStatus: 0,
             simpleModeVisibleColumns: [],
         });
     });

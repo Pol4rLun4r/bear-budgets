@@ -11,8 +11,8 @@ type Quotation = {
     updated_at?: string;
 };
 
-// Status por versão: 0 = rascunho, 1 = enviado
-type QuotationStatus = 0 | 1;
+// 0 = rascunho, 1 = enviado, 2 = revisar, 3 = declinado
+type QuotationStatus = 0 | 1 | 2 | 3;
 
 type QuotationItemToAdd = {
     item_reference: ItemReference;

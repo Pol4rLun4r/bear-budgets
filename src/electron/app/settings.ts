@@ -78,9 +78,11 @@ const defaultItemValueModeOptions = {
 } as const;
 const isBoardingInputMode = (value: unknown): value is BoardingInputMode =>
     value === "calendarDays" || value === "businessDays" || value === "date";
+const isQuotationStatus = (value: unknown): value is QuotationStatus =>
+    value === 0 || value === 1 || value === 2 || value === 3;
 
 export const DEFAULT_APP_SETTINGS: AppSettings = {
-    version: 6,
+    version: 7,
     general: {
         automaticUpdates: true,
     },
@@ -88,6 +90,7 @@ export const DEFAULT_APP_SETTINGS: AppSettings = {
         budgetTable: {
             defaultSimpleMode: true,
             defaultTagEditingEnabled: true,
+            defaultQuotationStatus: 0,
             simpleModeVisibleColumns: [
                 "description",
                 "internalCode",
@@ -122,6 +125,7 @@ const cloneSettings = (settings: AppSettings): AppSettings => ({
         budgetTable: {
             defaultSimpleMode: settings.interface.budgetTable.defaultSimpleMode,
             defaultTagEditingEnabled: settings.interface.budgetTable.defaultTagEditingEnabled,
+            defaultQuotationStatus: settings.interface.budgetTable.defaultQuotationStatus,
             simpleModeVisibleColumns: [...settings.interface.budgetTable.simpleModeVisibleColumns],
         },
         itemForm: {
@@ -272,10 +276,10 @@ const validateSimpleFormSettings = <
 const validateSettings = (value: unknown): AppSettings => {
     if (
         !isRecord(value) ||
-        !hasOnlyKeys(value, value.version === 5 || value.version === 6
+        !hasOnlyKeys(value, value.version === 5 || value.version === 6 || value.version === 7
             ? ["version", "general", "interface"]
             : ["version", "interface"]) ||
-        (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4 && value.version !== 5 && value.version !== 6)
+        (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4 && value.version !== 5 && value.version !== 6 && value.version !== 7)
     ) {
         throw new Error("Invalid settings file: unsupported or missing version.");
     }
@@ -306,12 +310,14 @@ const validateSettings = (value: unknown): AppSettings => {
         !hasOnlyKeys(budgetTable, [
             "defaultSimpleMode",
             "defaultTagEditingEnabled",
+            ...(value.version === 7 ? ["defaultQuotationStatus"] : []),
             "simpleModeVisibleColumns",
         ]) ||
         typeof budgetTable.defaultSimpleMode !== "boolean" ||
         ("defaultTagEditingEnabled" in budgetTable &&
             typeof budgetTable.defaultTagEditingEnabled !== "boolean") ||
-        (hasTagVisibilityDefault && typeof budgetTable.defaultTagEditingEnabled !== "boolean")
+        (hasTagVisibilityDefault && typeof budgetTable.defaultTagEditingEnabled !== "boolean") ||
+        (value.version === 7 && !isQuotationStatus(budgetTable.defaultQuotationStatus))
     ) {
         throw new Error("Invalid settings file: invalid budget table settings.");
     }
@@ -325,7 +331,7 @@ const validateSettings = (value: unknown): AppSettings => {
     }
 
     const validatedSettings: AppSettings = {
-        version: 6,
+        version: 7,
         general: {
             automaticUpdates: isRecord(generalSettings) &&
                 typeof generalSettings.automaticUpdates === "boolean"
@@ -338,6 +344,9 @@ const validateSettings = (value: unknown): AppSettings => {
                 defaultTagEditingEnabled: typeof budgetTable.defaultTagEditingEnabled === "boolean"
                     ? budgetTable.defaultTagEditingEnabled
                     : DEFAULT_APP_SETTINGS.interface.budgetTable.defaultTagEditingEnabled,
+                defaultQuotationStatus: isQuotationStatus(budgetTable.defaultQuotationStatus)
+                    ? budgetTable.defaultQuotationStatus
+                    : DEFAULT_APP_SETTINGS.interface.budgetTable.defaultQuotationStatus,
                 simpleModeVisibleColumns: validateColumns(budgetTable.simpleModeVisibleColumns),
             },
             itemForm: isLegacyVersion && itemForm === undefined
@@ -390,7 +399,7 @@ const validateSettings = (value: unknown): AppSettings => {
     const legacyItemForm = validatedSettings.interface.itemForm;
     return {
             ...validatedSettings,
-            version: 6,
+            version: 7,
             interface: {
                 ...validatedSettings.interface,
                 itemForm: {
@@ -500,6 +509,7 @@ const validateUpdate = (value: unknown): SettingsUpdate => {
     const allowedBudgetTableKeys = [
         "defaultSimpleMode",
         "defaultTagEditingEnabled",
+        "defaultQuotationStatus",
         "simpleModeVisibleColumns",
     ];
     if (
@@ -551,6 +561,12 @@ const validateUpdate = (value: unknown): SettingsUpdate => {
                 throw new Error("Invalid settings update: defaultTagEditingEnabled must be a boolean.");
             }
             update.defaultTagEditingEnabled = budgetTable.defaultTagEditingEnabled;
+        }
+        if ("defaultQuotationStatus" in budgetTable) {
+            if (!isQuotationStatus(budgetTable.defaultQuotationStatus)) {
+                throw new Error("Invalid settings update: defaultQuotationStatus is invalid.");
+            }
+            update.defaultQuotationStatus = budgetTable.defaultQuotationStatus;
         }
         if ("simpleModeVisibleColumns" in budgetTable) {
             update.simpleModeVisibleColumns = validateColumns(budgetTable.simpleModeVisibleColumns);
@@ -651,7 +667,7 @@ export const createSettingsStore = (filePath: string) => {
 
         const parsedSettings: unknown = JSON.parse(contents);
         const settings = validateSettings(parsedSettings);
-        if (isRecord(parsedSettings) && parsedSettings.version !== 6) {
+        if (isRecord(parsedSettings) && parsedSettings.version !== 7) {
             await persistSettings(filePath, settings);
         }
         currentSettings = settings;

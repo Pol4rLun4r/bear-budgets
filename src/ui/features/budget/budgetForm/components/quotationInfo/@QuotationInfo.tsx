@@ -1,6 +1,7 @@
 // components
 import ButtonHandleBudget from "./ButtonHandleBudget";
 import QuotationNotes from "./QuotationNotes";
+import QuotationStatus from "./QuotationStatus";
 
 // redux
 import { BudgetFormScope } from "../../store/@rootReducer";
@@ -23,6 +24,7 @@ const QuotationInfo = ({ scope, close }: QuotationInfoProps) => {
 
             }} >
             <QuotationNotes scope={scope} />
+            <QuotationStatus scope={scope} />
             <ButtonHandleBudget scope={scope} close={close} />
         </Group>
     )

@@ -8,10 +8,17 @@ import { success, failure } from "../../utils/handleSuccess.js";
 import { createRepositories } from "../../repositories/index.js";
 
 /** pegar resumo de todas as cotações (dados base) */
-const getAllQuotationsSummary = (db: Database) => () => {
+const getAllQuotationsSummary = (db: Database) => (rawQuery?: unknown) => {
     const repo = createRepositories(db);
 
-    const quotations = repo.quotation.base.getAllSummary();
+    if (rawQuery !== undefined && typeof rawQuery !== "string") {
+        return failure("A pesquisa deve ser um texto válido", "INVALID_SEARCH_QUERY");
+    }
+
+    const query = rawQuery?.trim();
+    const quotations = query
+        ? repo.quotation.base.searchSummary(query)
+        : repo.quotation.base.getAllSummary();
 
     if (quotations === undefined) {
         return failure("Erro interno ao buscar cotações");

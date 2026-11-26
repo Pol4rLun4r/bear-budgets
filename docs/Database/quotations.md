@@ -2,7 +2,7 @@
 
 Representa uma cotação criada pelo usuário.
 
-A cotação agrupa os itens orçados, seu valor total, observações e o estado atual (rascunho ou enviada).
+A cotação agrupa os itens orçados, seu valor total, observações e o status atual.
 
 ## Responsabilidades
 
@@ -30,8 +30,10 @@ A tabela é responsável por:
   * Default: `0`.
   * Valores:
 
-    * `0`: Rascunho.
-    * `1`: Enviada.
+    * `0`: Rascunho (cinza).
+    * `1`: Concluído (verde).
+    * `2`: Revisar (amarelo).
+    * `3`: Declinado (vermelho).
 
 * `notes`
 
@@ -53,7 +55,8 @@ A tabela é responsável por:
 
 ## Regras de negócio
 
-* Toda cotação inicia como rascunho.
+* Toda cotação inicia como rascunho, a menos que outro status seja escolhido no formulário.
+* O status só pode ser alterado pelo formulário de criação ou edição.
 * Toda cotação deve possuir pelo menos um item.
 * O valor total é informado pelo frontend e persistido pelo backend.
 * A quantidade de itens deve refletir exatamente o número de itens vinculados à cotação.
@@ -86,7 +89,7 @@ Na criação, o valor é calculado no frontend e enviado no payload. O backend v
 
 ### status
 
-Na criação, o status é sempre definido pelo backend como rascunho (`0`). Não faz parte da entrada do usuário.
+Na criação, o status padrão é rascunho (`0`), mas pode ser escolhido no formulário. Na edição, o status atual é mantido até ser alterado no formulário.
 
 ## Invariantes
 

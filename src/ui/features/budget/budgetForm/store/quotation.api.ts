@@ -2,9 +2,9 @@ import { api } from "@/app/api";
 
 export const quotationApi = api.injectEndpoints({
     endpoints: (build) => ({
-        getQuotationSummaries: build.query<Quotation[] | undefined, void>({
-            async queryFn() {
-                const result = await window.api.quotation.getAllSummary();
+        getQuotationSummaries: build.query<Quotation[] | undefined, string | undefined>({
+            async queryFn(query) {
+                const result = await window.api.quotation.getAllSummary(query);
 
                 if (!result.success) {
                     return {

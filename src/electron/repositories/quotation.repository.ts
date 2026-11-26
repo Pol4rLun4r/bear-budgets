@@ -1,15 +1,27 @@
 import type { Database } from "better-sqlite3";
 
+const quotationSummaryQuery = `
+    SELECT
+        id,
+        status,
+        notes,
+        total_value,
+        amount,
+        datetime(created_at, 'localtime') AS created_at,
+        datetime(updated_at, 'localtime') AS updated_at
+    FROM quotations
+`;
+
 /** cria uma nova cotação "a casca do orçamento" */
 const create = (db: Database) =>
-    ({ notes, amount, total_value }: Quotation) => {
+    ({ notes, status, amount, total_value }: Quotation) => {
         const result = db.transaction(() => {
 
             // cria a cotação
             const quotation = db.prepare(`
                 INSERT INTO quotations (status, notes, total_value, amount)
-                VALUES (0, ?, ?, ?)
-            `).run(notes, total_value, amount);
+                VALUES (?, ?, ?, ?)
+            `).run(status ?? 0, notes, total_value, amount);
 
             const quotationId = quotation.lastInsertRowid as number;
 
@@ -47,18 +59,23 @@ const deleteById = (db: Database) =>
 const getAllSummary = (db: Database) =>
     () => {
         return db.prepare(`
-            SELECT
-                id,
-                status,
-                notes,
-                total_value,
-                amount,
-                datetime(created_at, 'localtime') AS created_at,
-                datetime(updated_at, 'localtime') AS updated_at
-            FROM quotations
+            ${quotationSummaryQuery}
             ORDER BY created_at DESC, id DESC
             LIMIT 50
         `).all() as Quotation[];
+    };
+
+/** pesquisa o resumo das cotações pelo ID exibido ou pelas anotações */
+const searchSummary = (db: Database) =>
+    (query: string) => {
+        return db.prepare(`
+            ${quotationSummaryQuery}
+            WHERE
+                instr(CAST(id AS TEXT), ?) > 0
+                OR instr(printf('%06d', id), ?) > 0
+                OR instr(LOWER(COALESCE(notes, '')), LOWER(?)) > 0
+            ORDER BY created_at DESC, id DESC
+        `).all(query, query, query) as Quotation[];
     };
 
 /** pega a cotação pelo id */
@@ -130,6 +147,7 @@ const quotationRepository = (db: Database) => {
         getById: getById(db),
         deleteById: deleteById(db),
         getAllSummary: getAllSummary(db),
+        searchSummary: searchSummary(db),
         update: update(db)
     };
 };
