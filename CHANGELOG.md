@@ -1,3 +1,10 @@
+# [4.19.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.18.0...v4.19.0) (2026-11-26)
+
+
+### Features
+
+* **budget:** add quotation status management and search filters ([7af6533](https://github.com/Pol4rLun4r/bear-budgets/commit/7af6533b5a285086bd8d78b34bcef1e316e1f3f7))
+
 # [4.18.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.17.0...v4.18.0) (2026-11-25)
 
 
