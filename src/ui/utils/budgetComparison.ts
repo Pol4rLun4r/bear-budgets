@@ -26,6 +26,8 @@ const valueFields: (keyof ItemValuesData)[] = [
     "ipi",
     "st",
     "extra_value",
+    "discount_value",
+    "discount_type",
     "boarding",
     "delivery",
 ];

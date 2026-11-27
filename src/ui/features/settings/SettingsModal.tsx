@@ -36,7 +36,20 @@ const SettingsModal = ({ opened, onClose }: SettingsModalProps) => {
                 closeOnEscape={!saving}
                 closeOnClickOutside={!saving}
                 withCloseButton={false}
-                size="80%"
+                size="90vw"
+                styles={{
+                    content: {
+                        height: '90vh',
+                        maxHeight: '90vh',
+                        display: 'flex',
+                        flexDirection: 'column',
+                    },
+                    body: {
+                        flex: '1 1 auto',
+                        minHeight: 0,
+                        overflow: 'hidden',
+                    },
+                }}
             >
                 {opened && (
                     <SettingsTabs

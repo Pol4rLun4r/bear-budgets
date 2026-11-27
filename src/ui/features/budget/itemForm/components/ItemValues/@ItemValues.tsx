@@ -9,6 +9,7 @@ import IPI from "./inputs/IPI";
 import ST from "./inputs/ST";
 import Markup from "./inputs/Markup";
 import PurchaseShipping from "./inputs/PurchaseShipping";
+import Discount from "./inputs/Discount";
 import ExtraValue from "./inputs/ExtraValue";
 import Boarding from "./inputs/Boarding/@Boarding";
 import Delivery from "./inputs/Delivery";
@@ -90,6 +91,11 @@ const ItemValues = ({
                         {isVisible("boarding") && <Boarding scope={scope} />}
                         {isVisible("delivery") && <Delivery scope={scope} />}
                         {isVisible("purchaseShipping") && <PurchaseShipping scope={scope} />}
+                    </Group>
+                )}
+                {isVisible("discount") && (
+                    <Group justify="center" align="flex-end">
+                        <Discount scope={scope} />
                     </Group>
                 )}
             </Stack>

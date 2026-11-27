@@ -214,6 +214,20 @@ const ITEM_VALUES_TAG_DOWN = `
     ALTER TABLE item_values DROP COLUMN tag;
 `;
 
+const ITEM_VALUES_DISCOUNT_UP = `
+    ALTER TABLE item_values
+    ADD COLUMN discount_value REAL CHECK (discount_value IS NULL OR discount_value >= 0);
+
+    ALTER TABLE item_values
+    ADD COLUMN discount_type TEXT NOT NULL DEFAULT 'fixed'
+        CHECK (discount_type IN ('fixed', 'percentage'));
+`;
+
+const ITEM_VALUES_DISCOUNT_DOWN = `
+    ALTER TABLE item_values DROP COLUMN discount_type;
+    ALTER TABLE item_values DROP COLUMN discount_value;
+`;
+
 const rebuildQuotationStatusConstraint = (
     db: DatabaseType,
     statusConstraint: "0, 1" | "0, 1, 2, 3",
@@ -296,6 +310,7 @@ const MIGRATIONS = [
     { version: 4, up: ITEM_VALUES_DELIVERY_UP, down: ITEM_VALUES_DELIVERY_DOWN },
     { version: 5, up: ITEM_VALUES_TAG_UP, down: ITEM_VALUES_TAG_DOWN },
     { version: 6, up: QUOTATION_STATUS_UP, down: QUOTATION_STATUS_DOWN },
+    { version: 7, up: ITEM_VALUES_DISCOUNT_UP, down: ITEM_VALUES_DISCOUNT_DOWN },
 ];
 
 export function runMigrations(db: DatabaseType): void {

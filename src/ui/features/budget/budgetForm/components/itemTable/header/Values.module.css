@@ -23,3 +23,17 @@
     outline: 2px solid var(--mantine-primary-color-filled);
     outline-offset: 2px;
 }
+
+.totalComplete {
+    border-color: light-dark(var(--mantine-color-violet-2), var(--mantine-color-violet-9));
+    background:
+        radial-gradient(circle at 100% 0%, light-dark(rgb(121 80 242 / 12%), rgb(121 80 242 / 20%)), transparent 42%),
+        var(--mantine-color-body);
+}
+
+.marginTotal {
+    border-color: light-dark(var(--mantine-color-green-2), var(--mantine-color-green-9));
+    background:
+        radial-gradient(circle at 100% 0%, light-dark(rgb(64 192 87 / 12%), rgb(64 192 87 / 20%)), transparent 42%),
+        var(--mantine-color-body);
+}

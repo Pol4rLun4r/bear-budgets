@@ -2,6 +2,7 @@ export const defaultItemReferenceSimpleFields: ItemReferenceSimpleField[] = ["in
 
 export const defaultItemValuesSimpleFields: ItemValuesSimpleField[] = [
     "historyPrice",
+    "discount",
     "boarding",
     "delivery",
     "purchaseShipping",
@@ -92,6 +93,11 @@ export const itemValuesSimpleFields: {
         id: "extraValue",
         label: "Valor extra",
         description: "Campo para informar um valor adicional do item.",
+    },
+    {
+        id: "discount",
+        label: "Desconto",
+        description: "Campo para informar um desconto em reais ou percentual.",
     },
     {
         id: "boarding",

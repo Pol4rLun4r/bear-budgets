@@ -73,11 +73,25 @@ describe("runMigrations", () => {
         ]);
         expect(() => db.prepare("UPDATE item_values SET tag = 4 WHERE id = 1").run()).toThrow();
         expect(() => db.prepare("UPDATE item_values SET tag = NULL WHERE id = 1").run()).toThrow();
+        const discountColumns = db.prepare("PRAGMA table_info(item_values)").all() as Array<{ name: string; dflt_value: string | null }>;
+        expect(discountColumns.find((column) => column.name === "discount_value")).toMatchObject({
+            name: "discount_value",
+        });
+        expect(discountColumns.find((column) => column.name === "discount_type")).toMatchObject({
+            name: "discount_type",
+            dflt_value: "'fixed'",
+        });
+        expect(db.prepare("SELECT discount_value, discount_type FROM item_values WHERE id = 1").get()).toEqual({
+            discount_value: null,
+            discount_type: "fixed",
+        });
+        expect(() => db.prepare("UPDATE item_values SET discount_type = 'cash' WHERE id = 1").run()).toThrow();
+        expect(() => db.prepare("UPDATE item_values SET discount_value = -1 WHERE id = 1").run()).toThrow();
 
         db.close();
     });
 
-    it("cria item_values com delivery e tag em banco novo", () => {
+    it("cria item_values com delivery, tag e desconto em banco novo", () => {
         const db = new Database(":memory:");
         db.pragma("foreign_keys = ON");
 
@@ -94,6 +108,12 @@ describe("runMigrations", () => {
             type: "INTEGER",
             notnull: 1,
             dflt_value: "0",
+        });
+        expect(columns.find((column) => column.name === "discount_value")?.type).toBe("REAL");
+        expect(columns.find((column) => column.name === "discount_type")).toMatchObject({
+            type: "TEXT",
+            notnull: 1,
+            dflt_value: "'fixed'",
         });
 
         db.close();

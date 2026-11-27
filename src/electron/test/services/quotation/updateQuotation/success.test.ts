@@ -191,6 +191,45 @@ describe("Sucessos ao atualizar cotação (completa)", () => {
         expect(updatedItem?.item_values.delivery).toBe(0);
     });
 
+    it("deve salvar e depois remover um desconto nos valores do item", () => {
+        const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);
+        const item = fullQuotation.items[0];
+        const payload = quotationUpdatePayloadUtils.editQuotationItem(
+            quotation,
+            item.quotation_link_id,
+            {
+                item_values: {
+                    discount_value: 10.33,
+                    discount_type: "percentage",
+                },
+            },
+        );
+
+        const updatedResult = context.services.quotation.update(payload);
+        expect(updatedResult.success).toBe(true);
+        if (!updatedResult.success) return;
+
+        const updated = updatedResult.data as QuotationFull;
+        const updatedItem = updated.items.find((entry) => entry.quotation_link_id === item.quotation_link_id);
+        expect(updatedItem?.item_values).toMatchObject({
+            discount_value: 10.33,
+            discount_type: "percentage",
+        });
+
+        const clearPayload = quotationUpdatePayloadUtils.editQuotationItem(
+            quotationUpdatePayloadUtils.makeQuotationUpdatePayload(updated),
+            item.quotation_link_id,
+            { item_values: { discount_value: undefined } },
+        );
+        const clearedResult = context.services.quotation.update(clearPayload);
+        expect(clearedResult.success).toBe(true);
+        if (!clearedResult.success) return;
+
+        const clearedItem = (clearedResult.data as QuotationFull).items
+            .find((entry) => entry.quotation_link_id === item.quotation_link_id);
+        expect(clearedItem?.item_values.discount_value).toBeNull();
+    });
+
     it("deve atualizar tag e preservá-la quando não for enviada em uma atualização", () => {
         const quotation = quotationUpdatePayloadUtils.makeQuotationUpdatePayload(fullQuotation);
         const item = fullQuotation.items[0];

@@ -17,6 +17,8 @@ export const rulesCode = {
     INVALID_BOARDING: "O campo boarding deve ser um número inteiro.",
     INVALID_DELIVERY: "O campo delivery deve ser um número inteiro maior ou igual a zero.",
     INVALID_TAG: "O campo tag deve ser um dos valores 0, 1, 2 ou 3.",
+    INVALID_DISCOUNT_TYPE: "O tipo de desconto deve ser fixo ou percentual.",
+    INVALID_DISCOUNT_VALUE: "O valor do desconto deve ser um número não negativo com até duas casas decimais.",
 };
 
 // função auxiliar para validar se um ID opcional é um número inteiro positivo ou não informado (undefined ou null)
@@ -61,6 +63,7 @@ const validateItemValues = ({ itemValues }: ValidateItemValuesInput) => {
         ipi: itemValues.ipi,
         st: itemValues.st,
         extra_value: itemValues.extra_value,
+        discount_value: itemValues.discount_value,
     };
 
     // valida se os campos numéricos são números válidos (não NaN, não Infinity) caso sejam informados
@@ -68,6 +71,26 @@ const validateItemValues = ({ itemValues }: ValidateItemValuesInput) => {
         if (value !== undefined && value !== null && (typeof value !== "number" || !Number.isFinite(value))) {
             return failure(rulesCode.INVALID_NUMBER(field));
         }
+    }
+
+    const discountType = itemValues.discount_type ?? "fixed";
+    if (discountType !== "fixed" && discountType !== "percentage") {
+        return failure(rulesCode.INVALID_DISCOUNT_TYPE);
+    }
+
+    const discountValue = itemValues.discount_value;
+    if (
+        discountValue !== undefined
+        && discountValue !== null
+        && (
+            typeof discountValue !== "number"
+            || !Number.isFinite(discountValue)
+            || discountValue < 0
+            || Math.abs(discountValue * 100 - Math.round(discountValue * 100))
+                > Number.EPSILON * Math.max(1, Math.abs(discountValue * 100)) * 4
+        )
+    ) {
+        return failure(rulesCode.INVALID_DISCOUNT_VALUE);
     }
 
     // valida se o campo markup é uma string caso seja informado
@@ -100,6 +123,8 @@ const validateItemValues = ({ itemValues }: ValidateItemValuesInput) => {
         ipi: itemValues.ipi ?? undefined,
         st: itemValues.st ?? undefined,
         extra_value: itemValues.extra_value ?? undefined,
+        discount_value: discountValue ?? undefined,
+        discount_type: discountType,
         boarding: itemValues.boarding ?? undefined,
         delivery: itemValues.delivery ?? undefined,
     };

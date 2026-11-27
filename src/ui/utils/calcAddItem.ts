@@ -5,7 +5,20 @@ interface CalAddItem extends Partial<ItemValues> {
     switchStMode?: boolean
 }
 
-const calcAddItem = ({ ipi = 0, markup = "", purchase_shipping = 0, quantity = 0, st = 0, unit_price = 0, extra_value = 0, switchStMode }: CalAddItem) => {
+const roundCurrency = (value: number) => Math.round((value + Number.EPSILON) * 100) / 100;
+
+const calcAddItem = ({
+    ipi = 0,
+    markup = "",
+    purchase_shipping = 0,
+    quantity = 0,
+    st = 0,
+    unit_price = 0,
+    extra_value = 0,
+    discount_value = 0,
+    discount_type = "fixed",
+    switchStMode,
+}: CalAddItem) => {
     // converte markup em um numero
     const markupNum = convertMarkupValue(markup);
 
@@ -34,9 +47,17 @@ const calcAddItem = ({ ipi = 0, markup = "", purchase_shipping = 0, quantity = 0
     const totalAfterMarkup = totalWithIPIandST + markupValue;
     const totalWithExtraValue = totalAfterMarkup + extra_value;
     const totalExtrasAndShipping = extra_value + purchase_shipping;
+    const totalBeforeDiscount = totalAfterMarkup + totalExtrasAndShipping;
+    const requestedDiscountValue = discount_type === "percentage"
+        ? roundCurrency(totalBeforeDiscount * (discount_value / 100))
+        : roundCurrency(discount_value);
+    const discountValue = Math.min(
+        Math.max(0, requestedDiscountValue),
+        Math.max(0, totalBeforeDiscount),
+    );
 
-    // orçamento com todos os impostos e valores extras
-    const totalWithAll = totalAfterMarkup + totalExtrasAndShipping;
+    // orçamento com todos os impostos, valores extras e desconto
+    const totalWithAll = totalBeforeDiscount - discountValue;
 
     // valor unitário com todos os cálculos
     const finalUnitValue = totalWithAll / quantity;
@@ -52,6 +73,8 @@ const calcAddItem = ({ ipi = 0, markup = "", purchase_shipping = 0, quantity = 0
         totalAfterMarkup,
         totalWithExtraValue,
         totalExtrasAndShipping,
+        totalBeforeDiscount,
+        discountValue,
         totalWithAll,
         finalUnitValue,
     };

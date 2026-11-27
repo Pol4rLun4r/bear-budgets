@@ -2,8 +2,21 @@
 import { failure, success } from "../../utils/handleSuccess.js";
 import validateItemValues from "../item/validateItemValues.js";
 
-type ItemValueChanges = Partial<Pick<ItemValues,
-    "position" | "quantity" | "tag" | "unit_price" | "markup" | "purchase_shipping" | "ipi" | "st" | "extra_value" | "boarding" | "delivery"
+type ItemValueChanges = Partial<Pick<
+    ItemValues,
+    | "position"
+    | "quantity"
+    | "tag"
+    | "unit_price"
+    | "markup"
+    | "purchase_shipping"
+    | "ipi"
+    | "st"
+    | "extra_value"
+    | "discount_value"
+    | "discount_type"
+    | "boarding"
+    | "delivery"
 >>;
 
 type MatchedItem = UpdateQuotation["items"][number] & {
@@ -106,6 +119,8 @@ const compareItemValues = ({
             ipi: current.ipi ?? undefined,
             st: current.st ?? undefined,
             extra_value: current.extra_value ?? undefined,
+            discount_value: current.discount_value ?? undefined,
+            discount_type: current.discount_type ?? "fixed",
             boarding: current.boarding ?? undefined,
             delivery: current.delivery ?? undefined,
         };
@@ -145,6 +160,14 @@ const compareItemValues = ({
 
         if (currentValues.extra_value !== normalizedSubmittedValues.extra_value) {
             changes.extra_value = normalizedSubmittedValues.extra_value;
+        }
+
+        if (currentValues.discount_value !== normalizedSubmittedValues.discount_value) {
+            changes.discount_value = normalizedSubmittedValues.discount_value;
+        }
+
+        if (currentValues.discount_type !== normalizedSubmittedValues.discount_type) {
+            changes.discount_type = normalizedSubmittedValues.discount_type;
         }
 
         if (currentValues.boarding !== normalizedSubmittedValues.boarding) {

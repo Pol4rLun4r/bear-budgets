@@ -105,6 +105,18 @@ A tabela é responsável por:
   * Tipo: Número real.
   * Opcional.
 
+* `discount_value`
+
+  * Valor do desconto aplicado ao item, em reais ou percentual conforme `discount_type`.
+  * Tipo: Número real não negativo, com até duas casas decimais.
+  * Opcional.
+
+* `discount_type`
+
+  * Tipo do desconto aplicado ao item: `fixed` (valor em reais) ou `percentage` (percentual).
+  * Tipo: Texto.
+  * Obrigatório; assume `fixed` por padrão.
+
 ## Regras de negócio
 
 * Todo conjunto de valores deve estar associado a um `item_reference`.
@@ -171,6 +183,12 @@ Armazena o prazo de entrega do item em dias. Seu preenchimento é opcional e dep
 Representa um valor adicional aplicado ao item.
 
 Pode ser utilizado para complementar o custo do item em situações específicas.
+
+---
+
+### discount_value e discount_type
+
+`discount_value` guarda o número informado pelo usuário e `discount_type` determina se ele representa reais (`fixed`) ou percentual (`percentage`). Alterar o tipo não converte o valor informado. O desconto é calculado sobre o total após impostos, margem, valor extra e frete; seu valor aplicado não ultrapassa esse total.
 
 ## Invariantes
 

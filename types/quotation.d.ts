@@ -68,6 +68,7 @@ type ReferenceLink = {
 
 // valores do item – dados mutáveis (preço, quantidade, etc)
 type ItemValueTag = 0 | 1 | 2 | 3;
+type ItemDiscountType = "fixed" | "percentage";
 
 type ItemValues = {
     id?: number;
@@ -81,6 +82,8 @@ type ItemValues = {
     ipi?: number;
     st?: number;
     extra_value?: number;
+    discount_value?: number;
+    discount_type?: ItemDiscountType;
     boarding?: number; // tempo para embarcar o item
     delivery?: number; // tempo para entregar o item
     created_at?: string;

@@ -47,4 +47,24 @@ describe("itemValuesRepository tag", () => {
 
         expect(() => db.prepare("UPDATE item_values SET tag = 4 WHERE id = ?").run(id)).toThrow();
     });
+
+    it("persists and clears fixed and percentage discounts", () => {
+        const id = repository.create(itemReferenceId, {
+            position: 6,
+            quantity: 2,
+            discount_value: 10.33,
+            discount_type: "percentage",
+        });
+
+        expect(repository.getById(id)).toMatchObject({
+            discount_value: 10.33,
+            discount_type: "percentage",
+        });
+
+        const cleared = repository.update(id, { discount_value: undefined, discount_type: "fixed" });
+        expect(cleared).toMatchObject({
+            discount_value: null,
+            discount_type: "fixed",
+        });
+    });
 });

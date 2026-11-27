@@ -20,6 +20,27 @@
         var(--mantine-color-body);
 }
 
+.discountValue {
+    border-color: light-dark(var(--mantine-color-red-2), var(--mantine-color-red-9));
+    background:
+        radial-gradient(circle at 100% 0%, light-dark(rgb(250 82 82 / 12%), rgb(250 82 82 / 20%)), transparent 42%),
+        var(--mantine-color-body);
+}
+
+.marginValue {
+    border-color: light-dark(var(--mantine-color-green-2), var(--mantine-color-green-9));
+    background:
+        radial-gradient(circle at 100% 0%, light-dark(rgb(64 192 87 / 12%), rgb(64 192 87 / 20%)), transparent 42%),
+        var(--mantine-color-body);
+}
+
+.deliveryEstimate {
+    border-color: light-dark(var(--mantine-color-blue-2), var(--mantine-color-blue-9));
+    background:
+        radial-gradient(circle at 100% 0%, light-dark(rgb(34 139 230 / 12%), rgb(34 139 230 / 20%)), transparent 42%),
+        var(--mantine-color-body);
+}
+
 .primaryTitle,
 .detailsTitle {
     color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-white));

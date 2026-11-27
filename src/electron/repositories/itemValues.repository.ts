@@ -15,6 +15,8 @@ const getById = (db: Database) =>
                 ipi,
                 st,
                 extra_value,
+                discount_value,
+                discount_type,
                 boarding,
                 delivery,
                 tag,
@@ -46,6 +48,8 @@ const getByIds = (db: Database) =>
                 ipi,
                 st,
                 extra_value,
+                discount_value,
+                discount_type,
                 boarding,
                 delivery,
                 tag,
@@ -80,6 +84,8 @@ const getAllByReferenceId = (db: Database) =>
                 ipi,
                 st,
                 extra_value,
+                discount_value,
+                discount_type,
                 boarding,
                 delivery,
                 tag,
@@ -109,6 +115,8 @@ const getLatestByReferenceId = (db: Database) =>
                 ipi,
                 st,
                 extra_value,
+                discount_value,
+                discount_type,
                 boarding,
                 delivery,
                 tag,
@@ -138,8 +146,8 @@ const countByReferenceId = (db: Database) =>
 const create = (db: Database) =>
     (item_reference_id: number, data: Omit<ItemValues, "id" | "item_reference_id" | "created_at" | "updated_at" | "tag"> & { tag?: ItemValueTag }): number => {
         const row = db.prepare(`
-            INSERT INTO item_values (item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, extra_value, boarding, delivery, tag)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO item_values (item_reference_id, position, quantity, unit_price, markup, purchase_shipping, ipi, st, extra_value, discount_value, discount_type, boarding, delivery, tag)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).run(
             item_reference_id,
             data.position,
@@ -150,6 +158,8 @@ const create = (db: Database) =>
             data.ipi ?? undefined,
             data.st ?? undefined,
             data.extra_value ?? undefined,
+            data.discount_value ?? undefined,
+            data.discount_type ?? "fixed",
             data.boarding ?? undefined,
             data.delivery ?? undefined,
             data.tag ?? 0
@@ -205,6 +215,16 @@ const update = (db: Database) => (id: ItemValues['id'], data: Partial<ItemValues
     if (data.extra_value !== undefined) {
         fields.push("extra_value = ?");
         values.push(data.extra_value);
+    }
+
+    if (Object.hasOwn(data, "discount_value")) {
+        fields.push("discount_value = ?");
+        values.push(data.discount_value ?? null);
+    }
+
+    if (data.discount_type !== undefined) {
+        fields.push("discount_type = ?");
+        values.push(data.discount_type);
     }
 
     if (data.boarding !== undefined) {

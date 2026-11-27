@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createEmptyItemData } from "../../itemForm/store/itemForm.slice";
 import itemTableReducer, {
     addItem,
+    applyItemDiscount,
     cycleAllItemTags,
     deleteItem,
     dilutePurchaseShipping,
@@ -375,6 +376,70 @@ describe("item table tags", () => {
         );
 
         expect(updatedState[scope].map((item) => item.item_values.markup)).toEqual(["0", "0"]);
+    });
+
+    it("applies a percentage discount only to items with the selected tag", () => {
+        const scope = "budget_form_create";
+        let state = itemTableReducer(
+            undefined,
+            addItem({ scope, data: createPricedItem(100) }),
+        );
+        state = itemTableReducer(
+            state,
+            addItem({ scope, data: createPricedItem(200) }),
+        );
+        state[scope].forEach((item, index) => {
+            state = itemTableReducer(
+                state,
+                setItemTag({ scope, itemId: item.temp_id, tag: index === 0 ? 1 : 2 }),
+            );
+        });
+
+        const updatedState = itemTableReducer(
+            state,
+            applyItemDiscount({
+                scope,
+                value: 10.33,
+                type: "percentage",
+                target: "green",
+            }),
+        );
+
+        expect(updatedState[scope].map((item) => item.item_values.discount_value)).toEqual([
+            10.33,
+            undefined,
+        ]);
+        expect(updatedState[scope].map((item) => item.item_values.discount_type)).toEqual([
+            "percentage",
+            "fixed",
+        ]);
+    });
+
+    it("applies a fixed discount to all items and ignores invalid amounts", () => {
+        const scope = "budget_form_create";
+        let state = itemTableReducer(
+            undefined,
+            addItem({ scope, data: createPricedItem(100) }),
+        );
+        state = itemTableReducer(
+            state,
+            addItem({ scope, data: createPricedItem(200) }),
+        );
+
+        const updatedState = itemTableReducer(
+            state,
+            applyItemDiscount({ scope, value: 12.5, type: "fixed", target: "all" }),
+        );
+        const unchangedState = itemTableReducer(
+            state,
+            applyItemDiscount({ scope, value: 10.123, type: "fixed", target: "all" }),
+        );
+
+        expect(updatedState[scope].map((item) => item.item_values.discount_value)).toEqual([12.5, 12.5]);
+        expect(unchangedState[scope].map((item) => item.item_values.discount_value)).toEqual([
+            undefined,
+            undefined,
+        ]);
     });
 
     it.each(["", "-1", "1001", "1.5", "invalid"])(

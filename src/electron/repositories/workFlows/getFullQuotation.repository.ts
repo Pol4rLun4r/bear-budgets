@@ -75,6 +75,8 @@ const getQuotationFullRepository = (db: Database) =>
                 ipi,
                 st,
                 extra_value,
+                discount_value,
+                discount_type,
                 boarding,
                 delivery,
                 tag,

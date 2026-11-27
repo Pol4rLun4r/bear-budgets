@@ -1,6 +1,6 @@
 .tabs {
     display: flex;
-    height: min(65vh, 42rem);
+    height: 100%;
     min-height: 24rem;
 }
 

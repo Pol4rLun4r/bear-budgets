@@ -31,8 +31,8 @@ export const budgetTableColumns = [
     },
     {
         id: "shippingAndDelivery",
-        label: "Embarque + Entrega",
-        description: "Mostra as informações de embarque e entrega do item.",
+        label: "Previsão de entrega",
+        description: "Mostra a previsão de entrega do item, considerando os prazos de embarque e entrega.",
         width: "10%",
     },
     {

@@ -33,6 +33,7 @@ export const isHiddenValueWarning = (state: RootState, scope: ItemFormScope) => 
         (Boolean(itemValues.ipi) && !visibleFields.has("ipi")) ||
         (Boolean(itemValues.st) && !visibleFields.has("st")) ||
         (Boolean(itemValues.extra_value) && !visibleFields.has("extraValue")) ||
+        (Boolean(itemValues.discount_value) && !visibleFields.has("discount")) ||
         (Boolean(itemValues.boarding) && !visibleFields.has("boarding")) ||
         (itemValues.delivery != null &&
             itemValues.delivery !== defaultDelivery &&

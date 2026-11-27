@@ -6,6 +6,7 @@ import {
     IconCalendarStats,
     IconCoins,
     IconCurrencyReal,
+    IconTag,
     IconExclamationCircle,
     IconPercentage,
     IconReceipt,
@@ -62,6 +63,8 @@ const Calc = ({
         markupValue,
         totalAfterMarkup,
         totalExtrasAndShipping,
+        discountValue,
+        totalBeforeDiscount,
         totalWithAll,
         finalUnitValue,
     } = calcAddItem({ ...item_values, switchStMode });
@@ -69,6 +72,7 @@ const Calc = ({
     const hasST = (item_values.st ?? 0) > 0;
     const hasExtraValue = (item_values.extra_value ?? 0) > 0;
     const hasPurchaseShipping = (item_values.purchase_shipping ?? 0) > 0;
+    const hasDiscount = (item_values.discount_value ?? 0) > 0;
     const baseDate = new Date();
     const totalDeliveryDays = differenceInCalendarDays(
         baseDate,
@@ -118,7 +122,7 @@ const Calc = ({
             value: formatCurrency(totalWithIPIandST),
             copyValue: totalWithIPIandST,
             icon: IconReceiptTax,
-            primary: false,
+            primary: true,
             visible: isVisible("totalWithIPIandST"),
         },
         {
@@ -128,17 +132,21 @@ const Calc = ({
             value: `+ ${formatCurrency(markupValue)}`,
             copyValue: markupValue,
             icon: IconPercentage,
+            accent: "margin" as const,
+            highlight: true,
             primary: false,
             visible: isVisible("markupValue"),
         },
         {
             field: "markupValue" as const,
             label: "Total com margem",
-            explanation: "Total com impostos somado ao valor da margem.",
+            explanation: "Total com impostos e margem. Ainda não inclui valores extras, frete de compra nem o desconto.",
             value: formatCurrency(totalAfterMarkup),
             copyValue: totalAfterMarkup,
             icon: IconTrendingUp,
-            primary: false,
+            accent: "margin" as const,
+            highlight: true,
+            primary: true,
             visible: isVisible("markupValue"),
         },
         ...((hasExtraValue || hasPurchaseShipping)
@@ -153,10 +161,35 @@ const Calc = ({
                 visible: isVisible("extraValue") || isVisible("purchaseShipping"),
             }]
             : []),
+        ...(hasDiscount
+            ? [{
+                field: "discount" as const,
+                label: "Desconto",
+                explanation: item_values.discount_type === "percentage"
+                    ? "Percentual aplicado sobre o total com impostos, margem, valores extras e frete. O desconto não ultrapassa esse total."
+                    : "Valor em reais subtraído do total com impostos, margem, valores extras e frete, sem permitir um total negativo.",
+                value: `− ${formatCurrency(discountValue)}`,
+                copyValue: discountValue,
+                icon: IconTag,
+                highlight: true,
+                accent: "discount" as const,
+                primary: false,
+                visible: true,
+            }]
+            : []),
+        {
+            label: "Total sem desconto",
+            explanation: "Total completo do cálculo, com impostos, margem, valores extras e frete de compra, antes de aplicar o desconto.",
+            value: formatCurrency(totalBeforeDiscount),
+            copyValue: totalBeforeDiscount,
+            icon: IconCoins,
+            primary: true,
+            visible: true,
+        },
         {
             field: "totalWithAll" as const,
             label: "Total completo",
-            explanation: "Total com margem somado ao valor extra e ao frete de compra.",
+            explanation: "Total com impostos, margem, valores extras e frete de compra, menos o desconto aplicado.",
             value: formatCurrency(totalWithAll),
             copyValue: totalWithAll,
             icon: IconCoins,
@@ -170,6 +203,7 @@ const Calc = ({
             value: formatCurrency(finalUnitValue),
             copyValue: finalUnitValue,
             icon: IconCurrencyReal,
+            accent: "final" as const,
             highlight: true,
             primary: true,
             visible: isVisible("finalUnitValue"),
@@ -188,7 +222,7 @@ const Calc = ({
         isVisible("boarding") && isVisible("delivery");
 
     const renderCalculation = (
-        { label, explanation, value, copyValue, highlight, icon: CalculationIcon }: (typeof visibleCalculations)[number],
+        { label, explanation, value, copyValue, highlight, accent, icon: CalculationIcon }: (typeof visibleCalculations)[number],
         compact = false,
     ) => {
         const clipboardValue = formatNumberForClipboard(copyValue);
@@ -206,7 +240,11 @@ const Calc = ({
                             key={label}
                             className={[
                                 clipboardValue ? classes.copyableCard : undefined,
-                                highlight ? classes.finalValue : undefined,
+                                highlight && accent === "discount"
+                                    ? classes.discountValue
+                                    : highlight && accent === "margin"
+                                        ? classes.marginValue
+                                        : highlight ? classes.finalValue : undefined,
                             ].filter(Boolean).join(" ")}
                             withBorder
                             radius="lg"
@@ -231,7 +269,20 @@ const Calc = ({
                         >
                             <Stack gap={compact ? 2 : 4}>
                                 <Group gap={4} wrap="nowrap" align="center">
-                                    <ThemeIcon size={22} radius="xl" variant="light" color={highlight ? "teal" : "gray"}>
+                                    <ThemeIcon
+                                        size={22}
+                                        radius="xl"
+                                        variant="light"
+                                        color={
+                                            accent === "discount"
+                                                ? "red"
+                                                : accent === "margin"
+                                                    ? "green"
+                                                : accent === "final"
+                                                    ? "violet"
+                                                    : highlight ? "teal" : "gray"
+                                        }
+                                    >
                                         <CalculationIcon size={14} stroke={1.8} />
                                     </ThemeIcon>
                                     <Text
@@ -286,7 +337,13 @@ const Calc = ({
     };
 
     const renderDeliveryEstimate = (compact = false) => (
-        <Paper key="delivery-estimate" withBorder radius="lg" p={compact ? "xs" : "sm"}>
+        <Paper
+            key="delivery-estimate"
+            className={classes.deliveryEstimate}
+            withBorder
+            radius="lg"
+            p={compact ? "xs" : "sm"}
+        >
             <Stack gap={compact ? 2 : 4}>
                 <Group gap={4} wrap="nowrap" align="center">
                     <ThemeIcon size={22} radius="xl" variant="light" color="blue">
@@ -356,7 +413,7 @@ const Calc = ({
             ) : (
                 <Stack gap="xs">
                     {displayedCalculations.map((calculation) => renderCalculation(calculation, true))}
-                    {layout === "primary" && showTotalDeliveryDays && renderDeliveryEstimate(true)}
+                    {layout === "details" && showTotalDeliveryDays && renderDeliveryEstimate(true)}
                 </Stack>
             )}
         </Stack>

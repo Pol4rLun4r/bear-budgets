@@ -10,34 +10,38 @@ import { BudgetFormScope } from "../../../store/@rootReducer";
 import ItemFormModal from "@/features/budget/itemForm/@ItemFormModal";
 import CurrencyInput from "@/shared/inputs/CurrencyInput";
 import SwitchMode from "./SwitchMode";
+import DiscountTypeToggle from "@/features/budget/itemForm/components/ItemValues/inputs/DiscountTypeToggle";
 
 // icons
 import {
     IconChevronDown,
     IconCircleFilled,
+    IconCurrencyReal,
     IconPlus,
     IconPercentage,
     IconRotateClockwise,
     IconSettings,
     IconTrash,
     IconTruck,
+    IconTag,
 } from "@tabler/icons-react"
 import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
 import {
     dilutePurchaseShipping,
+    applyItemDiscount,
     getItemFreightDistributionBase,
-    matchesFreightDistributionTarget,
+    matchesItemTagTarget,
     replaceItemMarkup,
     resetItemTags,
     resetTable,
-    type FreightDistributionTarget,
+    type ItemTagTarget,
 } from "../../../store/itemTable.slice";
 import { applyDefaultItemValues } from "@/features/budget/itemForm/store/itemForm.slice";
 import { markupOptions } from "@/utils/markupList";
 
-const isFreightDistributionTarget = (
+const isItemTagTarget = (
     value: string | null,
-): value is FreightDistributionTarget => (
+): value is ItemTagTarget => (
     value === "all"
     || value === "neutral"
     || value === "green"
@@ -45,7 +49,7 @@ const isFreightDistributionTarget = (
     || value === "red"
 );
 
-const freightTargetColors: Record<FreightDistributionTarget, string> = {
+const itemTagTargetColors: Record<ItemTagTarget, string> = {
     all: "violet",
     neutral: "gray",
     green: "green",
@@ -69,23 +73,30 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
     const [deleteOpened, { open: deleteOpen, close: deleteClose }] = useDisclosure(false);
     const [freightOpened, { open: freightOpen, close: freightClose }] = useDisclosure(false);
     const [markupOpened, { open: markupOpen, close: markupClose }] = useDisclosure(false);
+    const [discountOpened, { open: discountOpen, close: discountClose }] = useDisclosure(false);
     const [freightAmount, setFreightAmount] = useState<number>();
-    const [freightTarget, setFreightTarget] = useState<FreightDistributionTarget>("all");
-    const [markupTarget, setMarkupTarget] = useState<FreightDistributionTarget>("all");
+    const [freightTarget, setFreightTarget] = useState<ItemTagTarget>("all");
+    const [markupTarget, setMarkupTarget] = useState<ItemTagTarget>("all");
+    const [discountTarget, setDiscountTarget] = useState<ItemTagTarget>("all");
     const [newMarkup, setNewMarkup] = useState<string | null>(null);
+    const [discountAmount, setDiscountAmount] = useState<number>();
+    const [discountType, setDiscountType] = useState<ItemDiscountType>("fixed");
     const dispatch = useAppDispatch();
     const items = useAppSelector((state) => state.budgetForm.itemTable[scope]);
     const defaultItemValues = useAppSelector(
         (state) => state.settings.value?.interface.itemForm.itemValues,
     );
     const selectedItemCount = items.filter((item) =>
-        matchesFreightDistributionTarget(item, freightTarget),
+        matchesItemTagTarget(item, freightTarget),
     ).length;
     const selectedFinalTotal = items
-        .filter((item) => matchesFreightDistributionTarget(item, freightTarget))
+        .filter((item) => matchesItemTagTarget(item, freightTarget))
         .reduce((sum, item) => sum + Math.max(0, getItemFreightDistributionBase(item)), 0);
     const selectedMarkupItemCount = items.filter((item) =>
-        matchesFreightDistributionTarget(item, markupTarget),
+        matchesItemTagTarget(item, markupTarget),
+    ).length;
+    const selectedDiscountItemCount = items.filter((item) =>
+        matchesItemTagTarget(item, discountTarget),
     ).length;
 
     const handleDelete = () => {
@@ -134,6 +145,19 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
         markupClose();
     };
 
+    const handleApplyDiscount = () => {
+        if (discountAmount === undefined || selectedDiscountItemCount === 0) return;
+
+        dispatch(applyItemDiscount({
+            scope,
+            value: discountAmount,
+            type: discountType,
+            target: discountTarget,
+        }));
+        setDiscountAmount(undefined);
+        discountClose();
+    };
+
     return (
         <>
             <Group>
@@ -171,6 +195,12 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                             onClick={freightOpen}
                         >
                             Diluir frete nos itens
+                        </Menu.Item>
+                        <Menu.Item
+                            leftSection={<IconTag size={16} />}
+                            onClick={discountOpen}
+                        >
+                            Aplicar desconto em massa
                         </Menu.Item>
                         <Menu.Item
                             leftSection={<IconPercentage size={16} />}
@@ -247,13 +277,13 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                                 size="sm"
                                 radius="xl"
                                 variant="light"
-                                color={freightTargetColors[freightTarget]}
+                                color={itemTagTargetColors[freightTarget]}
                             >
                                 <IconCircleFilled size={8} />
                             </ThemeIcon>
                         }
                         onChange={(value) => {
-                            if (isFreightDistributionTarget(value)) setFreightTarget(value);
+                            if (isItemTagTarget(value)) setFreightTarget(value);
                         }}
                         data={[
                             { value: "all", label: "Todos os itens" },
@@ -263,7 +293,7 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                             { value: "red", label: "Itens marcados em vermelho" },
                         ]}
                         renderOption={({ option }) => {
-                            const target = isFreightDistributionTarget(option.value)
+                            const target = isItemTagTarget(option.value)
                                 ? option.value
                                 : "all";
 
@@ -273,7 +303,7 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                                         size="sm"
                                         radius="xl"
                                         variant="light"
-                                        color={freightTargetColors[target]}
+                                        color={itemTagTargetColors[target]}
                                     >
                                         <IconCircleFilled size={8} />
                                     </ThemeIcon>
@@ -342,13 +372,13 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                                 size="sm"
                                 radius="xl"
                                 variant="light"
-                                color={freightTargetColors[markupTarget]}
+                                color={itemTagTargetColors[markupTarget]}
                             >
                                 <IconCircleFilled size={8} />
                             </ThemeIcon>
                         }
                         onChange={(value) => {
-                            if (isFreightDistributionTarget(value)) setMarkupTarget(value);
+                            if (isItemTagTarget(value)) setMarkupTarget(value);
                         }}
                         data={[
                             { value: "all", label: "Todos os itens" },
@@ -358,7 +388,7 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                             { value: "red", label: "Itens marcados em vermelho" },
                         ]}
                         renderOption={({ option }) => {
-                            const target = isFreightDistributionTarget(option.value)
+                            const target = isItemTagTarget(option.value)
                                 ? option.value
                                 : "all";
 
@@ -368,7 +398,7 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                                         size="sm"
                                         radius="xl"
                                         variant="light"
-                                        color={freightTargetColors[target]}
+                                        color={itemTagTargetColors[target]}
                                     >
                                         <IconCircleFilled size={8} />
                                     </ThemeIcon>
@@ -391,6 +421,100 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                         onClick={handleReplaceMarkup}
                     >
                         Aplicar nova margem
+                    </Button>
+                </Stack>
+            </Modal>
+
+            <Modal
+                opened={discountOpened}
+                onClose={discountClose}
+                title="Aplicar desconto em massa"
+                size="sm"
+            >
+                <Stack>
+                    <Text size="sm" c="dimmed">
+                        Informe o mesmo desconto para os itens escolhidos. O valor digitado permanece
+                        igual ao alternar entre reais e percentual.
+                    </Text>
+                    <Group align="flex-end" gap="xs" wrap="nowrap">
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                            <CurrencyInput
+                                width="100%"
+                                value={discountAmount}
+                                onValueChange={setDiscountAmount}
+                                label="Valor do desconto"
+                                placeholder="R$ 0,00"
+                                mode={discountType === "percentage" ? "percentage" : "currency"}
+                            />
+                        </div>
+                        <DiscountTypeToggle value={discountType} onChange={setDiscountType} />
+                    </Group>
+                    <Select
+                        label="Aplicar em"
+                        radius="lg"
+                        value={discountTarget}
+                        leftSection={
+                            <ThemeIcon
+                                size="sm"
+                                radius="xl"
+                                variant="light"
+                                color={itemTagTargetColors[discountTarget]}
+                            >
+                                <IconCircleFilled size={8} />
+                            </ThemeIcon>
+                        }
+                        onChange={(value) => {
+                            if (isItemTagTarget(value)) setDiscountTarget(value);
+                        }}
+                        data={[
+                            { value: "all", label: "Todos os itens" },
+                            { value: "neutral", label: "Itens neutros (sem tag)" },
+                            { value: "green", label: "Itens marcados em verde" },
+                            { value: "yellow", label: "Itens marcados em amarelo" },
+                            { value: "red", label: "Itens marcados em vermelho" },
+                        ]}
+                        renderOption={({ option }) => {
+                            const target = isItemTagTarget(option.value) ? option.value : "all";
+
+                            return (
+                                <Group gap="xs" wrap="nowrap">
+                                    <ThemeIcon
+                                        size="sm"
+                                        radius="xl"
+                                        variant="light"
+                                        color={itemTagTargetColors[target]}
+                                    >
+                                        <IconCircleFilled size={8} />
+                                    </ThemeIcon>
+                                    <span>{option.label}</span>
+                                </Group>
+                            );
+                        }}
+                        allowDeselect={false}
+                    />
+                    <Text size="sm" c={selectedDiscountItemCount === 0 ? "red" : "dimmed"}>
+                        {selectedDiscountItemCount === 0
+                            ? "Nenhum item corresponde a esta opção."
+                            : `${selectedDiscountItemCount} ${selectedDiscountItemCount === 1 ? "item selecionado" : "itens selecionados"}.`}
+                    </Text>
+                    <Button
+                        radius="lg"
+                        variant="light"
+                        color="teal"
+                        leftSection={
+                            discountType === "percentage"
+                                ? <IconPercentage size={18} />
+                                : <IconCurrencyReal size={18} />
+                        }
+                        disabled={
+                            discountAmount === undefined
+                            || !Number.isFinite(discountAmount)
+                            || discountAmount <= 0
+                            || selectedDiscountItemCount === 0
+                        }
+                        onClick={handleApplyDiscount}
+                    >
+                        Aplicar desconto
                     </Button>
                 </Stack>
             </Modal>

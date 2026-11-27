@@ -7,6 +7,7 @@ import budgetItemTagsContent from "./content/budget-item-tags.md?raw";
 import bulkBudgetAdjustmentsContent from "./content/bulk-budget-adjustments.md?raw";
 import notesAndListsImprovementsContent from "./content/notes-and-lists-improvements.md?raw";
 import searchAndFilterBudgetsContent from "./content/search-and-filter-budgets.md?raw";
+import itemDiscountsContent from "./content/item-discounts.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -20,6 +21,13 @@ interface ChangeLogEntry {
 }
 
 export const changeLogEntryData: ChangeLogEntry[] = [
+    {
+        title: "Aplique descontos nos itens do orçamento",
+        summary: "Informe um desconto em reais ou percentual em cada item ou use **Aplicar desconto em massa** para vários itens. O valor aplicado não ultrapassa o total calculado do item.",
+        date: "2026-11-26",
+        content: itemDiscountsContent,
+        category: "novelty",
+    },
     {
         title: "Escolha o status inicial dos orçamentos",
         summary: "Em Configurações > Interface > Orçamentos, escolha o status aplicado ao criar novos orçamentos. Rascunho continua como padrão inicial, mas você também pode escolher Concluído, Revisar ou Declinado. Orçamentos existentes não são alterados.",

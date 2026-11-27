@@ -40,6 +40,7 @@ describe("settings store", () => {
                 defaultSimpleMode: false,
                 simpleModeVisibleFields: [
                     "historyPrice",
+                    "discount",
                     "boarding",
                     "delivery",
                     "purchaseShipping",
@@ -99,7 +100,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(7);
+        expect(store.get().version).toBe(8);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(store.get().interface.itemForm).toEqual({
             itemReference: {
@@ -110,6 +111,7 @@ describe("settings store", () => {
                 defaultSimpleMode: true,
                 simpleModeVisibleFields: [
                     "historyPrice",
+                    "discount",
                     "boarding",
                     "delivery",
                     "purchaseShipping",
@@ -151,10 +153,10 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(7);
+        expect(store.get().version).toBe(8);
         expect(store.get().interface.itemForm.itemValues).toEqual({
             defaultSimpleMode: true,
-            simpleModeVisibleFields: ["ipi"],
+            simpleModeVisibleFields: ["ipi", "discount"],
             defaultMarkup: 40,
             defaultBoarding: 0,
             defaultBoardingMode: "calendarDays",
@@ -179,7 +181,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(7);
+        expect(store.get().version).toBe(8);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
@@ -196,7 +198,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(7);
+        expect(store.get().version).toBe(8);
         expect(store.get().general.automaticUpdates).toBe(true);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
@@ -222,7 +224,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(7);
+        expect(store.get().version).toBe(8);
         expect(store.get().interface.itemForm.itemValues.defaultBoardingMode).toBe("calendarDays");
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
@@ -240,8 +242,35 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(7);
+        expect(store.get().version).toBe(8);
         expect(store.get().interface.budgetTable.defaultQuotationStatus).toBe(0);
+        expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
+    });
+
+    it("adds the discount field to existing version 7 simple-mode preferences", async () => {
+        const existingFields = DEFAULT_APP_SETTINGS.interface.itemForm.itemValues
+            .simpleModeVisibleFields
+            .filter((field) => field !== "discount");
+        await writeFile(settingsPath, JSON.stringify({
+            ...DEFAULT_APP_SETTINGS,
+            version: 7,
+            interface: {
+                ...DEFAULT_APP_SETTINGS.interface,
+                itemForm: {
+                    ...DEFAULT_APP_SETTINGS.interface.itemForm,
+                    itemValues: {
+                        ...DEFAULT_APP_SETTINGS.interface.itemForm.itemValues,
+                        simpleModeVisibleFields: existingFields,
+                    },
+                },
+            },
+        }));
+
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        expect(store.get().version).toBe(8);
+        expect(store.get().interface.itemForm.itemValues.simpleModeVisibleFields).toContain("discount");
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
 

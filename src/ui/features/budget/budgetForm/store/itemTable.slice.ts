@@ -14,20 +14,20 @@ type ItemTableInput = Omit<ItemFormState, "temp_id" | "toggleStMode" | "is_highl
     is_highlight?: boolean;
 };
 
-export type FreightDistributionTarget = "all" | "neutral" | "green" | "yellow" | "red";
+export type ItemTagTarget = "all" | "neutral" | "green" | "yellow" | "red";
 
-const freightTargetTags: Record<Exclude<FreightDistributionTarget, "all">, ItemValueTag> = {
+const itemTagTargetTags: Record<Exclude<ItemTagTarget, "all">, ItemValueTag> = {
     neutral: 0,
     green: 1,
     yellow: 2,
     red: 3,
 };
 
-export const matchesFreightDistributionTarget = (
+export const matchesItemTagTarget = (
     item: ItemFormState,
-    target: FreightDistributionTarget,
+    target: ItemTagTarget,
 ) => target === "all"
-    || (item.item_values.tag ?? 0) === freightTargetTags[target];
+    || (item.item_values.tag ?? 0) === itemTagTargetTags[target];
 
 export const getItemFreightDistributionBase = (item: ItemFormState) => {
     const finalTotal = calcAddItem(item.item_values).totalWithAll;
@@ -216,14 +216,14 @@ const itemTableSlice = createSlice({
             action: PayloadAction<{
                 scope: BudgetFormScope;
                 amount: number;
-                target: FreightDistributionTarget;
+                target: ItemTagTarget;
             }>,
         ) => {
             const { scope, amount, target } = action.payload;
             if (!Number.isFinite(amount) || amount <= 0) return;
 
             const items = draft(state, scope).filter((item) =>
-                matchesFreightDistributionTarget(item, target),
+                matchesItemTagTarget(item, target),
             );
             if (items.length === 0) return;
 
@@ -259,7 +259,7 @@ const itemTableSlice = createSlice({
             action: PayloadAction<{
                 scope: BudgetFormScope;
                 markup: string;
-                target: FreightDistributionTarget;
+                target: ItemTagTarget;
             }>,
         ) => {
             const { scope, markup, target } = action.payload;
@@ -272,8 +272,33 @@ const itemTableSlice = createSlice({
             ) return;
 
             for (const item of draft(state, scope)) {
-                if (matchesFreightDistributionTarget(item, target)) {
+                if (matchesItemTagTarget(item, target)) {
                     item.item_values.markup = markup;
+                }
+            }
+        },
+        applyItemDiscount: (
+            state: ItemTableState,
+            action: PayloadAction<{
+                scope: BudgetFormScope;
+                value: number;
+                type: ItemDiscountType;
+                target: ItemTagTarget;
+            }>,
+        ) => {
+            const { scope, value, type, target } = action.payload;
+            if (
+                !Number.isFinite(value)
+                || value <= 0
+                || Math.abs(value * 100 - Math.round(value * 100))
+                    > Number.EPSILON * Math.max(1, Math.abs(value * 100)) * 4
+                || (type !== "fixed" && type !== "percentage")
+            ) return;
+
+            for (const item of draft(state, scope)) {
+                if (matchesItemTagTarget(item, target)) {
+                    item.item_values.discount_value = value;
+                    item.item_values.discount_type = type;
                 }
             }
         },
@@ -293,6 +318,7 @@ export const {
     resetItemTags,
     dilutePurchaseShipping,
     replaceItemMarkup,
+    applyItemDiscount,
 } = itemTableSlice.actions;
 
 export default itemTableSlice.reducer;

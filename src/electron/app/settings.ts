@@ -35,6 +35,7 @@ const itemValuesSimpleFields = new Set<string>([
     "ipi",
     "st",
     "extraValue",
+    "discount",
     "boarding",
     "delivery",
     "purchaseShipping",
@@ -57,6 +58,7 @@ const legacyItemValuesSimpleFields = new Set<string>(["ipi", "st", "extraValue"]
 const defaultItemReferenceSimpleFields: ItemReferenceSimpleField[] = ["internalCode"];
 const defaultItemValuesSimpleFields: ItemValuesSimpleField[] = [
     "historyPrice",
+    "discount",
     "boarding",
     "delivery",
     "purchaseShipping",
@@ -82,7 +84,7 @@ const isQuotationStatus = (value: unknown): value is QuotationStatus =>
     value === 0 || value === 1 || value === 2 || value === 3;
 
 export const DEFAULT_APP_SETTINGS: AppSettings = {
-    version: 7,
+    version: 8,
     general: {
         automaticUpdates: true,
     },
@@ -276,10 +278,11 @@ const validateSimpleFormSettings = <
 const validateSettings = (value: unknown): AppSettings => {
     if (
         !isRecord(value) ||
-        !hasOnlyKeys(value, value.version === 5 || value.version === 6 || value.version === 7
+        typeof value.version !== "number" ||
+        !hasOnlyKeys(value, value.version >= 5 && value.version <= 8
             ? ["version", "general", "interface"]
             : ["version", "interface"]) ||
-        (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4 && value.version !== 5 && value.version !== 6 && value.version !== 7)
+        ![1, 2, 3, 4, 5, 6, 7, 8].includes(value.version)
     ) {
         throw new Error("Invalid settings file: unsupported or missing version.");
     }
@@ -310,14 +313,14 @@ const validateSettings = (value: unknown): AppSettings => {
         !hasOnlyKeys(budgetTable, [
             "defaultSimpleMode",
             "defaultTagEditingEnabled",
-            ...(value.version === 7 ? ["defaultQuotationStatus"] : []),
+            ...(value.version >= 7 ? ["defaultQuotationStatus"] : []),
             "simpleModeVisibleColumns",
         ]) ||
         typeof budgetTable.defaultSimpleMode !== "boolean" ||
         ("defaultTagEditingEnabled" in budgetTable &&
             typeof budgetTable.defaultTagEditingEnabled !== "boolean") ||
         (hasTagVisibilityDefault && typeof budgetTable.defaultTagEditingEnabled !== "boolean") ||
-        (value.version === 7 && !isQuotationStatus(budgetTable.defaultQuotationStatus))
+        (value.version >= 7 && !isQuotationStatus(budgetTable.defaultQuotationStatus))
     ) {
         throw new Error("Invalid settings file: invalid budget table settings.");
     }
@@ -331,7 +334,7 @@ const validateSettings = (value: unknown): AppSettings => {
     }
 
     const validatedSettings: AppSettings = {
-        version: 7,
+        version: 8,
         general: {
             automaticUpdates: isRecord(generalSettings) &&
                 typeof generalSettings.automaticUpdates === "boolean"
@@ -394,14 +397,34 @@ const validateSettings = (value: unknown): AppSettings => {
             },
     };
 
-    if (!isLegacyVersion) return validatedSettings;
+    if (value.version >= 8) return validatedSettings;
 
-    const legacyItemForm = validatedSettings.interface.itemForm;
+    const migratedSettings = {
+        ...validatedSettings,
+        interface: {
+            ...validatedSettings.interface,
+            itemForm: {
+                ...validatedSettings.interface.itemForm,
+                itemValues: {
+                    ...validatedSettings.interface.itemForm.itemValues,
+                    simpleModeVisibleFields: [
+                        ...new Set([
+                            ...validatedSettings.interface.itemForm.itemValues.simpleModeVisibleFields,
+                            "discount" as const,
+                        ]),
+                    ],
+                },
+            },
+        },
+    };
+
+    if (!isLegacyVersion) return migratedSettings;
+
+    const legacyItemForm = migratedSettings.interface.itemForm;
     return {
-            ...validatedSettings,
-            version: 7,
+            ...migratedSettings,
             interface: {
-                ...validatedSettings.interface,
+                ...migratedSettings.interface,
                 itemForm: {
                     itemReference: {
                         ...legacyItemForm.itemReference,
@@ -667,7 +690,7 @@ export const createSettingsStore = (filePath: string) => {
 
         const parsedSettings: unknown = JSON.parse(contents);
         const settings = validateSettings(parsedSettings);
-        if (isRecord(parsedSettings) && parsedSettings.version !== 7) {
+        if (isRecord(parsedSettings) && parsedSettings.version !== 8) {
             await persistSettings(filePath, settings);
         }
         currentSettings = settings;

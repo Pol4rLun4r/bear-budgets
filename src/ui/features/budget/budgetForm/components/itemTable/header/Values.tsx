@@ -46,21 +46,24 @@ const Values = ({ scope }: { scope: BudgetFormScope }) => {
 
     const summaries = [
         {
-            label: "Total do orçamento",
-            explanation: "Soma dos valores finais de todos os itens, incluindo impostos, margem, valores extras e frete de compra.",
+            label: "Total completo",
+            explanation: "Soma do total completo de cada item: impostos, margem, valores extras e frete de compra, menos os descontos aplicados.",
             value: totalBudget,
             icon: IconCoins,
+            highlight: true,
         },
         {
-            label: "Total da margem",
-            explanation: "Valor total acrescentado pela margem dos itens do orçamento, calculada sobre o total com impostos de cada item.",
+            label: "Valor da margem",
+            explanation: "Soma dos valores acrescentados pela margem em cada item, calculada sobre o total com impostos.",
             value: totalMarkup,
             icon: IconPercentage,
             prefix: "+",
+            highlight: true,
+            accent: "margin" as const,
         },
         {
             label: "Total com impostos",
-            explanation: "Soma dos valores dos itens com IPI e ST, antes da margem, valores extras e frete de compra.",
+            explanation: "Soma do total sem impostos com IPI e ST de cada item, antes da margem, dos valores extras, do frete de compra e dos descontos.",
             value: totalWithTaxes,
             icon: IconReceiptTax,
         },
@@ -72,7 +75,7 @@ const Values = ({ scope }: { scope: BudgetFormScope }) => {
             spacing="xs"
             className={classes.container}
         >
-            {summaries.map(({ label, explanation, value, icon: SummaryIcon, prefix }) => {
+            {summaries.map(({ label, explanation, value, icon: SummaryIcon, prefix, highlight, accent }) => {
                 const clipboardValue = formatNumberForClipboard(value);
 
                 return (
@@ -88,7 +91,12 @@ const Values = ({ scope }: { scope: BudgetFormScope }) => {
                                     withBorder
                                     radius="lg"
                                     p="xs"
-                                    className={clipboardValue ? classes.copyableCard : undefined}
+                                    className={[
+                                        clipboardValue ? classes.copyableCard : undefined,
+                                        accent === "margin"
+                                            ? classes.marginTotal
+                                            : highlight ? classes.totalComplete : undefined,
+                                    ].filter(Boolean).join(" ")}
                                     onClick={clipboardValue ? copy : undefined}
                                     onKeyDown={(event) => {
                                         if (!clipboardValue || event.target !== event.currentTarget) return;
@@ -109,7 +117,12 @@ const Values = ({ scope }: { scope: BudgetFormScope }) => {
                                 >
                                     <Stack gap={2}>
                                         <Group gap={2} wrap="nowrap" align="center">
-                                            <ThemeIcon size={18} radius="xl" variant="light" color="gray">
+                                            <ThemeIcon
+                                                size={18}
+                                                radius="xl"
+                                                variant="light"
+                                                color={accent === "margin" ? "green" : highlight ? "violet" : "gray"}
+                                            >
                                                 <SummaryIcon size={12} stroke={1.8} />
                                             </ThemeIcon>
                                             <Text

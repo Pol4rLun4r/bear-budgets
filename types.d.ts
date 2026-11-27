@@ -131,6 +131,7 @@ type ItemValuesSimpleField =
     | "ipi"
     | "st"
     | "extraValue"
+    | "discount"
     | "boarding"
     | "delivery"
     | "purchaseShipping"
@@ -145,7 +146,7 @@ type ItemValuesSimpleField =
 type BoardingInputMode = "calendarDays" | "businessDays" | "date";
 
 type AppSettings = {
-    version: 7;
+    version: 8;
     general: {
         automaticUpdates: boolean;
     };

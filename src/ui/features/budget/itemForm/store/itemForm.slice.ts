@@ -41,6 +41,8 @@ export const createEmptyItemData = (): ItemFormState => {
             markup: '40',
             purchase_shipping: undefined,
             extra_value: undefined,
+            discount_value: undefined,
+            discount_type: "fixed",
             boarding: 0,
             delivery: 3,
         },

@@ -19,13 +19,17 @@ const Calculations = () => {
     const itemValues = useAppSelector((state) => state.items.itemValues);
     const hasSelection = itemValues.id !== undefined;
     const calculations = calcAddItem(itemValues);
+    const discountValue = calculations.discountValue;
     const data = [
         { field: "Total sem impostos", value: formatCurrency(calculations.totalWithoutTaxes, hasSelection) },
         { field: "Valor do markup em R$", value: formatCurrency(calculations.markupValue, hasSelection) },
         { field: "Valor do IPI", value: formatCurrency(calculations.ipiValue, hasSelection) },
         { field: "Valor do ST", value: formatCurrency(calculations.stValue, hasSelection) },
         { field: "Valor total + IPI e ST", value: formatCurrency(calculations.totalWithIPIandST, hasSelection) },
-        { field: "Total geral com impostos + Frete + Valor extra", value: formatCurrency(calculations.totalWithAll, hasSelection) },
+        ...(hasSelection && discountValue > 0
+            ? [{ field: "Desconto aplicado", value: formatCurrency(discountValue, hasSelection) }]
+            : []),
+        { field: "Total após impostos, frete, valores extras e desconto", value: formatCurrency(calculations.totalWithAll, hasSelection) },
         { field: "Valor unitário final", value: formatCurrency(calculations.finalUnitValue, hasSelection) },
     ];
 
