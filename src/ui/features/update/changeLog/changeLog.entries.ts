@@ -8,6 +8,7 @@ import bulkBudgetAdjustmentsContent from "./content/bulk-budget-adjustments.md?r
 import notesAndListsImprovementsContent from "./content/notes-and-lists-improvements.md?raw";
 import searchAndFilterBudgetsContent from "./content/search-and-filter-budgets.md?raw";
 import itemDiscountsContent from "./content/item-discounts.md?raw";
+import customMarginsContent from "./content/custom-margins.md?raw";
 
 export type ChangeLogCategory = "novelty" | "improvement" | "bug-fix";
 
@@ -21,6 +22,13 @@ interface ChangeLogEntry {
 }
 
 export const changeLogEntryData: ChangeLogEntry[] = [
+    {
+        title: "Crie atalhos com nomes para suas margens",
+        summary: "Em Configurações > Margens, salve nomes para percentuais de markup que usa com frequência. Depois, pesquise o nome no campo Markup e escolha a opção, exibida como “40% Revenda”, por exemplo; o cálculo continua usando o percentual.",
+        date: "2026-11-26",
+        content: customMarginsContent,
+        category: "novelty",
+    },
     {
         title: "Aplique descontos nos itens do orçamento",
         summary: "Informe um desconto em reais ou percentual em cada item ou use **Aplicar desconto em massa** para vários itens. O valor aplicado não ultrapassa o total calculado do item.",

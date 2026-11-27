@@ -3,6 +3,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { ItemFormState } from "../../itemForm/store/itemForm.slice";
 import { BudgetFormScope } from "./@rootReducer";
 import calcAddItem from "../../../../utils/calcAddItem";
+import { isValidMarkupOptionValue } from "../../../../utils/markupList";
 
 export interface ItemTableState {
     budget_form_create: ItemFormState[];
@@ -263,9 +264,9 @@ const itemTableSlice = createSlice({
             }>,
         ) => {
             const { scope, markup, target } = action.payload;
-            const markupValue = Number(markup);
+            const markupValue = Number(markup.split(".")[0]);
             if (
-                markup.trim() === ""
+                !isValidMarkupOptionValue(markup)
                 || !Number.isInteger(markupValue)
                 || markupValue < 0
                 || markupValue > 1000

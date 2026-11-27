@@ -46,3 +46,7 @@ export const getSettingsPath = (dbPath = getDBPath()) => {
 
     return path.join(directory, "bear-budgets-settings.json");
 };
+
+/** função para obter o caminho do arquivo de margens personalizadas */
+export const getMarginsPath = (dbPath = getDBPath()) =>
+    path.join(path.dirname(getSettingsPath(dbPath)), "bear-budgets-margins.json");

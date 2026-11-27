@@ -8,6 +8,56 @@ export const markupOptions = Array.from({ length: 1001 }, (_, value) => ({
     value: String(value),
 }));
 
+export const getMarkupOptions = (
+    margins: readonly CustomMargin[],
+    search = "",
+    selectedValue?: string,
+) => {
+    const customOptions = margins.map((margin) => ({
+        label: `${margin.percentage}% ${margin.name}`,
+        value: `${margin.percentage}.${margin.id}`,
+    }));
+    const normalizedSearch = search.trim().toLocaleLowerCase();
+    const standardOptions = normalizedSearch
+        ? markupOptions.filter(({ label }) =>
+            label.toLocaleLowerCase().includes(normalizedSearch),
+        )
+        : markupOptions.slice(0, Math.max(0, 10 - customOptions.length));
+    const selectedStandardOption = !normalizedSearch && selectedValue
+        ? markupOptions.find(({ value }) => value === selectedValue)
+        : undefined;
+    const standardOptionsWithSelected = selectedStandardOption &&
+        !standardOptions.some(({ value }) => value === selectedStandardOption.value)
+        ? [
+            ...standardOptions.slice(0, Math.max(0, 9 - customOptions.length)),
+            selectedStandardOption,
+        ]
+        : standardOptions;
+
+    return [
+        ...(customOptions.length > 0
+            ? [{ group: "Margens personalizadas", items: customOptions }]
+            : []),
+        ...(standardOptionsWithSelected.length > 0
+            ? [{ group: "Margens padrão", items: standardOptionsWithSelected }]
+            : []),
+    ];
+};
+
+export const isValidMarkupOptionValue = (value: string): boolean => {
+    const [percentage, id, ...extra] = value.split('.');
+    const isCustomId = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+        .test(id ?? '');
+    const hasValidParts = extra.length === 0 && (id === undefined || isCustomId);
+    const numericPercentage = Number(percentage);
+
+    return hasValidParts &&
+        /^\d+$/.test(percentage ?? '') &&
+        Number.isSafeInteger(numericPercentage) &&
+        numericPercentage >= 0 &&
+        numericPercentage <= 1000;
+};
+
 export const markupList: listStructure[] = [
     { label: '(00%) Zero', value: '0' },
     { label: '(05%) Markup', value: '5' },

@@ -4,6 +4,7 @@ import {
     IconColorSwatch,
     IconDeviceDesktop,
     IconFolder,
+    IconPercentage,
 } from '@tabler/icons-react';
 
 export interface SettingsCategory {
@@ -27,6 +28,13 @@ export const settingsCategories: SettingsCategory[] = [
         label: 'Interface',
         description: 'Personalize como as informações são exibidas nas telas do aplicativo.',
         icon: <IconDeviceDesktop size={18} stroke={1.5} />,
+        disabled: false,
+    },
+    {
+        value: 'margins',
+        label: 'Margens',
+        description: 'Crie atalhos nomeados para percentuais de markup.',
+        icon: <IconPercentage size={18} stroke={1.5} />,
         disabled: false,
     },
     {

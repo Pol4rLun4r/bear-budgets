@@ -6,6 +6,7 @@ import SettingsNavigation from './SettingsNavigation';
 import SettingsPanel from './SettingsPanel';
 import SettingsGeneralPanel from './SettingsGeneralPanel';
 import SettingsInterfacePanel from './SettingsInterfacePanel';
+import SettingsMarginsPanel from './SettingsMarginsPanel';
 import { settingsCategories } from '../settings.data';
 import { updateSettings } from '../store/settings.slice';
 import classes from '../Settings.module.css';
@@ -122,6 +123,8 @@ const SettingsTabs = ({ onDirtyChange, onRequestClose }: SettingsTabsProps) => {
                         onRequestClose={onRequestClose}
                     />
                 )
+                : category.value === 'margins'
+                ? <SettingsMarginsPanel key={category.value} />
                 : <SettingsPanel key={category.value} category={category} />
             )}
         </Tabs>

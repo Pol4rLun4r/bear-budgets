@@ -47,6 +47,11 @@ const api: API = {
     settings: {
         get: () => ipcInvoke('settings:get'),
         update: (settings) => ipcInvoke('settings:update', settings),
+    },
+    margins: {
+        get: () => ipcInvoke('margins:get'),
+        add: (margin) => ipcInvoke('margins:add', margin),
+        remove: (id) => ipcInvoke('margins:remove', id),
     }
 }
 

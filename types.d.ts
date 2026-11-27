@@ -99,7 +99,20 @@ type EventPayloadMapping = {
     // application settings
     "settings:get": AppSettings;
     "settings:update": AppSettings;
+
+    // custom margins
+    "margins:get": CustomMargin[];
+    "margins:add": CustomMargin[];
+    "margins:remove": CustomMargin[];
 }
+
+type CustomMargin = {
+    id: string;
+    name: string;
+    percentage: number;
+};
+
+type NewCustomMargin = Omit<CustomMargin, "id">;
 
 type BudgetTableColumn =
     | "description"
@@ -283,6 +296,12 @@ interface SettingsAPI {
     update(settings: SettingsUpdate): Promise<AppSettings>;
 }
 
+interface MarginsAPI {
+    get(): Promise<CustomMargin[]>;
+    add(margin: NewCustomMargin): Promise<CustomMargin[]>;
+    remove(id: string): Promise<CustomMargin[]>;
+}
+
 interface API {
     quotation: QuotationAPI;
     item: ItemAPI;
@@ -290,6 +309,7 @@ interface API {
     updates: AppUpdateAPI;
     news: NewsAPI;
     settings: SettingsAPI;
+    margins: MarginsAPI;
 };
 
 interface Window {

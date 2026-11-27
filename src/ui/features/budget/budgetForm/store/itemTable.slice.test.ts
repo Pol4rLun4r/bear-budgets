@@ -461,4 +461,21 @@ describe("item table tags", () => {
             expect(updatedState[scope][0].item_values.markup).toBe("40");
         },
     );
+
+    it("replaces item markup with a named custom margin", () => {
+        const scope = "budget_form_create";
+        const item = createPricedItem(100);
+        const state = itemTableReducer(
+            undefined,
+            addItem({ scope, data: item }),
+        );
+        const markup = "40.123e4567-e89b-42d3-a456-426614174000";
+
+        const updatedState = itemTableReducer(
+            state,
+            replaceItemMarkup({ scope, markup, target: "all" }),
+        );
+
+        expect(updatedState[scope][0].item_values.markup).toBe(markup);
+    });
 });

@@ -1,7 +1,7 @@
 // mantine
 import { Button, Group, Menu, Tooltip, Modal, Select, Stack, Text, ThemeIcon } from "@mantine/core"
 import { useDisclosure } from '@mantine/hooks';
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 // redux
 import { BudgetFormScope } from "../../../store/@rootReducer";
@@ -37,7 +37,8 @@ import {
     type ItemTagTarget,
 } from "../../../store/itemTable.slice";
 import { applyDefaultItemValues } from "@/features/budget/itemForm/store/itemForm.slice";
-import { markupOptions } from "@/utils/markupList";
+import { getMarkupOptions, isValidMarkupOptionValue } from "@/utils/markupList";
+import useCustomMargins from "@/hooks/useCustomMargins";
 
 const isItemTagTarget = (
     value: string | null,
@@ -79,9 +80,16 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
     const [markupTarget, setMarkupTarget] = useState<ItemTagTarget>("all");
     const [discountTarget, setDiscountTarget] = useState<ItemTagTarget>("all");
     const [newMarkup, setNewMarkup] = useState<string | null>(null);
+    const [markupSearch, setMarkupSearch] = useState("");
     const [discountAmount, setDiscountAmount] = useState<number>();
     const [discountType, setDiscountType] = useState<ItemDiscountType>("fixed");
     const dispatch = useAppDispatch();
+    const customMargins = useCustomMargins(markupOpened);
+    const selectedMarkupValue = newMarkup?.split(".")[0];
+    const markupOptions = useMemo(
+        () => getMarkupOptions(customMargins, markupSearch, selectedMarkupValue),
+        [customMargins, markupSearch, selectedMarkupValue],
+    );
     const items = useAppSelector((state) => state.budgetForm.itemTable[scope]);
     const defaultItemValues = useAppSelector(
         (state) => state.settings.value?.interface.itemForm.itemValues,
@@ -355,13 +363,31 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                         placeholder="Selecione a margem"
                         radius="lg"
                         leftSection={<IconPercentage size={18} />}
-                        value={newMarkup}
-                        onChange={setNewMarkup}
+                        value={
+                            newMarkup && markupOptions.some((group) =>
+                                group.items.some((option) => option.value === newMarkup),
+                            )
+                                ? newMarkup
+                                : null
+                        }
                         data={markupOptions}
                         searchable
-                        limit={10}
                         selectFirstOptionOnChange
                         selectFirstOptionOnDropdownOpen
+                        searchValue={markupSearch}
+                        onSearchChange={setMarkupSearch}
+                        onDropdownClose={() => setMarkupSearch("")}
+                        maxDropdownHeight={360}
+                        onChange={(value) => {
+                            setNewMarkup(value);
+                            setMarkupSearch("");
+                        }}
+                        renderOption={({ option }) => (
+                            <Tooltip label={option.label} withArrow withinPortal>
+                                <Text size="sm" truncate>{option.label}</Text>
+                            </Tooltip>
+                        )}
+                        styles={{ input: { textOverflow: "ellipsis" } }}
                     />
                     <Select
                         label="Alterar em"
@@ -417,7 +443,11 @@ const Buttons = ({ scope, tagEditingEnabled, onTagEditingChange }: ButtonsProps)
                         radius="lg"
                         variant="light"
                         leftSection={<IconPercentage size={18} />}
-                        disabled={newMarkup === null || selectedMarkupItemCount === 0}
+                        disabled={
+                            newMarkup === null ||
+                            !isValidMarkupOptionValue(newMarkup) ||
+                            selectedMarkupItemCount === 0
+                        }
                         onClick={handleReplaceMarkup}
                     >
                         Aplicar nova margem
