@@ -1,3 +1,12 @@
+# [4.20.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.19.0...v4.20.0) (2026-11-27)
+
+
+### Features
+
+* **budget:** add fixed and percentage discounts to budget items ([9800674](https://github.com/Pol4rLun4r/bear-budgets/commit/98006744eb9b9acdcebc19511c7c90cc557072ed))
+* **margins:** add customizable named markup shortcuts ([1bae2c7](https://github.com/Pol4rLun4r/bear-budgets/commit/1bae2c7060cc78614a921c2227ba2dfa5ad1387b))
+* **settings:** add appearance preferences and improve budget interactions ([070f47d](https://github.com/Pol4rLun4r/bear-budgets/commit/070f47de09234e36702ad7b97edf0567c9c17eae))
+
 # [4.19.0](https://github.com/Pol4rLun4r/bear-budgets/compare/v4.18.0...v4.19.0) (2026-11-26)
 
 
