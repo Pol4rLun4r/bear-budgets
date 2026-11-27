@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo } from "react";
 
 // mantine
 import { Box, Center, Paper, Select, Stack, Table, Text, VisuallyHidden } from "@mantine/core"
@@ -18,6 +18,8 @@ import {
 import Rows from "./Rows.tsx";
 import MenuBudget from "./MenuBudget.tsx";
 import { quotationStatusOptions } from "../../quotationStatus";
+import { useAppDispatch, useAppSelector } from "@/app/reduxHooks";
+import { setStatusFilter } from "../store/budgets.slice";
 
 // style
 import classes from "./Items.module.css"
@@ -32,7 +34,8 @@ const iconSize = 20
 const statusOptions = Object.values(quotationStatusOptions);
 
 const List = ({ budgets, open, searchQuery }: ListType ) => {
-    const [statusFilter, setStatusFilter] = useState<string | null>(null);
+    const dispatch = useAppDispatch();
+    const statusFilter = useAppSelector((state) => state.budgets.statusFilter);
     const filteredBudgets = statusFilter === null
         ? budgets
         : budgets.filter((budget) => String(budget.status ?? 0) === statusFilter);
@@ -49,7 +52,7 @@ const List = ({ budgets, open, searchQuery }: ListType ) => {
     return (
         <Paper withBorder radius="lg" w={'100%'} h={'100%'} miw={0} className={classes.items}>
             <MenuBudget open={open}>
-                {(handlers, seeBudget) => (
+                {(handlers, seeBudget, openBudget) => (
                     <Table.ScrollContainer
                         minWidth={1180}
                         w={'100%'}
@@ -67,7 +70,7 @@ const List = ({ budgets, open, searchQuery }: ListType ) => {
                                             placeholder="Status"
                                             data={statusFilterOptions}
                                             value={statusFilter}
-                                            onChange={setStatusFilter}
+                                            onChange={(value) => dispatch(setStatusFilter(value))}
                                             clearable
                                             allowDeselect={false}
                                             size="md"
@@ -116,7 +119,11 @@ const List = ({ budgets, open, searchQuery }: ListType ) => {
                             </Table.Thead>
                             <Table.Tbody>
                                 {filteredBudgets.length > 0 ? (
-                                    <Rows seeBudget={seeBudget} budgets={filteredBudgets} />
+                                    <Rows
+                                        seeBudget={seeBudget}
+                                        openBudget={openBudget}
+                                        budgets={filteredBudgets}
+                                    />
                                 ) : (
                                     <Table.Tr>
                                         <Table.Td colSpan={8}>

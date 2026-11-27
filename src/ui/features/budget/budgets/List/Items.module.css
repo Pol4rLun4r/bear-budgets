@@ -19,3 +19,12 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.budgetRow {
+    cursor: pointer;
+}
+
+.budgetRow:focus-visible {
+    outline: 2px solid var(--mantine-primary-color-filled);
+    outline-offset: -2px;
+}

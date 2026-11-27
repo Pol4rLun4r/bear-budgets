@@ -1,5 +1,5 @@
 // mantine
-import { ActionIcon, Badge, Group, Tooltip } from "@mantine/core"
+import { ActionIcon, Group, Tooltip } from "@mantine/core"
 
 // style
 import classes from './FrameBar.module.css';
@@ -37,12 +37,7 @@ const LeftTitle = () => {
                     <IconSnowflake key={isSidebarCollapsed.toString()} className={classes.snowflake} />
                 </ActionIcon>
             </Tooltip>
-            <Group gap={6} wrap="nowrap">
-                <div>Bear Budgets</div>
-                <Badge size="xs" variant="light" color="gray">
-                    v{__APP_VERSION__}
-                </Badge>
-            </Group>
+            <div>Bear Budgets</div>
         </Group>
     )
 };

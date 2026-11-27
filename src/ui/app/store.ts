@@ -8,6 +8,7 @@ import { api } from "./api";
 import layoutReducer from "./layout/store/layout.slice";
 import itemFormReducer from "@/features/budget/itemForm/store/@rootReducer";
 import budgetFormReducer from "@/features/budget/budgetForm/store/@rootReducer";
+import budgetsReducer from "@/features/budget/budgets/store/budgets.slice";
 import itemsReducer from "@/features/items/store/@rootReducer";
 import settingsReducer from "@/features/settings/store/settings.slice";
 
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   layout: layoutReducer,
   itemForm: itemFormReducer,
   budgetForm: budgetFormReducer,
+  budgets: budgetsReducer,
   items: itemsReducer,
   settings: settingsReducer,
   [api.reducerPath]: api.reducer,

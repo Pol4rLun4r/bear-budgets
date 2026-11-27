@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import './global.css'
 
 // mantine
-import { Button, Center, Loader, Stack, Text } from '@mantine/core';
+import { Button, Center, Loader, Stack, Text, useMantineColorScheme } from '@mantine/core';
 
 // components
 import MantineProvider from './MantineProvider'
@@ -48,6 +48,7 @@ const Application = () => {
 
     return (
         <MantineProvider>
+            <SettingsColorScheme />
             <div inert={blockingUpdate || showingUpdateError} aria-hidden={blockingUpdate || showingUpdateError}>
                 {loadStatus === 'loaded' ? (
                     <AppLayout />
@@ -77,5 +78,18 @@ const Application = () => {
         </MantineProvider>
     )
 }
+
+const SettingsColorScheme = () => {
+    const colorScheme = useAppSelector(
+        (state) => state.settings.value?.appearance.colorScheme ?? 'auto',
+    );
+    const { setColorScheme } = useMantineColorScheme();
+
+    useEffect(() => {
+        setColorScheme(colorScheme);
+    }, [colorScheme, setColorScheme]);
+
+    return null;
+};
 
 export default App;

@@ -10,6 +10,12 @@ const legacyBudgetTableSettings = () => ({
     simpleModeVisibleColumns: [...DEFAULT_APP_SETTINGS.interface.budgetTable.simpleModeVisibleColumns],
 });
 
+const legacySettings = (version: number) => ({
+    version,
+    general: DEFAULT_APP_SETTINGS.general,
+    interface: DEFAULT_APP_SETTINGS.interface,
+});
+
 describe("settings store", () => {
     let directory: string;
     let settingsPath: string;
@@ -100,7 +106,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(8);
+        expect(store.get().version).toBe(9);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(store.get().interface.itemForm).toEqual({
             itemReference: {
@@ -153,7 +159,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(8);
+        expect(store.get().version).toBe(9);
         expect(store.get().interface.itemForm.itemValues).toEqual({
             defaultSimpleMode: true,
             simpleModeVisibleFields: ["ipi", "discount"],
@@ -181,7 +187,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(8);
+        expect(store.get().version).toBe(9);
         expect(store.get().interface.budgetTable.defaultTagEditingEnabled).toBe(true);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
@@ -198,7 +204,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(8);
+        expect(store.get().version).toBe(9);
         expect(store.get().general.automaticUpdates).toBe(true);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
@@ -209,7 +215,7 @@ describe("settings store", () => {
                 .filter(([key]) => key !== "defaultBoardingMode"),
         );
         await writeFile(settingsPath, JSON.stringify({
-            ...DEFAULT_APP_SETTINGS,
+            ...legacySettings(5),
             version: 5,
             interface: {
                 ...DEFAULT_APP_SETTINGS.interface,
@@ -224,14 +230,14 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(8);
+        expect(store.get().version).toBe(9);
         expect(store.get().interface.itemForm.itemValues.defaultBoardingMode).toBe("calendarDays");
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
 
     it("adds the draft status default when migrating version 6 settings", async () => {
         await writeFile(settingsPath, JSON.stringify({
-            ...DEFAULT_APP_SETTINGS,
+            ...legacySettings(6),
             version: 6,
             interface: {
                 ...DEFAULT_APP_SETTINGS.interface,
@@ -242,7 +248,7 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(8);
+        expect(store.get().version).toBe(9);
         expect(store.get().interface.budgetTable.defaultQuotationStatus).toBe(0);
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
     });
@@ -252,7 +258,7 @@ describe("settings store", () => {
             .simpleModeVisibleFields
             .filter((field) => field !== "discount");
         await writeFile(settingsPath, JSON.stringify({
-            ...DEFAULT_APP_SETTINGS,
+            ...legacySettings(7),
             version: 7,
             interface: {
                 ...DEFAULT_APP_SETTINGS.interface,
@@ -269,9 +275,19 @@ describe("settings store", () => {
         const store = createSettingsStore(settingsPath);
         await store.initialize();
 
-        expect(store.get().version).toBe(8);
+        expect(store.get().version).toBe(9);
         expect(store.get().interface.itemForm.itemValues.simpleModeVisibleFields).toContain("discount");
         expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(store.get());
+    });
+
+    it("migrates version 8 settings and defaults to the system color scheme", async () => {
+        await writeFile(settingsPath, JSON.stringify(legacySettings(8)));
+
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        expect(store.get().appearance.colorScheme).toBe("auto");
+        expect(JSON.parse(await readFile(settingsPath, "utf8"))).toEqual(DEFAULT_APP_SETTINGS);
     });
 
     it("persists the automatic update preference", async () => {
@@ -299,6 +315,34 @@ describe("settings store", () => {
                 general: { automaticUpdates: "false" as unknown as boolean },
             }),
         ).rejects.toThrow("invalid general settings");
+        expect(store.get()).toEqual(initialSettings);
+    });
+
+    it("persists the selected color scheme", async () => {
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+
+        const settings = await store.update({
+            appearance: { colorScheme: "dark" },
+        });
+
+        expect(settings.appearance.colorScheme).toBe("dark");
+
+        const restartedStore = createSettingsStore(settingsPath);
+        await restartedStore.initialize();
+        expect(restartedStore.get().appearance.colorScheme).toBe("dark");
+    });
+
+    it("rejects unsupported color schemes without changing settings", async () => {
+        const store = createSettingsStore(settingsPath);
+        await store.initialize();
+        const initialSettings = store.get();
+
+        await expect(
+            store.update({
+                appearance: { colorScheme: "sepia" as AppColorScheme },
+            }),
+        ).rejects.toThrow("invalid appearance settings");
         expect(store.get()).toEqual(initialSettings);
     });
 

@@ -60,6 +60,14 @@ const SettingsGeneralPanel = ({
         <div className={classes.interfaceScrollArea}>
             <Stack gap="lg">
                 <Paper className={classes.exampleCard} radius="lg" p="md" withBorder>
+                    <Stack gap={4}>
+                        <Title order={5}>Versão do aplicativo</Title>
+                        <Text size="sm" c="dimmed">
+                            Bear Budgets {__APP_VERSION__}
+                        </Text>
+                    </Stack>
+                </Paper>
+                <Paper className={classes.exampleCard} radius="lg" p="md" withBorder>
                     <Stack gap="sm">
                         <Stack gap={4}>
                             <Title order={5}>Atualizações do aplicativo</Title>

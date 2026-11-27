@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 // mantine
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { Button, Group, Modal, Stack, TextInput } from "@mantine/core";
@@ -10,9 +8,10 @@ import BudgetForm from "../budgetForm/@BudgetForm.tsx";
 import List from "./List/@List.tsx";
 
 // redux
-import { useAppSelector } from "@/app/reduxHooks.ts";
+import { useAppDispatch, useAppSelector } from "@/app/reduxHooks.ts";
 import { useGetQuotationSummariesQuery } from "../budgetForm/store/quotation.api.ts";
 import { selectBudgetEditHasChanges } from "../budgetForm/store/budgetForm.selectors.ts";
+import { setSearch } from "./store/budgets.slice.ts";
 
 // styles
 import budgetFormClasses from "../budgetForm/budgetForm.module.css";
@@ -20,7 +19,8 @@ import budgetFormClasses from "../budgetForm/budgetForm.module.css";
 const Budgets = () => {
   const [formOpened, { open: formOpen, close: formClose }] = useDisclosure(false);
   const [requestOpened, { open: requestOpen, close: requestClose }] = useDisclosure(false);
-  const [search, setSearch] = useState("");
+  const dispatch = useAppDispatch();
+  const search = useAppSelector((state) => state.budgets.search);
   const [debouncedSearch] = useDebouncedValue(search, 250);
 
   const {
@@ -86,7 +86,7 @@ const Budgets = () => {
         aria-label="Buscar orçamentos por ID ou anotações"
         leftSection={<IconSearch />}
         value={search}
-        onChange={(event) => setSearch(event.currentTarget.value)}
+        onChange={(event) => dispatch(setSearch(event.currentTarget.value))}
       />
 
       <List budgets={budgetList} open={formOpen} searchQuery={debouncedSearch.trim()} />

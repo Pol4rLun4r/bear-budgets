@@ -10,7 +10,7 @@ import { getStepState, getSwitchModeValuesForm } from "./store/itemForm.selector
 
 // components
 import ItemForm from "./@ItemForm";
-import HiddenValueWarning from "./components/HiddenValueWarning";
+import HiddenContentWarning from "./components/HiddenContentWarning";
 import CalcAside from "./components/ItemValues/CalcAside";
 
 // styles
@@ -63,7 +63,7 @@ const ItemFormModal = ({
         >
             <Modal.Overlay backgroundOpacity={0.55} />
             <Modal.Content radius="lg">
-                <HiddenValueWarning scope={scope} />
+                <HiddenContentWarning scope={scope} />
                 <Box className={classes.formPane}>
                     <Modal.Header px="lg" pt="md" pb="sm">
                         <Modal.Title>{title}</Modal.Title>

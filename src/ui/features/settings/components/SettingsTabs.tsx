@@ -6,6 +6,7 @@ import SettingsNavigation from './SettingsNavigation';
 import SettingsPanel from './SettingsPanel';
 import SettingsGeneralPanel from './SettingsGeneralPanel';
 import SettingsInterfacePanel from './SettingsInterfacePanel';
+import SettingsAppearancePanel from './SettingsAppearancePanel';
 import SettingsMarginsPanel from './SettingsMarginsPanel';
 import { settingsCategories } from '../settings.data';
 import { updateSettings } from '../store/settings.slice';
@@ -17,12 +18,15 @@ interface SettingsTabsProps {
 }
 
 const applyUpdate = (settings: AppSettings, update: SettingsUpdate): AppSettings => {
-    const nextSettings = update.general
-        ? {
-            ...settings,
+    const nextSettings = {
+        ...settings,
+        ...(update.general && {
             general: { ...settings.general, ...update.general },
-        }
-        : settings;
+        }),
+        ...(update.appearance && {
+            appearance: { ...settings.appearance, ...update.appearance },
+        }),
+    };
     const interfaceUpdate = update.interface;
     if (!interfaceUpdate) return nextSettings;
 
@@ -78,7 +82,11 @@ const SettingsTabs = ({ onDirtyChange, onRequestClose }: SettingsTabsProps) => {
 
         try {
             const savedSettings = await dispatch(
-                updateSettings({ general: draft.general, interface: draft.interface }),
+                updateSettings({
+                    general: draft.general,
+                    appearance: draft.appearance,
+                    interface: draft.interface,
+                }),
             ).unwrap();
             setDraft(savedSettings);
         } catch (error) {
@@ -116,6 +124,18 @@ const SettingsTabs = ({ onDirtyChange, onRequestClose }: SettingsTabsProps) => {
                     <SettingsInterfacePanel
                         key={category.value}
                         settings={draft?.interface}
+                        dirty={dirty}
+                        saving={pendingWrites > 0}
+                        onChange={updateDraft}
+                        onSave={() => void saveDraft()}
+                        onRequestClose={onRequestClose}
+                    />
+                )
+                : category.value === 'appearance'
+                ? (
+                    <SettingsAppearancePanel
+                        key={category.value}
+                        settings={draft?.appearance}
                         dirty={dirty}
                         saving={pendingWrites > 0}
                         onChange={updateDraft}

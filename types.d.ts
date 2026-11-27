@@ -159,9 +159,12 @@ type ItemValuesSimpleField =
 type BoardingInputMode = "calendarDays" | "businessDays" | "date";
 
 type AppSettings = {
-    version: 8;
+    version: 9;
     general: {
         automaticUpdates: boolean;
+    };
+    appearance: {
+        colorScheme: AppColorScheme;
     };
     interface: {
         budgetTable: {
@@ -187,9 +190,14 @@ type AppSettings = {
     };
 };
 
+type AppColorScheme = "auto" | "light" | "dark";
+
 type SettingsUpdate = {
     general?: {
         automaticUpdates?: boolean;
+    };
+    appearance?: {
+        colorScheme?: AppColorScheme;
     };
     interface?: {
         budgetTable?: {

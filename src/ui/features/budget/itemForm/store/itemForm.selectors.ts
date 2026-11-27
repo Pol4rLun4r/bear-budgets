@@ -6,6 +6,7 @@ import type { BudgetFormScope } from "../../budgetForm/store/@rootReducer";
 // utils
 import { isDefinedMarkup, isDefinedNonNegative } from "@/utils/itemFormValidation";
 import { hasItemChanged } from "@/utils/budgetComparison";
+import { hasHiddenItemReferenceContent } from "./hiddenItemReferenceContent";
 
 // pega todo os dados do itemForm (formulário do item)
 export const getItemFormState = (state: RootState, scope: ItemFormScope) =>
@@ -41,6 +42,25 @@ export const isHiddenValueWarning = (state: RootState, scope: ItemFormScope) => 
         (Boolean(itemValues.purchase_shipping) && !visibleFields.has("purchaseShipping"));
 
     return hasHiddenValue && step !== 0 && switchMode;
+};
+
+export const isHiddenReferenceWarning = (state: RootState, scope: ItemFormScope) => {
+    const isReferenceStep = state.itemForm.steps[scope].step === 0;
+    const switchMode = state.itemForm.switch.item_reference.mode;
+    const visibleFields =
+        state.settings.value?.interface.itemForm.itemReference.simpleModeVisibleFields ?? [];
+    const itemForm = state.itemForm.form[scope];
+
+    return (
+        isReferenceStep &&
+        switchMode &&
+        hasHiddenItemReferenceContent(
+            itemForm.item_reference,
+            itemForm.reference_links,
+            state.itemForm.linkForm[scope].content,
+            visibleFields,
+        )
+    );
 };
 
 export const isHasDescription = (state: RootState, scope: ItemFormScope) => {

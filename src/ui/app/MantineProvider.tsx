@@ -59,7 +59,7 @@ const MantineProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider
             cssVariablesResolver={v8CssVariablesResolver}
-            defaultColorScheme='dark'
+            defaultColorScheme='auto'
             theme={theme}
         >
             <DatesProvider settings={{ locale: 'pt-br', firstDayOfWeek: 0 }}>

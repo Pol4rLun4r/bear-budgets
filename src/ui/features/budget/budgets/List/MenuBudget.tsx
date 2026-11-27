@@ -24,7 +24,11 @@ type seeBudgetType = (quotationId: Quotation['id']) => ReactElement;
 
 interface MenuBudgetType {
     open: () => void; // função para abrir o modal
-    children: (handlers: ContextMenuTargetHandlers, seeBudget: seeBudgetType) => React.ReactElement // função que recebe os handlers  retorna um elemento React
+    children: (
+        handlers: ContextMenuTargetHandlers,
+        seeBudget: seeBudgetType,
+        openBudget: (quotationId: Quotation['id']) => void,
+    ) => React.ReactElement
 }
 
 const MenuBudget = ({ open, children }: MenuBudgetType) => {
@@ -102,7 +106,14 @@ const MenuBudget = ({ open, children }: MenuBudgetType) => {
 
     // função para renderizar o botão de ver orçamento
     const seeBudget: seeBudgetType = (quotationId) => (
-        <ActionIcon onClick={() => handleSeeData(quotationId)} variant="transparent">
+        <ActionIcon
+            aria-label={`Abrir orçamento ${String(quotationId).padStart(6, "0")}`}
+            onClick={(event) => {
+                event.stopPropagation();
+                handleSeeData(quotationId);
+            }}
+            variant="transparent"
+        >
             {loadingQuotationIds.has(quotationId) ? <Loader size={16} /> : <IconEyeSpark />}
         </ActionIcon>
     );
@@ -129,8 +140,8 @@ const MenuBudget = ({ open, children }: MenuBudgetType) => {
     return (
         <Menu shadow="md" withArrow offset={-1}>
             <Menu.ContextMenu>
-                {/* passa os handlers e a função seeBudget para os filhos */}
-                {children({ onContextMenu: handleContextMenu }, seeBudget)}
+                {/* passa os handlers e as funções de abertura aos filhos */}
+                {children({ onContextMenu: handleContextMenu }, seeBudget, handleSeeData)}
             </Menu.ContextMenu>
 
             <Menu.Dropdown>{menuItems}</Menu.Dropdown>

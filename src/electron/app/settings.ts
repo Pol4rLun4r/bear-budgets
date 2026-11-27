@@ -82,11 +82,16 @@ const isBoardingInputMode = (value: unknown): value is BoardingInputMode =>
     value === "calendarDays" || value === "businessDays" || value === "date";
 const isQuotationStatus = (value: unknown): value is QuotationStatus =>
     value === 0 || value === 1 || value === 2 || value === 3;
+const isAppColorScheme = (value: unknown): value is AppColorScheme =>
+    value === "auto" || value === "light" || value === "dark";
 
 export const DEFAULT_APP_SETTINGS: AppSettings = {
-    version: 8,
+    version: 9,
     general: {
         automaticUpdates: true,
+    },
+    appearance: {
+        colorScheme: "auto",
     },
     interface: {
         budgetTable: {
@@ -122,6 +127,9 @@ const cloneSettings = (settings: AppSettings): AppSettings => ({
     version: settings.version,
     general: {
         automaticUpdates: settings.general.automaticUpdates,
+    },
+    appearance: {
+        colorScheme: settings.appearance.colorScheme,
     },
     interface: {
         budgetTable: {
@@ -279,10 +287,10 @@ const validateSettings = (value: unknown): AppSettings => {
     if (
         !isRecord(value) ||
         typeof value.version !== "number" ||
-        !hasOnlyKeys(value, value.version >= 5 && value.version <= 8
-            ? ["version", "general", "interface"]
+        !hasOnlyKeys(value, value.version >= 5 && value.version <= 9
+            ? ["version", "general", "interface", ...(value.version >= 9 ? ["appearance"] : [])]
             : ["version", "interface"]) ||
-        ![1, 2, 3, 4, 5, 6, 7, 8].includes(value.version)
+        ![1, 2, 3, 4, 5, 6, 7, 8, 9].includes(value.version)
     ) {
         throw new Error("Invalid settings file: unsupported or missing version.");
     }
@@ -297,6 +305,16 @@ const validateSettings = (value: unknown): AppSettings => {
             typeof generalSettings.automaticUpdates !== "boolean")
     ) {
         throw new Error("Invalid settings file: invalid general settings.");
+    }
+
+    const appearanceSettings = value.version >= 9 ? value.appearance : undefined;
+    if (
+        value.version >= 9 &&
+        (!isRecord(appearanceSettings) ||
+            !hasOnlyKeys(appearanceSettings, ["colorScheme"]) ||
+            !isAppColorScheme(appearanceSettings.colorScheme))
+    ) {
+        throw new Error("Invalid settings file: invalid appearance settings.");
     }
 
     const interfaceSettings = value.interface;
@@ -334,12 +352,18 @@ const validateSettings = (value: unknown): AppSettings => {
     }
 
     const validatedSettings: AppSettings = {
-        version: 8,
+        version: 9,
         general: {
             automaticUpdates: isRecord(generalSettings) &&
                 typeof generalSettings.automaticUpdates === "boolean"
                 ? generalSettings.automaticUpdates
                 : DEFAULT_APP_SETTINGS.general.automaticUpdates,
+        },
+        appearance: {
+            colorScheme: isRecord(appearanceSettings) &&
+                isAppColorScheme(appearanceSettings.colorScheme)
+                ? appearanceSettings.colorScheme
+                : DEFAULT_APP_SETTINGS.appearance.colorScheme,
         },
         interface: {
             budgetTable: {
@@ -537,13 +561,14 @@ const validateUpdate = (value: unknown): SettingsUpdate => {
     ];
     if (
         !isRecord(value) ||
-        !hasOnlyKeys(value, ["general", "interface"])
+        !hasOnlyKeys(value, ["general", "appearance", "interface"])
     ) {
         throw new Error("Invalid settings update.");
     }
 
     const interfaceUpdate: NonNullable<SettingsUpdate["interface"]> = {};
     let generalUpdate: SettingsUpdate["general"];
+    let appearanceUpdate: SettingsUpdate["appearance"];
 
     if ("general" in value) {
         if (
@@ -554,6 +579,17 @@ const validateUpdate = (value: unknown): SettingsUpdate => {
             throw new Error("Invalid settings update: invalid general settings.");
         }
         generalUpdate = { automaticUpdates: value.general.automaticUpdates };
+    }
+
+    if ("appearance" in value) {
+        if (
+            !isRecord(value.appearance) ||
+            !hasOnlyKeys(value.appearance, ["colorScheme"]) ||
+            !isAppColorScheme(value.appearance.colorScheme)
+        ) {
+            throw new Error("Invalid settings update: invalid appearance settings.");
+        }
+        appearanceUpdate = { colorScheme: value.appearance.colorScheme };
     }
 
     if ("interface" in value && (
@@ -631,12 +667,13 @@ const validateUpdate = (value: unknown): SettingsUpdate => {
         interfaceUpdate.itemForm = itemFormUpdate;
     }
 
-    if (Object.keys(interfaceUpdate).length === 0 && !generalUpdate) {
+    if (Object.keys(interfaceUpdate).length === 0 && !generalUpdate && !appearanceUpdate) {
         throw new Error("Invalid settings update: at least one setting is required.");
     }
 
     return {
         ...(generalUpdate && { general: generalUpdate }),
+        ...(appearanceUpdate && { appearance: appearanceUpdate }),
         ...(Object.keys(interfaceUpdate).length > 0 && { interface: interfaceUpdate }),
     };
 };
@@ -690,7 +727,7 @@ export const createSettingsStore = (filePath: string) => {
 
         const parsedSettings: unknown = JSON.parse(contents);
         const settings = validateSettings(parsedSettings);
-        if (isRecord(parsedSettings) && parsedSettings.version !== 8) {
+        if (isRecord(parsedSettings) && parsedSettings.version !== 9) {
             await persistSettings(filePath, settings);
         }
         currentSettings = settings;
@@ -711,6 +748,7 @@ export const createSettingsStore = (filePath: string) => {
 
             const settingsUpdate = validateUpdate(input);
             const generalUpdate = settingsUpdate.general;
+            const appearanceUpdate = settingsUpdate.appearance;
             const budgetTableUpdate = settingsUpdate.interface?.budgetTable;
             const itemFormUpdate = settingsUpdate.interface?.itemForm;
             const nextSettings = validateSettings({
@@ -719,6 +757,12 @@ export const createSettingsStore = (filePath: string) => {
                     general: {
                         ...currentSettings.general,
                         ...generalUpdate,
+                    },
+                }),
+                ...(appearanceUpdate && {
+                    appearance: {
+                        ...currentSettings.appearance,
+                        ...appearanceUpdate,
                     },
                 }),
                 interface: {

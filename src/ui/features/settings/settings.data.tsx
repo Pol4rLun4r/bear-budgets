@@ -40,9 +40,9 @@ export const settingsCategories: SettingsCategory[] = [
     {
         value: 'appearance',
         label: 'Aparência',
-        description: 'Preferências de aparência e tema serão adicionadas aqui.',
+        description: 'Escolha o tema visual do aplicativo.',
         icon: <IconColorSwatch size={18} stroke={1.5} />,
-        disabled: true,
+        disabled: false,
     },
     {
         value: 'files',
